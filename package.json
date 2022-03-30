@@ -7,9 +7,13 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
+  "proxy": "http://localhost:8080",
   "dependencies": {
+    "axios": "^0.26.1",
     "core-js": "^3.8.3",
-    "vue": "^3.2.13"
+    "pinia": "^2.0.12",
+    "vue": "^3.2.13",
+    "vue-router": "^4.0.14"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
