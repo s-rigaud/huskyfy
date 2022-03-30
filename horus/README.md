@@ -1,6 +1,4 @@
-# Horus
-Horus playlist project - Interact with Spotify playlists smoothly
-
+# horus
 
 ## Project setup
 ```
