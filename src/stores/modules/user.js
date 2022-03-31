@@ -3,9 +3,13 @@ import { defineStore } from 'pinia'
 export const useUserStore = defineStore('user', {
     state: () => {
         return {
-            login: '',
+            id: '',
+            username: '',
+            profilePicture: '',
+            isPremium: false,
             mail: '',
-            isPremium: true,
+            country: '',
+            connected: false,
         }
     },
 })

@@ -1,15 +1,26 @@
+import ExploreView from '@/views/ExploreView.vue';
 import HomePage from '@/views/HomePage.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import { useAuthStore } from '../stores/modules/auth';
+
 
 const routes = [
     {
         path: "/",
         name: "HomePage",
-        component: HomePage
+        component: HomePage,
+    },
+    {
+        path: "/callback",
+        name: "Callback",
+        component: HomePage,
+    },
+    {
+        path: "/explore",
+        name: "Explore",
+        component: ExploreView,
     },
 ]
-
 
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
@@ -17,9 +28,9 @@ const router = createRouter({
 })
 
 router.beforeEach(function (to, from, next) {
-    const store = useAuthStore()
+    const authStore = useAuthStore()
     // Does not allow to visit other pages while not connected
-    if (!store.access_token && to.name !== "HomePage") {
+    if (!authStore.accessToken && to.name !== "HomePage") {
         next(false);
     }
     next();
