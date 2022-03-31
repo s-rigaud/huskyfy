@@ -39,20 +39,17 @@ export default {
                 Authorization: `Basic ${ENCODED_CREDENTIALS}`,
                 "Content-Type": "application/x-www-form-urlencoded",
             },
-            data: {
-                code: authStore.temporaryToken,
-                redirect_uri: REDIRECT_URI,
-                grant_type: 'authorization_code',
-            },
+            data: `code=${authStore.temporaryToken}&redirect_uri=${REDIRECT_URI}&grant_type=authorization_code`,
         }).then(function (response) {
-            authStore.accessToken = response.data.accessToken
-            authStore.refreshToken = response.data.refreshToken
+            authStore.accessToken = response.data.access_token
+            authStore.refreshToken = response.data.refresh_token
             return response;
         })
     },
 
     requestNewAccessToken() {
         const authStore = useAuthStore();
+        console.log("trying to refresh token before retrying call")
 
         axios({
             method: 'post',
@@ -61,13 +58,12 @@ export default {
                 Authorization: `Basic ${ENCODED_CREDENTIALS}`,
                 "Content-Type": "application/x-www-form-urlencoded",
             },
-            data: {
-                grant_type: 'refresh_token',
-                refresh_token: authStore.refreshToken,
-            },
+            data: `grant_type=refresh_token&refresh_token=${authStore.refreshToken}`,
         }).then(function (response) {
-            authStore.accessToken = response.data.accessToken
+            authStore.accessToken = response.data.access_token
             return response;
-        })
+        }).catch(function (err) {
+            console.log(err);
+        });
     }
 };

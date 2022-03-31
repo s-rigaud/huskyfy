@@ -1,10 +1,10 @@
 <template>
   <div v-if="!this.userStore.connected">
-    <button @click="makeOauthRequest">Connect with Spotify</button>
+    <button @click="makeOauthRequest">Access OAuth2 portal</button>
     <button @click="makeAccessTokenRequest">
-      {{ this.authStore.temporaryToken }}
+      Request acces token with temp token : {{ this.authStore.temporaryToken }}
     </button>
-    <button @click="requestUserData">Make request</button>
+    <button @click="requestUserData">Get user info</button>
   </div>
 </template>
 
@@ -41,17 +41,18 @@ export default {
     },
     async requestUserData() {
       const response = await api.spotify.users.getUserProfile();
+      const data = response.data;
+      console.log(data);
 
       this.userStore.$patch({
-        id: response.data.id,
-        username: response.data.display_name,
-        profilePicture: response.data.images[0].url,
-        isPremium: response.data.product == "premium",
-        mail: response.data.email,
-        country: response.data.country,
+        id: data.id,
+        username: data.display_name,
+        profilePicture: data.images[0].url,
+        isPremium: data.product == "premium",
+        mail: data.email,
+        country: data.country,
         connected: true,
       });
-      console.log(response.data);
     },
   },
 };

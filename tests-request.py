@@ -43,5 +43,10 @@ def requestAnotherToken():
 
 
 if __name__ == "__main__":
-    requestFirstAccessToken()
+    import ipdb
+
+    ipdb.set_trace()
+    # requestFirstAccessToken()
     # requestAnotherToken()
+    rep = requests.get("https://accounts.spotify.com/authorize?response_type=code&client_id=0c26ab311d744f8faae1f5c8ccc4ae21&scope=user-read-private%20user-read-email%20user-follow-read%20user-library-read%20playlist-read-collaborative%20playlist-read-private&redirect_uri=http://localhost:8080")
+    pprint(rep.__dict__)

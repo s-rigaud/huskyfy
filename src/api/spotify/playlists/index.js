@@ -1,12 +1,16 @@
-import { useUserStore } from "@/stores/modules/user";
 import request from "./../request";
 
 export default {
-    getUserPlaylists(limit = 10, offset = 0) {
-        const userStore = useUserStore();
-        // TODO paginate
-        console.log(userStore.id)
-        return request.get(`users/${userStore.id}/playlists`, {
+    getUserPlaylists(limit, offset) {
+        return request.get(`me/playlists`, {
+            params: {
+                limit,
+                offset
+            }
+        });
+    },
+    getPlaylistTracks(playlist_id, limit, offset) {
+        return request.get(`playlists/${playlist_id}/tracks`, {
             params: {
                 limit,
                 offset

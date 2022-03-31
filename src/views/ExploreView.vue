@@ -4,10 +4,11 @@
     :key="playlist.id"
     :id="playlist.id"
     :name="playlist.name"
+    :image="playlist.image"
   />
   <button
     @click="requestPlaylists"
-    v-if="this.playlists.length == this.requestOffset"
+    v-if="this.playlists.length < this.playlistTotal"
   >
     Load more playlists
   </button>
@@ -30,11 +31,13 @@ export default {
         this.requestLimit,
         this.requestOffset
       );
-      console.log(response);
+      console.log(response.data);
+      this.playlistTotal = response.data.total;
       for (let playlistObject of response.data.items) {
         this.playlists.push({
           id: playlistObject.id,
           name: playlistObject.name,
+          image: playlistObject.images[0].url,
         });
       }
       this.requestOffset += this.requestLimit;
@@ -45,6 +48,7 @@ export default {
       playlists: [],
       requestLimit: 5,
       requestOffset: 0,
+      playlistTotal: 5,
     };
   },
 };

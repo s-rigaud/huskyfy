@@ -1,7 +1,8 @@
+import { useAuthStore } from '@/stores/modules/auth';
 import ExploreView from '@/views/ExploreView.vue';
 import HomePage from '@/views/HomePage.vue';
+import PlaylistView from '@/views/PlaylistView.vue';
 import { createRouter, createWebHistory } from 'vue-router';
-import { useAuthStore } from '../stores/modules/auth';
 
 
 const routes = [
@@ -19,6 +20,14 @@ const routes = [
         path: "/explore",
         name: "Explore",
         component: ExploreView,
+        children: [
+            {
+                path: "playlist/:playlistId",
+                name: "Explore playlist",
+                component: PlaylistView,
+                props: true,
+            }
+        ]
     },
 ]
 
