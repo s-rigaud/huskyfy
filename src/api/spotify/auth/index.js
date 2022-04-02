@@ -10,29 +10,18 @@ const SCOPES = 'user-read-private user-read-email user-follow-read user-library-
 
 export default {
     // https://developer.spotify.com/documentation/general/guides/authorization/code-flow/
-
-    // https://accounts.spotify.com/authorize?response_type=code&client_id=0c26ab311d744f8faae1f5c8ccc4ae21&scope=user-read-private%20user-read-email%20user-follow-read%20user-library-read%20playlist-read-collaborative%20playlist-read-private&redirect_uri=http://localhost:8080
-    makeOAuthRequest() {
-        const PARAMS = {
-            response_type: "code",
-            client_id: CLIENT_ID,
-            scope: SCOPES,
-            redirect_uri: REDIRECT_URI,
-        }
-        axios({
-            method: 'get',
-            url: 'https://accounts.spotify.com/authorize',
-            params: PARAMS,
-        })
+    getOAuthUrl() {
+        const BASE_URL = 'https://accounts.spotify.com/authorize';
+        const oauthUrl = `${BASE_URL}?response_type=code&client_id=${CLIENT_ID}&scope=${SCOPES}&redirect_uri=${REDIRECT_URI}`;
+        return oauthUrl;
     },
 
-    requestFirstAccessToken() {
+    async requestFirstAccessToken() {
         const authStore = useAuthStore();
-
         console.log("Token: " + authStore.temporaryToken);
         console.log("Encoded credentials: " + ENCODED_CREDENTIALS)
 
-        axios({
+        await axios({
             method: 'post',
             url: 'https://accounts.spotify.com/api/token',
             headers: {
@@ -43,15 +32,14 @@ export default {
         }).then(function (response) {
             authStore.accessToken = response.data.access_token
             authStore.refreshToken = response.data.refresh_token
-            return response;
         })
     },
 
-    requestNewAccessToken() {
+    async requestNewAccessToken() {
         const authStore = useAuthStore();
         console.log("trying to refresh token before retrying call")
 
-        axios({
+        return await axios({
             method: 'post',
             url: 'https://accounts.spotify.com/api/token',
             headers: {
@@ -63,7 +51,7 @@ export default {
             authStore.accessToken = response.data.access_token
             return response;
         }).catch(function (err) {
-            console.log(err);
+            console.log("Error while fetching new access token", err);
         });
     }
 };

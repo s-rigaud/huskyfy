@@ -1,17 +1,14 @@
 <template>
   <PlaylistCard
-    v-for="playlist in this.playlists"
+    v-for="playlist in playlists"
     :key="playlist.id"
     :id="playlist.id"
     :name="playlist.name"
     :image="playlist.image"
   />
-  <button
-    @click="requestPlaylists"
-    v-if="this.playlists.length < this.playlistTotal"
-  >
+  <v-btn @click="requestPlaylists" v-if="playlists.length < playlistTotal">
     Load more playlists
-  </button>
+  </v-btn>
 </template>
 
 <script>

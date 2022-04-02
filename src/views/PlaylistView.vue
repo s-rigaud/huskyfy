@@ -1,5 +1,5 @@
 <template>
-  <p>{{ this.id }}</p>
+  <p>{{ id }}</p>
 </template>
 
 <script>

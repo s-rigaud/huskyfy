@@ -8,25 +8,28 @@ const request = axios.create({
 
 request.interceptors.request.use(function (config) {
     const authStore = useAuthStore()
-
     if (authStore.accessToken) {
         config.headers.common["Authorization"] = `Bearer ${authStore.accessToken}`;
     }
     return config;
 }, null);
 
-// Handle access token refresh somewhere
+// Handle access token refresh for 401
 request.interceptors.response.use(null, async (error) => {
-    const { status, data } = error.response;
+    const { status } = error.response;
     const config = error.config;
-    console.log(status, data)
 
     if (error.response && status === 401) {
         let res = await api.spotify.auth.requestNewAccessToken();
         if (res.data.access_token) {
+            const authStore = useAuthStore()
+            authStore.accessToken = res.data.access_token;
+
+            config.headers["Authorization"] = `Bearer ${res.data.access_token}`;
             return request(config);
         }
     }
+    console.log("Exception while trying to handle error")
     return Promise.reject(error)
 });
 

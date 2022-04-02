@@ -1,10 +1,11 @@
 // Styles
 import '@mdi/font/css/materialdesignicons.css'
-import 'vuetify/styles'
-import VueI18n from './i18n'
-
 // Vuetify
 import { createVuetify } from 'vuetify'
+import 'vuetify/styles'
+// Translations
+import i18n from '../i18n'
+
 
 export default createVuetify(
   // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides

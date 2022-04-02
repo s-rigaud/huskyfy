@@ -1,8 +1,8 @@
 <template>
   <router-link
-    :to="{ name: 'Explore playlist', params: { playlistId: this.id } }"
+    :to="{ name: 'Explore playlist', params: { playlistId: id } }"
   >
-    <p>{{ this.id }} - {{ this.name }}</p>
+    <p>{{ id }} - {{ name }}</p>
     <img .src="this.image" alt="Playlist cover" />
   </router-link>
 </template>
