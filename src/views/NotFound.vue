@@ -1,5 +1,5 @@
 <template>
-  <p>Route not found</p>
+  <h2>Route not found</h2>
 </template>
 
 <script>

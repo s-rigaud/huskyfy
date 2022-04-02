@@ -4,7 +4,7 @@ const Base64 = require('js-base64').Base64;
 
 const CLIENT_ID = "0c26ab311d744f8faae1f5c8ccc4ae21"
 const CLIENT_SECRET = "144c002f948a438a958b25783f2835fe"
-const REDIRECT_URI = "http://localhost:8080";
+const REDIRECT_URI = "http://localhost:8080/login";
 const ENCODED_CREDENTIALS = Base64.encode(`${CLIENT_ID}:${CLIENT_SECRET}`)
 const SCOPES = 'user-read-private user-read-email user-follow-read user-library-read playlist-read-collaborative playlist-read-private';
 
@@ -18,9 +18,6 @@ export default {
 
     async requestFirstAccessToken() {
         const authStore = useAuthStore();
-        console.log("Token: " + authStore.temporaryToken);
-        console.log("Encoded credentials: " + ENCODED_CREDENTIALS)
-
         await axios({
             method: 'post',
             url: 'https://accounts.spotify.com/api/token',

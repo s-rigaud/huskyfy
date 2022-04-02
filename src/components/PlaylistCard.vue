@@ -1,10 +1,13 @@
 <template>
-  <router-link
-    :to="{ name: 'Explore playlist', params: { playlistId: id } }"
-  >
-    <p>{{ id }} - {{ name }}</p>
-    <img .src="this.image" alt="Playlist cover" />
-  </router-link>
+  <v-card class="mx-auto" max-width="344" @click="displayDetails">
+    <v-img .src="image" height="200px" cover></v-img>
+
+    <v-card-title> {{ id }} </v-card-title>
+
+    <v-card-subtitle> {{ name }} </v-card-subtitle>
+
+    <v-card-actions> </v-card-actions>
+  </v-card>
 </template>
 
 <script>
@@ -15,9 +18,13 @@ export default {
     name: String,
     image: String,
   },
-  setup() {},
-  data() {
-    return { requestLimit: 5, requestOffset: 0, trackTotal: 5 };
+  methods: {
+    displayDetails() {
+      this.$router.push({
+        name: "Explore playlist",
+        params: { playlistId: this.id },
+      });
+    },
   },
 };
 </script>

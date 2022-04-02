@@ -1,38 +1,29 @@
 import api from "@/api";
 import { useAuthStore } from '@/stores/modules/auth';
 import { useUserStore } from '@/stores/modules/user';
-import ExploreView from '@/views/ExploreView.vue';
-import HomePage from '@/views/HomePage.vue';
+import LoginView from '@/views/LoginView.vue';
 import NotFound from '@/views/NotFound.vue';
-import PlaylistView from '@/views/PlaylistView.vue';
+import PlaylistDetail from '@/views/PlaylistDetail.vue';
+import PlaylistList from '@/views/PlaylistList.vue';
 import { createRouter, createWebHistory } from 'vue-router';
-
-
 
 
 const routes = [
     {
-        path: "/",
-        name: "HomePage",
-        component: HomePage,
-    },
-    {
-        path: "/callback",
-        name: "Callback",
-        component: HomePage,
+        path: "/login",
+        name: "LoginView",
+        component: LoginView,
     },
     {
         path: "/explore",
         name: "Explore",
-        component: ExploreView,
-        children: [
-            {
-                path: "playlist/:playlistId",
-                name: "Explore playlist",
-                component: PlaylistView,
-                props: true,
-            }
-        ]
+        component: PlaylistList,
+    },
+    {
+        path: "/playlist/:playlistId",
+        name: "Explore playlist",
+        component: PlaylistDetail,
+        props: true,
     },
     { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound },
 ]
@@ -46,9 +37,13 @@ router.beforeEach(async function (to, from, next) {
     const authStore = useAuthStore()
     const userStore = useUserStore()
 
+    // Does not allow to visit other pages while not connected
+    if (!authStore.accessToken && to.name !== "LoginView") {
+        next({ name: 'LoginView' })
+    }
+
     // Intercept and autolog user when code is received
-    console.log(to, from, next);
-    if (to.name == "HomePage" && to.query.code) {
+    else if (to.name == "LoginView" && to.query.code) {
         const code = to.query.code;
         authStore.temporaryToken = code;
 
@@ -68,13 +63,12 @@ router.beforeEach(async function (to, from, next) {
             country: data.country,
             connected: true,
         });
-    }
+        next({ name: "Explore" });
 
-    // Does not allow to visit other pages while not connected
-    if (!authStore.accessToken && to.name !== "HomePage") {
-        next(false);
+    } else {
+        // Default routing
+        next();
     }
-    next();
 });
 
 export default router;

@@ -16,7 +16,7 @@ import api from "@/api";
 import PlaylistCard from "@/components/PlaylistCard.vue";
 
 export default {
-  name: "ExploreView",
+  name: "PlaylistList",
   components: { PlaylistCard },
   setup() {},
   mounted() {
