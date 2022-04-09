@@ -1,6 +1,6 @@
 import api from "@/api";
-import { useAuthStore } from '@/stores/modules/auth';
-import { useUserStore } from '@/stores/modules/user';
+import { useAuthStore } from '@/stores/auth';
+import { useUserStore } from '@/stores/user';
 import LoginView from '@/views/LoginView.vue';
 import NotFound from '@/views/NotFound.vue';
 import PlaylistDetail from '@/views/PlaylistDetail.vue';

@@ -1,4 +1,4 @@
-import { useAuthStore } from "@/stores/modules/auth";
+import { useAuthStore } from "@/stores/auth";
 import axios from "axios";
 const Base64 = require('js-base64').Base64;
 

@@ -17,4 +17,12 @@ export default {
             }
         });
     },
+    getUserSavedTracks(limit, offset) {
+        return request.get(`me/tracks`, {
+            params: {
+                limit,
+                offset
+            }
+        });
+    },
 };

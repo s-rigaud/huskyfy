@@ -1,5 +1,12 @@
 <template>
   <PlaylistCard
+    key="liked-song"
+    id="liked-song"
+    name="Liked song"
+    image="https://community.spotify.com/t5/image/serverpage/image-id/104727iC92B541DB372FBC7?v=v2"
+  />
+
+  <PlaylistCard
     v-for="playlist in playlists"
     :key="playlist.id"
     :id="playlist.id"
@@ -30,6 +37,7 @@ export default {
       );
       console.log(response.data);
       this.playlistTotal = response.data.total;
+
       for (let playlistObject of response.data.items) {
         this.playlists.push({
           id: playlistObject.id,
@@ -43,9 +51,9 @@ export default {
   data() {
     return {
       playlists: [],
-      requestLimit: 5,
+      requestLimit: 50,
       requestOffset: 0,
-      playlistTotal: 5,
+      playlistTotal: 50,
     };
   },
 };

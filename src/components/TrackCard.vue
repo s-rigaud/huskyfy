@@ -3,21 +3,15 @@
     <v-card color="#1F7087" theme="dark">
       <div class="d-flex flex-no-wrap justify-space-between">
         <div>
-          <v-card-title class="text-h5"> {{ id }} </v-card-title>
-
-          <v-card-subtitle>{{ name }}</v-card-subtitle>
-
-          <v-card-actions>
-            <v-btn class="ml-2" variant="outlined" size="small">
-              START RADIO
-            </v-btn>
-          </v-card-actions>
+          <v-card-title class="text-h5"> {{ name }} </v-card-title>
+          <v-card-subtitle>{{ id }}</v-card-subtitle>
+          <p>{{ artists }}</p>
+          <p>{{ genre }}</p>
+          <p>{{ isIndie }}</p>
         </div>
 
         <v-avatar class="ma-3" size="125" rounded="0">
-          <v-img
-            src="https://cdn.vuetifyjs.com/images/cards/foster.jpg"
-          ></v-img>
+          <v-img v-bind:src="image"></v-img>
         </v-avatar>
       </div>
     </v-card>
@@ -31,6 +25,9 @@ export default {
     id: String,
     name: String,
     image: String,
+    artists: Array,
+    genre: String,
+    isIndie: Boolean,
   },
 };
 </script>

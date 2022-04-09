@@ -2,7 +2,7 @@
   <v-app>
     <NavbarComponent />
     <v-main>
-      <v-container fluid>
+      <v-container id="container" fluid>
         <router-view />
       </v-container>
     </v-main>
@@ -19,3 +19,15 @@ export default {
   components: { NavbarComponent, FooterComponent },
 };
 </script>
+<style scoped>
+#container {
+  padding: 12px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: stretch;
+  align-content: space-between;
+  justify-content: space-around;
+  background-color: #ccc !important;
+}
+</style>
