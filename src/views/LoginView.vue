@@ -1,6 +1,4 @@
 <template>
-  <apexchart width="500" type="bar" :options="options" :series="series"></apexchart>
-
   <div
     id="login"
     style="
@@ -37,9 +35,7 @@ export default {
   name: "LoginView",
   setup() {
     const userStore = useUserStore();
-    return {
-      userStore,
-    };
+    return { userStore };
   },
   methods: {
     async accessOAuthPage() {

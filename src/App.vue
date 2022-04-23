@@ -23,7 +23,7 @@ export default {
 #container {
   padding: 12px;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   flex-wrap: wrap;
   align-items: stretch;
   align-content: space-between;

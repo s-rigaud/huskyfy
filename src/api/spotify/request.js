@@ -15,7 +15,10 @@ request.interceptors.request.use(function (config) {
 }, null);
 
 // Handle access token refresh for 401
-request.interceptors.response.use(null, async (error) => {
+request.interceptors.response.use(response => {
+    console.log(response);
+    return response
+}, async (error) => {
     const { status } = error.response;
     const config = error.config;
 
