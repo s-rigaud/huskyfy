@@ -1,8 +1,23 @@
-* Implémenter un fade on scroll avec une belle page d'accueil
-https://vuetifyjs.com/en/components/app-bars/#menu
+# V1 Features
 
+* Create logo
 
-* Implémenter alert quand c'est chargé
-https://vuetifyjs.com/en/components/alerts/#shaped
+* Find good image for header
 
-* Regarder tous les composants vuetify
+* Improve Username display
+
+* Correctly logout from OAuth2
+
+* Improve track card display (display more infos, display tags / artist)
+
+* Improve playlist card display
+
+* Add Github link to footer
+
+* Update graph when loading more tracks
+
+* Improve legend for donut chart
+
+* Improve indie score widget (name , utility small reward > 25% , > 50 %, >75% update emoji)
+
+* Add playlist creation button from current filtered tracks

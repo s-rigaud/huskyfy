@@ -54,10 +54,12 @@ router.beforeEach(async function (to, from, next) {
         const response = await api.spotify.users.getUserProfile();
         const data = response.data;
 
+        const DEFAULT_PICTURE = "https://4.bp.blogspot.com/-l60SlLNpKH0/WMmAGuXxX4I/AAAAAAAAB4E/nYzxAq6UOngLjsT277uXW5Am5Mom2oXpQCLcB/s1600/serpent%2Bkaa.jpg"
+        const userPicture = (data.images.length > 0) ? data.images[0].url : DEFAULT_PICTURE
         userStore.$patch({
             id: data.id,
             username: data.display_name,
-            profilePicture: data.images[0].url,
+            profilePicture: userPicture,
             isPremium: data.product == "premium",
             mail: data.email,
             country: data.country,

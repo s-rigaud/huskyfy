@@ -5,7 +5,6 @@
     :options="chartOptions"
     :series="series"
     @click="clickHandler"
-    @legnedClick="clickHandler"
   ></apexchart>
 </template>
 
@@ -65,11 +64,35 @@ export default {
       return string.charAt(0).toUpperCase() + string.slice(1);
     },
     clickHandler(event) {
-      var el = event.target;
-      var seriesIndex = parseInt(el.getAttribute("j"));
-      this.$emit("selectedGenre", this.genres[seriesIndex][0]);
-      console.log("selected genre ", event.target);
+      console.log(event);
+      if (event instanceof TouchEvent) return;
+
+      const el = event.target;
+      const isLengendClick =
+        el.nodeName == "SPAN" &&
+        Array.from(el.classList).includes("apexcharts-legend-text");
+      const isChartClick =
+        el.nodeName == "path" &&
+        Array.from(el.classList).includes("apexcharts-pie-area");
+
+      if (!isLengendClick && !isChartClick) return;
+
+      let genreLabel = "";
+      if (isLengendClick) {
+        genreLabel = event.target.textContent;
+      }
+      // Click on graph
+      else {
+        const seriesIndex = parseInt(el.getAttribute("j"));
+        genreLabel = this.genres[seriesIndex][0];
+      }
+      this.$emit("selectedGenre", genreLabel.toLowerCase());
     },
   },
 };
 </script>
+<style scoped>
+.apexcharts-legend-text:hover {
+  font-weight: bold;
+}
+</style>

@@ -28,6 +28,6 @@ export default {
   align-items: stretch;
   align-content: space-between;
   justify-content: space-around;
-  background-color: #ccc !important;
+  background-color: #95afc0 !important;
 }
 </style>

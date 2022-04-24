@@ -1,6 +1,17 @@
 <template>
-  <v-app-bar app absolute v-if="userStore.connected">
-    <router-link id="explore" to="/explore">🏠 Explore </router-link>
+  <v-app-bar
+    app
+    absolute
+    v-if="userStore.connected"
+    fade-img-on-scroll
+    image="https://psl.eu/sites/default/files/styles/fiche_evenement/public/2021-09/events_papyrus-cdf.png?itok=8KlmBy08"
+  >
+    <router-link id="explore" to="/explore"
+      ><img
+        src="http://media.unreel.me/prod/yoola/general//b27c2fe4-d8a8-4adb-9da7-cf2d860bcafa"
+        alt=""
+        style="min-width: 100px; width: 150px"
+    /></router-link>
     <v-spacer></v-spacer>
     <p>{{ userStore.username }}</p>
     <v-avatar style="align-items: initial">

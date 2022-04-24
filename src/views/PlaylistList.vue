@@ -1,5 +1,9 @@
 <template>
   <div id="full-page">
+    <h1>
+      Start browsing you playlist to gather some useful data on them, split them
+      by genre
+    </h1>
     <div id="playlists">
       <PlaylistCard
         key="liked-song"
@@ -13,7 +17,9 @@
         :key="playlist.id"
         :id="playlist.id"
         :name="playlist.name"
-        :image="playlist.image"
+        :image="getCoverOrDefaultCover(playlist)"
+        :public="playlist.public"
+        :description="playlist.description"
       />
       <v-btn @click="requestPlaylists" v-if="playlists.length < playlistTotal">
         Load more playlists
@@ -40,15 +46,13 @@ export default {
         this.requestOffset
       );
       this.playlistTotal = response.data.total;
-
-      for (let playlistObject of response.data.items) {
-        this.playlists.push({
-          id: playlistObject.id,
-          name: playlistObject.name,
-          image: playlistObject.images[0].url,
-        });
-      }
+      this.playlists.push(...response.data.items);
       this.requestOffset += this.requestLimit;
+    },
+    getCoverOrDefaultCover(playlist) {
+      return playlist.images.length > 0
+        ? playlist.images[0].url
+        : "https://yt3.ggpht.com/DTKih1mY7NIIGzKGOAbLIW11t7AevaNgFEZkF-amASGz6KEhAEWECroV-BOaIz9MezmN0145DA=s900-c-k-c0x00ffffff-no-rj";
     },
   },
   data() {
@@ -62,6 +66,12 @@ export default {
 };
 </script>
 <style scoped>
+#full-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 #playlists {
   display: flex;
   flex-direction: row;

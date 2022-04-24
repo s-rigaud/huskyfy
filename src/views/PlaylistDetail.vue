@@ -4,6 +4,15 @@
     <IndieChart :indiePercentage="indiePercentage" />
   </div>
 
+  <v-btn @click="createNewPlaylist">Create fake playlist</v-btn>
+  <v-btn
+    @click="loadTracks"
+    v-if="
+      playlists[playlistId] && playlists[playlistId].tracks.length < tracksTotal
+    "
+  >
+    Load more Tracks
+  </v-btn>
   <div id="tracks" v-if="filteredTracks.length > 0">
     <TrackCard
       v-for="track of filteredTracks"
@@ -15,13 +24,11 @@
       :genres="track.genres"
       :isIndie="track.isIndie"
     />
-    <v-btn @click="loadTracks" v-if="playlists[playlistId].tracks.length < tracksTotal">
-      Load more Tracks
-    </v-btn>
   </div>
 </template>
 
 <script>
+import api from "@/api";
 import GenreChart from "@/components/GenreChart.vue";
 import IndieChart from "@/components/IndieChart.vue";
 import TrackCard from "@/components/TrackCard.vue";
@@ -74,7 +81,20 @@ export default {
     },
     filterTracksByGenre(selectedGenreName) {
       this.filteredTracks = this.playlists[this.playlistId].tracks.filter((t) =>
-        t.genres.includes(selectedGenreName)
+        Array.from(t.genres).includes(selectedGenreName)
+      );
+    },
+    async createNewPlaylist() {
+      const playlist = this.playlists[this.playlistId];
+      let response = await api.spotify.playlists.createPlaylist(
+        playlist.name,
+        playlist.public,
+        playlist.description,
+        playlist.collaborative
+      );
+      await api.spotify.playlists.updatePlaylistCover(
+        response.data.id,
+        playlist.images[0].url
       );
     },
   },

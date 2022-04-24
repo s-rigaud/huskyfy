@@ -1,7 +1,7 @@
 <template>
   <v-col cols="12">
     <v-hover>
-      <v-card color="#1F7087" theme="dark">
+      <v-card color="#1F7087" theme="dark" variant="outlined">
         <div class="d-flex flex-no-wrap justify-space-between">
           <div>
             <v-card-title class="text-h5"> {{ name }} </v-card-title>
@@ -10,7 +10,7 @@
             <v-chip
               v-for="genre in genres"
               :key="genre"
-              :text="genre"
+              :text="genre.toUpperCase()"
               label
               style="margin: 5px"
             >

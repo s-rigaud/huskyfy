@@ -1,5 +1,9 @@
 <template>
-  <v-card @click="displayDetails" style="min-width: 23%; min-height: 23%">
+  <v-card
+    @click="displayDetails"
+    style="width: 23%; min-height: 23%; margin-bottom: 10px"
+    color="#f0932b"
+  >
     <v-parallax
       v-bind:src="image"
       height="400px"
@@ -8,10 +12,9 @@
     ></v-parallax>
 
     <v-card-title> {{ name }} </v-card-title>
-
-    <v-card-subtitle> {{ id }} </v-card-subtitle>
-
-    <v-card-actions> </v-card-actions>
+    <v-card-subtitle style="margin-bottom: inherit">
+      {{ description }}
+    </v-card-subtitle>
   </v-card>
 </template>
 
@@ -22,6 +25,8 @@ export default {
     id: String,
     name: String,
     image: String,
+    description: String,
+    public: Boolean,
   },
   methods: {
     displayDetails() {

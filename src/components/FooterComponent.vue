@@ -1,14 +1,22 @@
 <template>
   <v-footer
     app
-    color="primary lighten-1"
-    style="max-height: 100px"
+    style="max-height: 100px; background-color: #30336b; color: #dff9fb"
     v-if="userStore.connected"
   >
     <v-row justify="center" no-gutters>
       <v-col class="primary lighten-2 py-4 text-center white--text" cols="12">
         {{ new Date().getFullYear() }} —
-        <strong>Built with ♥ by Hylectrif</strong>
+        <strong>
+          Built with ♥ by
+          <a
+            href="https://github.com/s-rigaud"
+            target="_blank"
+            style="color: #f0932b; text-decoration: none"
+          >
+            Hylectrif
+          </a>
+        </strong>
       </v-col>
     </v-row>
   </v-footer>
