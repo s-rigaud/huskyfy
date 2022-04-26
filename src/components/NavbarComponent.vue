@@ -7,20 +7,21 @@
     image="https://psl.eu/sites/default/files/styles/fiche_evenement/public/2021-09/events_papyrus-cdf.png?itok=8KlmBy08"
   >
     <router-link id="explore" to="/explore"
-      ><img
-        src="http://media.unreel.me/prod/yoola/general//b27c2fe4-d8a8-4adb-9da7-cf2d860bcafa"
-        alt=""
-        style="min-width: 100px; width: 150px"
+      ><img src="logo.png" alt="" style="min-width: 100px; width: 150px"
     /></router-link>
+
     <v-spacer></v-spacer>
-    <p>{{ userStore.username }}</p>
-    <v-avatar style="align-items: initial">
-      <v-img
-        v-bind:src="this.userStore.profilePicture"
-        alt="Profile picture"
-      ></v-img>
-    </v-avatar>
-    <v-btn @click="logout">Logout</v-btn>
+
+    <h3 style="margin-right: 10px">{{ userStore.username }}</h3>
+    <v-badge content="🎵" color="warning">
+      <v-avatar style="align-items: initial">
+        <v-img
+          v-bind:src="this.userStore.profilePicture"
+          alt="Profile picture"
+        ></v-img>
+      </v-avatar>
+    </v-badge>
+    <v-btn @click="logout" color="error">Logout</v-btn>
   </v-app-bar>
 </template>
 
@@ -34,6 +35,15 @@ export default {
     const userStore = useUserStore();
     const authStore = useAuthStore();
     return { authStore, userStore };
+  },
+  computed: {
+    profilePictureOrDefault() {
+      const DEFAULT_PICTURE =
+        "https://4.bp.blogspot.com/-l60SlLNpKH0/WMmAGuXxX4I/AAAAAAAAB4E/nYzxAq6UOngLjsT277uXW5Am5Mom2oXpQCLcB/s1600/serpent%2Bkaa.jpg";
+      return this.userStore.profilePicture != ""
+        ? this.userStore.profilePicture
+        : DEFAULT_PICTURE;
+    },
   },
   methods: {
     logout() {

@@ -25,7 +25,7 @@ export default {
           radialBar: {
             hollow: {
               margin: 15,
-              size: "70%",
+              size: "30%",
               image:
                 "https://images.emojiterra.com/google/android-10/512px/1f60e.png",
               imageWidth: 64,

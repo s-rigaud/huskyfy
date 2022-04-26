@@ -2,17 +2,9 @@
 
 * Create logo
 
-* Find good image for header
-
 * Improve Username display
 
-* Correctly logout from OAuth2
-
 * Improve track card display (display more infos, display tags / artist)
-
-* Improve playlist card display
-
-* Add Github link to footer
 
 * Update graph when loading more tracks
 

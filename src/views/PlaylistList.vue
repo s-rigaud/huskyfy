@@ -1,8 +1,8 @@
 <template>
   <div id="full-page">
     <h1>
-      Start browsing you playlist to gather some useful data on them, split them
-      by genre
+      Start browsing your playlists to gather some useful data on them, split
+      them by genre and so much more
     </h1>
     <div id="playlists">
       <PlaylistCard
@@ -10,6 +10,9 @@
         id="liked-song"
         name="Liked song"
         image="https://community.spotify.com/t5/image/serverpage/image-id/104727iC92B541DB372FBC7?v=v2"
+        owner="Pomme"
+        :public="1 == 1"
+        :collaborative="1 == 1"
       />
 
       <PlaylistCard
@@ -18,8 +21,9 @@
         :id="playlist.id"
         :name="playlist.name"
         :image="getCoverOrDefaultCover(playlist)"
+        :owner="usernameToDisplay(playlist.owner['display_name'])"
         :public="playlist.public"
-        :description="playlist.description"
+        :collaborative="playlist.collaborative"
       />
       <v-btn @click="requestPlaylists" v-if="playlists.length < playlistTotal">
         Load more playlists
@@ -31,11 +35,23 @@
 <script>
 import api from "@/api";
 import PlaylistCard from "@/components/PlaylistCard.vue";
+import { useUserStore } from "@/stores/user";
 
 export default {
   name: "PlaylistList",
   components: { PlaylistCard },
-  setup() {},
+  setup() {
+    const userStore = useUserStore();
+    const currentUserUsername = userStore.username;
+    return { currentUserUsername };
+  },
+  computed: {
+    usernameToDisplay() {
+      return (ownerUsername) => {
+        return this.currentUserUsername == ownerUsername ? "me" : ownerUsername;
+      };
+    },
+  },
   mounted() {
     this.requestPlaylists();
   },

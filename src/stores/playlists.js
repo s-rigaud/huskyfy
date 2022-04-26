@@ -4,7 +4,7 @@ import { defineStore } from 'pinia';
 export const usePlaylistsStore = defineStore('playlists', {
     state: () => {
         return {
-            playlists: {},
+            playlists: {'liked-song': {}},
             MAX_TRACKS_LIMIT: 50,
         }
     },
@@ -12,6 +12,9 @@ export const usePlaylistsStore = defineStore('playlists', {
         async downloadPlaylistTracks(playlistId) {
             if (!this.playlists[playlistId]) {
                 this.playlists[playlistId] = { offset: 0, tracks: [] }
+            } else if (this.playlists[playlistId].offset >= this.playlists[playlistId].tracksTotal) {
+                console.log("playlist already loaded, no request");
+                return this.playlists[playlistId].tracks
             }
             const offset = this.playlists[playlistId].offset;
             const response = await this.callCorrespondingAPIEndpoint(playlistId, offset);

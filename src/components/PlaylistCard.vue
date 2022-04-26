@@ -1,19 +1,21 @@
 <template>
   <v-card
+    flat
     @click="displayDetails"
-    style="width: 23%; min-height: 23%; margin-bottom: 10px"
-    color="#f0932b"
+    style="
+      width: 23%;
+      min-height: 23%;
+      margin-bottom: 10px;
+      background-color: initial;
+    "
   >
-    <v-parallax
-      v-bind:src="image"
-      height="400px"
-      cover
-      scale="1.1"
-    ></v-parallax>
+    <v-img v-bind:src="image" height="400px" cover></v-img>
 
-    <v-card-title> {{ name }} </v-card-title>
-    <v-card-subtitle style="margin-bottom: inherit">
-      {{ description }}
+    <v-card-title style="padding: 0"> {{ name }} </v-card-title>
+    <v-card-subtitle style="padding: 0">
+      <p v-if="this.public">📣</p>
+      <p v-if="this.collaborative">🤝</p>
+      <p>Created by {{ owner }}</p>
     </v-card-subtitle>
   </v-card>
 </template>
@@ -25,8 +27,9 @@ export default {
     id: String,
     name: String,
     image: String,
-    description: String,
+    owner: String,
     public: Boolean,
+    collaborative: Boolean,
   },
   methods: {
     displayDetails() {

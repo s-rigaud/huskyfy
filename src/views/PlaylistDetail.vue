@@ -1,17 +1,43 @@
 <template>
+  <v-card flat>
+    <v-img
+      v-bind:src="playlists[this.playlistId].images[0].url"
+      height="400px"
+      cover
+    ></v-img>
+
+    <v-card-title style="padding: 0">
+      {{ playlists[this.playlistId].name }}
+    </v-card-title>
+    <v-card-subtitle style="padding: 0">
+      <p v-if="playlists[this.playlistId].public">📣</p>
+      <p v-if="playlists[this.playlistId].collaborative">🤝</p>
+      <p>Created by {{ playlists[this.playlistId].owner["display_name"] }}</p>
+    </v-card-subtitle>
+  </v-card>
+
   <div id="charts" v-if="filteredTracks.length > 0">
     <GenreChart :genres="sortedGenres" @selectedGenre="filterTracksByGenre" />
     <IndieChart :indiePercentage="indiePercentage" />
   </div>
 
-  <v-btn @click="createNewPlaylist">Create fake playlist</v-btn>
+  <v-btn @click="createNewPlaylist">Duplicate playlist</v-btn>
+  <v-progress-circular
+    :model-value="loadingPercentage"
+    color="deep-orange lighten-2"
+    v-if="loadingPercentage > 0"
+  >
+    {{ loadingPercentage }}% - {{ loadingText }}
+  </v-progress-circular>
+
+  <v-btn @click="unfollowPlaylist" color="error">Unfollow playlist</v-btn>
   <v-btn
     @click="loadTracks"
     v-if="
       playlists[playlistId] && playlists[playlistId].tracks.length < tracksTotal
     "
   >
-    Load more Tracks
+    Load more tracks
   </v-btn>
   <div id="tracks" v-if="filteredTracks.length > 0">
     <TrackCard
@@ -58,6 +84,8 @@ export default {
   data() {
     return {
       filteredTracks: [],
+      loadingPercentage: 0,
+      loadingText: "",
     };
   },
   methods: {
@@ -79,12 +107,18 @@ export default {
     async loadTracks() {
       this.filteredTracks = await this.downloadPlaylistTracks(this.playlistId);
     },
+    async unfollowPlaylist() {
+      await api.spotify.playlists.unfollowPlaylist(this.playlistId);
+      this.$router.push({ name: "Explore" });
+    },
     filterTracksByGenre(selectedGenreName) {
       this.filteredTracks = this.playlists[this.playlistId].tracks.filter((t) =>
         Array.from(t.genres).includes(selectedGenreName)
       );
     },
     async createNewPlaylist() {
+      this.loadingText = "Creating new playlist";
+      this.loadingPercentage = 1;
       const playlist = this.playlists[this.playlistId];
       let response = await api.spotify.playlists.createPlaylist(
         playlist.name,
@@ -92,10 +126,24 @@ export default {
         playlist.description,
         playlist.collaborative
       );
-      await api.spotify.playlists.updatePlaylistCover(
+
+      const newPlaylistId = response.data.id;
+      this.loadingText = "Updating playlist cover";
+      this.loadingPercentage = 33;
+      /*await api.spotify.playlists.updatePlaylistCover(
         response.data.id,
-        playlist.images[0].url
+        "https://m.media-amazon.com/images/I/61iw4s61r1S._AC_SX425_.jpg"
+        //playlist.images[0].url
+      );*/
+
+      this.loadingText = "Adding all selected tracks";
+      this.loadingPercentage = 66;
+      await api.spotify.playlists.addTracksToPlaylist(
+        newPlaylistId,
+        this.filteredTracks.map((t) => `spotify:track:${t.id}`)
       );
+      this.loadingText = "Done";
+      this.loadingPercentage = 100;
     },
   },
   computed: {
@@ -140,5 +188,10 @@ export default {
 }
 #tracks {
   width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-items: stretch;
 }
 </style>

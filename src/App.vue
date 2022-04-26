@@ -28,6 +28,13 @@ export default {
   align-items: stretch;
   align-content: space-between;
   justify-content: space-around;
-  background-color: #95afc0 !important;
+  background-color: #ddd !important;
+  font-family: "Righteous";
+}
+
+@font-face {
+  font-family: "Righteous";
+  src: local("Righteous"),
+    url(./fonts/righteous/Righteous-j7av.ttf) format("truetype");
 }
 </style>

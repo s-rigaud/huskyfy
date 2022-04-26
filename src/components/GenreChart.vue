@@ -40,9 +40,7 @@ export default {
           },
         ],
         legend: {
-          position: "right",
-          offsetY: 0,
-          height: 230,
+          position: "bottom",
         },
       },
     };
@@ -64,7 +62,6 @@ export default {
       return string.charAt(0).toUpperCase() + string.slice(1);
     },
     clickHandler(event) {
-      console.log(event);
       if (event instanceof TouchEvent) return;
 
       const el = event.target;

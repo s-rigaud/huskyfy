@@ -22,14 +22,17 @@ export default {
     },
     async getUserSavedTracks(limit, offset) {
         // Special playlist, only way to retrieve it is track by track, no global playlist element
+        const userStore = useUserStore()
+
         let response = await request.get(`me/tracks`, {
             params: {
                 limit,
                 offset
             }
         });
-        return {
-            tracks: response.data.items,
+        response.data = {
+            ...response.data,
+            tracks: { items: response.data.items },
             collaborative: false,
             description: "",
             id: "liked-songs",
@@ -38,7 +41,9 @@ export default {
             ],
             name: "liked-songs",
             public: false,
+            owner: { "display_name": userStore.username }
         }
+        return response
     },
     createPlaylist(name, public_, description, collaborative) {
         const userStore = useUserStore()
@@ -52,12 +57,22 @@ export default {
         });
     },
     async updatePlaylistCover(playlist_id, coverUrl) {
-        let response = await axios.get(coverUrl)
-        console.log(response);
+        let response = await axios.get(coverUrl, null, {
+            headers: { 'Content-Type': 'image/jpeg' }
+        })
+        console.log("image download", response);
         const body = Base64.encode(response.data)
 
         return request.put(`playlists/${playlist_id}/images`, body, {
             headers: { 'Content-Type': 'image/jpeg' }
         });
     },
+    unfollowPlaylist(playlistId) {
+        return request.delete(`playlists/${playlistId}/followers`);
+    },
+    addTracksToPlaylist(playlistId, tracksId) {
+        return request.post(`/playlists/${playlistId}/tracks`, {
+            "uris": tracksId,
+        });
+    }
 };
