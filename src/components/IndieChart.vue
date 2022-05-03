@@ -14,6 +14,7 @@ export default {
     indiePercentage: Number,
   },
   data() {
+    // All data needed to customize graph UI and data
     return {
       series: [this.indiePercentage],
       chartOptions: {
@@ -26,8 +27,7 @@ export default {
             hollow: {
               margin: 15,
               size: "30%",
-              image:
-                "https://images.emojiterra.com/google/android-10/512px/1f60e.png",
+              image: require("../assets/sunglasses-emoji.png"),
               imageWidth: 64,
               imageHeight: 64,
               imageClipped: false,
@@ -49,9 +49,7 @@ export default {
         fill: {
           type: "image",
           image: {
-            src: [
-              "https://s1.qwant.com/thumbr/0x380/2/9/0224dc49701b7ab7677a9ac8a9450c7f4f1312288135614e5163da17800682/palm-tree-24.jpg?u=https%3A%2F%2Fjooinn.com%2Fimages%2Fpalm-tree-24.jpg&q=0&b=1&p=0&a=0",
-            ],
+            src: [require("../assets/palmtree.webp")],
           },
         },
         stroke: {

@@ -15,15 +15,16 @@
       z-index: 1;
     "
   >
-    <h1 style="color: white">Split your Spotify playlist easily with Horus</h1>
+    <h1 style="color: white">{{ $t("login.header") }}</h1>
     <v-btn
       @click="accessOAuthPage"
       v-if="!userStore.connected"
       rounded
       color="primary"
       style="position: relative; bottom: -80%"
-      >Connect with Spotify</v-btn
     >
+      {{ $t("login.connect") }}
+    </v-btn>
   </div>
 </template>
 

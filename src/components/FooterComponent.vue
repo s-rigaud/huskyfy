@@ -8,7 +8,7 @@
       <v-col class="primary lighten-2 py-4 text-center white--text" cols="12">
         {{ new Date().getFullYear() }} —
         <strong>
-          Built with ♥ by
+          {{ $t("footer.built") }}
           <a
             href="https://github.com/s-rigaud"
             target="_blank"

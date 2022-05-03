@@ -1,1 +1,43 @@
-{}
+{
+    "login": {
+        "header": "Split your Spotify playlist easily with Horus",
+        "connect": "Connect to spotify"
+    },
+    "about": {
+        "header": "About the app, your data and me + links",
+        "home-button": "Back home"
+    },
+    "not-found": {
+        "404": "Page not found"
+    },
+    "playlist": {
+        "public": "Public playlist 📣",
+        "collaborative": "Collaborative playlist 🤝",
+        "private": "Private playlist 🔒",
+        "reset-filter": "Reset filters",
+        "duplicate": "Duplicate playlist",
+        "unfollow": "Unfollow playlist",
+        "set-private": "Set Playlist Private 🔒",
+        "set-public": "Set Playlist Public 📣",
+        "next": "Jump to new playlist",
+        "load-more-tracks": "Load more tracks",
+        "load-more-playlists": "Load more playlists",
+        "header": "Start browsing your playlists to gather some useful data on them, split them by genre and so much more",
+        "created-by": "Created by",
+        "your-music": {
+            "name": "Your music",
+            "description": "Spotify playlist with all your favorite songs"
+        }
+    },
+    "footer": {
+        "built": "Built with ♥ by"
+    },
+    "navbar": {
+        "logout": "Logout"
+    },
+    "track": {
+        "popular": "🔥 Popular artist",
+        "indie": "🌴 Indie artist"
+    },
+    "me": "me"
+}

@@ -1,5 +1,6 @@
 import request from "./../request";
 
+// Chunk list into smaller lists
 function chunkArray(myArray, chunkSize) {
     let results = [];
     while (myArray.length) {
@@ -9,7 +10,7 @@ function chunkArray(myArray, chunkSize) {
 }
 
 export default {
-    /* Spotify only accepts up to 50 artists at a time */
+    /* Spotify only returns a maximum of 50 artist detail at a time */
     async getMultipleArtists(artistIds) {
         const artists = []
         for (const artistIdsChunk of chunkArray(artistIds, 50)) {

@@ -3,9 +3,9 @@ import { createApp } from 'vue'
 import VueApexCharts from "vue3-apexcharts"
 import App from './App.vue'
 import VueI18n from './i18n'
-import vuetify from './plugins/vuetify'
-import { loadFonts } from './plugins/webfontloader'
-import router from './router'
+import vuetify from '@/plugins/vuetify'
+import { loadFonts } from '@/plugins/webfontloader'
+import router from '@/router'
 
 loadFonts()
 

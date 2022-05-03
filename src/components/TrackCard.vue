@@ -14,7 +14,7 @@
               {{ artists.join(", ") }}
               <v-chip
                 v-if="isIndie"
-                text="🌴 Indie"
+                :text="$t('track.indie')"
                 color="green"
                 label
                 text-color="white"
@@ -23,7 +23,7 @@
               </v-chip>
               <v-chip
                 v-else
-                text="🔥 Popular"
+                :text="$t('track.popular')"
                 color="cyan"
                 label
                 text-color="white"

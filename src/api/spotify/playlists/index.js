@@ -4,6 +4,7 @@ import request from "./../request";
 const Base64 = require('js-base64').Base64;
 
 export default {
+    // Retrieve playlists from the current logged user
     getUserPlaylists(limit, offset) {
         return request.get(`me/playlists`, {
             params: {
@@ -12,39 +13,25 @@ export default {
             }
         });
     },
+    // Return tracks for a playlist
     getPlaylistTracks(playlist_id, limit, offset) {
-        return request.get(`playlists/${playlist_id}`, {
+        return request.get(`playlists/${playlist_id}/tracks`, {
             params: {
                 limit,
                 offset
             }
         });
     },
+    // Return tracks from the special "Your music" playlist
     async getUserSavedTracks(limit, offset) {
-        // Special playlist, only way to retrieve it is track by track, no global playlist element
-        const userStore = useUserStore()
-
-        let response = await request.get(`me/tracks`, {
+        return await request.get(`me/tracks`, {
             params: {
                 limit,
                 offset
             }
         });
-        response.data = {
-            ...response.data,
-            tracks: { items: response.data.items },
-            collaborative: false,
-            description: "",
-            id: "liked-songs",
-            images: [
-                { url: "https://community.spotify.com/t5/image/serverpage/image-id/104727iC92B541DB372FBC7?v=v2" }
-            ],
-            name: "liked-songs",
-            public: false,
-            owner: { "display_name": userStore.username }
-        }
-        return response
     },
+    // Create new empty playlist
     createPlaylist(name, public_, description, collaborative) {
         const userStore = useUserStore()
         const userId = userStore.id
@@ -56,6 +43,7 @@ export default {
             description,
         });
     },
+    // Add new cover to a playlist
     async updatePlaylistCover(playlist_id, coverUrl) {
         let response = await axios.get(coverUrl, null, {
             headers: { 'Content-Type': 'image/jpeg' }
@@ -67,12 +55,18 @@ export default {
             headers: { 'Content-Type': 'image/jpeg' }
         });
     },
+    // Unfollow a specific playlist
     unfollowPlaylist(playlistId) {
         return request.delete(`playlists/${playlistId}/followers`);
     },
-    addTracksToPlaylist(playlistId, tracksId) {
+    // Add multiple tracks to an existing playlist
+    addTracksToPlaylist(playlistId, trackIds) {
         return request.post(`/playlists/${playlistId}/tracks`, {
-            "uris": tracksId,
+            "uris": trackIds,
         });
+    },
+    // Update playlist privacy, the playlist is either public or private
+    updatePlaylistPrivacy(playlistId, isPublic) {
+        return request.put(`/playlists/${playlistId}`, { "public": isPublic });
     }
 };

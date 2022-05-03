@@ -6,6 +6,7 @@ const request = axios.create({
     baseURL: "https://api.spotify.com/v1/"
 });
 
+// Add Headers headers on every request when connected
 request.interceptors.request.use(function (config) {
     const authStore = useAuthStore()
     if (authStore.accessToken) {
@@ -14,14 +15,15 @@ request.interceptors.request.use(function (config) {
     return config;
 }, null);
 
-// Handle access token refresh for 401
 request.interceptors.response.use(response => {
+    // Log every request
     console.log(response.config.url, response);
     return response
 }, async (error) => {
     const { status } = error.response;
     const config = error.config;
 
+    // Handle access token refresh for 401
     if (error.response && status === 401) {
         let res = await api.spotify.auth.requestNewAccessToken();
         if (res.data.access_token) {

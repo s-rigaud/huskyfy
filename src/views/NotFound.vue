@@ -1,5 +1,5 @@
 <template>
-  <h2>Route not found</h2>
+  <h2>{{ $t("not-found.404") }}</h2>
 </template>
 
 <script>

@@ -4,14 +4,15 @@
     absolute
     v-if="userStore.connected"
     fade-img-on-scroll
-    image="https://psl.eu/sites/default/files/styles/fiche_evenement/public/2021-09/events_papyrus-cdf.png?itok=8KlmBy08"
+    color="#f4f4f4"
   >
-    <router-link id="explore" to="/explore"
-      ><img src="logo.png" alt="" style="min-width: 100px; width: 150px"
-    /></router-link>
+    <router-link id="explore" to="/explore">
+      <img src="logo.png" alt="" style="min-width: 100px; width: 150px" />
+    </router-link>
 
     <v-spacer></v-spacer>
 
+    <!-- User info part -->
     <h3 style="margin-right: 10px">{{ userStore.username }}</h3>
     <v-badge content="🎵" color="warning">
       <v-avatar style="align-items: initial">
@@ -21,7 +22,19 @@
         ></v-img>
       </v-avatar>
     </v-badge>
-    <v-btn @click="logout" color="error">Logout</v-btn>
+
+    <select @change="updateLocale($event)">
+      <option
+        v-for="locale in sortedLocales"
+        :key="locale"
+        :value="locale"
+        :text="locale"
+      ></option>
+    </select>
+
+    <v-btn @click="logout" color="error">
+      {{ $t("navbar.logout") }}
+    </v-btn>
   </v-app-bar>
 </template>
 
@@ -38,11 +51,18 @@ export default {
   },
   computed: {
     profilePictureOrDefault() {
-      const DEFAULT_PICTURE =
-        "https://4.bp.blogspot.com/-l60SlLNpKH0/WMmAGuXxX4I/AAAAAAAAB4E/nYzxAq6UOngLjsT277uXW5Am5Mom2oXpQCLcB/s1600/serpent%2Bkaa.jpg";
+      const DEFAULT_PICTURE = require("../assets/no-user.png");
       return this.userStore.profilePicture != ""
         ? this.userStore.profilePicture
         : DEFAULT_PICTURE;
+    },
+    sortedLocales() {
+      // Set current locale first (preselected option)
+      let locales = this.$i18n.availableLocales;
+      const currentLocale = this.$i18n.locale;
+      locales = locales.filter((l) => l != currentLocale);
+      locales.unshift(currentLocale);
+      return locales;
     },
   },
   methods: {
@@ -50,6 +70,10 @@ export default {
       this.userStore.$reset();
       this.authStore.$reset();
       this.$router.push({ name: "LoginView" });
+    },
+    updateLocale(event) {
+      this.$i18n.locale = event.target.value;
+      this.mobileMenuActive = !this.mobileMenuActive;
     },
   },
 };

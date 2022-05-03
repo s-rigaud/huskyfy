@@ -1,0 +1,43 @@
+{
+    "login": {
+        "header": "Découpez votre liste de lecture Spotify facilement avec Horus",
+        "connect": "Se connecter à spotify"
+    },
+    "about": {
+        "header": "A propos de l'application, de vos données et de moi + liens",
+        "home-button": "Retour à l'accueil"
+    },
+    "not-found": {
+        "404": "Page non trouvée"
+    },
+    "playlist": {
+        "public": "Playlist publique📣",
+        "collaborative": "Playlist collaborative 🤝",
+        "private": "Playlist privée 🔒",
+        "reset-filter": "Réinitialiser les filtres",
+        "duplicate": "Créer une copie de la playlist",
+        "unfollow": "Supprimer la playlist",
+        "set-private": "Rendre la playlist privée 🔒",
+        "set-public": "Rendre la playlist publique 📣",
+        "next": "Voir la nouvelle playlist",
+        "load-more-tracks": "Charger plus de titres",
+        "load-more-playlists": "Charger plus de playlists",
+        "header": "Commencez à parcourir vos playlists pour recueillir des données utiles à leur sujet, les divisez par genre et bien plus encore.",
+        "created-by": "Créé par",
+        "your-music": {
+            "name": "Titres likés",
+            "description": "Playlist Spotify avec tous les titres likés"
+        }
+    },
+    "footer": {
+        "built": "Créé avec ♥ par"
+    },
+    "navbar": {
+        "logout": "Déconnexion"
+    },
+    "track": {
+        "popular": "🔥 Artiste populaire",
+        "indie": "🌴 Artiste Indé"
+    },
+    "me": "moi"
+}

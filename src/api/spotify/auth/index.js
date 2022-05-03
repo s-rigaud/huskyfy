@@ -9,7 +9,8 @@ const ENCODED_CREDENTIALS = Base64.encode(`${CLIENT_ID}:${CLIENT_SECRET}`)
 const SCOPES = 'user-read-private user-read-email user-follow-read user-library-read playlist-read-collaborative playlist-read-private playlist-modify-public playlist-modify-private ugc-image-upload';
 
 export default {
-    // https://developer.spotify.com/documentation/general/guides/authorization/code-flow/
+    // Return Spotify OAuth url
+    // On this url, the user can accept terms and scope and a temporary token is returned
     getOAuthUrl() {
         const BASE_URL = 'https://accounts.spotify.com/authorize';
         let oauthUrl = `${BASE_URL}?response_type=code&client_id=${CLIENT_ID}&scope=${SCOPES}&redirect_uri=${REDIRECT_URI}`;
@@ -20,6 +21,7 @@ export default {
         return oauthUrl;
     },
 
+    // Request first access token from the previous temporary token received
     async requestFirstAccessToken() {
         const authStore = useAuthStore();
         await axios({
@@ -36,6 +38,7 @@ export default {
         })
     },
 
+    // Refresh new access token
     async requestNewAccessToken() {
         const authStore = useAuthStore();
         console.log("trying to refresh token before retrying call")

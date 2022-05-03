@@ -13,9 +13,10 @@
 
     <v-card-title style="padding: 0"> {{ name }} </v-card-title>
     <v-card-subtitle style="padding: 0">
-      <p v-if="this.public">📣</p>
-      <p v-if="this.collaborative">🤝</p>
-      <p>Created by {{ owner }}</p>
+      <p>{{ $t("playlist.created-by") }} {{ owner }}</p>
+      <p v-if="this.collaborative">⠀•⠀{{ $t("playlist.collaborative") }}</p>
+      <p v-else-if="this.public">⠀•⠀{{ $t("playlist.public") }}</p>
+      <p v-else-if="!this.public && owner === 'me'">⠀•⠀{{ $t("playlist.private") }}</p>
     </v-card-subtitle>
   </v-card>
 </template>
