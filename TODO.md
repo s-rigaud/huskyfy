@@ -1,17 +1,57 @@
-# V1 Features
+# Login
 
-* Improve track card display (display more infos, display tags / artist)
+* Improve locale selector (add flags and arrow, update colors)
 
-* Update graph when loading more tracks
+* Improve general design
 
-* Improve legend for donut chart
+* Ensure responsiveness
 
-* Improve indie score widget (name , utility small reward > 25% , > 50 %, >75% update emoji)
+# Explore
 
-* Add playlist creation button from current filtered tracks
+* Improve logo quality (Use svg and add an icon, update tab icon too)
 
-* Get more tracks by default
+* Move navbar disconnect in a Vuetify menu (on click of picture or name display the disconnect button below)
 
-* Improve general loading time
+* Improve and center text in the middle (add hero or something cool if needed)
 
-* Improve default CSS freezing/buggy effect
+* Add Bulma like columns with max card per row
+
+* Update default gray color used to something more catchy or better looking
+
+* Improve general design
+
+* Ensure responsiveness
+
+# Playlist
+
+* Split UI in two main columns
+
+* Put graphs on left colum
+
+* Add filters to the left column
+
+* Add tracks to the right part
+
+* Adjust with UI detailed on the board
+
+* Add placeholders while loading
+
+* Improve general design
+
+* Ensure responsiveness
+
+# About
+
+* Add text about
+    * What does th app do ?
+    * Why is at been created ?
+    * By who ?
+    * A bug or ideas ?
+
+* Add about link in footer
+
+* Make back to home button a round with an x in it
+
+* Improve general design
+
+* Ensure responsiveness

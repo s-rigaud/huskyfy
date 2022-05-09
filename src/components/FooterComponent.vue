@@ -1,18 +1,14 @@
 <template>
-  <v-footer
-    app
-    style="max-height: 100px; background-color: #30336b; color: #dff9fb"
-    v-if="userStore.connected"
-  >
+  <v-footer app id="footer" v-if="userStore.connected">
     <v-row justify="center" no-gutters>
       <v-col class="primary lighten-2 py-4 text-center white--text" cols="12">
         {{ new Date().getFullYear() }} —
         <strong>
           {{ $t("footer.built") }}
           <a
+            id="github-link"
             href="https://github.com/s-rigaud"
             target="_blank"
-            style="color: #f0932b; text-decoration: none"
           >
             Hylectrif
           </a>
@@ -33,3 +29,14 @@ export default {
   },
 };
 </script>
+<style scoped>
+#footer {
+  max-height: 100px;
+  background-color: #30336b;
+  color: #dff9fb;
+}
+#github-link {
+  color: #f0932b;
+  text-decoration: none;
+}
+</style>

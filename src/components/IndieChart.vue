@@ -12,6 +12,7 @@ export default {
   name: "IndieChart",
   props: {
     indiePercentage: Number,
+    image: String
   },
   data() {
     // All data needed to customize graph UI and data
@@ -27,7 +28,7 @@ export default {
             hollow: {
               margin: 15,
               size: "30%",
-              image: require("../assets/sunglasses-emoji.png"),
+              image: this.image,
               imageWidth: 64,
               imageHeight: 64,
               imageClipped: false,
@@ -49,7 +50,7 @@ export default {
         fill: {
           type: "image",
           image: {
-            src: [require("../assets/palmtree.webp")],
+            src: [require("@/assets/palmtree.webp")],
           },
         },
         stroke: {

@@ -16,7 +16,7 @@
     </div>
 
     <v-btn
-      @click="requestPlaylists"
+      @click="loadMorePlaylists"
       v-if="playlistsStore.playlists.length < playlistTotal"
     >
       {{ $t("playlist.load-more-playlists") }}
@@ -56,25 +56,30 @@ export default {
     },
     formatName() {
       return (playlist) => {
-        return playlist.id == "liked-song"
+        return playlist.id == "my-music"
           ? this.$t("playlist.your-music.name")
           : playlist.name;
       };
     },
   },
   async mounted() {
-    const response = await this.playlistsStore.getUserPlaylists(
-      this.currentUserUsername,
-      this.offset
-    );
-    this.playlistTotal = response.total;
-    this.offset = response.offset;
+    await this.loadMorePlaylists();
+  },
+  methods: {
+    async loadMorePlaylists() {
+      const response = await this.playlistsStore.getUserPlaylists(
+        this.currentUserUsername,
+        this.offset
+      );
+      this.playlistTotal = response.total;
+      this.offset = response.offset;
+    },
   },
   data() {
     return {
       playlistTotal: 50,
       offset: 0,
-      DEFAULT_PLAYLIST_COVER: require("../assets/default_cover.jpg"),
+      DEFAULT_PLAYLIST_COVER: require("@/assets/default_cover.jpg"),
     };
   },
 };

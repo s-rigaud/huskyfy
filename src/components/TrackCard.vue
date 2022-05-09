@@ -1,8 +1,6 @@
 <template>
-  <v-card color="#1F7087" flat border rounded="0" style="width: 25%">
-    <div
-      style="display: flex !important; flex-wrap: wrap; flex-direction: column"
-    >
+  <v-card flat border rounded="0">
+    <div class="track-card">
       <v-avatar class="ma-3" size="125" rounded="0">
         <v-img v-bind:src="image"></v-img>
       </v-avatar>
@@ -35,13 +33,37 @@
         </v-card-header>
         <v-card-text>
           <v-chip
-            v-for="genre in genres"
+            v-for="genre in genres.slice(0, 3)"
             :key="genre"
             :text="genre.toUpperCase()"
             label
             style="margin: 5px"
           >
           </v-chip>
+
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn color="primary" dark v-bind="attrs" v-on="on">
+                Button
+              </v-btn>
+            </template>
+            <span>Tooltip</span>
+          </v-tooltip>
+
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-chip
+                v-if="genres.length > 3"
+                :text="`+${genres.length - 3}`"
+                label
+                style="margin: 5px"
+                v-bind="attrs"
+                v-on="on"
+              >
+              </v-chip>
+            </template>
+            <span>Tooltip</span>
+          </v-tooltip>
         </v-card-text>
       </div>
     </div>
@@ -61,3 +83,8 @@ export default {
   },
 };
 </script>
+<style scoped>
+.track-card {
+  display: flex !important;
+}
+</style>

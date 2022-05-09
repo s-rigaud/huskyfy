@@ -1,8 +1,5 @@
 <template>
-  <div
-    v-if="playlist"
-    style="display: flex; flex-direction: column; flex-wrap: wrap; width: 100%"
-  >
+  <div v-if="playlist" id="playlist">
     <!-- Basic card info to improve-->
     <v-card flat>
       <v-card-title style="padding: 0"> {{ playlist.name }} </v-card-title>
@@ -19,14 +16,20 @@
     <!-- Charts -->
     <div id="charts" v-if="filteredTracks.length > 0">
       <GenreChart :genres="sortedGenres" @selectedGenre="filterTracksByGenre" />
-      <IndieChart :indiePercentage="indiePercentage" />
+      <IndieChart
+        :indiePercentage="indiePercentage"
+        :image="getImage(indiePercentage)"
+      />
     </div>
     <v-btn @click="resetFilter" v-if="selectedGenreName != ''">
       {{ $t("playlist.reset-filters") }}
     </v-btn>
 
     <!--Playlist duplication-->
-    <v-btn @click="createNewPlaylist">{{ $t("playlist.duplicate") }}</v-btn>
+    <v-btn v-if="filteredTracks.length > 1" @click="createNewPlaylist">
+      {{ $t("playlist.duplicate") }}
+    </v-btn>
+
     <div id="loading-create-new-playlist" v-if="loadingPercentage > 0">
       <p>{{ loadingPercentage }}% - {{ loadingText }}</p>
       <v-progress-circular
@@ -114,8 +117,8 @@ export default {
       currentUserUsername,
     };
   },
-  mounted() {
-    this.loadTracks();
+  async mounted() {
+    await this.loadTracks();
     this.playlist = this.playlists[this.playlistId];
   },
   data() {
@@ -162,6 +165,10 @@ export default {
       this.$router.push({ name: "Explore" });
     },
     filterTracksByGenre(selectedGenreName) {
+      if (selectedGenreName == "") {
+        this.resetFilter();
+        return;
+      }
       this.selectedGenreName = selectedGenreName;
       this.filteredTracks = this.playlist.tracks.filter((t) =>
         Array.from(t.genres).includes(selectedGenreName)
@@ -170,6 +177,10 @@ export default {
     resetFilter() {
       this.selectedGenreName = "";
       this.filteredTracks = this.playlist.tracks;
+      this.$router.replace({
+        name: "Explore playlist",
+        params: { playlistId: "5SaZKlJ5OJJocl8aCbdK4z" },
+      });
     },
     getPlaylistNewPlaylistAttributes(playlist) {
       let newPlaylistName = playlist.name;
@@ -190,7 +201,7 @@ export default {
       };
     },
     async createNewPlaylist() {
-      this.loadingText = "Creating new playlist";
+      this.loadingText = this.$t("playlist.new.create");
       this.loadingPercentage = 1;
       const newPlaylist = this.getPlaylistNewPlaylistAttributes(this.playlist);
 
@@ -202,7 +213,7 @@ export default {
       );
       const newPlaylistId = response.data.id;
 
-      this.loadingText = "Updating playlist cover";
+      this.loadingText = this.$t("playlist.new.cover");
       this.loadingPercentage = 33;
       /*await this.playlistsStore.updatePlaylistCover(
         response.data.id,
@@ -210,22 +221,23 @@ export default {
         //playlist.images[0].url
       );*/
 
-      this.loadingText = "Adding all selected tracks";
+      this.loadingText = this.$t("playlist.new.tracks");
       this.loadingPercentage = 66;
       await this.playlistsStore.addTracksToPlaylist(
         newPlaylistId,
         this.filteredTracks.map((t) => t.uri)
       );
 
-      this.loadingText = "Done";
+      this.loadingText = this.$t("playlist.new.done");
       this.loadingPercentage = 100;
       this.newPlaylistId = newPlaylistId;
     },
     async setPlaylistPublic() {
-      console.log(this.playlist);
+      this.playlist.public = true;
       await this.playlistsStore.updatePlaylistPrivacy(this.playlistId, true);
     },
     async setPlaylistPrivate() {
+      this.playlist.public = false;
       await this.playlistsStore.updatePlaylistPrivacy(this.playlistId, false);
     },
   },
@@ -257,10 +269,26 @@ export default {
     userOwnsPlaylist() {
       return this.currentUserUsername == this.playlist.owner["display_name"];
     },
+    getImage() {
+      return (indiePercentage) => {
+        let image = "";
+        if (indiePercentage < 25) image = "cold";
+        else if (indiePercentage < 50) image = "sunglasses";
+        else if (indiePercentage < 75) image = "hot";
+        else image = "fire";
+        return require(`@/assets/${image}.png`);
+      };
+    },
   },
 };
 </script>
 <style scoped>
+#playlist {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  width: 100%;
+}
 #charts {
   display: flex;
   flex-direction: row;
@@ -271,10 +299,11 @@ export default {
 #tracks {
   width: 100%;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   flex-wrap: wrap;
   justify-content: space-evenly;
   align-items: stretch;
+  align-content: center;
 }
 #loading-create-new-playlist {
   display: flex;

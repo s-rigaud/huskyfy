@@ -50,12 +50,25 @@ export default {
         const seriesIndex = parseInt(el.getAttribute("j"));
         genreLabel = this.genres[seriesIndex][0];
       }
+
+      this.lastClickedWasSelection = !this.lastClickedWasSelection;
+      if (
+        !this.lastClickedWasSelection &&
+        this.lastGenreSelected == genreLabel
+      ) {
+        this.$emit("selectedGenre", "");
+        return;
+      }
+
+      this.lastGenreSelected = genreLabel;
       this.$emit("selectedGenre", genreLabel.toLowerCase());
     },
   },
   data() {
     // All data needed to customize graph UI and data
     return {
+      lastGenreSelected: false,
+      lastClickedWasSelection: false,
       series: this.genres.map((g) => g[1]),
       chartOptions: {
         chart: {

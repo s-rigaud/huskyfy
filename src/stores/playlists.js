@@ -29,9 +29,12 @@ export const usePlaylistsStore = defineStore('playlists', {
             for (const requestPlaylist of playlists) {
                 const knownPlaylist = this.playlists[requestPlaylist.id]
                 if (knownPlaylist) {
+                    // Override data with new cover added to the playlist
+                    const images = requestPlaylist.images
                     this.playlists[requestPlaylist.id] = {
                         ...requestPlaylist,
                         ...knownPlaylist,
+                        images: images
                     }
                 } else {
                     this.playlists[requestPlaylist.id] = requestPlaylist
@@ -48,11 +51,11 @@ export const usePlaylistsStore = defineStore('playlists', {
             return {
                 collaborative: false,
                 description: "",
-                id: "liked-song",
+                id: "my-music",
                 images: [
                     {
                         "height": null,
-                        "url": require("../assets/liked-song.jpeg"),
+                        "url": require("@/assets/my-music.jpeg"),
                         "width": null
                     }
                 ],
@@ -73,7 +76,6 @@ export const usePlaylistsStore = defineStore('playlists', {
                 this.playlists[playlistId] = { ...this.playlists[playlistId], offset: offset, tracks: [] }
             } else if (offset >= this.playlists[playlistId].total) {
                 console.log("playlist already loaded, no request");
-                console.log(this.playlists[playlistId]);
                 return this.playlists[playlistId].tracks
             }
 
@@ -122,9 +124,9 @@ export const usePlaylistsStore = defineStore('playlists', {
             }
             return this.playlists[playlistId].tracks
         },
-        // Route request to standard playlist call or special "liked-songs" one
+        // Route request to standard playlist call or special "My music" one
         async callCorrespondingAPIEndpoint(playlistId, offset) {
-            if (playlistId == "liked-song") {
+            if (playlistId == "my-music") {
                 return await api.spotify.playlists.getUserSavedTracks(
                     this.MAX_TRACKS_LIMIT,
                     offset

@@ -1,7 +1,8 @@
 {
     "login": {
-        "header": "Split your Spotify playlist easily with Horus",
-        "connect": "Connect to spotify"
+        "header": "Explore, duplicate, split and share your Spotify playlists easily with Horus",
+        "connect": "Log in with Spotify",
+        "about": "Learn more about this website"
     },
     "about": {
         "header": "About the app, your data and me + links",
@@ -14,7 +15,7 @@
         "public": "Public playlist 📣",
         "collaborative": "Collaborative playlist 🤝",
         "private": "Private playlist 🔒",
-        "reset-filter": "Reset filters",
+        "reset-filters": "Reset filters",
         "duplicate": "Duplicate playlist",
         "unfollow": "Unfollow playlist",
         "set-private": "Set Playlist Private 🔒",
@@ -27,13 +28,19 @@
         "your-music": {
             "name": "Your music",
             "description": "Spotify playlist with all your favorite songs"
+        },
+        "new": {
+            "create": "Creating new playlist",
+            "cover": "Updating playlist cover",
+            "tracks": "Adding all selected tracks",
+            "done": "Done"
         }
     },
     "footer": {
         "built": "Built with ♥ by"
     },
     "navbar": {
-        "logout": "Logout"
+        "logout": "Log out"
     },
     "track": {
         "popular": "🔥 Popular artist",
