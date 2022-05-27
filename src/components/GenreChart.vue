@@ -14,6 +14,7 @@ export default {
   props: {
     genres: Array,
   },
+  emits: ["onGenreSelect"],
   methods: {
     appendData() {
       var arr = this.series.slice();
@@ -56,12 +57,12 @@ export default {
         !this.lastClickedWasSelection &&
         this.lastGenreSelected == genreLabel
       ) {
-        this.$emit("selectedGenre", "");
+        this.$emit("onGenreSelect", "");
         return;
       }
 
       this.lastGenreSelected = genreLabel;
-      this.$emit("selectedGenre", genreLabel.toLowerCase());
+      this.$emit("onGenreSelect", genreLabel.toLowerCase());
     },
   },
   data() {

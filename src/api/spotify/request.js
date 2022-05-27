@@ -34,6 +34,14 @@ request.interceptors.response.use(response => {
             return request(config);
         }
     }
+
+    // Handle access token refresh for 401
+    if (error.response && status === 429) {
+        console.error(error);
+        console.error(config);
+        //return request(config);
+    }
+
     console.log("Exception while trying to handle error")
     return Promise.reject(error)
 });

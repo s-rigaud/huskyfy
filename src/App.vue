@@ -28,13 +28,18 @@ export default {
   align-items: stretch;
   align-content: space-between;
   justify-content: space-around;
-  background-color: #ddd !important;
-  font-family: "Righteous";
+  background-color: #f6e58d !important;
+  font-family: "Oswald";
 }
 
 @font-face {
   font-family: "Righteous";
   src: local("Righteous"),
     url(./fonts/righteous/Righteous-j7av.ttf) format("truetype");
+}
+
+@font-face {
+  font-family: "Oswald";
+  src: local("Oswald"), url(./fonts/oswald/Oswald-Medium.ttf) format("truetype");
 }
 </style>

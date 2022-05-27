@@ -1,5 +1,7 @@
 import api from "@/api";
+import { useUserStore } from '@/stores/user';
 import { defineStore } from 'pinia';
+import VueI18n from '../i18n';
 
 export const usePlaylistsStore = defineStore('playlists', {
     state: () => {
@@ -16,14 +18,14 @@ export const usePlaylistsStore = defineStore('playlists', {
     },
     actions: {
         // Retrieve playlists for user
-        async getUserPlaylists(currentUserUsername, offset) {
+        async getUserPlaylists(offset) {
             const response = await api.spotify.playlists.getUserPlaylists(
                 this.MAX_PLAYLISTS_LIMIT,
                 offset
             );
             offset += this.MAX_PLAYLISTS_LIMIT
             const playlists = response.data.items
-            playlists.unshift(this.getLikedSongPlaylist(currentUserUsername))
+            playlists.unshift(this.getLikedSongPlaylist())
 
             // Update existing playlist or create it
             for (const requestPlaylist of playlists) {
@@ -47,7 +49,9 @@ export const usePlaylistsStore = defineStore('playlists', {
             }
         },
         // Special playlist from user liked song treated differently in Spotify API
-        getLikedSongPlaylist(currentUserUsername) {
+        getLikedSongPlaylist() {
+            const i18n = VueI18n.global
+            const userStore = useUserStore()
             return {
                 collaborative: false,
                 description: "",
@@ -59,39 +63,51 @@ export const usePlaylistsStore = defineStore('playlists', {
                         "width": null
                     }
                 ],
-                name: "",
-                owner: {
-                    "display_name": currentUserUsername
-                },
+                name: i18n.t('playlist.your-music.name'),
+                owner: { "display_name": userStore.username },
                 primary_color: null,
                 public: false,
                 tracks: []
             }
         },
+        range(start, stop, step = 1) {
+            return Array(Math.ceil((stop - start) / step)).fill(start).map((x, y) => x + y * step)
+        },
         // Download more tracks for a specific playlist from previous offset
-        async downloadPlaylistTracks(playlistId) {
+        async downloadPlaylistTracks(playlistId, limit) {
+            // Init playlist info or return already saved tracks
             let offset = this.playlists[playlistId].offset;
             if (!offset) {
                 offset = 0
                 this.playlists[playlistId] = { ...this.playlists[playlistId], offset: offset, tracks: [] }
+            } else if (limit <= offset) {
+                console.log(`Asked ${limit} tracks - already saved ${offset}, no request`);
+                return this.playlists[playlistId].tracks.slice(0, limit);
             } else if (offset >= this.playlists[playlistId].total) {
-                console.log("playlist already loaded, no request");
+                console.log("full playlist already loaded, no request");
                 return this.playlists[playlistId].tracks
             }
 
-            const response = await this.callCorrespondingAPIEndpoint(playlistId, offset);
-            this.playlists[playlistId] = {
-                ...response.data,
-                ...this.playlists[playlistId],
-                offset: offset + this.MAX_TRACKS_LIMIT,
-            }
-
-            const artistIds = [];
-            for (const item of response.data.items) {
-                artistIds.push(...item.track.artists.map((a) => a.id));
+            const newTracks = []
+            for (const requestOffset of this.range(offset, limit, this.MAX_TRACKS_LIMIT)) {
+                // Save track infos
+                const response = await this.callCorrespondingAPIEndpoint(playlistId, requestOffset);
+                // Filter deleted track appearing in API
+                response.data.items = response.data.items.filter(i => i.track != null && i.track.type === "track")
+                newTracks.push(...response.data.items)
+                this.playlists[playlistId] = {
+                    ...response.data,
+                    ...this.playlists[playlistId],
+                    offset: this.playlists[playlistId].offset + this.MAX_TRACKS_LIMIT,
+                }
             }
 
             // Retrieve data on artists (mainly genres & followers)
+            const artistIds = [];
+            for (const item of newTracks) {
+                artistIds.push(...item.track.artists.map((a) => a.id));
+            }
+
             const spotifyArtistInfos = await api.spotify.artists.getMultipleArtists(
                 Array.from(new Set(artistIds))
             );
@@ -101,7 +117,7 @@ export const usePlaylistsStore = defineStore('playlists', {
             }
 
             // Map each track to artist genres and popularity (indie or not)
-            for (const item of response.data.items) {
+            for (const item of newTracks) {
                 const track = item.track
                 const trackImage = (track.album.images.length > 0) ? track.album.images[0].url : null
                 const artists = track.artists;

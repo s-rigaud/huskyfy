@@ -1,22 +1,14 @@
 # Login
 
-* Improve locale selector (add flags and arrow, update colors)
-
-* Improve general design
-
-* Ensure responsiveness
+* Update Image ?
 
 # Explore
 
-* Improve logo quality (Use svg and add an icon, update tab icon too)
+* Mon dieux les couleurs ...
 
-* Move navbar disconnect in a Vuetify menu (on click of picture or name display the disconnect button below)
+* Improve navbar disconnect
 
 * Improve and center text in the middle (add hero or something cool if needed)
-
-* Add Bulma like columns with max card per row
-
-* Update default gray color used to something more catchy or better looking
 
 * Improve general design
 
@@ -48,10 +40,14 @@
     * By who ?
     * A bug or ideas ?
 
-* Add about link in footer
-
 * Make back to home button a round with an x in it
 
 * Improve general design
 
 * Ensure responsiveness
+
+
+
+# Later
+
+* https://frontendchecklist.io/

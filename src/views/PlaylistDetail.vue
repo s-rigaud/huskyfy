@@ -1,90 +1,106 @@
 <template>
-  <div v-if="playlist" id="playlist">
+  <div v-if="playlists[playlistId]" id="playlist">
     <!-- Basic card info to improve-->
     <v-card flat>
-      <v-card-title style="padding: 0"> {{ playlist.name }} </v-card-title>
       <v-card-title style="padding: 0">
-        {{ playlist.description }}
+        {{ playlists[playlistId].name }}
+      </v-card-title>
+      <v-card-title style="padding: 0">
+        {{ playlists[playlistId].description }}
       </v-card-title>
       <v-card-subtitle style="padding: 0">
-        <p>Created by {{ playlist.owner["display_name"] }}</p>
-        <p v-if="playlist.public">{{ $t("playlist.public") }}</p>
-        <p v-if="playlist.collaborative">{{ $t("playlist.collaborative") }}</p>
+        <p>Created by {{ playlists[playlistId].owner["display_name"] }}</p>
+        <p v-if="playlists[playlistId].public">{{ $t("playlist.public") }}</p>
+        <p v-if="playlists[playlistId].collaborative">
+          {{ $t("playlist.collaborative") }}
+        </p>
       </v-card-subtitle>
+      <v-btn @click="unfollowPlaylist" color="error">
+        {{ $t("playlist.unfollow") }}
+      </v-btn>
+
+      <div
+        id="update-playlist-privacy"
+        v-if="userOwnsPlaylist && !playlists[playlistId].collaborative"
+      >
+        <v-btn @click="setPlaylistPrivate" v-if="playlists[playlistId].public">
+          {{ $t("playlist.set-private") }}
+        </v-btn>
+        <v-btn @click="setPlaylistPublic" v-else>
+          {{ $t("playlist.set-public") }}
+        </v-btn>
+      </div>
+
+      <!--Playlist duplication-->
+      <v-btn v-if="filteredTracks.length > 1" @click="createNewPlaylist">
+        {{ $t("playlist.duplicate") }}
+      </v-btn>
     </v-card>
 
-    <!-- Charts -->
-    <div id="charts" v-if="filteredTracks.length > 0">
-      <GenreChart :genres="sortedGenres" @selectedGenre="filterTracksByGenre" />
-      <IndieChart
-        :indiePercentage="indiePercentage"
-        :image="getImage(indiePercentage)"
-      />
-    </div>
-    <v-btn @click="resetFilter" v-if="selectedGenreName != ''">
-      {{ $t("playlist.reset-filters") }}
-    </v-btn>
-
-    <!--Playlist duplication-->
-    <v-btn v-if="filteredTracks.length > 1" @click="createNewPlaylist">
-      {{ $t("playlist.duplicate") }}
-    </v-btn>
-
-    <div id="loading-create-new-playlist" v-if="loadingPercentage > 0">
-      <p>{{ loadingPercentage }}% - {{ loadingText }}</p>
-      <v-progress-circular
-        :model-value="loadingPercentage"
-        color="deep-orange lighten-2"
+    <div id="content" style="display: flex">
+      <div
+        id="left-part"
+        style="
+          display: flex;
+          flex-direction: column;
+          border-right: 2px solid;
+          border-color: gray;
+          margin: 0 5px;
+        "
       >
-      </v-progress-circular>
+        <!-- Charts -->
+        <div id="charts" v-if="filteredTracks.length > 0">
+          <IndieChart
+            :indiePercentage="indiePercentage"
+            :image="getImage(indiePercentage)"
+          />
+          <GenreChart
+            :genres="sortedGenres"
+            @onGenreSelect="filterTracksByGenre"
+          />
+        </div>
+        <v-btn @click="resetFilters" v-if="selectedGenreName != ''">
+          {{ $t("playlist.reset-filters") }}
+        </v-btn>
+      </div>
+
+      <div id="right-part" style="width: 100%">
+        <h2>Placeholder title - {{ filteredTracks.length }}</h2>
+        <div id="tracks" v-if="filteredTracks.length > 0">
+          <TrackCard
+            v-for="track of filteredTracks"
+            :key="track.id"
+            :id="track.id"
+            :name="track.name"
+            :image="track.image"
+            :artists="track.artists.map((artist) => artist.name)"
+            :genres="track.genres"
+            :isIndie="track.isIndie"
+          />
+        </div>
+      </div>
     </div>
 
-    <v-btn @click="unfollowPlaylist" color="error">
-      {{ $t("playlist.unfollow") }}
-    </v-btn>
-
-    <div
-      id="update-playlist-privacy"
-      v-if="userOwnsPlaylist && !playlist.collaborative"
-    >
-      <v-btn @click="setPlaylistPrivate" v-if="playlist.public">
-        {{ $t("playlist.set-private") }}
-      </v-btn>
-      <v-btn @click="setPlaylistPublic" v-else>
-        {{ $t("playlist.set-public") }}
-      </v-btn>
-    </div>
-
-    <v-btn
-      id="get-to-new-playlist"
-      v-if="newPlaylistId != ''"
-      @click="displayNewPlaylistDetails"
-    >
-      {{ $t("playlist.next") }}
-    </v-btn>
-
-    <v-btn @click="loadTracks" v-if="playlist.tracks.length < playlist.total">
-      {{ $t("playlist.load-more-tracks") }}
-    </v-btn>
-
-    <div id="tracks" v-if="filteredTracks.length > 0">
-      <TrackCard
-        v-for="track of filteredTracks"
-        :key="track.id"
-        :id="track.id"
-        :name="track.name"
-        :image="track.image"
-        :artists="track.artists.map((artist) => artist.name)"
-        :genres="track.genres"
-        :isIndie="track.isIndie"
-      />
-    </div>
+    <DuplicatorPopup
+      v-if="startDuplication"
+      :playlist="playlists[playlistId]"
+      :selectedGenreName="selectedGenreName"
+      :filteredTracks="filteredTracks"
+    />
+    <LoadMoreTracksPopup
+      v-if="isHugePlaylist"
+      :playlist="playlists[playlistId]"
+      :trackRequestLimit="trackRequestLimit"
+      @allTracksLoaded="resetFilters"
+    />
   </div>
 </template>
 
 <script>
+import DuplicatorPopup from "@/components/DuplicatorPopup.vue";
 import GenreChart from "@/components/GenreChart.vue";
 import IndieChart from "@/components/IndieChart.vue";
+import LoadMoreTracksPopup from "@/components/LoadMoreTracksPopup.vue";
 import TrackCard from "@/components/TrackCard.vue";
 import { usePlaylistsStore } from "@/stores/playlists";
 import { useUserStore } from "@/stores/user";
@@ -96,6 +112,8 @@ export default {
     playlistId: String,
   },
   components: {
+    DuplicatorPopup,
+    LoadMoreTracksPopup,
     GenreChart,
     IndieChart,
     TrackCard,
@@ -118,20 +136,17 @@ export default {
     };
   },
   async mounted() {
-    await this.loadTracks();
-    this.playlist = this.playlists[this.playlistId];
+    await this.loadFirstTracks();
   },
   data() {
     return {
-      playlist: null,
+      trackRequestLimit: 150,
 
       selectedGenreName: "",
       filteredTracks: [],
 
-      loadingPercentage: 0,
-      loadingText: "",
-
-      newPlaylistId: "",
+      startDuplication: false,
+      isHugePlaylist: false,
     };
   },
   methods: {
@@ -143,21 +158,21 @@ export default {
           get: (target, name) => (name in target ? target[name] : 0),
         }
       );
-      for (const track of this.playlist.tracks) {
+      for (const track of this.playlists[this.playlistId].tracks) {
         for (const genre of track.genres) {
           genreCounter[genre] += 1;
         }
       }
       return genreCounter;
     },
-    async loadTracks() {
-      this.filteredTracks = await this.downloadPlaylistTracks(this.playlistId);
-    },
-    displayNewPlaylistDetails() {
-      this.$router.push({
-        name: "Explore playlist",
-        params: { playlistId: this.newPlaylistId },
-      });
+    async loadFirstTracks() {
+      await this.downloadPlaylistTracks(
+        this.playlistId,
+        this.trackRequestLimit
+      );
+      this.isHugePlaylist =
+        this.playlists[this.playlistId].total > this.trackRequestLimit;
+      this.resetFilters();
     },
     async unfollowPlaylist() {
       await this.playlistsStore.unfollowPlaylist(this.playlistId);
@@ -166,78 +181,25 @@ export default {
     },
     filterTracksByGenre(selectedGenreName) {
       if (selectedGenreName == "") {
-        this.resetFilter();
+        this.resetFilters();
         return;
       }
       this.selectedGenreName = selectedGenreName;
-      this.filteredTracks = this.playlist.tracks.filter((t) =>
+      this.filteredTracks = this.playlists[this.playlistId].tracks.filter((t) =>
         Array.from(t.genres).includes(selectedGenreName)
       );
     },
-    resetFilter() {
+    createNewPlaylist() {
+      this.startDuplication = true;
+    },
+    resetFilters() {
       this.selectedGenreName = "";
-      this.filteredTracks = this.playlist.tracks;
-      this.$router.replace({
-        name: "Explore playlist",
-        params: { playlistId: "5SaZKlJ5OJJocl8aCbdK4z" },
-      });
-    },
-    getPlaylistNewPlaylistAttributes(playlist) {
-      let newPlaylistName = playlist.name;
-      let newPlaylistDescription = "";
-      if (this.selectedGenreName !== "") {
-        newPlaylistName += ` • ${this.selectedGenreName}`;
-        newPlaylistDescription += `${playlist.name} • ${this.selectedGenreName}`;
-      } else {
-        newPlaylistDescription += `Copy of ${playlist.name}`;
-      }
-      newPlaylistDescription += ` • created by Horus`;
-
-      return {
-        name: newPlaylistName,
-        description: newPlaylistDescription,
-        public: playlist.public && !playlist.collaborative,
-        collaborative: playlist.collaborative,
-      };
-    },
-    async createNewPlaylist() {
-      this.loadingText = this.$t("playlist.new.create");
-      this.loadingPercentage = 1;
-      const newPlaylist = this.getPlaylistNewPlaylistAttributes(this.playlist);
-
-      let response = await this.playlistsStore.createPlaylist(
-        newPlaylist.name,
-        newPlaylist.public,
-        newPlaylist.description,
-        newPlaylist.collaborative
-      );
-      const newPlaylistId = response.data.id;
-
-      this.loadingText = this.$t("playlist.new.cover");
-      this.loadingPercentage = 33;
-      /*await this.playlistsStore.updatePlaylistCover(
-        response.data.id,
-        "https://m.media-amazon.com/images/I/61iw4s61r1S._AC_SX425_.jpg"
-        //playlist.images[0].url
-      );*/
-
-      this.loadingText = this.$t("playlist.new.tracks");
-      this.loadingPercentage = 66;
-      await this.playlistsStore.addTracksToPlaylist(
-        newPlaylistId,
-        this.filteredTracks.map((t) => t.uri)
-      );
-
-      this.loadingText = this.$t("playlist.new.done");
-      this.loadingPercentage = 100;
-      this.newPlaylistId = newPlaylistId;
+      this.filteredTracks = this.playlists[this.playlistId].tracks;
     },
     async setPlaylistPublic() {
-      this.playlist.public = true;
       await this.playlistsStore.updatePlaylistPrivacy(this.playlistId, true);
     },
     async setPlaylistPrivate() {
-      this.playlist.public = false;
       await this.playlistsStore.updatePlaylistPrivacy(this.playlistId, false);
     },
   },
@@ -261,13 +223,18 @@ export default {
     // Get the general playlist isIndie % from the mean of all tracks
     indiePercentage() {
       let indieTracks = 0;
-      for (const track of this.playlist.tracks) {
+      for (const track of this.playlists[this.playlistId].tracks) {
         indieTracks += track.isIndie;
       }
-      return parseInt((indieTracks / this.playlist.tracks.length) * 100);
+      return parseInt(
+        (indieTracks / this.playlists[this.playlistId].tracks.length) * 100
+      );
     },
     userOwnsPlaylist() {
-      return this.currentUserUsername == this.playlist.owner["display_name"];
+      return (
+        this.currentUserUsername ==
+        this.playlists[this.playlistId].owner["display_name"]
+      );
     },
     getImage() {
       return (indiePercentage) => {
@@ -291,7 +258,7 @@ export default {
 }
 #charts {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   flex-wrap: wrap;
   justify-content: space-around;
   align-items: center;
@@ -304,11 +271,5 @@ export default {
   justify-content: space-evenly;
   align-items: stretch;
   align-content: center;
-}
-#loading-create-new-playlist {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
 }
 </style>

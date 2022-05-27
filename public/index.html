@@ -1,13 +1,38 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 
 <head>
+  <!--checked header-->
   <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <link rel="icon" href="<%= BASE_URL %>favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="Horus website helps you split your Spotify playlists easily">
 
-  <title>Horus - Playlist Manager</title>
+  <!-- TODO link to real image-->
+  <link rel="apple-touch-icon" href="/custom-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta name="msapplication-config" content="browserconfig.xml" />
+
+  <link rel="icon" type="image/png" href="<%= BASE_URL %>favicon.png">
+
+  <!-- TODO update with real languages here -->
+  <link rel="alternate" href="https://example.com/" hreflang="x-default" />
+  <link rel="alternate" href="https://es.example.com/" hreflang="es">
+  <link rel="alternate" href="https://es.example.com/" hreflang="es">
+  <link rel="alternate" href="https://es.example.com/" hreflang="es">
+
+  <title>Horus | Playlist Manager</title>
+
+  <!-- TODO see https://github.com/thedaviddias/Front-End-Checklist#social-meta -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <style>
+    html {
+      overflow: auto !important;
+      scroll-behavior: smooth;
+    }
+  </style>
 
   <link rel="stylesheet" href="https://necolas.github.io/normalize.css/latest/normalize.css" />
 </head>
@@ -20,11 +45,5 @@
   <div id="app"></div>
   <!-- built files will be auto injected -->
 </body>
-
-<style>
-  html {
-    overflow-y: auto;
-  }
-</style>
 
 </html>

@@ -1,7 +1,6 @@
 <template>
   <div id="full-page">
     <h1>{{ $t("playlist.header") }}</h1>
-
     <div id="playlists">
       <PlaylistCard
         v-for="playlist in playlistsStore.playlists"
@@ -41,9 +40,8 @@ export default {
   computed: {
     usernameToDisplay() {
       return (ownerUsername) => {
-        const traducedMyself = this.$t("me");
         return this.currentUserUsername == ownerUsername
-          ? traducedMyself
+          ? this.$t("me")
           : ownerUsername;
       };
     },
@@ -67,19 +65,17 @@ export default {
   },
   methods: {
     async loadMorePlaylists() {
-      const response = await this.playlistsStore.getUserPlaylists(
-        this.currentUserUsername,
-        this.offset
-      );
+      const response = await this.playlistsStore.getUserPlaylists(this.offset);
       this.playlistTotal = response.total;
       this.offset = response.offset;
     },
   },
   data() {
     return {
-      playlistTotal: 50,
+      playlistTotal: 1,
       offset: 0,
       DEFAULT_PLAYLIST_COVER: require("@/assets/default_cover.jpg"),
+      isTrue: true,
     };
   },
 };
@@ -90,8 +86,8 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
 }
-
 #playlists {
   display: flex;
   flex-direction: row;
@@ -99,5 +95,6 @@ export default {
   align-content: stretch;
   justify-content: space-evenly;
   align-items: stretch;
+  margin: 0px 30px 30px 30px;
 }
 </style>

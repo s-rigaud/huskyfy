@@ -5,7 +5,6 @@
         "about": "En apprendre plus sur ce site"
     },
     "about": {
-        "header": "A propos de l'application, de vos données et de moi + liens",
         "home-button": "Retour à l'accueil"
     },
     "not-found": {
@@ -21,7 +20,6 @@
         "set-private": "Rendre la playlist privée 🔒",
         "set-public": "Rendre la playlist publique 📣",
         "next": "Voir la nouvelle playlist",
-        "load-more-tracks": "Charger plus de titres",
         "load-more-playlists": "Charger plus de playlists",
         "header": "Commencez à parcourir vos playlists pour recueillir des données utiles à leur sujet, les divisez par genre et bien plus encore.",
         "created-by": "Créé par",
@@ -34,7 +32,10 @@
             "cover": "Changement de l'image de couverture",
             "tracks": "Ajout des titres musicaux",
             "done": "Fini"
-        }
+        },
+        "load-more-warning": "Votre playlist contient plus de {limit} titres, voulez-vous tous les charger ?",
+        "load-more-button": "Charger tous les titres",
+        "fully-loaded": "Tous les artistes, les titres et les genres ont pu être récupérés"
     },
     "footer": {
         "built": "Créé avec ♥ par"

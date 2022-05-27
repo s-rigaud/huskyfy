@@ -5,10 +5,12 @@
     <v-card-title style="padding: 0"> {{ name }} </v-card-title>
     <v-card-subtitle style="padding: 0">
       <p>{{ $t("playlist.created-by") }} {{ owner }}</p>
-      <p v-if="this.collaborative">⠀•⠀{{ $t("playlist.collaborative") }}</p>
-      <p v-else-if="this.public">⠀•⠀{{ $t("playlist.public") }}</p>
+    </v-card-subtitle>
+    <v-card-subtitle style="padding: 0">
+      <p v-if="this.collaborative">{{ $t("playlist.collaborative") }}</p>
+      <p v-else-if="this.public">{{ $t("playlist.public") }}</p>
       <p v-else-if="!this.public && owner === 'me'">
-        ⠀•⠀{{ $t("playlist.private") }}
+        {{ $t("playlist.private") }}
       </p>
     </v-card-subtitle>
   </v-card>
@@ -35,11 +37,26 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style>
 .playlist-card {
-  width: 23%;
-  min-height: 23%;
-  margin-bottom: 10px;
+  width: 250px;
+  height: 250px;
   background-color: initial;
+  margin: 0px 3px 80px 3px;
+  background-color: initial;
+}
+
+.v-img__img--cover {
+  transition: filter 0.2s ease-in-out;
+  filter: brightness(1);
+}
+.v-card:hover .v-img__img--cover {
+  filter: brightness(1.2);
+}
+.v-card__overlay {
+  height: 322px;
+}
+.v-card:hover .v-card__overlay {
+  opacity: 0.2;
 }
 </style>

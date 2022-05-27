@@ -52,6 +52,7 @@ router.beforeEach(async function (to, from, next) {
     else if (to.name == "LoginView" && to.query.code) {
         const code = to.query.code;
         authStore.temporaryToken = code;
+        console.error(to, from);
 
         // Retrieving access token
         await api.spotify.auth.requestFirstAccessToken();

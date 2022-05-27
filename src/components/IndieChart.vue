@@ -12,7 +12,7 @@ export default {
   name: "IndieChart",
   props: {
     indiePercentage: Number,
-    image: String
+    image: String,
   },
   data() {
     // All data needed to customize graph UI and data
@@ -52,9 +52,6 @@ export default {
           image: {
             src: [require("@/assets/palmtree.webp")],
           },
-        },
-        stroke: {
-          lineCap: "round",
         },
         labels: ["Indie %"],
       },

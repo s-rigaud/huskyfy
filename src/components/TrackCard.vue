@@ -1,5 +1,5 @@
 <template>
-  <v-card flat border rounded="0">
+  <v-card flat border rounded="0" style="width: 100%">
     <div class="track-card">
       <v-avatar class="ma-3" size="125" rounded="0">
         <v-img v-bind:src="image"></v-img>
@@ -31,40 +31,26 @@
             </v-card-subtitle>
           </v-card-header-text>
         </v-card-header>
-        <v-card-text>
-          <v-chip
-            v-for="genre in genres.slice(0, 3)"
-            :key="genre"
-            :text="genre.toUpperCase()"
-            label
-            style="margin: 5px"
-          >
-          </v-chip>
-
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn color="primary" dark v-bind="attrs" v-on="on">
-                Button
-              </v-btn>
-            </template>
-            <span>Tooltip</span>
-          </v-tooltip>
-
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on, attrs }">
-              <v-chip
-                v-if="genres.length > 3"
-                :text="`+${genres.length - 3}`"
-                label
-                style="margin: 5px"
-                v-bind="attrs"
-                v-on="on"
-              >
-              </v-chip>
-            </template>
-            <span>Tooltip</span>
-          </v-tooltip>
-        </v-card-text>
+        <div v-if="genres.length > 0">
+          <v-card-text style="padding: 0">
+            <v-chip
+              v-for="genre in genres.slice(0, 3)"
+              :key="genre"
+              :text="genre.toUpperCase()"
+              label
+              style="margin: 5px"
+            >
+            </v-chip>
+            <v-chip
+              v-if="genres.length > 3"
+              :text="`+${genres.length - 3}`"
+              label
+              style="margin: 5px"
+            >
+            </v-chip>
+          </v-card-text>
+        </div>
+        <v-card-subtitle v-else>No genre provided</v-card-subtitle>
       </div>
     </div>
   </v-card>
@@ -81,10 +67,16 @@ export default {
     genres: Object,
     isIndie: Boolean,
   },
+  data() {
+    return {
+      isActive: true,
+    };
+  },
 };
 </script>
 <style scoped>
 .track-card {
   display: flex !important;
+  align-items: center;
 }
 </style>

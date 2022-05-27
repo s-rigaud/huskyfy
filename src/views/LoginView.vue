@@ -7,12 +7,14 @@
 
     <div id="lower-part">
       <v-btn
+        id="connect-button"
         @click="accessOAuthPage"
         v-if="!userStore.connected"
         rounded
-        color="primary"
+        color="#f0932b"
       >
         {{ $t("login.connect") }}
+        <v-icon right dark> mdi-account-circle </v-icon>
       </v-btn>
       <router-link to="/about" id="link-about">
         {{ $t("login.about") }}
@@ -52,18 +54,42 @@ export default {
   top: 0;
   bottom: 0;
   z-index: 1;
+  padding: 12px;
 }
 #upper-part {
   display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
 }
 #lower-part {
-  position: relative;
-  bottom: -70%;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
+#lower-part > button {
+  position: absolute;
+  bottom: 10%;
+}
+#lower-part > a {
+  position: absolute;
+  bottom: 5%;
+  font-size: large;
+}
 #link-about {
   color: white;
+}
+#connect-button {
+  font-size: larger;
+  padding: 20px;
+  text-transform: none;
+  letter-spacing: 0;
+}
+a,
+h1 {
+  background: rgba(0, 0, 0, 0.3);
+}
+.mdi {
+  margin-left: 3px;
 }
 </style>

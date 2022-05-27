@@ -4,30 +4,35 @@
     absolute
     v-if="userStore.connected"
     fade-img-on-scroll
-    color="#f4f4f4"
+    color="#fff"
+    style="font-family: 'Righteous'"
   >
+
     <router-link id="explore" to="/explore">
       <img id="logo" src="logo.png" alt="" />
     </router-link>
 
     <v-spacer></v-spacer>
 
-    <!-- User info part -->
-    <h3 style="margin-right: 10px">
-      {{ userStore.username }}
-    </h3>
-    <v-badge content="🎵" color="warning">
-      <v-avatar style="align-items: initial">
-        <v-img
-          v-bind:src="this.userStore.profilePicture"
-          alt="Profile picture"
-        ></v-img>
-      </v-avatar>
-    </v-badge>
+    <div id="user-info" style="display: flex; align-items: center">
+      <h3 style="margin-right: 10px">
+        {{ userStore.username }}
+      </h3>
+      <v-badge content="🎵" color="warning">
+        <v-avatar style="align-items: initial">
+          <v-img
+            v-bind:src="this.userStore.profilePicture"
+            alt="Profile picture"
+          ></v-img>
+        </v-avatar>
+      </v-badge>
 
-    <v-btn @click="logout" color="error">
-      {{ $t("navbar.logout") }}
-    </v-btn>
+      <div id="disconnect">
+        <v-btn @click="logout" color="error">
+          {{ $t("navbar.logout") }}
+        </v-btn>
+      </div>
+    </div>
 
     <LocaleSelector />
   </v-app-bar>
@@ -70,5 +75,18 @@ export default {
 #logo {
   min-width: 100px;
   width: 150px;
+}
+
+#user-info {
+  margin-right: 15px;
+}
+
+#user-info > #disconnect {
+  display: none;
+  position: absolute;
+  top: 45px;
+}
+#user-info:hover > #disconnect {
+  display: inherit;
 }
 </style>
