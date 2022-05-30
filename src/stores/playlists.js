@@ -9,6 +9,7 @@ export const usePlaylistsStore = defineStore('playlists', {
             playlists: {},
             MAX_TRACKS_LIMIT: 50,
             MAX_PLAYLISTS_LIMIT: 50,
+            selectedPlaylistId: null
         }
     },
     getters: {

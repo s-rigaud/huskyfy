@@ -29,11 +29,19 @@
     <p>
       This website was created by
       <a href="https://github.com/s-rigaud" target="_blank">me</a>
-      as a side project during my studies. I hope you will find it useful !
+      as a side project during my studies. I hope you will find it useful ! If
+      you find any bug or you want new functionalities do not hesitate to report
+      it
+      <a
+        href="mailto:horus-project-bugtracker@gmail.com?subject=Horus%20improvement%20request"
+      >
+        to me
+      </a>
+      😃
     </p>
   </div>
 
-  <v-btn @click="backToPreviousPage">{{ $t("about.home-button") }}</v-btn>
+  <v-btn id="exit-button" @click="backToPreviousPage">X</v-btn>
 </template>
 
 <script>
@@ -49,5 +57,14 @@ export default {
 <style scoped>
 #about-content {
   margin: 0% 25%;
+}
+#exit-button {
+  width: 50px;
+  height: 66px;
+  font-size: larger;
+  border-radius: 50%;
+  position: absolute;
+  top: 10px;
+  right: 10px;
 }
 </style>

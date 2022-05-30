@@ -2,18 +2,8 @@
   <div v-if="playlists[playlistId]" id="playlist">
     <!-- Basic card info to improve-->
     <v-card flat>
-      <v-card-title style="padding: 0">
-        {{ playlists[playlistId].name }}
-      </v-card-title>
-      <v-card-title style="padding: 0">
-        {{ playlists[playlistId].description }}
-      </v-card-title>
       <v-card-subtitle style="padding: 0">
-        <p>Created by {{ playlists[playlistId].owner["display_name"] }}</p>
-        <p v-if="playlists[playlistId].public">{{ $t("playlist.public") }}</p>
-        <p v-if="playlists[playlistId].collaborative">
-          {{ $t("playlist.collaborative") }}
-        </p>
+
       </v-card-subtitle>
       <v-btn @click="unfollowPlaylist" color="error">
         {{ $t("playlist.unfollow") }}
@@ -73,9 +63,10 @@
             :id="track.id"
             :name="track.name"
             :image="track.image"
-            :artists="track.artists.map((artist) => artist.name)"
+            :artists="track.artists"
             :genres="track.genres"
             :isIndie="track.isIndie"
+            :trackURI="track.uri"
           />
         </div>
       </div>
@@ -136,7 +127,9 @@ export default {
     };
   },
   async mounted() {
+    this.playlistsStore.selectedPlaylistId = this.playlistId
     await this.loadFirstTracks();
+    console.log(process.env)
   },
   data() {
     return {

@@ -6,7 +6,6 @@ import { createApp } from 'vue'
 import VueApexCharts from "vue3-apexcharts"
 import App from './App.vue'
 import VueI18n from './i18n'
-
 loadFonts()
 
 createApp(App)

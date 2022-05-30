@@ -1,15 +1,12 @@
 <template>
   <v-app-bar
-    app
-    absolute
     v-if="userStore.connected"
-    fade-img-on-scroll
-    color="#fff"
+    fixed
+    color="white"
     style="font-family: 'Righteous'"
   >
-
-    <router-link id="explore" to="/explore">
-      <img id="logo" src="logo.png" alt="" />
+    <router-link id="explore" to="/explore" style="height: inherit">
+      <img id="logo" src="logo.png" alt="" style="height: 100%" />
     </router-link>
 
     <v-spacer></v-spacer>
@@ -35,6 +32,29 @@
     </div>
 
     <LocaleSelector />
+
+    <template v-slot:extension>
+      <div v-if="playlistsStore.selectedPlaylistId != null">
+        <p>
+          {{ playlistsStore.playlists[playlistsStore.selectedPlaylistId].name }}
+        </p>
+        <p>
+          {{ playlistsStore.playlists[playlistsStore.selectedPlaylistId].description }}
+        </p>
+        <p>
+          Created by
+          {{
+            playlistsStore.playlists[playlistsStore.selectedPlaylistId].owner["display_name"]
+          }}
+        </p>
+        <p v-if="playlistsStore.playlists[playlistsStore.selectedPlaylistId].public">
+          {{ $t("playlist.public") }}
+        </p>
+        <p v-if="playlistsStore.playlists[playlistsStore.selectedPlaylistId].collaborative">
+          {{ $t("playlist.collaborative") }}
+        </p>
+      </div>
+    </template>
   </v-app-bar>
 </template>
 
@@ -71,7 +91,7 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style>
 #logo {
   min-width: 100px;
   width: 150px;
@@ -88,5 +108,8 @@ export default {
 }
 #user-info:hover > #disconnect {
   display: inherit;
+}
+.v-toolbar__extension {
+  height: fit-content !important;
 }
 </style>

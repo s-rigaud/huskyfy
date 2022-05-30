@@ -1,22 +1,31 @@
 <template>
-  <v-card flat border rounded="0" style="width: 100%">
+  <v-card flat border rounded="0" @click="openTrackOnSpotify">
     <div class="track-card">
-      <v-avatar class="ma-3" size="125" rounded="0">
-        <v-img v-bind:src="image"></v-img>
+      <v-avatar class="ma-3" size="90" rounded="0">
+        <v-img
+          v-bind:src="image"
+          lazy-src="https://picsum.photos/id/11/90/90"
+        ></v-img>
       </v-avatar>
       <div>
         <v-card-header>
           <v-card-header-text>
-            <v-card-title class="text-h5"> {{ name }} </v-card-title>
+            <v-card-title class="text-h6"> {{ name }} </v-card-title>
             <v-card-subtitle style="opacity: 1">
-              {{ artists.join(", ") }}
+              <a
+                v-for="artist in artists"
+                class="artist-name"
+                :key="artist"
+                v-text="addComma(artist.name)"
+                :href="artist.uri"
+              ></a>
               <v-chip
                 v-if="isIndie"
                 :text="$t('track.indie')"
                 color="green"
                 label
                 text-color="white"
-                style="margin: 5px"
+                size="small"
               >
               </v-chip>
               <v-chip
@@ -25,27 +34,29 @@
                 color="cyan"
                 label
                 text-color="white"
-                style="margin: 5px"
+                size="small"
               >
               </v-chip>
             </v-card-subtitle>
           </v-card-header-text>
         </v-card-header>
         <div v-if="genres.length > 0">
-          <v-card-text style="padding: 0">
+          <v-card-text>
             <v-chip
               v-for="genre in genres.slice(0, 3)"
               :key="genre"
               :text="genre.toUpperCase()"
               label
-              style="margin: 5px"
+              size="small"
+              class="genre-chip"
             >
             </v-chip>
             <v-chip
               v-if="genres.length > 3"
               :text="`+${genres.length - 3}`"
               label
-              style="margin: 5px"
+              size="small"
+              class="genre-chip"
             >
             </v-chip>
           </v-card-text>
@@ -66,11 +77,26 @@ export default {
     artists: Array,
     genres: Object,
     isIndie: Boolean,
+    trackURI: String,
+  },
+  computed: {
+    addComma() {
+      return (artistName) => {
+        if (this.artists[this.artists.length - 1].name == artistName)
+          return artistName;
+        return `${artistName},`;
+      };
+    },
   },
   data() {
     return {
       isActive: true,
     };
+  },
+  methods: {
+    openTrackOnSpotify() {
+      window.location.href = this.trackURI;
+    },
   },
 };
 </script>
@@ -78,5 +104,33 @@ export default {
 .track-card {
   display: flex !important;
   align-items: center;
+}
+.v-card {
+  width: 100%;
+  background-color: #ecf0f1;
+}
+.v-card:hover {
+  background-color: white !important;
+}
+.v-card-header {
+  padding: 0;
+}
+.v-card-text {
+  padding: 0;
+}
+.v-img {
+  border-radius: 10%;
+}
+.v-avatar {
+  margin: 5px !important;
+}
+
+.artist-name {
+  margin-right: 5px;
+  text-decoration: none;
+  color: black;
+}
+.genre-chip {
+  margin: 0 5px 2px 0px;
 }
 </style>

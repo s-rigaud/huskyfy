@@ -38,6 +38,11 @@ export default {
 };
 </script>
 <style>
+/*
+
+/!\ Not scoped css as v-card__overlay is only define internally in Vuetify
+
+*/
 .playlist-card {
   width: 250px;
   height: 250px;
@@ -45,18 +50,17 @@ export default {
   margin: 0px 3px 80px 3px;
   background-color: initial;
 }
-
-.v-img__img--cover {
+.playlist-card .v-img .v-img__img--cover {
   transition: filter 0.2s ease-in-out;
   filter: brightness(1);
 }
-.v-card:hover .v-img__img--cover {
+.playlist-card:hover .v-img__img--cover {
   filter: brightness(1.2);
 }
-.v-card__overlay {
+.playlist-card .v-card__overlay {
   height: 322px;
 }
-.v-card:hover .v-card__overlay {
+.playlist-card:hover .v-card__overlay {
   opacity: 0.2;
 }
 </style>

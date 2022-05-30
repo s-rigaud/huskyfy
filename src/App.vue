@@ -1,7 +1,12 @@
 <template>
   <v-app>
     <NavbarComponent />
-    <v-main>
+    <v-main
+      v-bind:class="{
+        'small-padding-top': playlistsStore.selectedPlaylistId == null,
+        'huge-padding-top': playlistsStore.selectedPlaylistId != null,
+      }"
+    >
       <v-container id="container" fluid>
         <router-view />
       </v-container>
@@ -13,10 +18,15 @@
 <script>
 import FooterComponent from "@/components/FooterComponent.vue";
 import NavbarComponent from "@/components/NavbarComponent.vue";
+import { usePlaylistsStore } from "@/stores/playlists";
 
 export default {
   name: "App",
   components: { NavbarComponent, FooterComponent },
+  setup() {
+    const playlistsStore = usePlaylistsStore();
+    return { playlistsStore };
+  },
 };
 </script>
 <style scoped>
@@ -41,5 +51,12 @@ export default {
 @font-face {
   font-family: "Oswald";
   src: local("Oswald"), url(./fonts/oswald/Oswald-Medium.ttf) format("truetype");
+}
+
+.small-padding-top {
+  padding: 64px 0 0 0 !important;
+}
+.huge-padding-top {
+  padding: 160px 0 0 0 !important;
 }
 </style>
