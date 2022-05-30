@@ -61,7 +61,6 @@ export default {
     },
   },
   async mounted() {
-    this.playlistsStore.selectedPlaylistId = null;
     await this.loadMorePlaylists();
   },
   methods: {

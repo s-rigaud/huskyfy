@@ -2,9 +2,7 @@
   <div v-if="playlists[playlistId]" id="playlist">
     <!-- Basic card info to improve-->
     <v-card flat>
-      <v-card-subtitle style="padding: 0">
-
-      </v-card-subtitle>
+      <v-card-subtitle style="padding: 0"> </v-card-subtitle>
       <v-btn @click="unfollowPlaylist" color="error">
         {{ $t("playlist.unfollow") }}
       </v-btn>
@@ -88,11 +86,11 @@
 </template>
 
 <script>
-import DuplicatorPopup from "@/components/DuplicatorPopup.vue";
-import GenreChart from "@/components/GenreChart.vue";
-import IndieChart from "@/components/IndieChart.vue";
-import LoadMoreTracksPopup from "@/components/LoadMoreTracksPopup.vue";
-import TrackCard from "@/components/TrackCard.vue";
+import DuplicatorPopup from "@/components/playlist_detail/DuplicatorPopup.vue";
+import GenreChart from "@/components/playlist_detail/GenreChart.vue";
+import IndieChart from "@/components/playlist_detail/IndieChart.vue";
+import LoadMoreTracksPopup from "@/components/playlist_detail/LoadMoreTracksPopup.vue";
+import TrackCard from "@/components/playlist_detail/TrackCard.vue";
 import { usePlaylistsStore } from "@/stores/playlists";
 import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
@@ -127,9 +125,12 @@ export default {
     };
   },
   async mounted() {
-    this.playlistsStore.selectedPlaylistId = this.playlistId
+    this.playlistsStore.selectedPlaylistId = this.playlistId;
     await this.loadFirstTracks();
-    console.log(process.env)
+    console.log(process.env);
+  },
+  beforeUnmount() {
+    this.playlistsStore.selectedPlaylistId = null;
   },
   data() {
     return {

@@ -3,8 +3,9 @@
     <NavbarComponent />
     <v-main
       v-bind:class="{
-        'small-padding-top': playlistsStore.selectedPlaylistId == null,
-        'huge-padding-top': playlistsStore.selectedPlaylistId != null,
+        'no-padding': true,
+        'small-padding-top': ['Explore', 'About'].includes($router.currentRoute.value.name),
+        'huge-padding-top': $router.currentRoute.value.name === 'Explore playlist'
       }"
     >
       <v-container id="container" fluid>
@@ -18,15 +19,13 @@
 <script>
 import FooterComponent from "@/components/FooterComponent.vue";
 import NavbarComponent from "@/components/NavbarComponent.vue";
-import { usePlaylistsStore } from "@/stores/playlists";
 
 export default {
   name: "App",
   components: { NavbarComponent, FooterComponent },
-  setup() {
-    const playlistsStore = usePlaylistsStore();
-    return { playlistsStore };
-  },
+  mounted(){
+    console.log(this.$router.currentRoute.value.name === "Explore");
+  }
 };
 </script>
 <style scoped>
@@ -53,6 +52,9 @@ export default {
   src: local("Oswald"), url(./fonts/oswald/Oswald-Medium.ttf) format("truetype");
 }
 
+.no-padding {
+  padding: 0 !important;
+}
 .small-padding-top {
   padding: 64px 0 0 0 !important;
 }

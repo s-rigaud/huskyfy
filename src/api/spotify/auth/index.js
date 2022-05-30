@@ -7,7 +7,6 @@ const CLIENT_SECRET = "144c002f948a438a958b25783f2835fe"
 const ENCODED_CREDENTIALS = Base64.encode(`${CLIENT_ID}:${CLIENT_SECRET}`)
 const SCOPES = 'user-read-private user-read-email user-follow-read user-library-read playlist-read-collaborative playlist-read-private playlist-modify-public playlist-modify-private ugc-image-upload';
 const REDIRECT_URL = `${process.env.VUE_APP_BASE_SERVER_URL}/login`
-console.log(process.env)
 
 export default {
     // Return Spotify OAuth url
