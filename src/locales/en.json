@@ -4,8 +4,7 @@
         "connect": "Sign in with Spotify",
         "about": "Learn more about this website"
     },
-    "about": {
-    },
+    "about": {},
     "not-found": {
         "404": "Page not found"
     },

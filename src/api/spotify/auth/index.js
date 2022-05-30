@@ -14,8 +14,8 @@ export default {
     getOAuthUrl() {
         const BASE_URL = 'https://accounts.spotify.com/authorize';
         let oauthUrl = `${BASE_URL}?response_type=code&client_id=${CLIENT_ID}&scope=${SCOPES}&redirect_uri=${REDIRECT_URL}`;
-        const ALWAYS_VALIDATE = false
-        if (ALWAYS_VALIDATE) {
+        const FORCE_OAUTH_MANUAL_VALIDATION = true
+        if (FORCE_OAUTH_MANUAL_VALIDATION) {
             oauthUrl += `&show_dialog=${true}`
         }
         return oauthUrl;
@@ -33,6 +33,8 @@ export default {
             },
             data: `code=${authStore.temporaryToken}&redirect_uri=${REDIRECT_URL}&grant_type=authorization_code`,
         }).then(function (response) {
+            // Delete old token not useful anymore
+            authStore.temporaryToken = ''
             authStore.accessToken = response.data.access_token
             authStore.refreshToken = response.data.refresh_token
         })

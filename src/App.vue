@@ -4,8 +4,11 @@
     <v-main
       v-bind:class="{
         'no-padding': true,
-        'small-padding-top': ['Explore', 'About'].includes($router.currentRoute.value.name),
-        'huge-padding-top': $router.currentRoute.value.name === 'Explore playlist'
+        'small-padding-top': ['Explore', 'About'].includes(
+          $router.currentRoute.value.name
+        ),
+        'huge-padding-top':
+          $router.currentRoute.value.name === 'Explore playlist',
       }"
     >
       <v-container id="container" fluid>
@@ -18,14 +21,11 @@
 
 <script>
 import FooterComponent from "@/components/FooterComponent.vue";
-import NavbarComponent from "@/components/NavbarComponent.vue";
+import NavbarComponent from "@/components/NavbarHeader.vue";
 
 export default {
   name: "App",
   components: { NavbarComponent, FooterComponent },
-  mounted(){
-    console.log(this.$router.currentRoute.value.name === "Explore");
-  }
 };
 </script>
 <style scoped>
@@ -59,6 +59,6 @@ export default {
   padding: 64px 0 0 0 !important;
 }
 .huge-padding-top {
-  padding: 160px 0 0 0 !important;
+  padding: 148px 0 0 0 !important;
 }
 </style>

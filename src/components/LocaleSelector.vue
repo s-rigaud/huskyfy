@@ -56,7 +56,5 @@ select {
   width: 45px;
   margin: 10px;
   padding: 0px 6px;
-
-
 }
 </style>

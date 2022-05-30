@@ -9,34 +9,33 @@
     "i18n:report": "vue-cli-service i18n:report --src './src/**/*.?(js|vue)' --locales './src/locales/**/*.json'"
   },
   "dependencies": {
-    "@mdi/font": "6.6.96",
-    "@vueuse/core": "^8.4.2",
-    "apexcharts": "^3.35.2",
+    "@mdi/font": "6.7.96",
+    "@vueuse/core": "^8.5.0",
+    "apexcharts": "^3.35.3",
     "axios": "^0.27.2",
-    "core-js": "^3.22.4",
+    "core-js": "^3.22.7",
     "dotenv": "^16.0.1",
     "js-base64": "^3.7.2",
     "pinia": "^2.0.14",
     "roboto-fontface": "*",
-    "vue": "^3.2.33",
+    "vue": "^3.2.36",
     "vue-i18n": "^9.1.10",
     "vue-router": "^4.0.15",
     "vue3-apexcharts": "^1.4.1",
     "vuetify": "npm:@vuetify/nightly@next",
-    "webfontloader": "^1.6.28"
+    "webpack-plugin-vuetify": "^2.0.0-alpha.10"
   },
   "devDependencies": {
-    "@babel/core": "^7.17.10",
-    "@babel/eslint-parser": "^7.17.0",
+    "@babel/core": "^7.18.2",
+    "@babel/eslint-parser": "^7.18.2",
     "@vue/cli-plugin-babel": "~5.0.4",
     "@vue/cli-plugin-eslint": "~5.0.4",
     "@vue/cli-service": "~5.0.4",
-    "eslint": "^8.15.0",
-    "eslint-plugin-vue": "^8.7.1",
-    "sass": "^1.51.0",
-    "sass-loader": "^12.6.0",
-    "vue-cli-plugin-vuetify": "~2.4.8",
-    "vuetify-loader": "^2.0.0-alpha.0"
+    "eslint": "^8.16.0",
+    "eslint-plugin-vue": "^9.0.1",
+    "sass": "^1.52.1",
+    "sass-loader": "^13.0.0",
+    "vue-cli-plugin-vuetify": "~2.5.0"
   },
   "eslintConfig": {
     "root": true,

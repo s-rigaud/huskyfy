@@ -1,15 +1,16 @@
 import api from "@/api";
 import { useUserStore } from '@/stores/user';
+import { useStorage } from '@vueuse/core';
 import { defineStore } from 'pinia';
 import VueI18n from '../i18n';
 
 export const usePlaylistsStore = defineStore('playlists', {
     state: () => {
         return {
-            playlists: {},
-            MAX_TRACKS_LIMIT: 50,
-            MAX_PLAYLISTS_LIMIT: 50,
-            selectedPlaylistId: null
+            playlists: useStorage("playlists", {}),
+            MAX_TRACKS_LIMIT: useStorage("MAX_TRACKS_LIMIT", 50),
+            MAX_PLAYLISTS_LIMIT: useStorage("MAX_PLAYLISTS_LIMIT", 50),
+            selectedPlaylistId: useStorage("selectedPlaylistId", null)
         }
     },
     getters: {
@@ -30,16 +31,24 @@ export const usePlaylistsStore = defineStore('playlists', {
 
             // Update existing playlist or create it
             for (const requestPlaylist of playlists) {
-                const knownPlaylist = this.playlists[requestPlaylist.id]
-                if (knownPlaylist) {
+                const cachedPlaylist = this.playlists[requestPlaylist.id]
+                if (cachedPlaylist) {
+                    //Pop cached tracks if playlist have changed
+                    if (cachedPlaylist.snapshot_id != requestPlaylist.snapshot_id) {
+                        cachedPlaylist.snapshot_id = requestPlaylist.snapshot_id
+                        cachedPlaylist.offset = 0
+                        cachedPlaylist.tracks = []
+                    }
+
                     // Override data with new cover added to the playlist
                     const images = requestPlaylist.images
                     this.playlists[requestPlaylist.id] = {
                         ...requestPlaylist,
-                        ...knownPlaylist,
+                        ...cachedPlaylist,
                         images: images
                     }
                 } else {
+                    console.log("Unknown playlist", requestPlaylist.name);
                     this.playlists[requestPlaylist.id] = requestPlaylist
                 }
             }
@@ -68,7 +77,8 @@ export const usePlaylistsStore = defineStore('playlists', {
                 owner: { "display_name": userStore.username },
                 primary_color: null,
                 public: false,
-                tracks: []
+                tracks: [],
+                snapshot_id: 42
             }
         },
         range(start, stop, step = 1) {
@@ -81,7 +91,9 @@ export const usePlaylistsStore = defineStore('playlists', {
             if (!offset) {
                 offset = 0
                 this.playlists[playlistId] = { ...this.playlists[playlistId], offset: offset, tracks: [] }
-            } else if (limit <= offset) {
+            }
+            // Cached tracks
+            else if (limit <= offset) {
                 console.log(`Asked ${limit} tracks - already saved ${offset}, no request`);
                 return this.playlists[playlistId].tracks.slice(0, limit);
             } else if (offset >= this.playlists[playlistId].total) {

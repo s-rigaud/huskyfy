@@ -1,6 +1,11 @@
 <template>
   <v-card flat @click="displayDetails" class="playlist-card">
-    <v-img v-bind:src="image" height="400px" cover></v-img>
+    <v-img
+      v-bind:src="image"
+      lazy-src="https://picsum.photos/id/11/90/90"
+      height="400px"
+      cover
+    ></v-img>
 
     <v-card-title style="padding: 0"> {{ name }} </v-card-title>
     <v-card-subtitle style="padding: 0">

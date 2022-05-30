@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia'
+import { useStorage } from '@vueuse/core'
 
 export const useNotificationStore = defineStore('notification', {
     state: () => {
         return {
-            notifications: []
+            notifications: useStorage("notifications", [])
         }
     },
 })

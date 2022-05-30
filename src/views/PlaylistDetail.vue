@@ -2,23 +2,6 @@
   <div v-if="playlists[playlistId]" id="playlist">
     <!-- Basic card info to improve-->
     <v-card flat>
-      <v-card-subtitle style="padding: 0"> </v-card-subtitle>
-      <v-btn @click="unfollowPlaylist" color="error">
-        {{ $t("playlist.unfollow") }}
-      </v-btn>
-
-      <div
-        id="update-playlist-privacy"
-        v-if="userOwnsPlaylist && !playlists[playlistId].collaborative"
-      >
-        <v-btn @click="setPlaylistPrivate" v-if="playlists[playlistId].public">
-          {{ $t("playlist.set-private") }}
-        </v-btn>
-        <v-btn @click="setPlaylistPublic" v-else>
-          {{ $t("playlist.set-public") }}
-        </v-btn>
-      </div>
-
       <!--Playlist duplication-->
       <v-btn v-if="filteredTracks.length > 1" @click="createNewPlaylist">
         {{ $t("playlist.duplicate") }}
@@ -127,7 +110,6 @@ export default {
   async mounted() {
     this.playlistsStore.selectedPlaylistId = this.playlistId;
     await this.loadFirstTracks();
-    console.log(process.env);
   },
   beforeUnmount() {
     this.playlistsStore.selectedPlaylistId = null;
@@ -168,11 +150,6 @@ export default {
         this.playlists[this.playlistId].total > this.trackRequestLimit;
       this.resetFilters();
     },
-    async unfollowPlaylist() {
-      await this.playlistsStore.unfollowPlaylist(this.playlistId);
-      this.filteredTracks = [];
-      this.$router.push({ name: "Explore" });
-    },
     filterTracksByGenre(selectedGenreName) {
       if (selectedGenreName == "") {
         this.resetFilters();
@@ -189,12 +166,6 @@ export default {
     resetFilters() {
       this.selectedGenreName = "";
       this.filteredTracks = this.playlists[this.playlistId].tracks;
-    },
-    async setPlaylistPublic() {
-      await this.playlistsStore.updatePlaylistPrivacy(this.playlistId, true);
-    },
-    async setPlaylistPrivate() {
-      await this.playlistsStore.updatePlaylistPrivacy(this.playlistId, false);
     },
   },
   computed: {
@@ -222,12 +193,6 @@ export default {
       }
       return parseInt(
         (indieTracks / this.playlists[this.playlistId].tracks.length) * 100
-      );
-    },
-    userOwnsPlaylist() {
-      return (
-        this.currentUserUsername ==
-        this.playlists[this.playlistId].owner["display_name"]
       );
     },
     getImage() {

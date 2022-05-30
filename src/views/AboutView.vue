@@ -12,9 +12,9 @@
     <h2>Spotify connection and account access</h2>
     <p>
       This website is using well designed Spotify OAuth2 access account which
-      allow the website to access your data safely. There is no data stored on
-      the Horus platform or anywhere on the website so you are totally safe when
-      browsing or exiting the website without signing out.
+      allow the website to access your data safely. There is no data stored in
+      any server so you are totally safe when browsing or exiting the website
+      without signing out.
     </p>
 
     <h2>How it works</h2>

@@ -10,6 +10,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 
 const routes = [
+    { path: '/', redirect: '/explore' },
     {
         path: "/login",
         name: "LoginView",

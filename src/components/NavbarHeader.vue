@@ -34,44 +34,24 @@
     <LocaleSelector />
 
     <template v-slot:extension>
-      <div v-if="playlistsStore.selectedPlaylistId != null">
-        <p>
-          {{ playlistsStore.playlists[playlistsStore.selectedPlaylistId].name }}
-        </p>
-        <p>
-          {{ playlistsStore.playlists[playlistsStore.selectedPlaylistId].description }}
-        </p>
-        <p>
-          Created by
-          {{
-            playlistsStore.playlists[playlistsStore.selectedPlaylistId].owner["display_name"]
-          }}
-        </p>
-        <p v-if="playlistsStore.playlists[playlistsStore.selectedPlaylistId].public">
-          {{ $t("playlist.public") }}
-        </p>
-        <p v-if="playlistsStore.playlists[playlistsStore.selectedPlaylistId].collaborative">
-          {{ $t("playlist.collaborative") }}
-        </p>
-      </div>
+      <NavbarPlaylistSelected />
     </template>
   </v-app-bar>
 </template>
 
 <script>
 import LocaleSelector from "@/components/LocaleSelector.vue";
+import NavbarPlaylistSelected from "@/components/NavbarPlaylistSelected.vue";
 import { useAuthStore } from "@/stores/auth";
-import { usePlaylistsStore } from "@/stores/playlists";
 import { useUserStore } from "@/stores/user";
 
 export default {
-  name: "NavbarComponent",
-  components: { LocaleSelector },
+  name: "NavbarHeader",
+  components: { LocaleSelector, NavbarPlaylistSelected },
   setup() {
     const userStore = useUserStore();
     const authStore = useAuthStore();
-    const playlistsStore = usePlaylistsStore();
-    return { authStore, userStore, playlistsStore };
+    return { authStore, userStore };
   },
   computed: {
     profilePictureOrDefault() {
@@ -85,7 +65,6 @@ export default {
     logout() {
       this.userStore.$reset();
       this.authStore.$reset();
-      this.playlistsStore.$reset();
       this.$router.push({ name: "LoginView" });
     },
   },

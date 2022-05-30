@@ -4,8 +4,7 @@
         "connect": "Se connecter à Spotify",
         "about": "En apprendre plus sur ce site"
     },
-    "about": {
-    },
+    "about": {},
     "not-found": {
         "404": "Page non trouvée"
     },
