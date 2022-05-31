@@ -14,6 +14,8 @@
 
 * Ensure responsiveness
 
+* Fix Playlist Card display for name too long (fix overflow)
+
 # Playlist
 
 * Add filters to the left column

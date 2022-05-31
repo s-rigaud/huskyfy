@@ -1,5 +1,5 @@
-import { defineStore } from 'pinia'
 import { useStorage } from '@vueuse/core'
+import { defineStore } from 'pinia'
 
 export const useAuthStore = defineStore('auth', {
     state: () => {
@@ -9,5 +9,12 @@ export const useAuthStore = defineStore('auth', {
             accessToken: useStorage('accessToken', ''),
             refreshToken: useStorage('refreshToken', ''),
         }
-    },
+    }, actions: {
+        reset() {
+            // Manually update state as localstorage and states are linked now
+            this.temporaryToken = ''
+            this.accessToken = ''
+            this.refreshToken = ''
+        }
+    }
 })

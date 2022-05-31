@@ -1,5 +1,5 @@
 <template>
-  <v-footer app id="footer" v-if="userStore.connected">
+  <v-footer id="footer" v-if="userStore.connected">
     <v-row justify="center" no-gutters>
       <router-link to="/explore">
         <v-btn text tile depressed class="my-2"> Home </v-btn>

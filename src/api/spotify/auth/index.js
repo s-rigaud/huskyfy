@@ -14,7 +14,7 @@ export default {
     getOAuthUrl() {
         const BASE_URL = 'https://accounts.spotify.com/authorize';
         let oauthUrl = `${BASE_URL}?response_type=code&client_id=${CLIENT_ID}&scope=${SCOPES}&redirect_uri=${REDIRECT_URL}`;
-        const FORCE_OAUTH_MANUAL_VALIDATION = true
+        const FORCE_OAUTH_MANUAL_VALIDATION = false
         if (FORCE_OAUTH_MANUAL_VALIDATION) {
             oauthUrl += `&show_dialog=${true}`
         }

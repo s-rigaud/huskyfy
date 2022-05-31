@@ -12,5 +12,19 @@ export const useUserStore = defineStore('user', {
         country: useStorage('country', ''),
         connected: useStorage('connected', false),
         locale: useStorage('locale', 'en')
-    })
+    }),
+    actions: {
+        reset() {
+            // Manually update state as localstorage and states are linked now
+            console.log("called");
+            this.id = ''
+            this.username = ''
+            this.profilePicture = ''
+            this.isPremium = false
+            this.mail = ''
+            this.country = ''
+            this.connected = false
+            // Do not reset locale
+        },
+    }
 })

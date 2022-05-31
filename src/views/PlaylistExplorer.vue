@@ -7,7 +7,7 @@
         :key="playlist.id"
         :id="playlist.id"
         :name="formatName(playlist)"
-        :image="getCoverOrDefaultCover(playlist)"
+        :images="playlist.images"
         :owner="usernameToDisplay(playlist.owner['display_name'])"
         :public="playlist.public"
         :collaborative="playlist.collaborative"
@@ -45,13 +45,6 @@ export default {
           : ownerUsername;
       };
     },
-    getCoverOrDefaultCover() {
-      return (playlist) => {
-        return playlist.images.length > 0
-          ? playlist.images[0].url
-          : this.DEFAULT_PLAYLIST_COVER;
-      };
-    },
     formatName() {
       return (playlist) => {
         return playlist.id == "my-music"
@@ -60,7 +53,7 @@ export default {
       };
     },
   },
-  async mounted() {
+  async created() {
     await this.loadMorePlaylists();
   },
   methods: {
@@ -74,7 +67,6 @@ export default {
     return {
       playlistTotal: 1,
       offset: 0,
-      DEFAULT_PLAYLIST_COVER: require("@/assets/default_cover.jpg"),
       isTrue: true,
     };
   },

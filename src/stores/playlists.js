@@ -19,6 +19,12 @@ export const usePlaylistsStore = defineStore('playlists', {
         },
     },
     actions: {
+        reset() {
+            // Manually update state as localstorage and states are linked now
+            this.playlists = {}
+            this.accessToken = ''
+            this.selectedPlaylistId = null
+        },
         // Retrieve playlists for user
         async getUserPlaylists(offset) {
             const response = await api.spotify.playlists.getUserPlaylists(
@@ -32,6 +38,11 @@ export const usePlaylistsStore = defineStore('playlists', {
             // Update existing playlist or create it
             for (const requestPlaylist of playlists) {
                 const cachedPlaylist = this.playlists[requestPlaylist.id]
+
+                if (requestPlaylist.images.length == 0) {
+                    requestPlaylist.images = [{ url: require("@/assets/default_cover.jpg") }]
+                }
+
                 if (cachedPlaylist) {
                     //Pop cached tracks if playlist have changed
                     if (cachedPlaylist.snapshot_id != requestPlaylist.snapshot_id) {
@@ -39,16 +50,12 @@ export const usePlaylistsStore = defineStore('playlists', {
                         cachedPlaylist.offset = 0
                         cachedPlaylist.tracks = []
                     }
-
-                    // Override data with new cover added to the playlist
-                    const images = requestPlaylist.images
                     this.playlists[requestPlaylist.id] = {
                         ...requestPlaylist,
                         ...cachedPlaylist,
-                        images: images
+                        images: requestPlaylist.images
                     }
                 } else {
-                    console.log("Unknown playlist", requestPlaylist.name);
                     this.playlists[requestPlaylist.id] = requestPlaylist
                 }
             }
@@ -68,9 +75,9 @@ export const usePlaylistsStore = defineStore('playlists', {
                 id: "my-music",
                 images: [
                     {
-                        "height": null,
-                        "url": require("@/assets/my-music.jpeg"),
-                        "width": null
+                        height: null,
+                        url: require("@/assets/my-music.jpeg"),
+                        width: null
                     }
                 ],
                 name: i18n.t('playlist.your-music.name'),

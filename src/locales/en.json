@@ -14,9 +14,9 @@
         "private": "Private playlist 🔒",
         "reset-filters": "Reset filters",
         "duplicate": "Duplicate playlist",
-        "unfollow": "Unfollow playlist",
-        "set-private": "Set Playlist Private 🔒",
-        "set-public": "Set Playlist Public 📣",
+        "unfollow": "Unfollow 🗑️",
+        "set-private": "Set private 🔒",
+        "set-public": "Set public 📣",
         "next": "Jump to new playlist",
         "load-more-playlists": "Load more playlists",
         "header": "Start browsing your playlists to gather some useful data on them, split them by genre and so much more",
@@ -33,7 +33,8 @@
         },
         "load-more-warning": "Your playlist has more than {limit} tracks, do you want to load all of them ?",
         "load-more-button": "Load all tracks",
-        "fully-loaded": "All artists, tracks and genres have been retrieved"
+        "fully-loaded": "All artists, tracks and genres have been retrieved",
+        "open-on-spotify": "Open on Spotify"
     },
     "footer": {
         "built": "Built with ♥ by"

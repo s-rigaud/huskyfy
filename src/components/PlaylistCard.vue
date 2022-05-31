@@ -1,13 +1,13 @@
 <template>
   <v-card flat @click="displayDetails" class="playlist-card">
     <v-img
-      v-bind:src="image"
+      v-bind:src="images[0].url"
       lazy-src="https://picsum.photos/id/11/90/90"
       height="400px"
       cover
     ></v-img>
 
-    <v-card-title style="padding: 0"> {{ name }} </v-card-title>
+    <v-card-title class="text-truncate"> {{ name }} </v-card-title>
     <v-card-subtitle style="padding: 0">
       <p>{{ $t("playlist.created-by") }} {{ owner }}</p>
     </v-card-subtitle>
@@ -27,7 +27,7 @@ export default {
   props: {
     id: String,
     name: String,
-    image: String,
+    images: Array,
     owner: String,
     public: Boolean,
     collaborative: Boolean,
@@ -39,6 +39,9 @@ export default {
         params: { playlistId: this.id },
       });
     },
+  },
+  created() {
+    console.log(this.images);
   },
 };
 </script>
@@ -64,6 +67,11 @@ export default {
 }
 .playlist-card .v-card__overlay {
   height: 322px;
+}
+.playlist-card .v-card-title {
+  padding: 0;
+  letter-spacing: 0;
+  white-space: nowrap;
 }
 .playlist-card:hover .v-card__overlay {
   opacity: 0.2;

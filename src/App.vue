@@ -39,6 +39,7 @@ export default {
   justify-content: space-around;
   background-color: #f6e58d !important;
   font-family: "Oswald";
+  min-height: 100%;
 }
 
 @font-face {

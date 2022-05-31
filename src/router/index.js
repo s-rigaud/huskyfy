@@ -7,6 +7,7 @@ import NotFound from '@/views/NotFound.vue';
 import PlaylistDetail from '@/views/PlaylistDetail.vue';
 import PlaylistExplorer from '@/views/PlaylistExplorer.vue';
 import { createRouter, createWebHistory } from 'vue-router';
+import { usePlaylistsStore } from "@/stores/playlists";
 
 
 const routes = [
@@ -42,7 +43,6 @@ const router = createRouter({
 
 router.beforeEach(async function (to, from, next) {
     const authStore = useAuthStore()
-    const userStore = useUserStore()
 
     // Does not allow to visit other pages while not connected
     if (!authStore.accessToken && to.name !== "LoginView" && to.name !== "About") {
@@ -62,7 +62,7 @@ router.beforeEach(async function (to, from, next) {
         const data = response.data;
 
         const userPicture = (data.images.length > 0) ? data.images[0].url : ''
-        userStore.$patch({
+        useUserStore().$patch({
             id: data.id,
             username: data.display_name,
             profilePicture: userPicture,
@@ -73,7 +73,10 @@ router.beforeEach(async function (to, from, next) {
         });
         next({ name: "Explore" });
 
-    } else {
+    } else if (to.name != "Explore playlist"){
+        usePlaylistsStore().selectedPlaylistId = null
+        next();
+    }else {
         // Default routing
         next();
     }

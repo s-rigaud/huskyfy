@@ -6,7 +6,7 @@
     style="font-family: 'Righteous'"
   >
     <router-link id="explore" to="/explore" style="height: inherit">
-      <img id="logo" src="logo.png" alt="" style="height: 100%" />
+      <img id="logo" :src="logo" alt="" style="height: 100%" />
     </router-link>
 
     <v-spacer></v-spacer>
@@ -31,6 +31,7 @@
       </div>
     </div>
 
+    <v-btn @click="clearLocalStorage">Clear local storage</v-btn>
     <LocaleSelector />
 
     <template v-slot:extension>
@@ -43,6 +44,7 @@
 import LocaleSelector from "@/components/LocaleSelector.vue";
 import NavbarPlaylistSelected from "@/components/NavbarPlaylistSelected.vue";
 import { useAuthStore } from "@/stores/auth";
+import { usePlaylistsStore } from "@/stores/playlists";
 import { useUserStore } from "@/stores/user";
 
 export default {
@@ -51,7 +53,9 @@ export default {
   setup() {
     const userStore = useUserStore();
     const authStore = useAuthStore();
-    return { authStore, userStore };
+    const playlistsStore = usePlaylistsStore();
+
+    return { authStore, playlistsStore, userStore };
   },
   computed: {
     profilePictureOrDefault() {
@@ -60,11 +64,18 @@ export default {
         ? this.userStore.profilePicture
         : DEFAULT_PICTURE;
     },
+    logo(){
+      return require("@/assets/logo.png")
+    }
   },
   methods: {
+    clearLocalStorage() {
+      localStorage.clear();
+    },
     logout() {
-      this.userStore.$reset();
-      this.authStore.$reset();
+      this.userStore.reset();
+      this.authStore.reset();
+      this.playlistsStore.selectedPlaylistId = null;
       this.$router.push({ name: "LoginView" });
     },
   },
