@@ -16,7 +16,6 @@ export const useUserStore = defineStore('user', {
     actions: {
         reset() {
             // Manually update state as localstorage and states are linked now
-            console.log("called");
             this.id = ''
             this.username = ''
             this.profilePicture = ''

@@ -27,7 +27,16 @@
       </div>
     </div>
 
-    <div style="display: flex">
+    <div
+      style="
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        margin-top: 5px;
+        padding: 3px;
+        display: flex;
+      "
+    >
       <div
         id="update-playlist-privacy"
         v-if="
@@ -154,6 +163,7 @@ export default {
 #playlist-info {
   display: flex;
   flex-direction: row;
+  margin-bottom: 10px;
 }
 #playlist-image {
   width: 70px !important;

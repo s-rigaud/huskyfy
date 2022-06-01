@@ -35,7 +35,8 @@
         "load-more-button": "Load all tracks",
         "fully-loaded": "All artists, tracks and genres have been retrieved",
         "open-on-spotify": "Open on Spotify",
-        "export-preview": "Export playlist preview 🖼️"
+        "export-preview": "Export playlist preview 🖼️",
+        "no-tracks": "This playlist doesn't have any track now. Open the playlist on Spotify and try to add tracks to start seeing them here"
     },
     "footer": {
         "built": "Built with ♥ by"

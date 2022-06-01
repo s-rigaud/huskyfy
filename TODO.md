@@ -6,15 +6,17 @@
 
 * Mon dieu les couleurs ...
 
-* Improve navbar disconnect (https://next.vuetifyjs.com/en/api/v-app-bar/#props-order ??)
-
 * Improve and center text in the middle (add hero or something cool if needed)
+
+* Fix Playlist Card display for name too long (fix overflow)
+
+* What if no playlists on the account
+
+* Add loading things
 
 * Improve general design
 
 * Ensure responsiveness
-
-* Fix Playlist Card display for name too long (fix overflow)
 
 # Playlist
 

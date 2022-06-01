@@ -33,9 +33,9 @@ export default {
     collaborative: Boolean,
   },
   computed: {
-    loadingCover(){
-      return require("@/assets/default_cover.jpg")
-    }
+    loadingCover() {
+      return require("@/assets/default_cover.jpg");
+    },
   },
   methods: {
     displayDetails() {

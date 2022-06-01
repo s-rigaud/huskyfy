@@ -2,7 +2,7 @@
   <v-app>
     <NavbarComponent />
     <v-main
-    id="main"
+      id="main"
       v-bind:class="{
         'no-padding': true,
         'small-padding-top': ['Explore', 'About'].includes(
@@ -30,9 +30,6 @@ export default {
 };
 </script>
 <style scoped>
-#main{
-  transition: 0s all ease;
-}
 #container {
   padding: 12px;
   display: flex;
@@ -63,6 +60,6 @@ export default {
   padding: 64px 0 0 0 !important;
 }
 .huge-padding-top {
-  padding: 148px 0 0 0 !important;
+  padding: 162px 0 0 0 !important;
 }
 </style>

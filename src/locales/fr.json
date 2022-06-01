@@ -14,7 +14,7 @@
         "private": "Playlist privée 🔒",
         "reset-filters": "Réinitialiser les filtres",
         "duplicate": "Créer une copie de la playlist",
-        "unfollow": "Ne plus suivre 🗑️",
+        "unfollow": "Supprimer de la bibliothèque",
         "set-private": "Rendre privée 🔒",
         "set-public": "Rendre publique 📣",
         "next": "Voir la nouvelle playlist",
@@ -35,7 +35,8 @@
         "load-more-button": "Charger tous les titres",
         "fully-loaded": "Tous les artistes, les titres et les genres ont pu être récupérés",
         "open-on-spotify": "Ouvrir dans Spotify",
-       "export-preview": "Sauvegarder un aperçu 🖼️"
+        "export-preview": "Sauvegarder un aperçu 🖼️",
+        "no-tracks": "Cette playlist n'a pas de titres pour le moment. Ouvrez la playlist sur Spotify et essayez d'ajouter des titres pour commencer à les voir apparaître ici."
     },
     "footer": {
         "built": "Créé avec ♥ par"

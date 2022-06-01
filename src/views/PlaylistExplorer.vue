@@ -79,6 +79,7 @@ export default {
   flex-direction: column;
   align-items: center;
   text-align: center;
+  width: 100%;
 }
 #playlists {
   display: flex;

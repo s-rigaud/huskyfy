@@ -11,27 +11,36 @@
 
     <v-spacer></v-spacer>
 
-    <div id="user-info">
-      <h3 style="margin-right: 10px">
-        {{ userStore.username }}
-      </h3>
-      <v-badge content="🎵" color="warning">
-        <v-avatar style="align-items: initial">
-          <v-img
-            v-bind:src="this.userStore.profilePicture"
-            alt="Profile picture"
-          ></v-img>
-        </v-avatar>
-      </v-badge>
+    <v-menu open-on-hover transition="slide-y-transition">
+      <template v-slot:activator="{ props }">
+        <div id="user-info" v-bind="props">
+          <h3 style="margin-right: 10px">
+            {{ userStore.username }}
+          </h3>
+          <v-badge content="🎵" color="warning">
+            <v-avatar style="align-items: initial">
+              <v-img
+                v-bind:src="this.userStore.profilePicture"
+                alt="Profile picture"
+              ></v-img>
+            </v-avatar>
+          </v-badge>
+        </div>
+      </template>
 
-      <div id="disconnect">
-        <v-btn @click="logout" color="error">
-          {{ $t("navbar.logout") }}
-        </v-btn>
-      </div>
-    </div>
+      <v-btn
+        id="logout-button"
+        @click="logout"
+        color="error"
+        variant="outlined"
+      >
+        {{ $t("navbar.logout") }}
+      </v-btn>
+    </v-menu>
 
-    <v-btn @click="clearLocalStorage">Clear local storage</v-btn>
+    <v-btn @click="clearLocalStorage" variant="outlined">
+      Clear local storage
+    </v-btn>
     <LocaleSelector />
 
     <template v-slot:extension>
@@ -92,15 +101,14 @@ export default {
   margin-right: 15px;
   display: flex;
   align-items: center;
+  cursor: pointer;
 }
 
-#user-info > #disconnect {
-  display: none;
+#logout-button {
+  background-color: white;
   position: absolute;
-  top: 45px;
-}
-#user-info:hover > #disconnect {
-  display: inherit;
+  top: 12px;
+  font-family: "Oswald";
 }
 .v-toolbar__extension {
   height: fit-content !important;

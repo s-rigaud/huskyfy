@@ -1,22 +1,21 @@
 <template>
-  <div v-if="playlists[playlistId]" id="playlist">
-    <!-- Basic card info to improve-->
-    <v-card flat>
-      <!--Playlist duplication-->
-      <v-btn v-if="filteredTracks.length > 1" @click="createNewPlaylist">
-        {{ $t("playlist.duplicate") }}
-      </v-btn>
-    </v-card>
+  <div id="playlist" v-if="playlists[playlistId].total > 0">
+    <!--Playlist duplication-->
+    <v-btn v-if="filteredTracks.length > 1" @click="createNewPlaylist">
+      {{ $t("playlist.duplicate") }}
+    </v-btn>
 
     <div id="content" style="display: flex">
       <div id="left-part">
         <!-- Charts -->
-        <div id="charts" v-if="filteredTracks.length > 0">
+        <div id="charts">
           <IndieChart
+            v-if="filteredTracks.length > 0"
             :indiePercentage="indiePercentage"
             :image="getImage(indiePercentage)"
           />
           <GenreChart
+            v-if="filteredTracks.length > 0"
             :genres="sortedGenres"
             @onGenreSelect="filterTracksByGenre"
           />
@@ -68,6 +67,13 @@
       @allTracksLoaded="resetFilters"
     />
   </div>
+  <div id="no-tracks" v-else>
+    <h1>{{ $t("playlist.no-tracks") }}</h1>
+    <v-btn @click="openPlaylistOnSpotify" id="open-spotify" variant="outlined">
+      {{ $t("playlist.open-on-spotify") }}
+      <v-img width="25" :src="spotifyLogo" alt="Spotify Logo" />
+    </v-btn>
+  </div>
 </template>
 
 <script>
@@ -111,6 +117,7 @@ export default {
   },
   async mounted() {
     this.playlistsStore.selectedPlaylistId = this.playlistId;
+    console.log(this.playlists[this.playlistId].total);
     await this.loadFirstTracks();
   },
   beforeUnmount() {
@@ -174,6 +181,9 @@ export default {
       this.selectedGenreName = "";
       this.filteredTracks = this.playlists[this.playlistId].tracks;
     },
+    openPlaylistOnSpotify() {
+      window.location.href = this.playlists[this.playlistId].uri;
+    },
   },
   computed: {
     // Returns only top genres sorted by most to least popular
@@ -212,10 +222,13 @@ export default {
         return require(`@/assets/${image}.png`);
       };
     },
+    spotifyLogo() {
+      return require("@/assets/spotify.png");
+    },
   },
 };
 </script>
-<style scoped>
+<style>
 #left-part {
   display: flex;
   flex-direction: column;
@@ -236,6 +249,7 @@ export default {
   flex-wrap: wrap;
   justify-content: space-around;
   align-items: center;
+  min-height: 613px;
 }
 #tracks {
   width: 100%;
@@ -245,5 +259,23 @@ export default {
   justify-content: space-evenly;
   align-items: stretch;
   align-content: center;
+}
+#no-tracks {
+  width: 100%;
+  text-align: center;
+  margin: auto;
+}
+
+#open-spotify {
+  background-color: white;
+}
+#open-spotify .v-btn__content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+#open-spotify .v-btn__content img {
+  margin: 0px 3px;
+  width: 20px;
 }
 </style>

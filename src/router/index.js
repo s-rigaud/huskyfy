@@ -3,7 +3,6 @@ import { useAuthStore } from '@/stores/auth';
 import { useUserStore } from '@/stores/user';
 import AboutView from '@/views/AboutView.vue';
 import LoginView from '@/views/LoginView.vue';
-import NotFound from '@/views/NotFound.vue';
 import PlaylistDetail from '@/views/PlaylistDetail.vue';
 import PlaylistExplorer from '@/views/PlaylistExplorer.vue';
 import { createRouter, createWebHistory } from 'vue-router';
@@ -33,7 +32,7 @@ const routes = [
         name: "About",
         component: AboutView,
     },
-    { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound },
+    { path: '/:pathMatch(.*)*', redirect: '/explore'},
 ]
 
 const router = createRouter({

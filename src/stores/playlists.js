@@ -20,20 +20,22 @@ export const usePlaylistsStore = defineStore('playlists', {
     },
     actions: {
         reset() {
-            // Manually update state as localstorage and states are linked now
+            // Manually update state as local storage and states are linked now
             this.playlists = {}
             this.accessToken = ''
             this.selectedPlaylistId = null
         },
         // Retrieve playlists for user
         async getUserPlaylists(offset) {
+            const userStore = useUserStore()
+
             const response = await api.spotify.playlists.getUserPlaylists(
                 this.MAX_PLAYLISTS_LIMIT,
                 offset
             );
             offset += this.MAX_PLAYLISTS_LIMIT
             const playlists = response.data.items
-            playlists.unshift(this.getLikedSongPlaylist())
+            playlists.unshift(this.getLikedSongPlaylist(userStore))
 
             // Update existing playlist or create it
             for (const requestPlaylist of playlists) {
@@ -53,10 +55,23 @@ export const usePlaylistsStore = defineStore('playlists', {
                     this.playlists[requestPlaylist.id] = {
                         ...requestPlaylist,
                         ...cachedPlaylist,
+                        name: requestPlaylist.name,
+                        description: requestPlaylist.description,
                         images: requestPlaylist.images
                     }
                 } else {
-                    this.playlists[requestPlaylist.id] = requestPlaylist
+                    this.playlists[requestPlaylist.id] = {
+                        total: this.getTrackCount(requestPlaylist, userStore),
+                        ...requestPlaylist
+                    }
+                }
+            }
+
+            // Delete cached playlists deleted by user
+            const playlistRequestId = playlists.map(p => p.id)
+            for (let key in this.playlists) {
+                if (!playlistRequestId.includes(key)) {
+                    delete this.playlists[key]
                 }
             }
 
@@ -66,9 +81,8 @@ export const usePlaylistsStore = defineStore('playlists', {
             }
         },
         // Special playlist from user liked song treated differently in Spotify API
-        getLikedSongPlaylist() {
+        getLikedSongPlaylist(userStore) {
             const i18n = VueI18n.global
-            const userStore = useUserStore()
             return {
                 collaborative: false,
                 description: "",
@@ -87,6 +101,13 @@ export const usePlaylistsStore = defineStore('playlists', {
                 tracks: [],
                 snapshot_id: 42
             }
+        },
+        getTrackCount(requestPlaylist, userStore) {
+            // Spotify general Mix playlists have their total tracks set
+            // to 0 while there are currently tracks in the playlist
+            // We have to fix this
+            if (requestPlaylist.name.includes(userStore.username) && requestPlaylist.name.includes("+")) return 50
+            return requestPlaylist.tracks.total
         },
         range(start, stop, step = 1) {
             return Array(Math.ceil((stop - start) / step)).fill(start).map((x, y) => x + y * step)
