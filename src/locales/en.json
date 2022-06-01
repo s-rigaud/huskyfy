@@ -34,7 +34,8 @@
         "load-more-warning": "Your playlist has more than {limit} tracks, do you want to load all of them ?",
         "load-more-button": "Load all tracks",
         "fully-loaded": "All artists, tracks and genres have been retrieved",
-        "open-on-spotify": "Open on Spotify"
+        "open-on-spotify": "Open on Spotify",
+        "export-preview": "Export playlist preview 🖼️"
     },
     "footer": {
         "built": "Built with ♥ by"

@@ -2,6 +2,7 @@
   <v-app>
     <NavbarComponent />
     <v-main
+    id="main"
       v-bind:class="{
         'no-padding': true,
         'small-padding-top': ['Explore', 'About'].includes(
@@ -21,7 +22,7 @@
 
 <script>
 import FooterComponent from "@/components/FooterComponent.vue";
-import NavbarComponent from "@/components/NavbarHeader.vue";
+import NavbarComponent from "@/components/navbar/NavbarHeader.vue";
 
 export default {
   name: "App",
@@ -29,6 +30,9 @@ export default {
 };
 </script>
 <style scoped>
+#main{
+  transition: 0s all ease;
+}
 #container {
   padding: 12px;
   display: flex;
@@ -36,7 +40,6 @@ export default {
   flex-wrap: wrap;
   align-items: stretch;
   align-content: space-between;
-  justify-content: space-around;
   background-color: #f6e58d !important;
   font-family: "Oswald";
   min-height: 100%;

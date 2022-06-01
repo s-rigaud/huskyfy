@@ -2,7 +2,7 @@
   <v-card flat @click="displayDetails" class="playlist-card">
     <v-img
       v-bind:src="images[0].url"
-      lazy-src="https://picsum.photos/id/11/90/90"
+      :lazy-src="loadingCover"
       height="400px"
       cover
     ></v-img>
@@ -32,6 +32,11 @@ export default {
     public: Boolean,
     collaborative: Boolean,
   },
+  computed: {
+    loadingCover(){
+      return require("@/assets/default_cover.jpg")
+    }
+  },
   methods: {
     displayDetails() {
       this.$router.push({
@@ -39,9 +44,6 @@ export default {
         params: { playlistId: this.id },
       });
     },
-  },
-  created() {
-    console.log(this.images);
   },
 };
 </script>
@@ -55,7 +57,7 @@ export default {
   width: 250px;
   height: 250px;
   background-color: initial;
-  margin: 0px 3px 80px 3px;
+  margin: 0px 3px 85px 3px;
   background-color: initial;
 }
 .playlist-card .v-img .v-img__img--cover {

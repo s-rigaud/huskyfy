@@ -9,16 +9,7 @@
     </v-card>
 
     <div id="content" style="display: flex">
-      <div
-        id="left-part"
-        style="
-          display: flex;
-          flex-direction: column;
-          border-right: 2px solid;
-          border-color: gray;
-          margin: 0 5px;
-        "
-      >
+      <div id="left-part">
         <!-- Charts -->
         <div id="charts" v-if="filteredTracks.length > 0">
           <IndieChart
@@ -30,6 +21,17 @@
             @onGenreSelect="filterTracksByGenre"
           />
         </div>
+
+        <v-combobox
+          clearable
+          filled
+          hide-selected
+          v-model="selectedPopularity"
+          :filter="filterTracksPopularity"
+          :items="popularities"
+          label="Popularity"
+        ></v-combobox>
+
         <v-btn @click="resetFilters" v-if="selectedGenreName != ''">
           {{ $t("playlist.reset-filters") }}
         </v-btn>
@@ -118,7 +120,9 @@ export default {
     return {
       trackRequestLimit: 150,
 
+      selectedPopularity: "",
       selectedGenreName: "",
+      popularities: ["indie", "popularity"],
       filteredTracks: [],
 
       startDuplication: false,
@@ -159,6 +163,9 @@ export default {
       this.filteredTracks = this.playlists[this.playlistId].tracks.filter((t) =>
         Array.from(t.genres).includes(selectedGenreName)
       );
+    },
+    filterTracksPopularity(item, queryText, itemText) {
+      console.log(item, queryText, itemText);
     },
     createNewPlaylist() {
       this.startDuplication = true;
@@ -209,6 +216,14 @@ export default {
 };
 </script>
 <style scoped>
+#left-part {
+  display: flex;
+  flex-direction: column;
+  border-right: 2px solid;
+  border-color: gray;
+  margin: 0 5px;
+  min-width: 380px !important;
+}
 #playlist {
   display: flex;
   flex-direction: column;

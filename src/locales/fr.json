@@ -20,7 +20,7 @@
         "next": "Voir la nouvelle playlist",
         "load-more-playlists": "Charger plus de playlists",
         "header": "Commencez à parcourir vos playlists pour recueillir des données utiles à leur sujet, les divisez par genre et bien plus encore.",
-        "created-by": "Créé par",
+        "created-by": "Créée par",
         "your-music": {
             "name": "Titres likés",
             "description": "Playlist Spotify avec tous les titres likés"
@@ -34,7 +34,8 @@
         "load-more-warning": "Votre playlist contient plus de {limit} titres, voulez-vous tous les charger ?",
         "load-more-button": "Charger tous les titres",
         "fully-loaded": "Tous les artistes, les titres et les genres ont pu être récupérés",
-        "open-on-spotify": "Ouvrir dans Spotify"
+        "open-on-spotify": "Ouvrir dans Spotify",
+       "export-preview": "Sauvegarder un aperçu 🖼️"
     },
     "footer": {
         "built": "Créé avec ♥ par"

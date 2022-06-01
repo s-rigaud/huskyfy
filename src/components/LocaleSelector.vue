@@ -1,13 +1,15 @@
 <template>
-  <select @change="updateLocale">
-    <option
-      v-for="locale in sortedLocales"
-      :key="locale"
-      :label="locale"
-      :value="locale"
-      type="text"
-    ></option>
-  </select>
+  <div class="select">
+    <select @change="updateLocale">
+      <option
+        v-for="locale in sortedLocales"
+        :key="locale"
+        :label="locale"
+        :value="locale"
+        type="text"
+      ></option>
+    </select>
+  </div>
 </template>
 
 <script>
@@ -39,22 +41,49 @@ export default {
 };
 </script>
 <style scoped>
-select {
-  background-color: #f0932b;
-  background-image: url("../assets/arrow.svg");
-  background-position: right 10px center;
-  background-repeat: no-repeat;
-  background-size: auto 30%;
-  border-radius: 5px;
-  border: none;
-  color: black;
-  outline: none;
-  -moz-appearance: none;
-  -webkit-appearance: none;
-  appearance: none;
-  height: 40px;
-  width: 45px;
+.select {
+  position: relative;
+  display: flex;
+  width: 60px;
+  height: 30px;
+  line-height: 1;
+  background: #5c6664;
+  overflow: hidden;
+  border-radius: 0.25em;
   margin: 10px;
-  padding: 0px 6px;
+}
+.select::after {
+  content: "\25BC";
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 7px 7px;
+  background: #3c3e3e;
+  cursor: pointer;
+  pointer-events: none;
+  transition: 0.25s all ease;
+}
+.select:hover::after {
+  color: #f0932b;
+}
+
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  appearance: none;
+  outline: 0;
+  box-shadow: none;
+  border: 0 !important;
+  background: #5c6664;
+  background-image: none;
+  flex: 1;
+  padding: 0 0.5em;
+  color: #fff;
+  cursor: pointer;
+  font-size: 1em;
+}
+select::-ms-expand {
+  display: none;
 }
 </style>

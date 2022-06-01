@@ -6,6 +6,11 @@ import VueApexCharts from "vue3-apexcharts"
 import App from './App.vue'
 import VueI18n from './i18n'
 
+// never log on production env
+if (process.env.NODE_ENV === 'production') {
+  console.log = function () { };
+}
+
 createApp(App)
   .use(router)
   .use(createPinia())

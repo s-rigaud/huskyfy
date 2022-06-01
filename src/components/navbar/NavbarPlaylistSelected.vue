@@ -1,6 +1,6 @@
 <template>
   <div v-if="playlistsStore.selectedPlaylistId != null" id="header-blocks">
-    <div style="display: flex; flex-direction: row">
+    <div id="playlist-info">
       <v-img
         v-bind:src="
           playlistsStore.playlists[playlistsStore.selectedPlaylistId].images[0]
@@ -13,6 +13,7 @@
       <div>
         <h3>
           {{ playlistsStore.playlists[playlistsStore.selectedPlaylistId].name }}
+          {{ getEmojiFromVisibility }}
         </h3>
         <p>
           {{
@@ -20,26 +21,10 @@
               .description
           }}
         </p>
-        <p>{{ $t("playlist.created-by") }} {{ usernameToDisplay }}</p>
+        <p style="opacity: 0.5">
+          {{ $t("playlist.created-by") }} {{ usernameToDisplay }}
+        </p>
       </div>
-    </div>
-    <div>
-      <p
-        v-if="
-          playlistsStore.playlists[playlistsStore.selectedPlaylistId].public
-        "
-      >
-        {{ $t("playlist.public") }}
-      </p>
-      <p
-        v-if="
-          playlistsStore.playlists[playlistsStore.selectedPlaylistId]
-            .collaborative
-        "
-      >
-        {{ $t("playlist.collaborative") }}
-      </p>
-      <p v-else>{{ $t("playlist.private") }}</p>
     </div>
 
     <div style="display: flex">
@@ -60,11 +45,18 @@
         >
           {{ $t("playlist.set-private") }}
         </v-btn>
-        <v-btn @click="setPlaylistPublic" variant="outlined" v-else>
+        <v-btn v-else @click="setPlaylistPublic" variant="outlined">
           {{ $t("playlist.set-public") }}
         </v-btn>
       </div>
-      <v-btn @click="openPlaylistOnSpotify" id="open-spotify-playlist-button" variant="outlined">
+      <v-btn @click="exportPreview" variant="outlined">
+        {{ $t("playlist.export-preview") }}
+      </v-btn>
+      <v-btn
+        @click="openPlaylistOnSpotify"
+        id="open-spotify-playlist-button"
+        variant="outlined"
+      >
         {{ $t("playlist.open-on-spotify") }}
         <v-img width="25" :src="spotifyLogo" alt="Spotify Logo" />
       </v-btn>
@@ -92,11 +84,13 @@ export default {
   },
   computed: {
     usernameToDisplay() {
-      return this.currentUserUsername ==
+      const playlistCreator =
         this.playlistsStore.playlists[this.playlistsStore.selectedPlaylistId]
-          .owner["display_name"]
+          .owner["display_name"];
+
+      return this.currentUserUsername == playlistCreator
         ? this.$t("me")
-        : this.currentUserUsername;
+        : playlistCreator;
     },
     userOwnsPlaylist() {
       return (
@@ -108,6 +102,14 @@ export default {
     spotifyLogo() {
       return require("@/assets/spotify.png");
     },
+    getEmojiFromVisibility() {
+      const playlist =
+        this.playlistsStore.playlists[this.playlistsStore.selectedPlaylistId];
+
+      if (playlist.collaborative) return "🤝";
+      if (playlist.public) return "📣";
+      return "🔒";
+    },
   },
   methods: {
     openPlaylistOnSpotify() {
@@ -115,6 +117,9 @@ export default {
         this.playlistsStore.playlists[
           this.playlistsStore.selectedPlaylistId
         ].uri;
+    },
+    exportPreview() {
+      alert("Preview no available right now");
     },
     async unfollowPlaylist() {
       const toDeletePlaylistId = this.playlistsStore.selectedPlaylistId;
@@ -145,6 +150,10 @@ export default {
   border-top: 2px #ccc solid;
   margin: 5px;
   width: 100%;
+}
+#playlist-info {
+  display: flex;
+  flex-direction: row;
 }
 #playlist-image {
   width: 70px !important;

@@ -2,16 +2,13 @@
   <v-card flat border rounded="0" @click="openTrackOnSpotify">
     <div class="track-card">
       <v-avatar class="ma-3" size="90" rounded="0">
-        <v-img
-          v-bind:src="image"
-          lazy-src="https://picsum.photos/id/11/90/90"
-        ></v-img>
+        <v-img v-bind:src="image" :lazy-src="loadingCover"></v-img>
       </v-avatar>
       <div>
         <v-card-header>
           <v-card-header-text>
             <v-card-title class="text-h6"> {{ name }} </v-card-title>
-            <v-card-subtitle style="opacity: 1">
+            <v-card-subtitle>
               <a
                 v-for="artist in artists"
                 class="artist-name"
@@ -86,6 +83,9 @@ export default {
           return artistName;
         return `${artistName},`;
       };
+    },
+    loadingCover() {
+      return require("@/assets/default_cover.jpg");
     },
   },
   data() {

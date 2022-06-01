@@ -11,7 +11,7 @@
 
     <v-spacer></v-spacer>
 
-    <div id="user-info" style="display: flex; align-items: center">
+    <div id="user-info">
       <h3 style="margin-right: 10px">
         {{ userStore.username }}
       </h3>
@@ -42,7 +42,7 @@
 
 <script>
 import LocaleSelector from "@/components/LocaleSelector.vue";
-import NavbarPlaylistSelected from "@/components/NavbarPlaylistSelected.vue";
+import NavbarPlaylistSelected from "@/components/navbar/NavbarPlaylistSelected.vue";
 import { useAuthStore } from "@/stores/auth";
 import { usePlaylistsStore } from "@/stores/playlists";
 import { useUserStore } from "@/stores/user";
@@ -64,13 +64,14 @@ export default {
         ? this.userStore.profilePicture
         : DEFAULT_PICTURE;
     },
-    logo(){
-      return require("@/assets/logo.png")
-    }
+    logo() {
+      return require("@/assets/logo.png");
+    },
   },
   methods: {
     clearLocalStorage() {
       localStorage.clear();
+      this.logout();
     },
     logout() {
       this.userStore.reset();
@@ -89,6 +90,8 @@ export default {
 
 #user-info {
   margin-right: 15px;
+  display: flex;
+  align-items: center;
 }
 
 #user-info > #disconnect {
