@@ -24,23 +24,23 @@
 </template>
 
 <script>
-import api from "@/api";
-import LocaleSelector from "@/components/LocaleSelector.vue";
-import { useUserStore } from "@/stores/user";
+import api from '@/api'
+import LocaleSelector from '@/components/LocaleSelector.vue'
+import { useUserStore } from '@/stores/user'
 
 export default {
-  name: "LoginView",
-  setup() {
-    const userStore = useUserStore();
-    return { userStore };
+  name: 'LoginView',
+  setup () {
+    const userStore = useUserStore()
+    return { userStore }
   },
   components: { LocaleSelector },
   methods: {
-    accessOAuthPage() {
-      window.location.href = api.spotify.auth.getOAuthUrl();
-    },
-  },
-};
+    accessOAuthPage () {
+      window.location.href = api.spotify.auth.getOAuthUrl()
+    }
+  }
+}
 </script>
 <style scoped>
 #login {

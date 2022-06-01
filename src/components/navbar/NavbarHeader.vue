@@ -50,46 +50,47 @@
 </template>
 
 <script>
-import LocaleSelector from "@/components/LocaleSelector.vue";
-import NavbarPlaylistSelected from "@/components/navbar/NavbarPlaylistSelected.vue";
-import { useAuthStore } from "@/stores/auth";
-import { usePlaylistsStore } from "@/stores/playlists";
-import { useUserStore } from "@/stores/user";
+import LocaleSelector from '@/components/LocaleSelector.vue'
+import NavbarPlaylistSelected from '@/components/navbar/NavbarPlaylistSelected.vue'
+import { useAuthStore } from '@/stores/auth'
+import { usePlaylistsStore } from '@/stores/playlists'
+import { useUserStore } from '@/stores/user'
 
 export default {
-  name: "NavbarHeader",
+  name: 'NavbarHeader',
   components: { LocaleSelector, NavbarPlaylistSelected },
-  setup() {
-    const userStore = useUserStore();
-    const authStore = useAuthStore();
-    const playlistsStore = usePlaylistsStore();
+  setup () {
+    const userStore = useUserStore()
+    const authStore = useAuthStore()
+    const playlistsStore = usePlaylistsStore()
 
-    return { authStore, playlistsStore, userStore };
+    return { authStore, playlistsStore, userStore }
   },
   computed: {
-    profilePictureOrDefault() {
-      const DEFAULT_PICTURE = require("@/assets/no-user.png");
-      return this.userStore.profilePicture != ""
+    profilePictureOrDefault () {
+      // eslint-disable-next-line
+      const DEFAULT_PICTURE = require('@/assets/no-user.png')
+      return this.userStore.profilePicture !== ''
         ? this.userStore.profilePicture
-        : DEFAULT_PICTURE;
+        : DEFAULT_PICTURE
     },
-    logo() {
-      return require("@/assets/logo.png");
-    },
+    logo () {
+      return require('@/assets/logo.png')
+    }
   },
   methods: {
-    clearLocalStorage() {
-      localStorage.clear();
-      this.logout();
+    clearLocalStorage () {
+      localStorage.clear()
+      this.logout()
     },
-    logout() {
-      this.userStore.reset();
-      this.authStore.reset();
-      this.playlistsStore.selectedPlaylistId = null;
-      this.$router.push({ name: "LoginView" });
-    },
-  },
-};
+    logout () {
+      this.userStore.reset()
+      this.authStore.reset()
+      this.playlistsStore.selectedPlaylistId = null
+      this.$router.push({ name: 'LoginView' })
+    }
+  }
+}
 </script>
 <style>
 #logo {

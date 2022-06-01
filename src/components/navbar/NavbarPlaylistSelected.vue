@@ -78,78 +78,78 @@
 </template>
 
 <script>
-import { usePlaylistsStore } from "@/stores/playlists";
-import { useUserStore } from "@/stores/user";
+import { usePlaylistsStore } from '@/stores/playlists'
+import { useUserStore } from '@/stores/user'
 
 export default {
-  name: "NavbarPlaylistSelected",
-  setup() {
-    const userStore = useUserStore();
-    const playlistsStore = usePlaylistsStore();
+  name: 'NavbarPlaylistSelected',
+  setup () {
+    const userStore = useUserStore()
+    const playlistsStore = usePlaylistsStore()
 
-    const currentUserUsername = userStore.username;
+    const currentUserUsername = userStore.username
 
-    return { currentUserUsername, playlistsStore };
+    return { currentUserUsername, playlistsStore }
   },
   computed: {
-    usernameToDisplay() {
+    usernameToDisplay () {
       const playlistCreator =
         this.playlistsStore.playlists[this.playlistsStore.selectedPlaylistId]
-          .owner["display_name"];
+          .owner.display_name
 
-      return this.currentUserUsername == playlistCreator
-        ? this.$t("me")
-        : playlistCreator;
+      return this.currentUserUsername === playlistCreator
+        ? this.$t('me')
+        : playlistCreator
     },
-    userOwnsPlaylist() {
+    userOwnsPlaylist () {
       return (
-        this.currentUserUsername ==
+        this.currentUserUsername ===
         this.playlistsStore.playlists[this.playlistsStore.selectedPlaylistId]
-          .owner["display_name"]
-      );
+          .owner.display_name
+      )
     },
-    spotifyLogo() {
-      return require("@/assets/spotify.png");
+    spotifyLogo () {
+      return require('@/assets/spotify.png')
     },
-    getEmojiFromVisibility() {
+    getEmojiFromVisibility () {
       const playlist =
-        this.playlistsStore.playlists[this.playlistsStore.selectedPlaylistId];
+        this.playlistsStore.playlists[this.playlistsStore.selectedPlaylistId]
 
-      if (playlist.collaborative) return "🤝";
-      if (playlist.public) return "📣";
-      return "🔒";
-    },
+      if (playlist.collaborative) return '🤝'
+      if (playlist.public) return '📣'
+      return '🔒'
+    }
   },
   methods: {
-    openPlaylistOnSpotify() {
+    openPlaylistOnSpotify () {
       window.location.href =
         this.playlistsStore.playlists[
           this.playlistsStore.selectedPlaylistId
-        ].uri;
+        ].uri
     },
-    exportPreview() {
-      alert("Preview no available right now");
+    exportPreview () {
+      alert('Preview no available right now')
     },
-    async unfollowPlaylist() {
-      const toDeletePlaylistId = this.playlistsStore.selectedPlaylistId;
-      this.playlistsStore.selectedPlaylistId = null;
-      await this.playlistsStore.unfollowPlaylist(toDeletePlaylistId);
-      this.$router.push({ name: "Explore" });
+    async unfollowPlaylist () {
+      const toDeletePlaylistId = this.playlistsStore.selectedPlaylistId
+      this.playlistsStore.selectedPlaylistId = null
+      await this.playlistsStore.unfollowPlaylist(toDeletePlaylistId)
+      this.$router.push({ name: 'Explore' })
     },
-    async setPlaylistPublic() {
+    async setPlaylistPublic () {
       await this.playlistsStore.updatePlaylistPrivacy(
         this.playlistsStore.selectedPlaylistId,
         true
-      );
+      )
     },
-    async setPlaylistPrivate() {
+    async setPlaylistPrivate () {
       await this.playlistsStore.updatePlaylistPrivacy(
         this.playlistsStore.selectedPlaylistId,
         false
-      );
-    },
-  },
-};
+      )
+    }
+  }
+}
 </script>
 <style>
 #header-blocks {

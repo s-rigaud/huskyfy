@@ -77,156 +77,156 @@
 </template>
 
 <script>
-import DuplicatorPopup from "@/components/playlist_detail/DuplicatorPopup.vue";
-import GenreChart from "@/components/playlist_detail/GenreChart.vue";
-import IndieChart from "@/components/playlist_detail/IndieChart.vue";
-import LoadMoreTracksPopup from "@/components/playlist_detail/LoadMoreTracksPopup.vue";
-import TrackCard from "@/components/playlist_detail/TrackCard.vue";
-import { usePlaylistsStore } from "@/stores/playlists";
-import { useUserStore } from "@/stores/user";
-import { storeToRefs } from "pinia";
+import DuplicatorPopup from '@/components/playlist_detail/DuplicatorPopup.vue'
+import GenreChart from '@/components/playlist_detail/GenreChart.vue'
+import IndieChart from '@/components/playlist_detail/IndieChart.vue'
+import LoadMoreTracksPopup from '@/components/playlist_detail/LoadMoreTracksPopup.vue'
+import TrackCard from '@/components/playlist_detail/TrackCard.vue'
+import { usePlaylistsStore } from '@/stores/playlists'
+import { useUserStore } from '@/stores/user'
+import { storeToRefs } from 'pinia'
 
 export default {
-  name: "PlaylistDetail",
+  name: 'PlaylistDetail',
   props: {
-    playlistId: String,
+    playlistId: String
   },
   components: {
     DuplicatorPopup,
     LoadMoreTracksPopup,
     GenreChart,
     IndieChart,
-    TrackCard,
+    TrackCard
   },
-  setup() {
-    const userStore = useUserStore();
-    const playlistsStore = usePlaylistsStore();
+  setup () {
+    const userStore = useUserStore()
+    const playlistsStore = usePlaylistsStore()
 
     // Shorthand
-    const { playlists } = storeToRefs(playlistsStore);
-    const { downloadPlaylistTracks } = playlistsStore;
+    const { playlists } = storeToRefs(playlistsStore)
+    const { downloadPlaylistTracks } = playlistsStore
 
-    const currentUserUsername = userStore.username;
+    const currentUserUsername = userStore.username
 
     return {
       playlistsStore,
       playlists,
       downloadPlaylistTracks,
-      currentUserUsername,
-    };
+      currentUserUsername
+    }
   },
-  async mounted() {
-    this.playlistsStore.selectedPlaylistId = this.playlistId;
-    console.log(this.playlists[this.playlistId].total);
-    await this.loadFirstTracks();
+  async mounted () {
+    this.playlistsStore.selectedPlaylistId = this.playlistId
+    console.log(this.playlists[this.playlistId].total)
+    await this.loadFirstTracks()
   },
-  beforeUnmount() {
-    this.playlistsStore.selectedPlaylistId = null;
+  beforeUnmount () {
+    this.playlistsStore.selectedPlaylistId = null
   },
-  data() {
+  data () {
     return {
       trackRequestLimit: 150,
 
-      selectedPopularity: "",
-      selectedGenreName: "",
-      popularities: ["indie", "popularity"],
+      selectedPopularity: '',
+      selectedGenreName: '',
+      popularities: ['indie', 'popularity'],
       filteredTracks: [],
 
       startDuplication: false,
-      isHugePlaylist: false,
-    };
+      isHugePlaylist: false
+    }
   },
   methods: {
-    getGenreCount() {
+    getGenreCount () {
       // default dict with 0 as default value
       const genreCounter = new Proxy(
         {},
         {
-          get: (target, name) => (name in target ? target[name] : 0),
+          get: (target, name) => (name in target ? target[name] : 0)
         }
-      );
+      )
       for (const track of this.playlists[this.playlistId].tracks) {
         for (const genre of track.genres) {
-          genreCounter[genre] += 1;
+          genreCounter[genre] += 1
         }
       }
-      return genreCounter;
+      return genreCounter
     },
-    async loadFirstTracks() {
+    async loadFirstTracks () {
       await this.downloadPlaylistTracks(
         this.playlistId,
         this.trackRequestLimit
-      );
+      )
       this.isHugePlaylist =
-        this.playlists[this.playlistId].total > this.trackRequestLimit;
-      this.resetFilters();
+        this.playlists[this.playlistId].total > this.trackRequestLimit
+      this.resetFilters()
     },
-    filterTracksByGenre(selectedGenreName) {
-      if (selectedGenreName == "") {
-        this.resetFilters();
-        return;
+    filterTracksByGenre (selectedGenreName) {
+      if (selectedGenreName === '') {
+        this.resetFilters()
+        return
       }
-      this.selectedGenreName = selectedGenreName;
+      this.selectedGenreName = selectedGenreName
       this.filteredTracks = this.playlists[this.playlistId].tracks.filter((t) =>
         Array.from(t.genres).includes(selectedGenreName)
-      );
+      )
     },
-    filterTracksPopularity(item, queryText, itemText) {
-      console.log(item, queryText, itemText);
+    filterTracksPopularity (item, queryText, itemText) {
+      console.log(item, queryText, itemText)
     },
-    createNewPlaylist() {
-      this.startDuplication = true;
+    createNewPlaylist () {
+      this.startDuplication = true
     },
-    resetFilters() {
-      this.selectedGenreName = "";
-      this.filteredTracks = this.playlists[this.playlistId].tracks;
+    resetFilters () {
+      this.selectedGenreName = ''
+      this.filteredTracks = this.playlists[this.playlistId].tracks
     },
-    openPlaylistOnSpotify() {
-      window.location.href = this.playlists[this.playlistId].uri;
-    },
+    openPlaylistOnSpotify () {
+      window.location.href = this.playlists[this.playlistId].uri
+    }
   },
   computed: {
     // Returns only top genres sorted by most to least popular
-    sortedGenres() {
-      const genreCounter = this.getGenreCount();
-      let genreLabels = Object.keys(genreCounter).map((label) => [
+    sortedGenres () {
+      const genreCounter = this.getGenreCount()
+      const genreLabels = Object.keys(genreCounter).map((label) => [
         label,
-        genreCounter[label],
-      ]);
+        genreCounter[label]
+      ])
 
       // DESC sort
       genreLabels.sort((a, b) => {
-        return b[1] - a[1];
-      });
+        return b[1] - a[1]
+      })
 
       // Sampling
-      return genreLabels.slice(0, 15);
+      return genreLabels.slice(0, 15)
     },
     // Get the general playlist isIndie % from the mean of all tracks
-    indiePercentage() {
-      let indieTracks = 0;
+    indiePercentage () {
+      let indieTracks = 0
       for (const track of this.playlists[this.playlistId].tracks) {
-        indieTracks += track.isIndie;
+        indieTracks += track.isIndie
       }
       return parseInt(
         (indieTracks / this.playlists[this.playlistId].tracks.length) * 100
-      );
+      )
     },
-    getImage() {
+    getImage () {
       return (indiePercentage) => {
-        let image = "";
-        if (indiePercentage < 25) image = "cold";
-        else if (indiePercentage < 50) image = "sunglasses";
-        else if (indiePercentage < 75) image = "hot";
-        else image = "fire";
-        return require(`@/assets/${image}.png`);
-      };
+        let image = ''
+        if (indiePercentage < 25) image = 'cold'
+        else if (indiePercentage < 50) image = 'sunglasses'
+        else if (indiePercentage < 75) image = 'hot'
+        else image = 'fire'
+        return require(`@/assets/${image}.png`)
+      }
     },
-    spotifyLogo() {
-      return require("@/assets/spotify.png");
-    },
-  },
-};
+    spotifyLogo () {
+      return require('@/assets/spotify.png')
+    }
+  }
+}
 </script>
 <style>
 #left-part {

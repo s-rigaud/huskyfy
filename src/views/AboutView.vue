@@ -46,13 +46,13 @@
 
 <script>
 export default {
-  name: "AboutView",
+  name: 'AboutView',
   methods: {
-    backToPreviousPage() {
-      this.$router.go(-1);
-    },
-  },
-};
+    backToPreviousPage () {
+      this.$router.go(-1)
+    }
+  }
+}
 </script>
 <style scoped>
 #about-content {

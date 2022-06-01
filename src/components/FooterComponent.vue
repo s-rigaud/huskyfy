@@ -26,15 +26,15 @@
 </template>
 
 <script>
-import { useUserStore } from "@/stores/user";
+import { useUserStore } from '@/stores/user'
 
 export default {
-  name: "FooterComponent",
-  setup() {
-    const userStore = useUserStore();
-    return { userStore };
-  },
-};
+  name: 'FooterComponent',
+  setup () {
+    const userStore = useUserStore()
+    return { userStore }
+  }
+}
 </script>
 <style scoped>
 #footer {

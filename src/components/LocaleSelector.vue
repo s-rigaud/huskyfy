@@ -13,32 +13,32 @@
 </template>
 
 <script>
-import { useUserStore } from "@/stores/user";
+import { useUserStore } from '@/stores/user'
 
 export default {
-  name: "LocaleSelector",
-  setup() {
-    const userStore = useUserStore();
-    return { userStore };
+  name: 'LocaleSelector',
+  setup () {
+    const userStore = useUserStore()
+    return { userStore }
   },
   computed: {
-    sortedLocales() {
+    sortedLocales () {
       // Set current locale first (preselected option)
-      let locales = this.$i18n.availableLocales;
-      const currentLocale = this.$i18n.locale;
-      locales = locales.filter((l) => l != currentLocale);
-      locales.unshift(currentLocale);
-      return locales;
-    },
+      let locales = this.$i18n.availableLocales
+      const currentLocale = this.$i18n.locale
+      locales = locales.filter((l) => l !== currentLocale)
+      locales.unshift(currentLocale)
+      return locales
+    }
   },
   methods: {
-    updateLocale(event) {
-      const locale = event.target.value;
-      this.$i18n.locale = locale;
-      this.userStore.locale = locale;
-    },
-  },
-};
+    updateLocale (event) {
+      const locale = event.target.value
+      this.$i18n.locale = locale
+      this.userStore.locale = locale
+    }
+  }
+}
 </script>
 <style scoped>
 .select {

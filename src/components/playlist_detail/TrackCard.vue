@@ -66,7 +66,7 @@
 
 <script>
 export default {
-  name: "TrackCard",
+  name: 'TrackCard',
   props: {
     id: String,
     name: String,
@@ -74,31 +74,30 @@ export default {
     artists: Array,
     genres: Object,
     isIndie: Boolean,
-    trackURI: String,
+    trackURI: String
   },
   computed: {
-    addComma() {
+    addComma () {
       return (artistName) => {
-        if (this.artists[this.artists.length - 1].name == artistName)
-          return artistName;
-        return `${artistName},`;
-      };
+        if (this.artists[this.artists.length - 1].name === artistName) { return artistName }
+        return `${artistName},`
+      }
     },
-    loadingCover() {
-      return require("@/assets/default_cover.jpg");
-    },
+    loadingCover () {
+      return require('@/assets/default_cover.jpg')
+    }
   },
-  data() {
+  data () {
     return {
-      isActive: true,
-    };
+      isActive: true
+    }
   },
   methods: {
-    openTrackOnSpotify() {
-      window.location.href = this.trackURI;
-    },
-  },
-};
+    openTrackOnSpotify () {
+      window.location.href = this.trackURI
+    }
+  }
+}
 </script>
 <style scoped>
 .track-card {

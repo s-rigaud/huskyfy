@@ -17,36 +17,36 @@
 </template>
 
 <script>
-import { usePlaylistsStore } from "@/stores/playlists";
+import { usePlaylistsStore } from '@/stores/playlists'
 
 export default {
-  name: "LoadMoreTracksPopup",
+  name: 'LoadMoreTracksPopup',
   props: {
     playlist: Object,
-    trackRequestLimit: Number,
+    trackRequestLimit: Number
   },
-  emits: ["allTracksLoaded"],
-  setup() {
-    const playlistsStore = usePlaylistsStore();
-    const { downloadPlaylistTracks } = playlistsStore;
+  emits: ['allTracksLoaded'],
+  setup () {
+    const playlistsStore = usePlaylistsStore()
+    const { downloadPlaylistTracks } = playlistsStore
 
-    return { downloadPlaylistTracks, playlistsStore };
+    return { downloadPlaylistTracks, playlistsStore }
   },
   methods: {
-    async loadAllTracks() {
-      this.notLoaded = false;
-      await this.downloadPlaylistTracks(this.playlist.id, this.playlist.total);
-      this.isLoaded = true;
-      this.$emit("allTracksLoaded");
-    },
+    async loadAllTracks () {
+      this.notLoaded = false
+      await this.downloadPlaylistTracks(this.playlist.id, this.playlist.total)
+      this.isLoaded = true
+      this.$emit('allTracksLoaded')
+    }
   },
-  data() {
+  data () {
     return {
       notLoaded: true,
-      isLoaded: false,
-    };
-  },
-};
+      isLoaded: false
+    }
+  }
+}
 </script>
 <style>
 #load-more-snackbar .v-snackbar__content {

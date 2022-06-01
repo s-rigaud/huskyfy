@@ -24,53 +24,53 @@
 </template>
 
 <script>
-import PlaylistCard from "@/components/PlaylistCard.vue";
-import { usePlaylistsStore } from "@/stores/playlists";
-import { useUserStore } from "@/stores/user";
+import PlaylistCard from '@/components/PlaylistCard.vue'
+import { usePlaylistsStore } from '@/stores/playlists'
+import { useUserStore } from '@/stores/user'
 
 export default {
-  name: "PlaylistExplorer",
+  name: 'PlaylistExplorer',
   components: { PlaylistCard },
-  setup() {
-    const userStore = useUserStore();
-    const playlistsStore = usePlaylistsStore();
-    const currentUserUsername = userStore.username;
-    return { currentUserUsername, playlistsStore };
+  setup () {
+    const userStore = useUserStore()
+    const playlistsStore = usePlaylistsStore()
+    const currentUserUsername = userStore.username
+    return { currentUserUsername, playlistsStore }
   },
   computed: {
-    usernameToDisplay() {
+    usernameToDisplay () {
       return (ownerUsername) => {
-        return this.currentUserUsername == ownerUsername
-          ? this.$t("me")
-          : ownerUsername;
-      };
+        return this.currentUserUsername === ownerUsername
+          ? this.$t('me')
+          : ownerUsername
+      }
     },
-    formatName() {
+    formatName () {
       return (playlist) => {
-        return playlist.id == "my-music"
-          ? this.$t("playlist.your-music.name")
-          : playlist.name;
-      };
-    },
+        return playlist.id === 'my-music'
+          ? this.$t('playlist.your-music.name')
+          : playlist.name
+      }
+    }
   },
-  async created() {
-    await this.loadMorePlaylists();
+  async created () {
+    await this.loadMorePlaylists()
   },
   methods: {
-    async loadMorePlaylists() {
-      const response = await this.playlistsStore.getUserPlaylists(this.offset);
-      this.playlistTotal = response.total;
-      this.offset = response.offset;
-    },
+    async loadMorePlaylists () {
+      const response = await this.playlistsStore.getUserPlaylists(this.offset)
+      this.playlistTotal = response.total
+      this.offset = response.offset
+    }
   },
-  data() {
+  data () {
     return {
       playlistTotal: 1,
       offset: 0,
-      isTrue: true,
-    };
-  },
-};
+      isTrue: true
+    }
+  }
+}
 </script>
 
 <style scoped>

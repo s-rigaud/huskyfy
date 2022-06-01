@@ -10,62 +10,62 @@
 
 <script>
 export default {
-  name: "GenreChart",
+  name: 'GenreChart',
   props: {
-    genres: Array,
+    genres: Array
   },
-  emits: ["onGenreSelect"],
+  emits: ['onGenreSelect'],
   methods: {
-    appendData() {
-      var arr = this.series.slice();
-      arr.push(Math.floor(Math.random() * (100 - 1 + 1)) + 1);
-      this.series = arr;
+    appendData () {
+      const arr = this.series.slice()
+      arr.push(Math.floor(Math.random() * (100 - 1 + 1)) + 1)
+      this.series = arr
     },
-    removeData() {
-      if (this.series.length === 1) return;
-      var arr = this.series.slice();
-      arr.pop();
-      this.series = arr;
+    removeData () {
+      if (this.series.length === 1) return
+      const arr = this.series.slice()
+      arr.pop()
+      this.series = arr
     },
-    capitalize(string) {
-      return string.charAt(0).toUpperCase() + string.slice(1);
+    capitalize (string) {
+      return string.charAt(0).toUpperCase() + string.slice(1)
     },
     // Emit genre on click
-    clickHandler(event) {
-      if (event instanceof TouchEvent) return;
+    clickHandler (event) {
+      if (event instanceof TouchEvent) return
 
-      const el = event.target;
+      const el = event.target
       const isLegendClick =
-        el.nodeName == "SPAN" &&
-        Array.from(el.classList).includes("apexcharts-legend-text");
+        el.nodeName === 'SPAN' &&
+        Array.from(el.classList).includes('apexcharts-legend-text')
       const isChartClick =
-        el.nodeName == "path" &&
-        Array.from(el.classList).includes("apexcharts-pie-area");
+        el.nodeName === 'path' &&
+        Array.from(el.classList).includes('apexcharts-pie-area')
 
-      if (!isLegendClick && !isChartClick) return;
+      if (!isLegendClick && !isChartClick) return
 
-      let genreLabel = "";
+      let genreLabel = ''
       if (isLegendClick) {
-        genreLabel = event.target.textContent;
+        genreLabel = event.target.textContent
       } else {
-        const seriesIndex = parseInt(el.getAttribute("j"));
-        genreLabel = this.genres[seriesIndex][0];
+        const seriesIndex = parseInt(el.getAttribute('j'))
+        genreLabel = this.genres[seriesIndex][0]
       }
 
-      this.lastClickedWasSelection = !this.lastClickedWasSelection;
+      this.lastClickedWasSelection = !this.lastClickedWasSelection
       if (
         !this.lastClickedWasSelection &&
-        this.lastGenreSelected == genreLabel
+        this.lastGenreSelected === genreLabel
       ) {
-        this.$emit("onGenreSelect", "");
-        return;
+        this.$emit('onGenreSelect', '')
+        return
       }
 
-      this.lastGenreSelected = genreLabel;
-      this.$emit("onGenreSelect", genreLabel.toLowerCase());
-    },
+      this.lastGenreSelected = genreLabel
+      this.$emit('onGenreSelect', genreLabel.toLowerCase())
+    }
   },
-  data() {
+  data () {
     // All data needed to customize graph UI and data
     return {
       lastGenreSelected: false,
@@ -74,32 +74,32 @@ export default {
       chartOptions: {
         chart: {
           width: 380,
-          type: "donut",
+          type: 'donut'
         },
         labels: this.genres.map((g) => this.capitalize(g[0])),
         dataLabels: {
-          enabled: false,
+          enabled: false
         },
         responsive: [
           {
             breakpoint: 480,
             options: {
               chart: {
-                width: 200,
-              },
-            },
-          },
+                width: 200
+              }
+            }
+          }
         ],
         legend: {
-          position: "bottom",
+          position: 'bottom',
           onItemHover: {
-            highlightDataSeries: true,
-          },
-        },
-      },
-    };
-  },
-};
+            highlightDataSeries: true
+          }
+        }
+      }
+    }
+  }
+}
 </script>
 <style scoped>
 .apexcharts-legend-text:hover {

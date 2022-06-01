@@ -21,13 +21,13 @@
 </template>
 
 <script>
-import FooterComponent from "@/components/FooterComponent.vue";
-import NavbarComponent from "@/components/navbar/NavbarHeader.vue";
+import FooterComponent from '@/components/FooterComponent.vue'
+import NavbarComponent from '@/components/navbar/NavbarHeader.vue'
 
 export default {
-  name: "App",
-  components: { NavbarComponent, FooterComponent },
-};
+  name: 'App',
+  components: { NavbarComponent, FooterComponent }
+}
 </script>
 <style scoped>
 #container {

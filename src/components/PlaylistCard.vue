@@ -23,29 +23,29 @@
 
 <script>
 export default {
-  name: "PlaylistCard",
+  name: 'PlaylistCard',
   props: {
     id: String,
     name: String,
     images: Array,
     owner: String,
     public: Boolean,
-    collaborative: Boolean,
+    collaborative: Boolean
   },
   computed: {
-    loadingCover() {
-      return require("@/assets/default_cover.jpg");
-    },
+    loadingCover () {
+      return require('@/assets/default_cover.jpg')
+    }
   },
   methods: {
-    displayDetails() {
+    displayDetails () {
       this.$router.push({
-        name: "Explore playlist",
-        params: { playlistId: this.id },
-      });
-    },
-  },
-};
+        name: 'Explore playlist',
+        params: { playlistId: this.id }
+      })
+    }
+  }
+}
 </script>
 <style>
 /*

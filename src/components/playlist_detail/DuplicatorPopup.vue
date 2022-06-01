@@ -19,92 +19,92 @@
 </template>
 
 <script>
-import { usePlaylistsStore } from "@/stores/playlists";
+import { usePlaylistsStore } from '@/stores/playlists'
 
 export default {
-  name: "DuplicatorPopup",
+  name: 'DuplicatorPopup',
   props: {
     playlist: Object,
     selectedGenreName: String,
-    filteredTracks: Array,
+    filteredTracks: Array
   },
-  setup() {
-    const playlistsStore = usePlaylistsStore();
-    return { playlistsStore };
+  setup () {
+    const playlistsStore = usePlaylistsStore()
+    return { playlistsStore }
   },
-  async created() {
-    await this.createNewPlaylist();
+  async created () {
+    await this.createNewPlaylist()
   },
   methods: {
-    async createNewPlaylist() {
-      this.startDuplication = true;
-      this.loadingText = this.$t("playlist.new.create");
-      this.loadingPercentage = 1;
-      const newPlaylist = this.getPlaylistNewPlaylistAttributes(this.playlist);
+    async createNewPlaylist () {
+      this.startDuplication = true
+      this.loadingText = this.$t('playlist.new.create')
+      this.loadingPercentage = 1
+      const newPlaylist = this.getPlaylistNewPlaylistAttributes(this.playlist)
 
-      let response = await this.playlistsStore.createPlaylist(
+      const response = await this.playlistsStore.createPlaylist(
         newPlaylist.name,
         newPlaylist.public,
         newPlaylist.description,
         newPlaylist.collaborative
-      );
-      const newPlaylistId = response.data.id;
+      )
+      const newPlaylistId = response.data.id
 
-      this.loadingText = this.$t("playlist.new.cover");
-      this.loadingPercentage = 33;
-      /*await this.playlistsStore.updatePlaylistCover(
+      this.loadingText = this.$t('playlist.new.cover')
+      this.loadingPercentage = 33
+      /* await this.playlistsStore.updatePlaylistCover(
         response.data.id,
         "https://m.media-amazon.com/images/I/61iw4s61r1S._AC_SX425_.jpg"
         //playlist.images[0].url
-      );*/
+      ); */
 
-      this.loadingText = this.$t("playlist.new.tracks");
-      this.loadingPercentage = 66;
+      this.loadingText = this.$t('playlist.new.tracks')
+      this.loadingPercentage = 66
       await this.playlistsStore.addTracksToPlaylist(
         newPlaylistId,
         this.filteredTracks.map((t) => t.uri)
-      );
+      )
 
-      this.loadingText = this.$t("playlist.new.done");
-      this.loadingPercentage = 100;
-      this.newPlaylistId = newPlaylistId;
+      this.loadingText = this.$t('playlist.new.done')
+      this.loadingPercentage = 100
+      this.newPlaylistId = newPlaylistId
     },
-    getPlaylistNewPlaylistAttributes(playlist) {
-      let newPlaylistName = playlist.name;
-      let newPlaylistDescription = "";
-      if (this.selectedGenreName !== "") {
-        newPlaylistName += ` • ${this.selectedGenreName}`;
-        newPlaylistDescription += `${playlist.name} • ${this.selectedGenreName}`;
+    getPlaylistNewPlaylistAttributes (playlist) {
+      let newPlaylistName = playlist.name
+      let newPlaylistDescription = ''
+      if (this.selectedGenreName !== '') {
+        newPlaylistName += ` • ${this.selectedGenreName}`
+        newPlaylistDescription += `${playlist.name} • ${this.selectedGenreName}`
       } else {
-        newPlaylistDescription += `Copy of ${playlist.name}`;
+        newPlaylistDescription += `Copy of ${playlist.name}`
       }
-      newPlaylistDescription += ` • created by Horus`;
+      newPlaylistDescription += ' • created by Horus'
 
       return {
         name: newPlaylistName,
         description: newPlaylistDescription,
         public: playlist.public && !playlist.collaborative,
-        collaborative: playlist.collaborative,
-      };
+        collaborative: playlist.collaborative
+      }
     },
-    displayNewPlaylistDetails() {
+    displayNewPlaylistDetails () {
       this.$router.push({
-        name: "Explore playlist",
-        params: { playlistId: this.newPlaylistId },
-      });
-    },
+        name: 'Explore playlist',
+        params: { playlistId: this.newPlaylistId }
+      })
+    }
   },
-  data() {
+  data () {
     return {
       loadingPercentage: 0,
-      loadingText: "",
+      loadingText: '',
 
-      newPlaylistId: "",
+      newPlaylistId: '',
 
-      snackbar: true,
-    };
-  },
-};
+      snackbar: true
+    }
+  }
+}
 </script>
 <style scoped>
 #loading-create-new-playlist {
