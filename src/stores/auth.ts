@@ -16,7 +16,7 @@ export const useAuthStore = defineStore('auth', {
   } as AuthState),
   actions: {
     reset () {
-      // Manually update state as localstorage and states are linked now
+      // Manually update state as local storage and states are linked now
       this.temporaryToken = ''
       this.accessToken = ''
       this.refreshToken = ''

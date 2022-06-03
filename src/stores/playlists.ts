@@ -1,11 +1,14 @@
 import api from '@/api'
-import { useUserStore } from '@/stores/user'
+import { SpotifyPlaylist, SpotifyTrackMetadata } from '@/api/spotify/model'
+import { UserState, useUserStore } from '@/stores/user'
 import { RemovableRef, useStorage } from '@vueuse/core'
-import { defineStore } from 'pinia'
+import { AxiosResponse } from 'axios'
+import { defineStore, Store } from 'pinia'
+
 import VueI18n from '../i18n'
 
 type PlaylistState = {
-  playlists: RemovableRef<object>; // TODO update
+  playlists: RemovableRef<SpotifyPlaylist[]>; // TODO update
   MAX_TRACKS_LIMIT: RemovableRef<number>;
   MAX_PLAYLISTS_LIMIT: RemovableRef<number>;
   selectedPlaylistId: RemovableRef<null>;
@@ -80,7 +83,7 @@ export const usePlaylistsStore = defineStore('playlists', {
       }
     },
     // Special playlist from user liked song treated differently in Spotify API
-    getLikedSongPlaylist (userStore: any) {
+    getLikedSongPlaylist (userStore: Store<'user', UserState>): SpotifyPlaylist {
       const i18n = VueI18n.global
       return {
         collaborative: false,
@@ -88,20 +91,29 @@ export const usePlaylistsStore = defineStore('playlists', {
         id: 'my-music',
         images: [
           {
-            height: null,
-            url: require('@/assets/my-music.jpeg'),
-            width: null
+            url: require('@/assets/my-music.jpeg')
           }
         ],
         name: i18n.t('playlist.your-music.name'),
-        owner: { display_name: userStore.username },
+        owner: {
+          display_name: userStore.username,
+          external_urls: { spotify: '' },
+          href: '',
+          id: '0',
+          type: 'playlist',
+          uri: ''
+        },
         primary_color: null,
         public: false,
         tracks: [],
-        snapshot_id: 42
+        snapshot_id: 42,
+        external_urls: { spotify: '' },
+        href: '',
+        type: 'playlist',
+        uri: ''
       }
     },
-    getTrackCount (requestPlaylist: any, userStore: any) {
+    getTrackCount (requestPlaylist: SpotifyPlaylist, userStore: Store<'user', UserState>): number {
       // Spotify general Mix playlists have their total tracks set
       // to 0 while there are currently tracks in the playlist
       // We have to fix this
@@ -127,7 +139,7 @@ export const usePlaylistsStore = defineStore('playlists', {
         return this.playlists[playlistId].tracks
       }
 
-      const newTracks: Array<any> = []
+      const newTracks: Array<SpotifyTrackMetadata> = []
       for (const requestOffset of this.range(offset, limit, this.MAX_TRACKS_LIMIT)) {
         // Save track infos
         const response = await this.callCorrespondingAPIEndpoint(playlistId, requestOffset)
@@ -142,7 +154,7 @@ export const usePlaylistsStore = defineStore('playlists', {
       }
 
       // Retrieve data on artists (mainly genres & followers)
-      const artistIds: Array<any> = []
+      const artistIds: Array<string> = []
       for (const item of newTracks) {
         artistIds.push(...item.track.artists.map((a) => a.id))
       }
@@ -205,7 +217,7 @@ export const usePlaylistsStore = defineStore('playlists', {
       delete this.playlists[playlistId]
     },
     // Create new empty playlist
-    async createPlaylist (name: string, public_: boolean, description: string, collaborative: boolean) {
+    async createPlaylist (name: string, public_: boolean, description: string, collaborative: boolean): Promise<AxiosResponse<SpotifyPlaylist, SpotifyPlaylist>> {
       const response = await api.spotify.playlists.createPlaylist(
         name,
         public_,

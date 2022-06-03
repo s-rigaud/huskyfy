@@ -1,12 +1,13 @@
 import { useUserStore } from '@/stores/user'
-import axios from 'axios'
+import axios, { AxiosResponse } from 'axios'
+import { SpotifyGetPlaylistResponse, SpotifyTrackResponse } from '../model'
 import request from '../request'
 // eslint-disable-next-line
 const Base64 = require('js-base64').Base64
 
 export default {
   // Retrieve playlists from the current logged user
-  getUserPlaylists (limit: number, offset: number) {
+  getUserPlaylists (limit: number, offset: number) : Promise<AxiosResponse<SpotifyGetPlaylistResponse, SpotifyGetPlaylistResponse>> {
     return request.get('me/playlists', {
       params: {
         limit,
@@ -15,7 +16,7 @@ export default {
     })
   },
   // Return tracks for a playlist
-  getPlaylistTracks (playlistId: string, limit: number, offset: number) {
+  getPlaylistTracks (playlistId: string, limit: number, offset: number) : Promise<AxiosResponse<SpotifyTrackResponse, SpotifyTrackResponse>> {
     return request.get(`playlists/${playlistId}/tracks`, {
       params: {
         limit,
@@ -24,7 +25,7 @@ export default {
     })
   },
   // Return tracks from the special "Your music" playlist
-  async getUserSavedTracks (limit: number, offset: number) {
+  async getUserSavedTracks (limit: number, offset: number) : Promise<AxiosResponse<SpotifyTrackResponse, SpotifyTrackResponse>> {
     return await request.get('me/tracks', {
       params: {
         limit,

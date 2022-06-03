@@ -1,10 +1,11 @@
 import { useAuthStore } from '@/stores/auth'
-import axios from 'axios'
+import axios, { AxiosResponse } from 'axios'
+import { SpotifyAuthResponse } from '../model'
 // eslint-disable-next-line
 const Base64 = require('js-base64').Base64
 
-const CLIENT_ID = '0c26ab311d744f8faae1f5c8ccc4ae21'
-const CLIENT_SECRET = '144c002f948a438a958b25783f2835fe'
+const CLIENT_ID: string = process.env.VUE_APP_SPOTIFY_CLIENT_ID
+const CLIENT_SECRET: string = process.env.VUE_APP_SPOTIFY_CLIENT_SECRET
 const ENCODED_CREDENTIALS = Base64.encode(`${CLIENT_ID}:${CLIENT_SECRET}`)
 const SCOPES = 'user-read-private user-read-email user-follow-read user-library-read playlist-read-collaborative playlist-read-private playlist-modify-public playlist-modify-private ugc-image-upload'
 const REDIRECT_URL = `${process.env.VUE_APP_BASE_SERVER_URL}/login`
@@ -33,16 +34,16 @@ export default {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
       data: `code=${authStore.temporaryToken}&redirect_uri=${REDIRECT_URL}&grant_type=authorization_code`
-    }).then(function (response) {
+    }).then(function ({ data }: AxiosResponse<SpotifyAuthResponse, SpotifyAuthResponse>) {
       // Delete old token not useful anymore
       authStore.temporaryToken = ''
-      authStore.accessToken = response.data.access_token
-      authStore.refreshToken = response.data.refresh_token
+      authStore.accessToken = data.access_token
+      authStore.refreshToken = data.refresh_token
     })
   },
 
   // Refresh new access token
-  async requestNewAccessToken () {
+  async requestNewAccessToken () : Promise<string | void> {
     const authStore = useAuthStore()
     console.log('trying to refresh token before retrying call')
 
@@ -54,9 +55,8 @@ export default {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
       data: `grant_type=refresh_token&refresh_token=${authStore.refreshToken}`
-    }).then(function (response) {
-      authStore.accessToken = response.data.access_token
-      return response
+    }).then(function ({ data }: AxiosResponse<SpotifyAuthResponse, SpotifyAuthResponse>) {
+      return data.access_token
     }).catch(function (err) {
       console.log('Error while fetching new access token', err)
     })

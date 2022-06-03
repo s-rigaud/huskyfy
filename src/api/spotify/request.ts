@@ -27,12 +27,12 @@ request.interceptors.response.use(response => {
 
   // Handle access token refresh for 401
   if (error.response && status === 401) {
-    const res: any = await api.spotify.auth.requestNewAccessToken()
-    if (res.data.access_token) {
+    const accessToken = await api.spotify.auth.requestNewAccessToken()
+    if (accessToken!) {
       const authStore = useAuthStore()
-      authStore.accessToken = res.data.access_token
+      authStore.accessToken = accessToken
 
-      config.headers.Authorization = `Bearer ${res.data.access_token}`
+      config.headers.Authorization = `Bearer ${accessToken}`
       return request(config)
     }
   }

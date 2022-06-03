@@ -1,8 +1,10 @@
+import { AxiosResponse } from 'axios'
+import { SpotifyArtist, SpotifyArtistResponse } from '../model'
 import request from '../request'
 
 // Chunk list into smaller lists
-function chunkArray (myArray: Array<any>, chunkSize: number) {
-  const results: Array<any> = []
+function chunkArray (myArray: Array<string>, chunkSize: number): Array<Array<string>> {
+  const results: Array<Array<string>> = []
   while (myArray.length) {
     results.push(myArray.splice(0, chunkSize))
   }
@@ -12,12 +14,13 @@ function chunkArray (myArray: Array<any>, chunkSize: number) {
 export default {
   /* Spotify only returns a maximum of 50 artist detail at a time */
   async getMultipleArtists (artistIds: Array<string>) {
-    const artists: Array<any> = []
+    const artists: Array<SpotifyArtist> = []
     for (const artistIdsChunk of chunkArray(artistIds, 50)) {
       const ids = artistIdsChunk.join(',')
-      const response = await request.get('artists', { params: { ids } })
+      const response: AxiosResponse<SpotifyArtistResponse, SpotifyArtistResponse> = await request.get('artists', { params: { ids } })
       artists.push(...response.data.artists)
     }
+    console.log(artists)
     return artists
   }
 }

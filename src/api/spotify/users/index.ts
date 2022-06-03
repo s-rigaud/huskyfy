@@ -1,8 +1,10 @@
+import { AxiosResponse } from 'axios'
+import { SpotifyProfile } from '../model'
 import request from '../request'
 
 export default {
   // Return global info about the current logged user
-  getUserProfile (): Promise<any> {
+  getUserProfile (): Promise<AxiosResponse<SpotifyProfile, SpotifyProfile>> {
     return request.get('me')
   }
 }
