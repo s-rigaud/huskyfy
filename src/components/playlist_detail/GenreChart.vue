@@ -4,7 +4,6 @@
     width="380"
     :options="chartOptions"
     :series="series"
-    @click="clickHandler"
   ></apexchart>
 </template>
 
@@ -14,7 +13,6 @@ export default {
   props: {
     genres: Array
   },
-  emits: ['onGenreSelect'],
   methods: {
     appendData () {
       const arr = this.series.slice()
@@ -26,43 +24,6 @@ export default {
       const arr = this.series.slice()
       arr.pop()
       this.series = arr
-    },
-    capitalize (string) {
-      return string.charAt(0).toUpperCase() + string.slice(1)
-    },
-    // Emit genre on click
-    clickHandler (event) {
-      if (event instanceof TouchEvent) return
-
-      const el = event.target
-      const isLegendClick =
-        el.nodeName === 'SPAN' &&
-        Array.from(el.classList).includes('apexcharts-legend-text')
-      const isChartClick =
-        el.nodeName === 'path' &&
-        Array.from(el.classList).includes('apexcharts-pie-area')
-
-      if (!isLegendClick && !isChartClick) return
-
-      let genreLabel = ''
-      if (isLegendClick) {
-        genreLabel = event.target.textContent
-      } else {
-        const seriesIndex = parseInt(el.getAttribute('j'))
-        genreLabel = this.genres[seriesIndex][0]
-      }
-
-      this.lastClickedWasSelection = !this.lastClickedWasSelection
-      if (
-        !this.lastClickedWasSelection &&
-        this.lastGenreSelected === genreLabel
-      ) {
-        this.$emit('onGenreSelect', '')
-        return
-      }
-
-      this.lastGenreSelected = genreLabel
-      this.$emit('onGenreSelect', genreLabel.toLowerCase())
     }
   },
   data () {
@@ -70,13 +31,13 @@ export default {
     return {
       lastGenreSelected: false,
       lastClickedWasSelection: false,
-      series: this.genres.map((g) => g[1]),
+      series: this.genres.map(genre => genre.value),
       chartOptions: {
         chart: {
           width: 380,
           type: 'donut'
         },
-        labels: this.genres.map((g) => this.capitalize(g[0])),
+        labels: this.genres.map(genre => genre.cap_name),
         dataLabels: {
           enabled: false
         },

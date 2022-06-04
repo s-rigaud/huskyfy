@@ -24,7 +24,7 @@ import { usePlaylistsStore } from '@/stores/playlists'
 export default {
   name: 'DuplicatorPopup',
   props: {
-    playlist: Object,
+    playlistId: String,
     selectedGenreName: String,
     filteredTracks: Array
   },
@@ -40,15 +40,11 @@ export default {
       this.startDuplication = true
       this.loadingText = this.$t('playlist.new.create')
       this.loadingPercentage = 1
-      const newPlaylist = this.getPlaylistNewPlaylistAttributes(this.playlist)
-
-      const response = await this.playlistsStore.createPlaylist(
-        newPlaylist.name,
-        newPlaylist.public,
-        newPlaylist.description,
-        newPlaylist.collaborative
+      const newPlaylistId = await this.playlistsStore.createPlaylist(
+        this.playlistId,
+        this.selectedGenreName,
+        this.filteredTracks.length
       )
-      const newPlaylistId = response.data.id
 
       this.loadingText = this.$t('playlist.new.cover')
       this.loadingPercentage = 33
@@ -68,24 +64,6 @@ export default {
       this.loadingText = this.$t('playlist.new.done')
       this.loadingPercentage = 100
       this.newPlaylistId = newPlaylistId
-    },
-    getPlaylistNewPlaylistAttributes (playlist) {
-      let newPlaylistName = playlist.name
-      let newPlaylistDescription = ''
-      if (this.selectedGenreName !== '') {
-        newPlaylistName += ` • ${this.selectedGenreName}`
-        newPlaylistDescription += `${playlist.name} • ${this.selectedGenreName}`
-      } else {
-        newPlaylistDescription += `Copy of ${playlist.name}`
-      }
-      newPlaylistDescription += ' • created by Horus'
-
-      return {
-        name: newPlaylistName,
-        description: newPlaylistDescription,
-        public: playlist.public && !playlist.collaborative,
-        collaborative: playlist.collaborative
-      }
     },
     displayNewPlaylistDetails () {
       this.$router.push({
@@ -120,5 +98,8 @@ export default {
 .v-progress-circular__underlay {
   stroke: rgba(255, 255, 255, 0.1);
   z-index: 1;
+}
+#get-to-new-playlist{
+  width: 100%;
 }
 </style>

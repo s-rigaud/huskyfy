@@ -133,8 +133,8 @@ export default {
     async unfollowPlaylist () {
       const toDeletePlaylistId = this.playlistsStore.selectedPlaylistId
       this.playlistsStore.selectedPlaylistId = null
-      await this.playlistsStore.unfollowPlaylist(toDeletePlaylistId)
       this.$router.push({ name: 'Explore' })
+      await this.playlistsStore.unfollowPlaylist(toDeletePlaylistId)
     },
     async setPlaylistPublic () {
       await this.playlistsStore.updatePlaylistPrivacy(
@@ -164,6 +164,7 @@ export default {
   display: flex;
   flex-direction: row;
   margin-bottom: 10px;
+  max-height: 72px;
 }
 #playlist-image {
   width: 70px !important;

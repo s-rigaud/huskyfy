@@ -12,9 +12,9 @@
       <p>{{ $t("playlist.created-by") }} {{ owner }}</p>
     </v-card-subtitle>
     <v-card-subtitle style="padding: 0">
-      <p v-if="this.collaborative">{{ $t("playlist.collaborative") }}</p>
-      <p v-else-if="this.public">{{ $t("playlist.public") }}</p>
-      <p v-else-if="!this.public && owner === 'me'">
+      <p v-if="collaborative">{{ $t("playlist.collaborative") }}</p>
+      <p v-else-if="public">{{ $t("playlist.public") }}</p>
+      <p v-else-if="!public && owner === 'me'">
         {{ $t("playlist.private") }}
       </p>
     </v-card-subtitle>

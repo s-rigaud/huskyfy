@@ -157,6 +157,11 @@ export interface SpotifyTrackMetadata {
 interface SimplifiedSpotifyTracks {
     href: string;
     total: number;
+    items?: Array<string>
+    limit?: number
+    next?: string
+    offset?: number
+    previous?: string
 }
 
 interface _BasePlaylistAttributes {

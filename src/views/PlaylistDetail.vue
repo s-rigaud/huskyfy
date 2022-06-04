@@ -1,7 +1,7 @@
 <template>
-  <div id="playlist" v-if="playlists[playlistId].total > 0">
+  <div id="playlist" v-if="playlists[playlistId] && playlists[playlistId].total > 0">
     <!--Playlist duplication-->
-    <v-btn v-if="filteredTracks.length > 1" @click="createNewPlaylist">
+    <v-btn id="duplicate-playlist-button" v-if="filteredTracks.length > 1" @click="createNewPlaylist">
       {{ $t("playlist.duplicate") }}
     </v-btn>
 
@@ -16,29 +16,36 @@
           />
           <GenreChart
             v-if="filteredTracks.length > 0"
-            :genres="sortedGenres"
-            @onGenreSelect="filterTracksByGenre"
+            :genres="getSortedGenres()"
           />
         </div>
 
-        <v-select
-          v-model="selectedPopularity"
-          label="Popularity filter"
-          :items="popularities"
-          variant="outlined"
-          density="comfortable"
-        >
-          <template v-slot:activator="{ selection }">
-            <v-chip
-              @click="console.log(selection)"
-              v-text="selection.item"
-            ></v-chip>
-          </template>
-        </v-select>
+        <div id="filters">
+          <h3>Filters</h3>
+          <v-select
+            v-model="selectedPopularity"
+            label="Popularity"
+            :items="popularities"
+            variant="outlined"
+            density="comfortable"
+          ></v-select>
 
-        <v-btn @click="resetFilters" v-if="selectedGenreName != ''">
-          {{ $t("playlist.reset-filters") }}
-        </v-btn>
+          <v-select
+            v-model="selectedGenres"
+            label="Genres"
+            :items="getSortedGenres()"
+            item-title="cap_name"
+            item-value="name"
+            variant="outlined"
+            density="comfortable"
+            multiple
+            style="text-transform: capitalize"
+          ></v-select>
+
+          <v-btn @click="resetFilters" v-if="selectedGenres.length !== 0">
+            {{ $t("playlist.reset-filters") }}
+          </v-btn>
+        </div>
       </div>
 
       <div id="right-part" style="width: 100%">
@@ -61,8 +68,8 @@
 
     <DuplicatorPopup
       v-if="startDuplication"
-      :playlist="playlists[playlistId]"
-      :selectedGenreName="selectedGenreName"
+      :playlistId="playlists[playlistId].id"
+      :selectedGenreName="selectedGenres[0]"
       :filteredTracks="filteredTracks"
     />
     <LoadMoreTracksPopup
@@ -94,7 +101,10 @@ import { storeToRefs } from 'pinia'
 export default {
   name: 'PlaylistDetail',
   props: {
-    playlistId: String
+    playlistId: {
+      type: String,
+      default: ''
+    }
   },
   components: {
     DuplicatorPopup,
@@ -132,14 +142,15 @@ export default {
     return {
       trackRequestLimit: 150,
 
-      selectedGenreName: '',
       filteredTracks: [],
 
       startDuplication: false,
       isHugePlaylist: false,
 
-      popularities: ['Indie', 'Popular'],
-      selectedPopularity: ''
+      popularities: ['Indie', 'Popular', 'No filter'],
+      selectedPopularity: 'No filter',
+
+      selectedGenres: []
     }
   },
   methods: {
@@ -167,21 +178,16 @@ export default {
         this.playlists[this.playlistId].total > this.trackRequestLimit
       this.resetFilters()
     },
-    filterTracksByGenre (selectedGenreName) {
-      if (selectedGenreName === '') {
-        this.resetFilters()
-        return
-      }
-      this.selectedGenreName = selectedGenreName
+    filterTracksByGenres () {
+      if (this.selectedGenres.length === 0) return this.resetFilters()
+
       this.filteredTracks = this.playlists[this.playlistId].tracks.filter((t) =>
-        Array.from(t.genres).includes(selectedGenreName)
+        this.selectedGenres.some(genre => t.genres.includes(genre))
       )
     },
-    filterTracksPopularity (popularity) {
-      if (popularity === '') {
-        this.resetFilters()
-        return
-      }
+    filterTracksByPopularity (popularity) {
+      if (popularity === 'No filter') return this.resetFilters()
+
       const isIndieSelected = popularity === 'Indie'
       this.filteredTracks = this.playlists[this.playlistId].tracks.filter(
         (t) => t.isIndie === isIndieSelected
@@ -191,30 +197,35 @@ export default {
       this.startDuplication = true
     },
     resetFilters () {
-      this.selectedGenreName = ''
+      this.selectedGenres = []
       this.filteredTracks = this.playlists[this.playlistId].tracks
     },
     openPlaylistOnSpotify () {
       window.location.href = this.playlists[this.playlistId].uri
-    }
-  },
-  computed: {
+    },
     // Returns only top genres sorted by most to least popular
-    sortedGenres () {
+    getSortedGenres () {
       const genreCounter = this.getGenreCount()
-      const genreLabels = Object.keys(genreCounter).map((label) => [
+      const genreMapping = Object.keys(genreCounter).map((label) => [
         label,
         genreCounter[label]
       ])
 
       // DESC sort
-      genreLabels.sort((a, b) => {
+      genreMapping.sort((a, b) => {
         return b[1] - a[1]
       })
 
       // Sampling
-      return genreLabels.slice(0, 15)
+      return genreMapping.slice(0, 15).map(
+        genre => ({ name: genre[0], value: genre[1], cap_name: this.capitalize(genre[0]) })
+      )
     },
+    capitalize (string) {
+      return string.charAt(0).toUpperCase() + string.slice(1)
+    }
+  },
+  computed: {
     // Get the general playlist isIndie % from the mean of all tracks
     indiePercentage () {
       let indieTracks = 0
@@ -240,9 +251,14 @@ export default {
     }
   },
   watch: {
-    selectedPopularity (newSelectedPopularity, oldSelectedPoplarity) {
-      console.log(newSelectedPopularity, oldSelectedPoplarity)
-      this.filterTracksPopularity(newSelectedPopularity)
+    selectedPopularity (newSelectedPopularity) {
+      this.filterTracksByPopularity(newSelectedPopularity)
+    },
+    selectedGenres (newValue, oldValue) {
+      // Do not filter on component mount
+      if (oldValue.length !== 0 || newValue.length !== 0) {
+        this.filterTracksByGenres()
+      }
     }
   }
 }
@@ -297,4 +313,5 @@ export default {
   margin: 0px 3px;
   width: 20px;
 }
+#duplicate-playlist-button{}
 </style>

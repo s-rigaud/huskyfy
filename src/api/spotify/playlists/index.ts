@@ -1,6 +1,6 @@
 import { useUserStore } from '@/stores/user'
 import axios, { AxiosResponse } from 'axios'
-import { SpotifyGetPlaylistResponse, SpotifyPlaylist, SpotifyTrackResponse } from '../model'
+import { SpotifyGetPlaylistResponse, SimplifiedSpotifyPlaylist, SpotifyTrackResponse } from '../model'
 import request from '../request'
 // eslint-disable-next-line
 const Base64 = require('js-base64').Base64
@@ -34,7 +34,7 @@ export default {
     })
   },
   // Create new empty playlist
-  createPlaylist (name: string, public_: boolean, description: string, collaborative: boolean): Promise<AxiosResponse<SpotifyPlaylist, SpotifyPlaylist>> {
+  createPlaylist (name: string, public_: boolean, description: string, collaborative: boolean): Promise<AxiosResponse<SimplifiedSpotifyPlaylist, SimplifiedSpotifyPlaylist>> {
     const userStore = useUserStore()
     const userId = userStore.id
 

@@ -2,7 +2,6 @@ import api from '@/api'
 import { SimplifiedSpotifyPlaylist, SpotifyPlaylist, SpotifyTrackMetadata } from '@/api/spotify/model'
 import { UserState, useUserStore } from '@/stores/user'
 import { RemovableRef, useStorage } from '@vueuse/core'
-import { AxiosResponse } from 'axios'
 import { defineStore, Store } from 'pinia'
 import VueI18n from '../i18n'
 
@@ -15,6 +14,18 @@ type PlaylistState = {
   MAX_TRACKS_LIMIT: RemovableRef<number>;
   MAX_PLAYLISTS_LIMIT: RemovableRef<number>;
   selectedPlaylistId: RemovableRef<string | null>;
+}
+
+function chunkArray (myArray: Array<string>, chunkSize: number): Array<Array<string>> {
+  const results: Array<Array<string>> = []
+  while (myArray.length) {
+    results.push(myArray.splice(0, chunkSize))
+  }
+  return results
+}
+
+function range (start: number, stop: number, step = 1): Array<number> {
+  return Array(Math.ceil((stop - start) / step)).fill(start).map((x, y) => x + y * step)
 }
 
 export const usePlaylistsStore = defineStore('playlists', {
@@ -124,9 +135,6 @@ export const usePlaylistsStore = defineStore('playlists', {
       if (requestPlaylist.name.includes(userStore.username) && requestPlaylist.name.includes('+')) return 50
       return requestPlaylist.tracks.total
     },
-    range (start: number, stop: number, step = 1): Array<number> {
-      return Array(Math.ceil((stop - start) / step)).fill(start).map((x, y) => x + y * step)
-    },
     // Download more tracks for a specific playlist from previous offset
     async downloadPlaylistTracks (playlistId: string, limit: number) {
       // Init playlist info or return already saved tracks
@@ -144,9 +152,9 @@ export const usePlaylistsStore = defineStore('playlists', {
       }
 
       const newTracks: Array<SpotifyTrackMetadata> = []
-      for (const requestOffset of this.range(offset, limit, this.MAX_TRACKS_LIMIT)) {
+      for (const requestOffset of range(offset, limit, this.MAX_TRACKS_LIMIT)) {
         // Save track infos
-        const response = await this.callCorrespondingAPIEndpoint(playlistId, requestOffset)
+        const response = await this.retrieveTracks(playlistId, requestOffset)
         // Filter deleted track appearing in API
         response.data.items = response.data.items.filter(i => i.track != null && i.track.type === 'track')
         newTracks.push(...response.data.items)
@@ -199,7 +207,7 @@ export const usePlaylistsStore = defineStore('playlists', {
       return this.playlists[playlistId].tracks
     },
     // Route request to standard playlist call or special "My music" one
-    async callCorrespondingAPIEndpoint (playlistId: string, offset: number) {
+    async retrieveTracks (playlistId: string, offset: number) {
       if (playlistId === 'my-music') {
         return await api.spotify.playlists.getUserSavedTracks(
           this.MAX_TRACKS_LIMIT,
@@ -224,7 +232,23 @@ export const usePlaylistsStore = defineStore('playlists', {
       delete this.playlists[playlistId]
     },
     // Create new empty playlist
-    async createPlaylist (name: string, public_: boolean, description: string, collaborative: boolean): Promise<AxiosResponse<SpotifyPlaylist, SpotifyPlaylist>> {
+    async createPlaylist (basePlaylistId: string, selectedGenreName: string, totalTrack: number): Promise<string> {
+      const basePlaylist = this.playlists[basePlaylistId]
+      let newPlaylistName = basePlaylist.name
+      let newPlaylistDescription = ''
+      if (selectedGenreName) {
+        newPlaylistName += ` • ${selectedGenreName}`
+        newPlaylistDescription += `${basePlaylist.name} • ${selectedGenreName}`
+      } else {
+        newPlaylistDescription += `Copy of ${basePlaylist.name}`
+      }
+      newPlaylistDescription += ' • created by Horus'
+
+      const name = newPlaylistName
+      const description = newPlaylistDescription
+      const public_ = basePlaylist.public && !basePlaylist.collaborative
+      const collaborative = basePlaylist.collaborative
+
       const response = await api.spotify.playlists.createPlaylist(
         name,
         public_,
@@ -232,14 +256,22 @@ export const usePlaylistsStore = defineStore('playlists', {
         collaborative
       )
       const playlist = response.data
-      this.playlists[playlist.id] = playlist
-      return response
+      this.playlists[playlist.id] = {
+        ...playlist,
+        total:
+        totalTrack,
+        tracks: [],
+        images: basePlaylist.images
+      }
+      return playlist.id
     },
-    async addTracksToPlaylist (newPlaylistId: string, tracksId: Array<string>) {
-      await api.spotify.playlists.addTracksToPlaylist(
-        newPlaylistId,
-        tracksId
-      )
+    async addTracksToPlaylist (newPlaylistId: string, trackIds: Array<string>) {
+      for (const trackIdBatch of chunkArray(trackIds, 100)) {
+        await api.spotify.playlists.addTracksToPlaylist(
+          newPlaylistId,
+          trackIdBatch
+        )
+      }
     },
     async updatePlaylistCover (playlistId: string, coverUrl: string) {
       await api.spotify.playlists.updatePlaylistCover(
