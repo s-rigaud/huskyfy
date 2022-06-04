@@ -6,16 +6,16 @@ import request from '../request'
 const Base64 = require('js-base64').Base64
 
 interface Callback {
-  (coverToBytes: string | ArrayBuffer | null): void;
+  (base64cover: string): void;
 }
 
 // Legacy code not optimised used to gather Spotify cover img in base64
-function toDataURL (url: string, callback: Callback) {
+function toDataURL (url: string, uploadCallback: Callback) {
   const xhRequest = new XMLHttpRequest()
   xhRequest.onload = function () {
     const reader = new FileReader()
     reader.onloadend = function () {
-      callback(reader.result)
+      uploadCallback(reader.result + '')
     }
     reader.readAsDataURL(xhRequest.response)
   }
@@ -70,8 +70,8 @@ export default {
       res => res.text()
     )
 
-    const callback: Callback = (coverToBytes: string | ArrayBuffer | null) => {
-      const bytesNoMetadata = coverToBytes!.split(',')[1]
+    const callback: Callback = (base64cover: string) => {
+      const bytesNoMetadata = base64cover.split(',')[1]
       request.put(`playlists/${playlistId}/images`, bytesNoMetadata, {
         headers: { 'Content-Type': 'image/jpeg' }
       })

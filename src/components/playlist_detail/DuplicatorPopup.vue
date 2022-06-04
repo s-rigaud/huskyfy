@@ -25,7 +25,7 @@ export default {
   name: 'DuplicatorPopup',
   props: {
     playlistId: String,
-    selectedGenres: String,
+    selectedGenres: Array,
     filteredTracks: Array
   },
   setup () {
@@ -56,6 +56,7 @@ export default {
       this.loadingText = this.$t('playlist.new.tracks')
       this.loadingPercentage = 66
       await this.playlistsStore.addTracksToPlaylist(
+        this.playlistId,
         newPlaylistId,
         this.filteredTracks.map((t) => t.uri)
       )
@@ -65,10 +66,11 @@ export default {
       this.newPlaylistId = newPlaylistId
     },
     displayNewPlaylistDetails () {
-      this.$router.push({
+      window.location.href = '/playlist/' + this.newPlaylistId
+      /* this.$router.push({
         name: 'Explore playlist',
         params: { playlistId: this.newPlaylistId }
-      })
+      }) */
     }
   },
   data () {

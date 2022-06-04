@@ -13,7 +13,9 @@
       <div>
         <div id="title">
           <h3 style="margin-right: 5px">
-            {{ playlistsStore.playlists[playlistsStore.selectedPlaylistId].name }}
+            {{
+              playlistsStore.playlists[playlistsStore.selectedPlaylistId].name
+            }}
           </h3>
           <v-tooltip location="top">
             <template v-slot:activator="{ props: tooltip }">
@@ -78,9 +80,37 @@
         <v-img width="25" :src="spotifyLogo" alt="Spotify Logo" />
       </v-btn>
 
-      <v-btn @click="unfollowPlaylist" color="error" variant="outlined">
-        {{ $t("playlist.unfollow") }}
-      </v-btn>
+      <v-dialog persistent v-model="isDeleteModalOpen">
+        <template v-slot:activator="{ props }">
+          <v-btn v-bind="props" color="error" variant="outlined">
+            {{ $t("playlist.unfollow") }}
+          </v-btn>
+        </template>
+
+        <v-card>
+          <v-card-title class="text-h5">
+            Delete '{{
+              playlistsStore.playlists[playlistsStore.selectedPlaylistId].name
+            }}'
+          </v-card-title>
+          <v-card-text>
+            Do you really want to delete this playlist from your library ?
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+              color="green darken-1"
+              text
+              @click="isDeleteModalOpen = false"
+            >
+              No
+            </v-btn>
+            <v-btn color="red darken-1" text @click="unfollowPlaylist">
+              Delete
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </div>
   </div>
 </template>
@@ -98,6 +128,12 @@ export default {
     const currentUserUsername = userStore.username
 
     return { currentUserUsername, playlistsStore }
+  },
+  data () {
+    return {
+      isDeleteModalOpen: false,
+      tooltip: null
+    }
   },
   computed: {
     usernameToDisplay () {
@@ -147,10 +183,11 @@ export default {
       alert('Preview no available right now')
     },
     async unfollowPlaylist () {
+      this.isDeleteModalOpen = false
       const toDeletePlaylistId = this.playlistsStore.selectedPlaylistId
+      await this.playlistsStore.unfollowPlaylist(toDeletePlaylistId)
       this.playlistsStore.selectedPlaylistId = null
       this.$router.push({ name: 'Explore' })
-      await this.playlistsStore.unfollowPlaylist(toDeletePlaylistId)
     },
     async setPlaylistPublic () {
       await this.playlistsStore.updatePlaylistPrivacy(

@@ -64,6 +64,7 @@ export const usePlaylistsStore = defineStore('playlists', {
         if (cachedPlaylist) {
           // Pop cached tracks if playlist have changed
           if (cachedPlaylist.snapshot_id !== requestPlaylist.snapshot_id) {
+            console.log(cachedPlaylist, cachedPlaylist.snapshot_id, requestPlaylist.snapshot_id)
             cachedPlaylist.snapshot_id = requestPlaylist.snapshot_id
             cachedPlaylist.offset = 0
             cachedPlaylist.tracks = []
@@ -139,6 +140,7 @@ export const usePlaylistsStore = defineStore('playlists', {
     async downloadPlaylistTracks (playlistId: string, limit: number) {
       // Init playlist info or return already saved tracks
       let offset = this.playlists[playlistId].offset
+      console.log(this.playlists[playlistId], offset, limit)
       if (!offset) {
         offset = 0
         this.playlists[playlistId] = { ...this.playlists[playlistId], offset: offset, tracks: [] }
@@ -246,14 +248,14 @@ export const usePlaylistsStore = defineStore('playlists', {
 
       const name = newPlaylistName
       const description = newPlaylistDescription
-      const public_ = basePlaylist.public && !basePlaylist.collaborative
-      const collaborative = basePlaylist.collaborative
+      // const public_ = basePlaylist.public && !basePlaylist.collaborative
+      // const collaborative = basePlaylist.collaborative
 
       const response = await api.spotify.playlists.createPlaylist(
         name,
-        public_,
+        false,
         description,
-        collaborative
+        false
       )
       const playlist = response.data
       this.playlists[playlist.id] = {
@@ -265,8 +267,9 @@ export const usePlaylistsStore = defineStore('playlists', {
       }
       return playlist.id
     },
-    async addTracksToPlaylist (newPlaylistId: string, trackIds: Array<string>) {
+    async addTracksToPlaylist (originalPlaylistId: string, newPlaylistId: string, trackIds: Array<string>) {
       let lastSnapshotId = ''
+      const offset = trackIds.length
       for (const trackIdBatch of chunkArray(trackIds, 100)) {
         const { data } = await api.spotify.playlists.addTracksToPlaylist(
           newPlaylistId,
@@ -274,7 +277,9 @@ export const usePlaylistsStore = defineStore('playlists', {
         )
         lastSnapshotId = data.snapshot_id
       }
-      return lastSnapshotId
+      this.playlists[newPlaylistId].snapshot_id = lastSnapshotId
+      this.playlists[newPlaylistId].tracks = this.playlists[originalPlaylistId].tracks.filter(t => trackIds.includes(t.id))
+      this.playlists[newPlaylistId].offset = offset
     },
     async updatePlaylistCover (playlistId: string, coverUrl: string) {
       await api.spotify.playlists.updatePlaylistCover(

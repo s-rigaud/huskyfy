@@ -49,6 +49,11 @@
             style="text-transform: capitalize"
           ></v-select>
 
+          <v-switch
+            v-model="isExclusiveGenres"
+            label="Make selected genres exclusive"
+          ></v-switch>
+
           <v-btn @click="resetFilters" v-if="selectedGenres.length !== 0">
             {{ $t("playlist.reset-filters") }}
           </v-btn>
@@ -157,7 +162,8 @@ export default {
       popularities: ['Indie', 'Popular', 'No filter'],
       selectedPopularity: 'No filter',
 
-      selectedGenres: []
+      selectedGenres: [],
+      isExclusiveGenres: false
     }
   },
   methods: {
@@ -188,9 +194,15 @@ export default {
     filterTracksByGenres () {
       if (this.selectedGenres.length === 0) return this.resetFilters()
 
-      this.filteredTracks = this.playlists[this.playlistId].tracks.filter((t) =>
-        this.selectedGenres.some((genre) => t.genres.includes(genre))
-      )
+      if (this.isExclusiveGenres) {
+        this.filteredTracks = this.playlists[this.playlistId].tracks.filter(
+          (t) => this.selectedGenres.every((genre) => t.genres.includes(genre))
+        )
+      } else {
+        this.filteredTracks = this.playlists[this.playlistId].tracks.filter(
+          (t) => this.selectedGenres.some((genre) => t.genres.includes(genre))
+        )
+      }
     },
     filterTracksByPopularity (popularity) {
       if (popularity === 'No filter') return this.resetFilters()
@@ -224,13 +236,11 @@ export default {
       })
 
       // Sampling
-      return genreMapping
-        .slice(0, 15)
-        .map((genre) => ({
-          name: genre[0],
-          value: genre[1],
-          cap_name: this.capitalize(genre[0])
-        }))
+      return genreMapping.slice(0, 15).map((genre) => ({
+        name: genre[0],
+        value: genre[1],
+        cap_name: this.capitalize(genre[0])
+      }))
     },
     capitalize (string) {
       return string.charAt(0).toUpperCase() + string.slice(1)
@@ -270,6 +280,9 @@ export default {
       if (oldValue.length !== 0 || newValue.length !== 0) {
         this.filterTracksByGenres()
       }
+    },
+    isExclusiveGenres () {
+      this.filterTracksByGenres()
     }
   }
 }
@@ -323,7 +336,5 @@ export default {
 #open-spotify .v-btn__content img {
   margin: 0px 3px;
   width: 20px;
-}
-#duplicate-playlist-button {
 }
 </style>
