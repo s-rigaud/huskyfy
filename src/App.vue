@@ -23,11 +23,12 @@
 <script>
 import FooterComponent from '@/components/FooterComponent.vue'
 import NavbarComponent from '@/components/navbar/NavbarHeader.vue'
+import { defineComponent } from 'vue'
 
-export default {
+export default defineComponent({
   name: 'App',
   components: { NavbarComponent, FooterComponent }
-}
+})
 </script>
 <style scoped>
 #container {
@@ -38,7 +39,7 @@ export default {
   align-items: stretch;
   align-content: space-between;
   background-color: #f6e58d !important;
-  font-family: "Oswald";
+  font-family: "Oswald" !important;
   min-height: 100%;
 }
 

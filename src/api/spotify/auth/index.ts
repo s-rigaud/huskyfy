@@ -43,7 +43,7 @@ export default {
   },
 
   // Refresh new access token
-  async requestNewAccessToken () : Promise<string | void> {
+  async requestNewAccessToken (): Promise<string | void> {
     const authStore = useAuthStore()
     console.log('trying to refresh token before retrying call')
 

@@ -1,17 +1,20 @@
 import api from '@/api'
-import { SpotifyPlaylist, SpotifyTrackMetadata } from '@/api/spotify/model'
+import { SimplifiedSpotifyPlaylist, SpotifyPlaylist, SpotifyTrackMetadata } from '@/api/spotify/model'
 import { UserState, useUserStore } from '@/stores/user'
 import { RemovableRef, useStorage } from '@vueuse/core'
 import { AxiosResponse } from 'axios'
 import { defineStore, Store } from 'pinia'
-
 import VueI18n from '../i18n'
 
+type KeyPlaylist = {
+  [key: string]: SpotifyPlaylist
+}
+
 type PlaylistState = {
-  playlists: RemovableRef<SpotifyPlaylist[]>; // TODO update
+  playlists: RemovableRef<KeyPlaylist>;
   MAX_TRACKS_LIMIT: RemovableRef<number>;
   MAX_PLAYLISTS_LIMIT: RemovableRef<number>;
-  selectedPlaylistId: RemovableRef<null>;
+  selectedPlaylistId: RemovableRef<string | null>;
 }
 
 export const usePlaylistsStore = defineStore('playlists', {
@@ -63,8 +66,9 @@ export const usePlaylistsStore = defineStore('playlists', {
           }
         } else {
           this.playlists[requestPlaylist.id] = {
+            ...requestPlaylist,
             total: this.getTrackCount(requestPlaylist, userStore),
-            ...requestPlaylist
+            tracks: []
           }
         }
       }
@@ -83,7 +87,7 @@ export const usePlaylistsStore = defineStore('playlists', {
       }
     },
     // Special playlist from user liked song treated differently in Spotify API
-    getLikedSongPlaylist (userStore: Store<'user', UserState>): SpotifyPlaylist {
+    getLikedSongPlaylist (userStore: Store<'user', UserState>): SimplifiedSpotifyPlaylist {
       const i18n = VueI18n.global
       return {
         collaborative: false,
@@ -103,24 +107,24 @@ export const usePlaylistsStore = defineStore('playlists', {
           type: 'playlist',
           uri: ''
         },
-        primary_color: null,
+        primary_color: undefined,
         public: false,
-        tracks: [],
-        snapshot_id: 42,
+        snapshot_id: '42',
+        tracks: { href: '', total: 1 },
         external_urls: { spotify: '' },
         href: '',
         type: 'playlist',
         uri: ''
       }
     },
-    getTrackCount (requestPlaylist: SpotifyPlaylist, userStore: Store<'user', UserState>): number {
+    getTrackCount (requestPlaylist: SimplifiedSpotifyPlaylist, userStore: Store<'user', UserState>): number {
       // Spotify general Mix playlists have their total tracks set
       // to 0 while there are currently tracks in the playlist
       // We have to fix this
       if (requestPlaylist.name.includes(userStore.username) && requestPlaylist.name.includes('+')) return 50
       return requestPlaylist.tracks.total
     },
-    range (start: number, stop: number, step = 1) {
+    range (start: number, stop: number, step = 1): Array<number> {
       return Array(Math.ceil((stop - start) / step)).fill(start).map((x, y) => x + y * step)
     },
     // Download more tracks for a specific playlist from previous offset
@@ -149,7 +153,7 @@ export const usePlaylistsStore = defineStore('playlists', {
         this.playlists[playlistId] = {
           ...response.data,
           ...this.playlists[playlistId],
-          offset: this.playlists[playlistId].offset + this.MAX_TRACKS_LIMIT
+          offset: this.playlists[playlistId].offset! + this.MAX_TRACKS_LIMIT
         }
       }
 
@@ -162,7 +166,12 @@ export const usePlaylistsStore = defineStore('playlists', {
       const spotifyArtistInfos = await api.spotify.artists.getMultipleArtists(
         Array.from(new Set(artistIds))
       )
-      const artistMap = new Map()
+
+      type ArtistStatistics = {
+        genres: Array<string>;
+        followers: number;
+      }
+      const artistMap: Map<string, ArtistStatistics> = new Map()
       for (const artist of spotifyArtistInfos) {
         artistMap.set(artist.id, { genres: artist.genres, followers: artist.followers.total })
       }
@@ -170,21 +179,19 @@ export const usePlaylistsStore = defineStore('playlists', {
       // Map each track to artist genres and popularity (indie or not)
       for (const item of newTracks) {
         const track = item.track
-        const trackImage = (track.album.images.length > 0) ? track.album.images[0].url : null
         const artists = track.artists
         let allArtistIndie = true
 
-        const trackGenres = new Set()
+        const trackGenres: Set<string> = new Set()
         for (const artist of artists) {
-          artistMap.get(artist.id).genres.map(t => trackGenres.add(t))
-          const followerCount = artistMap.get(artist.id).followers
+          artistMap.get(artist.id)!.genres.map(t => trackGenres.add(t))
+          const followerCount = artistMap.get(artist.id)!.followers
           if (followerCount > 500_000) {
             allArtistIndie = false
           }
         }
         this.playlists[playlistId].tracks.push({
           ...track,
-          image: trackImage,
           isIndie: allArtistIndie,
           genres: Array.from(trackGenres)
         })

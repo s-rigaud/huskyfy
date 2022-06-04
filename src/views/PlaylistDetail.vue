@@ -21,15 +21,20 @@
           />
         </div>
 
-        <v-combobox
-          clearable
-          filled
-          hide-selected
+        <v-select
           v-model="selectedPopularity"
-          :filter="filterTracksPopularity"
+          label="Popularity filter"
           :items="popularities"
-          label="Popularity"
-        ></v-combobox>
+          variant="outlined"
+          density="comfortable"
+        >
+          <template v-slot:activator="{ selection }">
+            <v-chip
+              @click="console.log(selection)"
+              v-text="selection.item"
+            ></v-chip>
+          </template>
+        </v-select>
 
         <v-btn @click="resetFilters" v-if="selectedGenreName != ''">
           {{ $t("playlist.reset-filters") }}
@@ -44,7 +49,7 @@
             :key="track.id"
             :id="track.id"
             :name="track.name"
-            :image="track.image"
+            :image="track.album.images[0].url"
             :artists="track.artists"
             :genres="track.genres"
             :isIndie="track.isIndie"
@@ -127,13 +132,14 @@ export default {
     return {
       trackRequestLimit: 150,
 
-      selectedPopularity: '',
       selectedGenreName: '',
-      popularities: ['indie', 'popularity'],
       filteredTracks: [],
 
       startDuplication: false,
-      isHugePlaylist: false
+      isHugePlaylist: false,
+
+      popularities: ['Indie', 'Popular'],
+      selectedPopularity: ''
     }
   },
   methods: {
@@ -171,8 +177,15 @@ export default {
         Array.from(t.genres).includes(selectedGenreName)
       )
     },
-    filterTracksPopularity (item, queryText, itemText) {
-      console.log(item, queryText, itemText)
+    filterTracksPopularity (popularity) {
+      if (popularity === '') {
+        this.resetFilters()
+        return
+      }
+      const isIndieSelected = popularity === 'Indie'
+      this.filteredTracks = this.playlists[this.playlistId].tracks.filter(
+        (t) => t.isIndie === isIndieSelected
+      )
     },
     createNewPlaylist () {
       this.startDuplication = true
@@ -224,6 +237,12 @@ export default {
     },
     spotifyLogo () {
       return require('@/assets/spotify.png')
+    }
+  },
+  watch: {
+    selectedPopularity (newSelectedPopularity, oldSelectedPoplarity) {
+      console.log(newSelectedPopularity, oldSelectedPoplarity)
+      this.filterTracksPopularity(newSelectedPopularity)
     }
   }
 }

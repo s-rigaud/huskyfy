@@ -11,7 +11,8 @@
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "useDefineForClassFields": true,
-    "noImplicitAny": true, // should be true
+    "noImplicitAny": false, // should be true
+    "noImplicitThis": true,
     "sourceMap": true,
     "baseUrl": ".",
     "types": [
@@ -34,7 +35,8 @@
     "src/**/*.tsx",
     "src/**/*.vue",
     "tests/**/*.ts",
-    "tests/**/*.tsx"
+    "tests/**/*.tsx",
+    "src/i18n.js"
   ],
   "exclude": [
     "node_modules"

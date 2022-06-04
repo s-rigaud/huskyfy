@@ -1,13 +1,13 @@
 import { useUserStore } from '@/stores/user'
 import axios, { AxiosResponse } from 'axios'
-import { SpotifyGetPlaylistResponse, SpotifyTrackResponse } from '../model'
+import { SpotifyGetPlaylistResponse, SpotifyPlaylist, SpotifyTrackResponse } from '../model'
 import request from '../request'
 // eslint-disable-next-line
 const Base64 = require('js-base64').Base64
 
 export default {
   // Retrieve playlists from the current logged user
-  getUserPlaylists (limit: number, offset: number) : Promise<AxiosResponse<SpotifyGetPlaylistResponse, SpotifyGetPlaylistResponse>> {
+  getUserPlaylists (limit: number, offset: number): Promise<AxiosResponse<SpotifyGetPlaylistResponse, SpotifyGetPlaylistResponse>> {
     return request.get('me/playlists', {
       params: {
         limit,
@@ -16,7 +16,7 @@ export default {
     })
   },
   // Return tracks for a playlist
-  getPlaylistTracks (playlistId: string, limit: number, offset: number) : Promise<AxiosResponse<SpotifyTrackResponse, SpotifyTrackResponse>> {
+  getPlaylistTracks (playlistId: string, limit: number, offset: number): Promise<AxiosResponse<SpotifyTrackResponse, SpotifyTrackResponse>> {
     return request.get(`playlists/${playlistId}/tracks`, {
       params: {
         limit,
@@ -25,7 +25,7 @@ export default {
     })
   },
   // Return tracks from the special "Your music" playlist
-  async getUserSavedTracks (limit: number, offset: number) : Promise<AxiosResponse<SpotifyTrackResponse, SpotifyTrackResponse>> {
+  async getUserSavedTracks (limit: number, offset: number): Promise<AxiosResponse<SpotifyTrackResponse, SpotifyTrackResponse>> {
     return await request.get('me/tracks', {
       params: {
         limit,
@@ -34,7 +34,7 @@ export default {
     })
   },
   // Create new empty playlist
-  createPlaylist (name: string, public_: boolean, description: string, collaborative: boolean) {
+  createPlaylist (name: string, public_: boolean, description: string, collaborative: boolean): Promise<AxiosResponse<SpotifyPlaylist, SpotifyPlaylist>> {
     const userStore = useUserStore()
     const userId = userStore.id
 

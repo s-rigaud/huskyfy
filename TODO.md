@@ -1,5 +1,7 @@
 # Login
 
+* Update window title on tab
+
 * Update Image ?
 
 # Explore

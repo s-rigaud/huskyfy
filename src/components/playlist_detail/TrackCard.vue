@@ -1,14 +1,14 @@
 <template>
   <v-card flat border rounded="0" @click="openTrackOnSpotify">
     <div class="track-card">
-      <v-avatar class="ma-3" size="90" rounded="0">
+      <v-avatar class="ma-3" size="80" rounded="0">
         <v-img v-bind:src="image" :lazy-src="loadingCover"></v-img>
       </v-avatar>
       <div>
         <v-card-header>
           <v-card-header-text>
             <v-card-title class="text-h6"> {{ name }} </v-card-title>
-            <v-card-subtitle>
+            <v-card-subtitle style="display: inline-flex">
               <a
                 v-for="artist in artists"
                 class="artist-name"
@@ -16,25 +16,27 @@
                 v-text="addComma(artist.name)"
                 :href="artist.uri"
               ></a>
-              <v-chip
-                v-if="isIndie"
-                :text="$t('track.indie')"
-                color="green"
-                label
-                text-color="white"
-                size="small"
-              >
-              </v-chip>
-              <v-chip
-                v-else
-                :text="$t('track.popular')"
-                color="cyan"
-                label
-                text-color="white"
-                size="small"
-              >
-              </v-chip>
             </v-card-subtitle>
+
+            <v-chip
+              v-if="isIndie"
+              :text="$t('track.indie')"
+              color="green"
+              label
+              text-color="white"
+              size="small"
+              class="popularity-chip"
+            >
+            </v-chip>
+            <v-chip
+              v-else
+              :text="$t('track.popular')"
+              color="cyan"
+              label
+              size="small"
+              class="popularity-chip"
+            >
+            </v-chip>
           </v-card-header-text>
         </v-card-header>
         <div v-if="genres.length > 0">
@@ -79,7 +81,9 @@ export default {
   computed: {
     addComma () {
       return (artistName) => {
-        if (this.artists[this.artists.length - 1].name === artistName) { return artistName }
+        if (this.artists[this.artists.length - 1].name === artistName) {
+          return artistName
+        }
         return `${artistName},`
       }
     },
@@ -131,5 +135,12 @@ export default {
 }
 .genre-chip {
   margin: 0 5px 2px 0px;
+}
+.popularity-chip {
+  font-family: "Righteous" !important;
+  opacity: 1 !important;
+}
+.text-h6 {
+  font-family: "Oswald" !important;
 }
 </style>

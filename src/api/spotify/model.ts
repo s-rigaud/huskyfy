@@ -134,6 +134,8 @@ export interface SpotifyTrack {
     track_number: number;
     type: string;
     uri: string;
+    isIndie: boolean;
+    genres: Array<string>
 }
 
 // Spotify API Track embedded with metadata
@@ -149,10 +151,15 @@ export interface SpotifyTrackMetadata {
     track: SpotifyTrack;
     // eslint-disable-next-line
     video_thumbnail: SpotifyVideoThumbnail;
+    total?: number;
 }
 
-// Playlist Model
-export interface SpotifyPlaylist {
+interface SimplifiedSpotifyTracks {
+    href: string;
+    total: number;
+}
+
+interface _BasePlaylistAttributes {
     collaborative: boolean;
     description: string;
     id: string;
@@ -160,11 +167,10 @@ export interface SpotifyPlaylist {
     name: string;
     owner: SpotifyOwner;
     // eslint-disable-next-line
-    primary_color?: any;
+    primary_color?: string;
     public: boolean;
-    tracks: Array<SpotifyTrackMetadata>;
     // eslint-disable-next-line
-    snapshot_id: any;
+    snapshot_id: string;
     // eslint-disable-next-line
     external_urls: SpotifyExternalUrls;
     href: string;
@@ -172,8 +178,29 @@ export interface SpotifyPlaylist {
     uri: string;
 }
 
+export interface SpotifyPlaylist extends _BasePlaylistAttributes {
+    tracks: Array<SpotifyTrack>;
+    offset?: number;
+    total: number;
+}
+
+export interface SimplifiedSpotifyPlaylist extends _BasePlaylistAttributes {
+    tracks: SimplifiedSpotifyTracks
+}
+
 // Spotify API Response for /playlists
 export interface SpotifyGetPlaylistResponse {
+    href: string;
+    items: SimplifiedSpotifyPlaylist[];
+    limit: number;
+    next?: string;
+    offset: number;
+    previous?: string;
+    total: number;
+}
+
+// Spotify API Response for /playlist/id
+export interface SpotifyGetDetailedPlaylistResponse {
     href: string;
     items: SpotifyPlaylist[];
     limit: number;
