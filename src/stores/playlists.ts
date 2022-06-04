@@ -232,17 +232,17 @@ export const usePlaylistsStore = defineStore('playlists', {
       delete this.playlists[playlistId]
     },
     // Create new empty playlist
-    async createPlaylist (basePlaylistId: string, selectedGenreName: string, totalTrack: number): Promise<string> {
+    async createPlaylist (basePlaylistId: string, selectedGenres: Array<string>, totalTrack: number): Promise<string> {
       const basePlaylist = this.playlists[basePlaylistId]
-      let newPlaylistName = basePlaylist.name
+      let newPlaylistName = `Copy of ${basePlaylist.name}`
       let newPlaylistDescription = ''
-      if (selectedGenreName) {
-        newPlaylistName += ` • ${selectedGenreName}`
-        newPlaylistDescription += `${basePlaylist.name} • ${selectedGenreName}`
+      if (selectedGenres.length !== 0) {
+        newPlaylistName += ` • ${selectedGenres}`
+        newPlaylistDescription += `${basePlaylist.name} • ${selectedGenres}`
       } else {
         newPlaylistDescription += `Copy of ${basePlaylist.name}`
       }
-      newPlaylistDescription += ' • created by Horus'
+      newPlaylistDescription += ' • created by Horus 𓂀'
 
       const name = newPlaylistName
       const description = newPlaylistDescription
@@ -259,19 +259,22 @@ export const usePlaylistsStore = defineStore('playlists', {
       this.playlists[playlist.id] = {
         ...playlist,
         total:
-        totalTrack,
+          totalTrack,
         tracks: [],
         images: basePlaylist.images
       }
       return playlist.id
     },
     async addTracksToPlaylist (newPlaylistId: string, trackIds: Array<string>) {
+      let lastSnapshotId = ''
       for (const trackIdBatch of chunkArray(trackIds, 100)) {
-        await api.spotify.playlists.addTracksToPlaylist(
+        const { data } = await api.spotify.playlists.addTracksToPlaylist(
           newPlaylistId,
           trackIdBatch
         )
+        lastSnapshotId = data.snapshot_id
       }
+      return lastSnapshotId
     },
     async updatePlaylistCover (playlistId: string, coverUrl: string) {
       await api.spotify.playlists.updatePlaylistCover(

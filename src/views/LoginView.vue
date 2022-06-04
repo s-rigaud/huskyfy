@@ -27,7 +27,6 @@
 import api from '@/api'
 import LocaleSelector from '@/components/LocaleSelector.vue'
 import { useUserStore } from '@/stores/user'
-
 export default {
   name: 'LoginView',
   setup () {

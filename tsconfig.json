@@ -11,7 +11,7 @@
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "useDefineForClassFields": true,
-    "noImplicitAny": false, // should be true
+    "noImplicitAny": true, // should be true
     "noImplicitThis": true,
     "sourceMap": true,
     "baseUrl": ".",

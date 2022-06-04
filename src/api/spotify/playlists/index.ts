@@ -1,9 +1,28 @@
 import { useUserStore } from '@/stores/user'
-import axios, { AxiosResponse } from 'axios'
-import { SpotifyGetPlaylistResponse, SimplifiedSpotifyPlaylist, SpotifyTrackResponse } from '../model'
+import { AxiosResponse } from 'axios'
+import { SimplifiedSpotifyPlaylist, SpotifyGetPlaylistResponse, SpotifyTrackResponse } from '../model'
 import request from '../request'
 // eslint-disable-next-line
 const Base64 = require('js-base64').Base64
+
+interface Callback {
+  (coverToBytes: string | ArrayBuffer | null): void;
+}
+
+// Legacy code not optimised used to gather Spotify cover img in base64
+function toDataURL (url: string, callback: Callback) {
+  const xhRequest = new XMLHttpRequest()
+  xhRequest.onload = function () {
+    const reader = new FileReader()
+    reader.onloadend = function () {
+      callback(reader.result)
+    }
+    reader.readAsDataURL(xhRequest.response)
+  }
+  xhRequest.open('GET', url)
+  xhRequest.responseType = 'blob'
+  xhRequest.send()
+}
 
 export default {
   // Retrieve playlists from the current logged user
@@ -47,15 +66,17 @@ export default {
   },
   // Add new cover to a playlist
   async updatePlaylistCover (playlistId: string, coverUrl: string) {
-    const response = await axios.get(coverUrl, {
-      headers: { 'Content-Type': 'image/jpeg' }
-    })
-    console.log('image download', response)
-    const body = Base64.encode(response.data)
+    const response = await fetch(coverUrl).then(
+      res => res.text()
+    )
 
-    return request.put(`playlists/${playlistId}/images`, body, {
-      headers: { 'Content-Type': 'image/jpeg' }
-    })
+    const callback: Callback = (coverToBytes: string | ArrayBuffer | null) => {
+      const bytesNoMetadata = coverToBytes!.split(',')[1]
+      request.put(`playlists/${playlistId}/images`, bytesNoMetadata, {
+        headers: { 'Content-Type': 'image/jpeg' }
+      })
+    }
+    toDataURL(coverUrl, callback)
   },
   // Unfollow a specific playlist
   unfollowPlaylist (playlistId: string) {

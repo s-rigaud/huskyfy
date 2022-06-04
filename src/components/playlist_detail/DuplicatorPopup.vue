@@ -25,7 +25,7 @@ export default {
   name: 'DuplicatorPopup',
   props: {
     playlistId: String,
-    selectedGenreName: String,
+    selectedGenres: String,
     filteredTracks: Array
   },
   setup () {
@@ -42,17 +42,16 @@ export default {
       this.loadingPercentage = 1
       const newPlaylistId = await this.playlistsStore.createPlaylist(
         this.playlistId,
-        this.selectedGenreName,
+        this.selectedGenres,
         this.filteredTracks.length
       )
 
       this.loadingText = this.$t('playlist.new.cover')
       this.loadingPercentage = 33
-      /* await this.playlistsStore.updatePlaylistCover(
-        response.data.id,
-        "https://m.media-amazon.com/images/I/61iw4s61r1S._AC_SX425_.jpg"
-        //playlist.images[0].url
-      ); */
+      await this.playlistsStore.updatePlaylistCover(
+        newPlaylistId,
+        this.playlistsStore.playlists[this.playlistId].images[0].url
+      )
 
       this.loadingText = this.$t('playlist.new.tracks')
       this.loadingPercentage = 66
@@ -99,7 +98,7 @@ export default {
   stroke: rgba(255, 255, 255, 0.1);
   z-index: 1;
 }
-#get-to-new-playlist{
+#get-to-new-playlist {
   width: 100%;
 }
 </style>

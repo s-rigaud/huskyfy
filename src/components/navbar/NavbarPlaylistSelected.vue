@@ -11,10 +11,17 @@
         cover
       ></v-img>
       <div>
-        <h3>
-          {{ playlistsStore.playlists[playlistsStore.selectedPlaylistId].name }}
-          {{ getEmojiFromVisibility }}
-        </h3>
+        <div id="title">
+          <h3 style="margin-right: 5px">
+            {{ playlistsStore.playlists[playlistsStore.selectedPlaylistId].name }}
+          </h3>
+          <v-tooltip location="top">
+            <template v-slot:activator="{ props: tooltip }">
+              <h3 v-bind="tooltip">{{ getEmojiFromVisibility }}</h3>
+            </template>
+            <span>{{ gettextFromVisibility }}</span>
+          </v-tooltip>
+        </div>
         <p>
           {{
             playlistsStore.playlists[playlistsStore.selectedPlaylistId]
@@ -58,7 +65,8 @@
           {{ $t("playlist.set-public") }}
         </v-btn>
       </div>
-      <v-btn @click="exportPreview" variant="outlined">
+
+      <v-btn @click="exportPreview" variant="outlined" v-bind="tooltip">
         {{ $t("playlist.export-preview") }}
       </v-btn>
       <v-btn
@@ -118,6 +126,14 @@ export default {
       if (playlist.collaborative) return '🤝'
       if (playlist.public) return '📣'
       return '🔒'
+    },
+    gettextFromVisibility () {
+      const playlist =
+        this.playlistsStore.playlists[this.playlistsStore.selectedPlaylistId]
+
+      if (playlist.collaborative) return this.$t('playlist.collaborative')
+      if (playlist.public) return this.$t('playlist.public')
+      return this.$t('playlist.private')
     }
   },
   methods: {
@@ -152,6 +168,9 @@ export default {
 }
 </script>
 <style>
+#title {
+  display: inline-flex;
+}
 #header-blocks {
   display: flex;
   justify-content: space-between;

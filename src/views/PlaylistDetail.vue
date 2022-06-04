@@ -1,7 +1,14 @@
 <template>
-  <div id="playlist" v-if="playlists[playlistId] && playlists[playlistId].total > 0">
+  <div
+    id="playlist"
+    v-if="playlists[playlistId] && playlists[playlistId].total > 0"
+  >
     <!--Playlist duplication-->
-    <v-btn id="duplicate-playlist-button" v-if="filteredTracks.length > 1" @click="createNewPlaylist">
+    <v-btn
+      id="duplicate-playlist-button"
+      v-if="filteredTracks.length > 1"
+      @click="createNewPlaylist"
+    >
       {{ $t("playlist.duplicate") }}
     </v-btn>
 
@@ -69,7 +76,7 @@
     <DuplicatorPopup
       v-if="startDuplication"
       :playlistId="playlists[playlistId].id"
-      :selectedGenreName="selectedGenres[0]"
+      :selectedGenres="selectedGenres"
       :filteredTracks="filteredTracks"
     />
     <LoadMoreTracksPopup
@@ -182,7 +189,7 @@ export default {
       if (this.selectedGenres.length === 0) return this.resetFilters()
 
       this.filteredTracks = this.playlists[this.playlistId].tracks.filter((t) =>
-        this.selectedGenres.some(genre => t.genres.includes(genre))
+        this.selectedGenres.some((genre) => t.genres.includes(genre))
       )
     },
     filterTracksByPopularity (popularity) {
@@ -217,9 +224,13 @@ export default {
       })
 
       // Sampling
-      return genreMapping.slice(0, 15).map(
-        genre => ({ name: genre[0], value: genre[1], cap_name: this.capitalize(genre[0]) })
-      )
+      return genreMapping
+        .slice(0, 15)
+        .map((genre) => ({
+          name: genre[0],
+          value: genre[1],
+          cap_name: this.capitalize(genre[0])
+        }))
     },
     capitalize (string) {
       return string.charAt(0).toUpperCase() + string.slice(1)
@@ -313,5 +324,6 @@ export default {
   margin: 0px 3px;
   width: 20px;
 }
-#duplicate-playlist-button{}
+#duplicate-playlist-button {
+}
 </style>

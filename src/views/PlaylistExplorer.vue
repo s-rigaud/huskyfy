@@ -27,7 +27,6 @@
 import PlaylistCard from '@/components/PlaylistCard.vue'
 import { usePlaylistsStore } from '@/stores/playlists'
 import { useUserStore } from '@/stores/user'
-
 export default {
   name: 'PlaylistExplorer',
   components: { PlaylistCard },

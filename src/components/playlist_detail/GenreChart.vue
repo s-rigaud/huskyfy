@@ -31,13 +31,13 @@ export default {
     return {
       lastGenreSelected: false,
       lastClickedWasSelection: false,
-      series: this.genres.map(genre => genre.value),
+      series: this.genres.map((genre) => genre.value),
       chartOptions: {
         chart: {
           width: 380,
           type: 'donut'
         },
-        labels: this.genres.map(genre => genre.cap_name),
+        labels: this.genres.map((genre) => genre.cap_name),
         dataLabels: {
           enabled: false
         },
