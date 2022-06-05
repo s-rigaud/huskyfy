@@ -9,8 +9,8 @@ interface Callback {
   (base64cover: string): void;
 }
 
-// Legacy code not optimised used to gather Spotify cover img in base64
-function toDataURL (url: string, uploadCallback: Callback) {
+// Legacy code not optimized used to gather Spotify cover img in base64
+function getEncodedPictureFromURL (url: string, uploadCallback: Callback) {
   const xhRequest = new XMLHttpRequest()
   xhRequest.onload = function () {
     const reader = new FileReader()
@@ -53,7 +53,7 @@ export default {
     })
   },
   // Create new empty playlist
-  createPlaylist (name: string, public_: boolean, description: string, collaborative: boolean): Promise<AxiosResponse<SimplifiedSpotifyPlaylist, SimplifiedSpotifyPlaylist>> {
+  async createPlaylist (name: string, public_: boolean, description: string, collaborative: boolean): Promise<AxiosResponse<SimplifiedSpotifyPlaylist, SimplifiedSpotifyPlaylist>> {
     const userStore = useUserStore()
     const userId = userStore.id
 
@@ -65,18 +65,14 @@ export default {
     })
   },
   // Add new cover to a playlist
-  async updatePlaylistCover (playlistId: string, coverUrl: string) {
-    const response = await fetch(coverUrl).then(
-      res => res.text()
-    )
-
+  updatePlaylistCover (playlistId: string, coverUrl: string) {
     const callback: Callback = (base64cover: string) => {
       const bytesNoMetadata = base64cover.split(',')[1]
       request.put(`playlists/${playlistId}/images`, bytesNoMetadata, {
         headers: { 'Content-Type': 'image/jpeg' }
       })
     }
-    toDataURL(coverUrl, callback)
+    getEncodedPictureFromURL(coverUrl, callback)
   },
   // Unfollow a specific playlist
   unfollowPlaylist (playlistId: string) {

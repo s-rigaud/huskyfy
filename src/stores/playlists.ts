@@ -281,8 +281,8 @@ export const usePlaylistsStore = defineStore('playlists', {
       this.playlists[newPlaylistId].tracks = this.playlists[originalPlaylistId].tracks.filter(t => trackIds.includes(t.id))
       this.playlists[newPlaylistId].offset = offset
     },
-    async updatePlaylistCover (playlistId: string, coverUrl: string) {
-      await api.spotify.playlists.updatePlaylistCover(
+    updatePlaylistCover (playlistId: string, coverUrl: string) {
+      api.spotify.playlists.updatePlaylistCover(
         playlistId,
         coverUrl
       )
