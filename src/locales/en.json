@@ -1,12 +1,32 @@
 {
+    "about": {
+        "title": {
+            "description": "Horus playlist manager",
+            "connection": "Spotify connection and account access 🔑",
+            "process": "How it works ⚙️",
+            "creator": "Creator 👤"
+        },
+        "content": {
+            "description": "Horus is a small web project that aims to provide new functionalities when manipulating Spotify playlists. Right now, it is not possible to create sub-playlists on Spotify filtering by track genres or artists. Moreover, indie artists are not really promoted on the platform so Horus try to highlight their work.",
+            "connection": "This website is using well designed Spotify OAuth2 access account which allow the website to access your data safely. There is no data stored in any server so you are totally safe when browsing or exiting the website without signing out.",
+            "process": "Horus is using the really open Spotify API to gather genres and data about artists, genre and tracks of your playlists. Once done, the app tries to provide a nice interface for you to filter and create new playlists from previous ones easily.",
+            "creator1": "This website was created by",
+            "creator2": "as a side project during my studies. I hope you will find it useful ! If you find any bug or you want new functionalities do not hesitate to report it",
+            "creator3": "to me"
+        }
+    },
+    "footer": {
+        "built": "Built with ♥ by"
+    },
     "login": {
         "header": "Explore, duplicate, split and share your Spotify playlists easily with Horus",
         "connect": "Sign in with Spotify",
         "about": "Learn more about this website"
     },
-    "about": {},
-    "not-found": {
-        "404": "Page not found"
+    "me": "me",
+    "navbar": {
+        "logout": "Sign out",
+        "change-account": "Change account"
     },
     "playlist": {
         "public": "Public playlist 📣",
@@ -36,17 +56,26 @@
         "fully-loaded": "All artists, tracks and genres have been retrieved",
         "open-on-spotify": "Open on Spotify",
         "export-preview": "Export playlist preview 🖼️",
-        "no-tracks": "This playlist doesn't have any track now. Open the playlist on Spotify and try to add tracks to start seeing them here"
-    },
-    "footer": {
-        "built": "Built with ♥ by"
-    },
-    "navbar": {
-        "logout": "Sign out"
+        "no-tracks": "This playlist doesn't have any track now. Open the playlist on Spotify and try to add tracks to start seeing them here",
+        "delete": {
+            "delete": "Delete ",
+            "confirm-message": "Do you really want to delete this playlist from your library ?",
+            "agree": "Delete",
+            "disagree": "No"
+        }
     },
     "track": {
         "popular": "🔥 Popular artist",
-        "indie": "🌴 Indie artist"
-    },
-    "me": "me"
+        "indie": "🌴 Indie artist",
+        "filters": {
+            "popular": "🔥 Popular",
+            "indie": "🌴 Indie",
+            "no-filter": "No filter",
+            "name": "Filters",
+            "popularity": "Popularity",
+            "genres": "Genres"
+        },
+        "no-genre": "No genre provided",
+        "exclusive-filter": "Make selected genre exclusive"
+    }
 }

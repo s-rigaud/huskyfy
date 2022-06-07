@@ -10,6 +10,7 @@ export type UserState = {
   country: RemovableRef<string>;
   connected: RemovableRef<boolean>;
   locale: RemovableRef<string>;
+  wantsToChangeAccount: RemovableRef<boolean>;
 }
 
 // All infos about the user
@@ -22,7 +23,8 @@ export const useUserStore = defineStore('user', {
     mail: useStorage('mail', ''),
     country: useStorage('country', ''),
     connected: useStorage('connected', false),
-    locale: useStorage('locale', 'en')
+    locale: useStorage('locale', 'en'),
+    wantsToChangeAccount: useStorage('wantsToChangeAccount', false)
   } as UserState),
   actions: {
     reset () {
@@ -35,6 +37,7 @@ export const useUserStore = defineStore('user', {
       this.country = ''
       this.connected = false
       // Do not reset locale
+      // Do not reset wantsToChangeAccount
     }
   }
 })

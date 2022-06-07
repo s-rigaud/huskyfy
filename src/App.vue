@@ -1,17 +1,14 @@
 <template>
   <v-app>
     <NavbarComponent />
-    <v-main
-      id="main"
-      v-bind:class="{
-        'no-padding': true,
-        'small-padding-top': ['Explore', 'About'].includes(
-          $router.currentRoute.value.name
-        ),
-        'huge-padding-top':
-          $router.currentRoute.value.name === 'Explore playlist',
-      }"
-    >
+    <v-main id="main" v-bind:class="{
+      'no-padding': true,
+      'small-padding-top': ['Explore', 'About'].includes(
+        $router.currentRoute.value.name
+      ),
+      'huge-padding-top':
+        $router.currentRoute.value.name === 'Explore playlist',
+    }">
       <v-container id="container" fluid>
         <router-view />
       </v-container>
@@ -30,18 +27,6 @@ export default defineComponent({
 })
 </script>
 <style scoped>
-#container {
-  padding: 12px;
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  align-items: stretch;
-  align-content: space-between;
-  background-color: #f6e58d !important;
-  font-family: "Oswald" !important;
-  min-height: 100%;
-}
-
 @font-face {
   font-family: "Righteous";
   src: local("Righteous"),
@@ -53,12 +38,34 @@ export default defineComponent({
   src: local("Oswald"), url(./fonts/oswald/Oswald-Medium.ttf) format("truetype");
 }
 
+#container {
+  padding: 12px;
+  background-color: #907163 !important;
+  color: #dff9fb !important;
+  font-family: "Oswald" !important;
+  min-height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: stretch;
+  align-content: space-between;
+  justify-content: center;
+}
+
+#main {
+  background-color: #A33327 !important;
+  color: #dff9fb !important;
+}
+
 .no-padding {
   padding: 0 !important;
 }
+
 .small-padding-top {
   padding: 64px 0 0 0 !important;
 }
+
 .huge-padding-top {
   padding: 158px 0 0 0 !important;
 }

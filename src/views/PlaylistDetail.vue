@@ -1,60 +1,26 @@
 <template>
-  <div
-    id="playlist"
-    v-if="playlists[playlistId] && playlists[playlistId].total > 0"
-  >
-    <!--Playlist duplication-->
-    <v-btn
-      id="duplicate-playlist-button"
-      v-if="filteredTracks.length > 1"
-      @click="createNewPlaylist"
-    >
-      {{ $t("playlist.duplicate") }}
-    </v-btn>
-
+  <div id="playlist" v-if="playlists[playlistId] && playlists[playlistId].total > 0">
     <div id="content" style="display: flex">
       <div id="left-part">
         <!-- Charts -->
         <div id="charts">
-          <IndieChart
-            v-if="filteredTracks.length > 0"
-            :indiePercentage="indiePercentage"
-            :image="getImage(indiePercentage)"
-          />
-          <GenreChart
-            v-if="filteredTracks.length > 0"
-            :genres="getSortedGenres()"
-          />
+          <IndieChart v-if="filteredTracks.length > 0" :indiePercentage="indiePercentage"
+            :image="getImage(indiePercentage)" />
+          <GenreChart v-if="filteredTracks.length > 0" :genres="getSortedGenres()" />
         </div>
 
         <div id="filters">
           <h3>Filters</h3>
-          <v-select
-            v-model="selectedPopularity"
-            label="Popularity"
-            :items="popularities"
-            variant="outlined"
-            density="comfortable"
-          ></v-select>
+          <v-select v-model="selectedPopularity" :label="$t('track.filters.popularity')" :items="popularities" item-title="name"
+            item-value="value" variant="outlined" density="comfortable"></v-select>
 
-          <v-select
-            v-model="selectedGenres"
-            label="Genres"
-            :items="getSortedGenres()"
-            item-title="cap_name"
-            item-value="name"
-            variant="outlined"
-            density="comfortable"
-            multiple
-            style="text-transform: capitalize"
-          ></v-select>
+          <v-select v-model="selectedGenres" :label="$t('track.filters.genres')" :items="getSortedGenres()" item-title="cap_name"
+            item-value="name" variant="outlined" density="comfortable" multiple style="text-transform: capitalize">
+          </v-select>
 
-          <v-switch
-            v-model="isExclusiveGenres"
-            label="Make selected genres exclusive"
-          ></v-switch>
+          <v-switch v-model="isExclusiveGenres" :label="$t('track.exclusive-filter')"></v-switch>
 
-          <v-btn @click="resetFilters" v-if="selectedGenres.length !== 0">
+          <v-btn @click="resetFilters" v-if="selectedGenres.length !== 0 || selectedPopularity != 'No filter'">
             {{ $t("playlist.reset-filters") }}
           </v-btn>
         </div>
@@ -63,33 +29,17 @@
       <div id="right-part" style="width: 100%">
         <h2>Placeholder title - {{ filteredTracks.length }}</h2>
         <div id="tracks" v-if="filteredTracks.length > 0">
-          <TrackCard
-            v-for="track of filteredTracks"
-            :key="track.id"
-            :id="track.id"
-            :name="track.name"
-            :image="track.album.images[0].url"
-            :artists="track.artists"
-            :genres="track.genres"
-            :isIndie="track.isIndie"
-            :trackURI="track.uri"
-          />
+
+          <TrackCard v-for="track of filteredTracks" :key="track.id" :id="track.id" :name="track.name"
+            :image="track.album.images[0].url" :artists="track.artists" :genres="track.genres" :isIndie="track.isIndie"
+            :trackURI="track.uri" />
+
         </div>
       </div>
     </div>
 
-    <DuplicatorPopup
-      v-if="startDuplication"
-      :playlistId="playlists[playlistId].id"
-      :selectedGenres="selectedGenres"
-      :filteredTracks="filteredTracks"
-    />
-    <LoadMoreTracksPopup
-      v-if="isHugePlaylist"
-      :playlist="playlists[playlistId]"
-      :trackRequestLimit="trackRequestLimit"
-      @allTracksLoaded="resetFilters"
-    />
+    <LoadMoreTracksPopup v-if="isHugePlaylist" :playlist="playlists[playlistId]" :trackRequestLimit="trackRequestLimit"
+      @allTracksLoaded="resetFilters" />
   </div>
   <div id="no-tracks" v-else>
     <h1>{{ $t("playlist.no-tracks") }}</h1>
@@ -101,7 +51,6 @@
 </template>
 
 <script>
-import DuplicatorPopup from '@/components/playlist_detail/DuplicatorPopup.vue'
 import GenreChart from '@/components/playlist_detail/GenreChart.vue'
 import IndieChart from '@/components/playlist_detail/IndieChart.vue'
 import LoadMoreTracksPopup from '@/components/playlist_detail/LoadMoreTracksPopup.vue'
@@ -119,7 +68,6 @@ export default {
     }
   },
   components: {
-    DuplicatorPopup,
     LoadMoreTracksPopup,
     GenreChart,
     IndieChart,
@@ -130,7 +78,7 @@ export default {
     const playlistsStore = usePlaylistsStore()
 
     // Shorthand
-    const { playlists } = storeToRefs(playlistsStore)
+    const { filteredTracks, selectedGenres, playlists } = storeToRefs(playlistsStore)
     const { downloadPlaylistTracks } = playlistsStore
 
     const currentUserUsername = userStore.username
@@ -139,30 +87,31 @@ export default {
       playlistsStore,
       playlists,
       downloadPlaylistTracks,
-      currentUserUsername
+      currentUserUsername,
+      filteredTracks,
+      selectedGenres
     }
   },
   async mounted () {
     this.playlistsStore.selectedPlaylistId = this.playlistId
-    console.log(this.playlists[this.playlistId].total)
+    // this.playlistsStore.$subscribe(this.watchForGenreUpdate)
+
     await this.loadFirstTracks()
-  },
-  beforeUnmount () {
-    this.playlistsStore.selectedPlaylistId = null
+    this.filteredTracks = this.playlists[this.playlistId].tracks
   },
   data () {
     return {
       trackRequestLimit: 150,
 
-      filteredTracks: [],
-
-      startDuplication: false,
       isHugePlaylist: false,
 
-      popularities: ['Indie', 'Popular', 'No filter'],
+      popularities: [
+        { name: this.$t('track.filters.indie'), value: 'Indie' },
+        { name: this.$t('track.filters.popular'), value: 'Popular' },
+        { name: this.$t('track.filters.no-filter'), value: 'No filter' }
+      ],
       selectedPopularity: 'No filter',
 
-      selectedGenres: [],
       isExclusiveGenres: false
     }
   },
@@ -192,15 +141,17 @@ export default {
       this.resetFilters()
     },
     filterTracksByGenres () {
-      if (this.selectedGenres.length === 0) return this.resetFilters()
+      const genres = this.selectedGenres
+      if (genres.length === 0) return this.resetFilters()
 
+      const currentPlaylistTracks = this.playlists[this.playlistId].tracks
       if (this.isExclusiveGenres) {
-        this.filteredTracks = this.playlists[this.playlistId].tracks.filter(
-          (t) => this.selectedGenres.every((genre) => t.genres.includes(genre))
+        this.filteredTracks = currentPlaylistTracks.filter(
+          (t) => genres.every((genre) => t.genres.includes(genre))
         )
       } else {
-        this.filteredTracks = this.playlists[this.playlistId].tracks.filter(
-          (t) => this.selectedGenres.some((genre) => t.genres.includes(genre))
+        this.filteredTracks = currentPlaylistTracks.filter(
+          (t) => genres.some((genre) => t.genres.includes(genre))
         )
       }
     },
@@ -212,11 +163,9 @@ export default {
         (t) => t.isIndie === isIndieSelected
       )
     },
-    createNewPlaylist () {
-      this.startDuplication = true
-    },
     resetFilters () {
       this.selectedGenres = []
+      this.selectedPopularity = 'No filter'
       this.filteredTracks = this.playlists[this.playlistId].tracks
     },
     openPlaylistOnSpotify () {
@@ -275,14 +224,13 @@ export default {
     selectedPopularity (newSelectedPopularity) {
       this.filterTracksByPopularity(newSelectedPopularity)
     },
+    isExclusiveGenres () {
+      this.filterTracksByGenres()
+    },
     selectedGenres (newValue, oldValue) {
-      // Do not filter on component mount
       if (oldValue.length !== 0 || newValue.length !== 0) {
         this.filterTracksByGenres()
       }
-    },
-    isExclusiveGenres () {
-      this.filterTracksByGenres()
     }
   }
 }
@@ -296,12 +244,14 @@ export default {
   margin: 0 5px;
   min-width: 380px !important;
 }
+
 #playlist {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
   width: 100%;
 }
+
 #charts {
   display: flex;
   flex-direction: column;
@@ -310,6 +260,7 @@ export default {
   align-items: center;
   min-height: 613px;
 }
+
 #tracks {
   width: 100%;
   display: flex;
@@ -319,6 +270,7 @@ export default {
   align-items: stretch;
   align-content: center;
 }
+
 #no-tracks {
   width: 100%;
   text-align: center;
@@ -328,11 +280,13 @@ export default {
 #open-spotify {
   background-color: white;
 }
+
 #open-spotify .v-btn__content {
   display: flex;
   flex-direction: row;
   align-items: center;
 }
+
 #open-spotify .v-btn__content img {
   margin: 0px 3px;
   width: 20px;

@@ -1,44 +1,32 @@
 <template>
   <div id="about-content">
-    <h1>Horus playlist manager</h1>
-    <p>
-      Horus is a small web project that aims to provide new functionalities when
-      manipulating Spotify playlists. Right now, it is not possible to create
-      sub-playlists on Spotify filtering by track genres or artists. Moreover,
-      indie artists are not really promoted on the platform so Horus try to
-      highlight their work.
-    </p>
+    <div id="text">
+      <div style="display: inline-flex">
+        <v-img width="40" :src="horus" alt="Horus Image"></v-img>
+        <h1 style="margin-right: 10px">{{ $t("about.title.description") }}</h1>
+      </div>
+      <p> {{ $t("about.content.description") }} </p>
 
-    <h2>Spotify connection and account access</h2>
-    <p>
-      This website is using well designed Spotify OAuth2 access account which
-      allow the website to access your data safely. There is no data stored in
-      any server so you are totally safe when browsing or exiting the website
-      without signing out.
-    </p>
+      <h2>{{ $t("about.title.connection") }}</h2>
+      <p>{{ $t("about.content.connection") }} </p>
 
-    <h2>How it works</h2>
-    <p>
-      Horus is using the really open Spotify API to gather genres and data about
-      artists, genre and tracks of your playlists. Once done, the app tries to
-      provide a nice interface for you to filter and create new playlists from
-      previous ones easily.
-    </p>
+      <h2>{{ $t("about.title.process") }}</h2>
+      <p> {{ $t("about.content.process") }} </p>
 
-    <h2>Creator</h2>
-    <p>
-      This website was created by
-      <a href="https://github.com/s-rigaud" target="_blank">me</a>
-      as a side project during my studies. I hope you will find it useful ! If
-      you find any bug or you want new functionalities do not hesitate to report
-      it
-      <a
-        href="mailto:horus-project-bugtracker@gmail.com?subject=Horus%20improvement%20request"
-      >
-        to me
-      </a>
-      😃
-    </p>
+      <h2>{{ $t("about.title.creator") }}</h2>
+      <p>
+        {{ $t("about.content.creator1") }}
+        <a href="https://github.com/s-rigaud" target="_blank">{{ $t("me") }}</a>
+        {{ $t("about.content.creator2") }}
+        <a href="mailto:horusproject.bugtracker@gmail.com?subject=Horus%20improvement%20request">
+          {{ $t("about.content.creator3") }}
+        </a>
+        😃
+      </p>
+    </div>
+    <a href="https://github.com/s-rigaud" target="_blank">
+      <v-img width="70" :src="githubImg" alt="Github Image"></v-img>
+    </a>
   </div>
 
   <v-btn id="exit-button" @click="backToPreviousPage">X</v-btn>
@@ -47,6 +35,14 @@
 <script>
 export default {
   name: 'AboutView',
+  computed: {
+    githubImg () {
+      return require('@/assets/github.png')
+    },
+    horus () {
+      return require('@/assets/oeil-dhorus.png')
+    }
+  },
   methods: {
     backToPreviousPage () {
       this.$router.go(-1)
@@ -56,15 +52,50 @@ export default {
 </script>
 <style scoped>
 #about-content {
-  margin: 0% 25%;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
+
+#text {
+  margin: auto;
+  max-width: 700px;
+  text-align: justify;
+}
+
 #exit-button {
   width: 50px;
   height: 66px;
   font-size: larger;
   border-radius: 50%;
-  position: absolute;
-  top: 10px;
+  position: fixed;
+  top: 70px;
   right: 10px;
+}
+
+h1 {
+  font-size: xxx-large;
+}
+p {
+  margin-bottom: 20px;
+}
+a{
+  text-decoration: none;
+  color: #F0932B
+}
+
+@media (max-width: 992px) {
+  h1{
+    font-size: xx-large;
+  }
+  h2 {
+    font-size: large;
+  }
+
+  #exit-button {
+    display: none;
+  }
 }
 </style>

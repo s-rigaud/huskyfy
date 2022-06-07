@@ -1,6 +1,7 @@
 <template>
   <div id="full-page">
     <h1>{{ $t("playlist.header") }}</h1>
+
     <div id="playlists">
       <PlaylistCard
         v-for="playlist in playlistsStore.playlists"

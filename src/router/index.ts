@@ -37,8 +37,9 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
-  scrollBehavior () {
-    document.getElementById('app')!.scrollIntoView({ behavior: 'smooth' })
+  scrollBehavior() {
+    // always scroll to top
+    return { top: 0, behavior: 'smooth' }
   }
 })
 
@@ -68,11 +69,13 @@ router.beforeEach(async function (to, from, next) {
       isPremium: data.product === 'premium',
       mail: data.email,
       country: data.country,
-      connected: true
+      connected: true,
+      wantsToChangeAccount: false
     })
     next({ name: 'Explore' })
   } else if (to.name !== 'Explore playlist') {
-    usePlaylistsStore().selectedPlaylistId = null
+    const playlistsStore = usePlaylistsStore()
+    playlistsStore.$patch({ selectedPlaylistId: null, filteredTracks: [], selectedGenres: [] })
     next()
   } else {
     // Default routing

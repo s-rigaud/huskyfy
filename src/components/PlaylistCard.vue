@@ -1,11 +1,6 @@
 <template>
   <v-card flat @click="displayDetails" class="playlist-card">
-    <v-img
-      v-bind:src="images[0].url"
-      :lazy-src="loadingCover"
-      height="400px"
-      cover
-    ></v-img>
+    <v-img v-bind:src="images[0].url" :lazy-src="loadingCover" height="400px" cover></v-img>
 
     <v-card-title class="text-truncate"> {{ name }} </v-card-title>
     <v-card-subtitle style="padding: 0">
@@ -14,10 +9,9 @@
     <v-card-subtitle style="padding: 0">
       <p v-if="collaborative">{{ $t("playlist.collaborative") }}</p>
       <p v-else-if="public">{{ $t("playlist.public") }}</p>
-      <p v-else-if="!public && owner === 'me'">
-        {{ $t("playlist.private") }}
-      </p>
+      <p v-else> {{ $t("playlist.private") }} </p>
     </v-card-subtitle>
+    <v-img width="30" :src="horus" alt="Horus Image" class="horus-img"></v-img>
   </v-card>
 </template>
 
@@ -35,6 +29,9 @@ export default {
   computed: {
     loadingCover () {
       return require('@/assets/default_cover.jpg')
+    },
+    horus () {
+      return require('@/assets/oeil-dhorus.png')
     }
   },
   methods: {
@@ -59,23 +56,50 @@ export default {
   background-color: initial;
   margin: 0px 3px 85px 3px;
   background-color: initial;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  color: #dff9fb !important;
 }
+
 .playlist-card .v-img .v-img__img--cover {
   transition: filter 0.2s ease-in-out;
   filter: brightness(1);
 }
+
 .playlist-card:hover .v-img__img--cover {
-  filter: brightness(1.2);
+  filter: brightness(0.8);
 }
+
 .playlist-card .v-card__overlay {
   height: 322px;
 }
+
 .playlist-card .v-card-title {
   padding: 0;
   letter-spacing: 0;
   white-space: nowrap;
 }
+
+.playlist-card .v-card__overlay {
+  opacity: 0.1;
+  transition: 0.5s opacity ease;
+}
+
 .playlist-card:hover .v-card__overlay {
   opacity: 0.2;
+}
+
+/* Horus symbol on cards */
+.horus-img {
+  position: relative;
+  opacity: 0;
+  bottom: 25px;
+  left: 200px;
+  transition: 0.5s opacity linear;
+}
+
+.playlist-card:hover .horus-img {
+  opacity: 1;
 }
 </style>

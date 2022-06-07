@@ -20,7 +20,6 @@ export default {
       const response: AxiosResponse<SpotifyArtistResponse, SpotifyArtistResponse> = await request.get('artists', { params: { ids } })
       artists.push(...response.data.artists)
     }
-    console.log(artists)
     return artists
   }
 }

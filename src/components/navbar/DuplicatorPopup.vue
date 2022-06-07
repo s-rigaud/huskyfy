@@ -24,9 +24,7 @@ import { usePlaylistsStore } from '@/stores/playlists'
 export default {
   name: 'DuplicatorPopup',
   props: {
-    playlistId: String,
-    selectedGenres: Array,
-    filteredTracks: Array
+    playlistId: String
   },
   setup () {
     const playlistsStore = usePlaylistsStore()
@@ -42,8 +40,8 @@ export default {
       this.loadingPercentage = 1
       const newPlaylistId = await this.playlistsStore.createPlaylist(
         this.playlistId,
-        this.selectedGenres,
-        this.filteredTracks.length
+        this.playlistsStore.selectedGenres,
+        this.playlistsStore.filteredTracks.length
       )
 
       this.loadingText = this.$t('playlist.new.cover')
@@ -58,7 +56,7 @@ export default {
       await this.playlistsStore.addTracksToPlaylist(
         this.playlistId,
         newPlaylistId,
-        this.filteredTracks.map((t) => t.uri)
+        this.playlistsStore.filteredTracks.map((t) => t.uri)
       )
 
       this.loadingText = this.$t('playlist.new.done')

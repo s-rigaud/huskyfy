@@ -1,4 +1,5 @@
 import { useAuthStore } from '@/stores/auth'
+import { useUserStore } from '@/stores/user'
 import axios, { AxiosResponse } from 'axios'
 import { SpotifyAuthResponse } from '../model'
 // eslint-disable-next-line
@@ -16,8 +17,8 @@ export default {
   getOAuthUrl () {
     const BASE_URL = 'https://accounts.spotify.com/authorize'
     let oauthUrl = `${BASE_URL}?response_type=code&client_id=${CLIENT_ID}&scope=${SCOPES}&redirect_uri=${REDIRECT_URL}`
-    const FORCE_OAUTH_MANUAL_VALIDATION = false
-    if (FORCE_OAUTH_MANUAL_VALIDATION) {
+    const FORCE_OAUTH_MANUAL_CONNEXION = useUserStore().wantsToChangeAccount
+    if (FORCE_OAUTH_MANUAL_CONNEXION) {
       oauthUrl += `&show_dialog=${true}`
     }
     return oauthUrl
@@ -57,7 +58,7 @@ export default {
       data: `grant_type=refresh_token&refresh_token=${authStore.refreshToken}`
     }).then(function ({ data }: AxiosResponse<SpotifyAuthResponse, SpotifyAuthResponse>) {
       return data.access_token
-    }).catch(function (err) {
+    }).catch(function (err: Error) {
       console.log('Error while fetching new access token', err)
     })
   }

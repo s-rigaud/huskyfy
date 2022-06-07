@@ -1,52 +1,84 @@
 {
-    "login": {
-        "header": "Explorez, dupliquez, divisez et partagez vos playlists Spotify facilement avec Horus",
-        "connect": "Se connecter à Spotify",
-        "about": "En apprendre plus sur ce site"
-    },
-    "about": {},
-    "not-found": {
-        "404": "Page non trouvée"
-    },
-    "playlist": {
-        "public": "Playlist publique📣",
-        "collaborative": "Playlist collaborative 🤝",
-        "private": "Playlist privée 🔒",
-        "reset-filters": "Réinitialiser les filtres",
-        "duplicate": "Créer une nouvelle playlist avec les titres actuels",
-        "unfollow": "Supprimer de la bibliothèque",
-        "set-private": "Rendre privée 🔒",
-        "set-public": "Rendre publique 📣",
-        "next": "Voir la nouvelle playlist",
-        "load-more-playlists": "Charger plus de playlists",
-        "header": "Commencez à parcourir vos playlists pour recueillir des données utiles à leur sujet, les divisez par genre et bien plus encore.",
-        "created-by": "Créée par",
-        "your-music": {
-            "name": "Titres likés",
-            "description": "Playlist Spotify avec tous les titres likés"
-        },
-        "new": {
-            "create": "Création de la nouvelle playlist",
-            "cover": "Changement de l'image de couverture",
-            "tracks": "Ajout des titres musicaux",
-            "done": "Fini"
-        },
-        "load-more-warning": "Votre playlist contient plus de {limit} titres, voulez-vous tous les charger ?",
-        "load-more-button": "Charger tous les titres",
-        "fully-loaded": "Tous les artistes, les titres et les genres ont pu être récupérés",
-        "open-on-spotify": "Ouvrir dans Spotify",
-        "export-preview": "Sauvegarder un aperçu 🖼️",
-        "no-tracks": "Cette playlist n'a pas de titres pour le moment. Ouvrez la playlist sur Spotify et essayez d'ajouter des titres pour commencer à les voir apparaître ici."
-    },
-    "footer": {
-        "built": "Créé avec ♥ par"
-    },
-    "navbar": {
-        "logout": "Déconnexion"
-    },
-    "track": {
-        "popular": "🔥 Artiste populaire",
-        "indie": "🌴 Artiste Indé"
-    },
-    "me": "moi"
+	"about": {
+		"title": {
+			"description": "Horus playlist manager",
+			"connection": "Connexion et accès au compte Spotify 🔑",
+			"process": "Comment ça marche ⚙️",
+			"creator": "Créateur 👤"
+		},
+		"content": {
+			"description": "Horus est un petit site web qui vise à fournir de nouvelles fonctionnalités en manipulant des playlists Spotify. Actuellement, il n'est pas possible de créer des sous-playlists sur Spotify en filtrant par genres musicaux ou par artistes. Horus essaie aussi de mettre en avant les artistes indépendants",
+			"connection": "Horus utilise la méthode OAuth2 fournie par Spotify qui permetd'accéder à vos données Spotify en toute sécurité. Aucune donnée n'est stockée sur un serveur, vous êtes donc totalement en sécurité lorsque vous naviguez ou quittez le site sans vous déconnecter.",
+			"process": "Horus utilise l'API de Spotify pour rassembler les genres et les données sur les artistes, le genre et les titres de vos playlists. L'application essaie ensuite de fournir une interface agréable pour vous permettre de filtrer et de créer facilement de nouvelles playlists à partir de celles déjà existantes.",
+			"creator1": "Ce site a été créé par",
+			"creator2": "comme un projet personnel pendant mes études. J'espère que vous le trouverez utile ! Si vous trouvez un bug ou si vous voulez de nouvelles fonctionnalités,",
+			"creator3": "n'hésitez pas me joindre ici"
+		}
+	},
+	"footer": {
+		"built": "Créé avec ♥ par"
+	},
+	"login": {
+		"header": "Explorez, dupliquez, divisez et partagez vos playlists Spotify facilement avec Horus",
+		"connect": "Se connecter à Spotify",
+		"about": "En apprendre plus sur ce site"
+	},
+	"me": "moi",
+	"navbar": {
+		"logout": "Déconnexion",
+		"change-account": "Changer de compte"
+	},
+	"not-found": {
+		"404": "Page non trouvée"
+	},
+	"playlist": {
+		"public": "Playlist publique📣",
+		"collaborative": "Playlist collaborative 🤝",
+		"private": "Playlist privée 🔒",
+		"reset-filters": "Réinitialiser les filtres",
+		"duplicate": "Créer une nouvelle playlist avec les titres actuels",
+		"unfollow": "Supprimer de la bibliothèque 🗑️",
+		"set-private": "Rendre privée 🔒",
+		"set-public": "Rendre publique 📣",
+		"next": "Voir la nouvelle playlist",
+		"load-more-playlists": "Charger plus de playlists",
+		"header": "Parcourez votre bibliothèque Spotify pour créer de nouvelles playlists",
+		"created-by": "Créée par",
+		"your-music": {
+			"name": "Titres likés",
+			"description": "Playlist Spotify avec tous les titres likés"
+		},
+		"new": {
+			"create": "Création de la nouvelle playlist",
+			"cover": "Changement de l'image de couverture",
+			"tracks": "Ajout des titres musicaux",
+			"done": "Fini"
+		},
+		"load-more-warning": "Votre playlist contient plus de {limit} titres, voulez-vous tous les charger ?",
+		"load-more-button": "Charger tous les titres",
+		"fully-loaded": "Tous les artistes, les titres et les genres ont pu être récupérés",
+		"open-on-spotify": "Ouvrir dans Spotify",
+		"export-preview": "Sauvegarder un aperçu 🖼️",
+		"no-tracks": "Cette playlist n'a pas de titres pour le moment. Ouvrez la playlist sur Spotify et essayez d'ajouter des titres pour commencer à les voir apparaître ici.",
+		"delete": {
+			"delete": "Supprimer ",
+			"confirm-message": "Voulez vous vraiment supprimer cette playlist de votre bibliothèque ?",
+			"agree": "Supprimer",
+			"disagree": "Non"
+		}
+	},
+	"track": {
+		"popular": "🔥 Artiste populaire",
+		"indie": "🌴 Artiste Indé",
+		"filters": {
+			"popular": "🔥 Populaire",
+			"indie": "🌴 Indé",
+			"no-filter": "Pas de filtre",
+			"name": "Filtres",
+			"popularity": "Popularité",
+			"genres": "Genres"
+		},
+		"no-genre": "Pas de genre",
+		"exclusive-filter": "Rendre la sélection exclusive"
+	}
 }

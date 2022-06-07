@@ -1,20 +1,16 @@
 <template>
-  <div v-if="playlistsStore.selectedPlaylistId != null" id="header-blocks">
+  <div v-if="playlistsStore.selectedPlaylistId != null && playlistsStore.playlists[playlistsStore.selectedPlaylistId]"
+    id="header-blocks">
     <div id="playlist-info">
-      <v-img
-        v-bind:src="
-          playlistsStore.playlists[playlistsStore.selectedPlaylistId].images[0]
-            .url
-        "
-        id="playlist-image"
-        lazy-src="https://picsum.photos/id/11/90/90"
-        cover
-      ></v-img>
+      <v-img v-bind:src="
+        playlistsStore.playlists[playlistsStore.selectedPlaylistId].images[0]
+          .url
+      " id="playlist-image" lazy-src="https://picsum.photos/id/11/90/90" cover></v-img>
       <div>
         <div id="title">
           <h3 style="margin-right: 5px">
             {{
-              playlistsStore.playlists[playlistsStore.selectedPlaylistId].name
+                playlistsStore.playlists[playlistsStore.selectedPlaylistId].name
             }}
           </h3>
           <v-tooltip location="top">
@@ -26,8 +22,8 @@
         </div>
         <p>
           {{
-            playlistsStore.playlists[playlistsStore.selectedPlaylistId]
-              .description
+              playlistsStore.playlists[playlistsStore.selectedPlaylistId]
+                .description
           }}
         </p>
         <p style="opacity: 0.5">
@@ -36,31 +32,22 @@
       </div>
     </div>
 
-    <div
-      style="
+    <div style="
         position: fixed;
         right: 0;
         bottom: 0;
         margin-top: 5px;
         padding: 3px;
         display: flex;
-      "
-    >
-      <div
-        id="update-playlist-privacy"
-        v-if="
-          userOwnsPlaylist &&
-          !playlistsStore.playlists[playlistsStore.selectedPlaylistId]
-            .collaborative
-        "
-      >
-        <v-btn
-          @click="setPlaylistPrivate"
-          v-if="
-            playlistsStore.playlists[playlistsStore.selectedPlaylistId].public
-          "
-          variant="outlined"
-        >
+      ">
+      <div id="update-playlist-privacy" v-if="
+        userOwnsPlaylist &&
+        !playlistsStore.playlists[playlistsStore.selectedPlaylistId]
+          .collaborative
+      ">
+        <v-btn @click="setPlaylistPrivate" v-if="
+          playlistsStore.playlists[playlistsStore.selectedPlaylistId].public
+        " variant="outlined">
           {{ $t("playlist.set-private") }}
         </v-btn>
         <v-btn v-else @click="setPlaylistPublic" variant="outlined">
@@ -68,14 +55,15 @@
         </v-btn>
       </div>
 
+      <v-btn id="duplicate-playlist-button" variant="outlined"
+        v-if="playlistsStore.playlists[playlistsStore.selectedPlaylistId].tracks.length > 1" @click="createNewPlaylist">
+        {{ $t("playlist.duplicate") }}
+      </v-btn>
+
       <v-btn @click="exportPreview" variant="outlined" v-bind="tooltip">
         {{ $t("playlist.export-preview") }}
       </v-btn>
-      <v-btn
-        @click="openPlaylistOnSpotify"
-        id="open-spotify-playlist-button"
-        variant="outlined"
-      >
+      <v-btn @click="openPlaylistOnSpotify" id="open-spotify-playlist-button" variant="outlined">
         {{ $t("playlist.open-on-spotify") }}
         <v-img width="25" :src="spotifyLogo" alt="Spotify Logo" />
       </v-btn>
@@ -87,40 +75,42 @@
           </v-btn>
         </template>
 
+        <!-- DELETE MODAL -->
         <v-card>
           <v-card-title class="text-h5">
-            Delete '{{
-              playlistsStore.playlists[playlistsStore.selectedPlaylistId].name
-            }}'
+            {{ $t('playlist.delete.delete') }}
+            '{{ playlistsStore.playlists[playlistsStore.selectedPlaylistId].name }}'
           </v-card-title>
           <v-card-text>
-            Do you really want to delete this playlist from your library ?
+            {{ $t('playlist.delete.confirm-message') }}
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn
-              color="green darken-1"
-              text
-              @click="isDeleteModalOpen = false"
-            >
-              No
+            <v-btn color="green darken-1" text @click="isDeleteModalOpen = false">
+              {{ $t('playlist.delete.disagree') }}
             </v-btn>
-            <v-btn color="red darken-1" text @click="unfollowPlaylist">
-              Delete
+            <v-btn v-if="!waitingForDeletion" color="red darken-1" text @click="unfollowPlaylist">
+              {{ $t('playlist.delete.agree') }}
             </v-btn>
+            <v-progress-circular v-else indeterminate color="red"></v-progress-circular>
           </v-card-actions>
         </v-card>
       </v-dialog>
     </div>
   </div>
+
+  <DuplicatorPopup v-if="startDuplication"
+    :playlistId="playlistsStore.playlists[playlistsStore.selectedPlaylistId].id" />
 </template>
 
 <script>
+import DuplicatorPopup from '@/components/navbar/DuplicatorPopup.vue'
 import { usePlaylistsStore } from '@/stores/playlists'
 import { useUserStore } from '@/stores/user'
 
 export default {
   name: 'NavbarPlaylistSelected',
+  components: { DuplicatorPopup },
   setup () {
     const userStore = useUserStore()
     const playlistsStore = usePlaylistsStore()
@@ -132,7 +122,9 @@ export default {
   data () {
     return {
       isDeleteModalOpen: false,
-      tooltip: null
+      startDuplication: false,
+      tooltip: null,
+      waitingForDeletion: false
     }
   },
   computed: {
@@ -182,11 +174,16 @@ export default {
     exportPreview () {
       alert('Preview no available right now')
     },
+    createNewPlaylist () {
+      this.startDuplication = true
+    },
     async unfollowPlaylist () {
       this.isDeleteModalOpen = false
+      this.waitingForDeletion = true
       const toDeletePlaylistId = this.playlistsStore.selectedPlaylistId
       await this.playlistsStore.unfollowPlaylist(toDeletePlaylistId)
       this.playlistsStore.selectedPlaylistId = null
+      this.waitingForDeletion = false
       this.$router.push({ name: 'Explore' })
     },
     async setPlaylistPublic () {
@@ -208,6 +205,7 @@ export default {
 #title {
   display: inline-flex;
 }
+
 #header-blocks {
   display: flex;
   justify-content: space-between;
@@ -215,13 +213,16 @@ export default {
   border-top: 2px #ccc solid;
   margin: 5px;
   width: 100%;
+  transition: 55s all ease;
 }
+
 #playlist-info {
   display: flex;
   flex-direction: row;
   margin-bottom: 10px;
   max-height: 72px;
 }
+
 #playlist-image {
   width: 70px !important;
   max-width: 70px !important;
@@ -229,11 +230,13 @@ export default {
   max-height: 70px !important;
   margin: 1px 10px 1px 1px;
 }
+
 #open-spotify-playlist-button .v-btn__content {
   display: flex;
   flex-direction: row;
   align-items: center;
 }
+
 #open-spotify-playlist-button .v-btn__content img {
   margin: 0px 3px;
   width: 20px;

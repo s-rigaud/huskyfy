@@ -1,12 +1,7 @@
 <template>
-  <v-app-bar
-    v-if="userStore.connected"
-    fixed
-    color="white"
-    style="font-family: 'Righteous'"
-  >
-    <router-link id="explore" to="/explore" style="height: inherit">
-      <img id="logo" :src="logo" alt="" style="height: 100%" />
+  <v-app-bar v-if="userStore.connected" fixed flat style="font-family: 'Righteous'">
+    <router-link id="explore" to="/explore">
+      <img id="logo" :src="logo" alt="Horus logo" />
     </router-link>
 
     <v-spacer></v-spacer>
@@ -14,27 +9,20 @@
     <v-menu open-on-hover transition="slide-y-transition">
       <template v-slot:activator="{ props }">
         <div id="user-info" v-bind="props">
-          <h3 style="margin-right: 10px">
-            {{ userStore.username }}
-          </h3>
-          <v-badge content="🎵" color="warning">
+          <h3 id="profile-name"> {{ userStore.username }} </h3>
+          <v-badge content="🎵" color="#CCA04F">
             <v-avatar style="align-items: initial">
-              <v-img
-                v-bind:src="this.userStore.profilePicture"
-                alt="Profile picture"
-              ></v-img>
+              <v-img v-bind:src="this.userStore.profilePicture" alt="Profile picture"></v-img>
             </v-avatar>
           </v-badge>
         </div>
       </template>
 
-      <v-btn
-        id="logout-button"
-        @click="logout"
-        color="error"
-        variant="outlined"
-      >
+      <v-btn id="logout-button" @click="logout" color="error" variant="outlined">
         {{ $t("navbar.logout") }}
+      </v-btn>
+      <v-btn id="change-account-button" @click="logoutAndChangeAccount" color="error" variant="outlined">
+        {{ $t("navbar.change-account") }}
       </v-btn>
     </v-menu>
 
@@ -88,13 +76,30 @@ export default {
       this.authStore.reset()
       this.playlistsStore.selectedPlaylistId = null
       this.$router.push({ name: 'LoginView' })
+    },
+    logoutAndChangeAccount () {
+      this.userStore.wantsToChangeAccount = true
+      // wantsToChangeAccount is not reset
+      this.userStore.reset()
+      this.authStore.reset()
+      this.playlistsStore.selectedPlaylistId = null
+      this.$router.push({ name: 'LoginView' })
     }
   }
 }
 </script>
 <style>
+header {
+  background-color: #A33327 !important;
+  color: #dff9fb !important;
+  letter-spacing: 1px !important;
+}
+
+#profile-name {
+  margin-right: 10px
+}
+
 #logo {
-  min-width: 100px;
   width: 150px;
 }
 
@@ -111,7 +116,30 @@ export default {
   top: 12px;
   font-family: "Oswald";
 }
+
+#change-account-button {
+  background-color: white;
+  position: absolute;
+  top: 45px;
+  font-family: "Oswald";
+}
+
 .v-toolbar__extension {
   height: fit-content !important;
+}
+
+.v-menu .v-overlay__content {
+  width: 500px !important;
+}
+
+@media (max-width: 992px) {
+  #logo {
+    height: 50px;
+    width: auto;
+  }
+
+  header {
+    padding: 2px !important;
+  }
 }
 </style>
