@@ -1,13 +1,8 @@
 <template>
+  <!-- Language selector -->
   <div class="select">
     <select @change="updateLocale">
-      <option
-        v-for="locale in sortedLocales"
-        :key="locale"
-        :label="locale"
-        :value="locale"
-        type="text"
-      ></option>
+      <option v-for="locale in sortedLocales" :key="locale" :label="locale" :value="locale" type="text"></option>
     </select>
   </div>
 </template>
@@ -52,6 +47,7 @@ export default {
   border-radius: 0.25em;
   margin: 10px;
 }
+
 .select::after {
   content: "\25BC";
   position: absolute;
@@ -63,8 +59,9 @@ export default {
   pointer-events: none;
   transition: 0.25s all ease;
 }
+
 .select:hover::after {
-  color: #f0932b;
+  color: #A33327;
 }
 
 select {
@@ -83,6 +80,7 @@ select {
   cursor: pointer;
   font-size: 1em;
 }
+
 select::-ms-expand {
   display: none;
 }

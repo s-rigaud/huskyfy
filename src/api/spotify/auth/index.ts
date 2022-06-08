@@ -8,8 +8,23 @@ const Base64 = require('js-base64').Base64
 const CLIENT_ID: string = process.env.VUE_APP_SPOTIFY_CLIENT_ID
 const CLIENT_SECRET: string = process.env.VUE_APP_SPOTIFY_CLIENT_SECRET
 const ENCODED_CREDENTIALS = Base64.encode(`${CLIENT_ID}:${CLIENT_SECRET}`)
-const SCOPES = 'user-read-private user-read-email user-follow-read user-library-read playlist-read-collaborative playlist-read-private playlist-modify-public playlist-modify-private ugc-image-upload'
+
 const REDIRECT_URL = `${process.env.VUE_APP_BASE_SERVER_URL}/login`
+const SCOPES = [
+  // User profile
+  'user-read-email',
+
+  // Read all tracks ans playlists
+  'user-library-read',
+  'user-read-private',
+  'playlist-read-collaborative',
+  'playlist-read-private',
+
+  // Update playlist
+  'playlist-modify-public',
+  'playlist-modify-private',
+  'ugc-image-upload'
+].join(' ')
 
 export default {
   // Return Spotify OAuth url

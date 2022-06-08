@@ -4,15 +4,16 @@
 			"description": "Horus playlist manager",
 			"connection": "Connexion et accès au compte Spotify 🔑",
 			"process": "Comment ça marche ⚙️",
-			"creator": "Créateur 👤"
+			"creator": "Créateur 😃"
 		},
 		"content": {
 			"description": "Horus est un petit site web qui vise à fournir de nouvelles fonctionnalités en manipulant des playlists Spotify. Actuellement, il n'est pas possible de créer des sous-playlists sur Spotify en filtrant par genres musicaux ou par artistes. Horus essaie aussi de mettre en avant les artistes indépendants",
 			"connection": "Horus utilise la méthode OAuth2 fournie par Spotify qui permetd'accéder à vos données Spotify en toute sécurité. Aucune donnée n'est stockée sur un serveur, vous êtes donc totalement en sécurité lorsque vous naviguez ou quittez le site sans vous déconnecter.",
 			"process": "Horus utilise l'API de Spotify pour rassembler les genres et les données sur les artistes, le genre et les titres de vos playlists. L'application essaie ensuite de fournir une interface agréable pour vous permettre de filtrer et de créer facilement de nouvelles playlists à partir de celles déjà existantes.",
-			"creator1": "Ce site a été créé par",
-			"creator2": "comme un projet personnel pendant mes études. J'espère que vous le trouverez utile ! Si vous trouvez un bug ou si vous voulez de nouvelles fonctionnalités,",
-			"creator3": "n'hésitez pas me joindre ici"
+			"creator1": "Ce site a été",
+			"creator2":" créé par moi",
+			"creator3": "comme un projet personnel pendant mes études. J'espère que vous le trouverez utile ! Si vous trouvez un bug ou si vous voulez de nouvelles fonctionnalités,",
+			"creator4": "n'hésitez pas me joindre ici"
 		}
 	},
 	"footer": {
@@ -36,7 +37,11 @@
 		"collaborative": "Playlist collaborative 🤝",
 		"private": "Playlist privée 🔒",
 		"reset-filters": "Réinitialiser les filtres",
-		"duplicate": "Créer une nouvelle playlist avec les titres actuels",
+		"duplicate": {
+			"button": "Dupliquer la playlist ⏭️",
+			"copy-of": "Copie de ",
+			"created-by": "créée par Horus 𓂀"
+		} ,
 		"unfollow": "Supprimer de la bibliothèque 🗑️",
 		"set-private": "Rendre privée 🔒",
 		"set-public": "Rendre publique 📣",
@@ -68,6 +73,7 @@
 		}
 	},
 	"track": {
+		"name": "titres",
 		"popular": "🔥 Artiste populaire",
 		"indie": "🌴 Artiste Indé",
 		"filters": {
@@ -79,6 +85,7 @@
 			"genres": "Genres"
 		},
 		"no-genre": "Pas de genre",
-		"exclusive-filter": "Rendre la sélection exclusive"
+		"exclusive-filter": "Rendre la sélection exclusive",
+		"all-tracks": "Tous les titres"
 	}
 }

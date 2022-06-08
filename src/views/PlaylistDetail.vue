@@ -1,21 +1,24 @@
 <template>
+  <!-- Description of all the playlist with all the tracks and filters -->
   <div id="playlist" v-if="playlists[playlistId] && playlists[playlistId].total > 0">
     <div id="content" style="display: flex">
       <div id="left-part">
+
         <!-- Charts -->
         <div id="charts">
-          <IndieChart v-if="filteredTracks.length > 0" :indiePercentage="indiePercentage"
-            :image="getImage(indiePercentage)" />
+          <IndieChart v-if="filteredTracks.length > 0" :playlistId="playlistId" />
           <GenreChart v-if="filteredTracks.length > 0" :genres="getSortedGenres()" />
         </div>
 
+        <!-- Filters -->
         <div id="filters">
           <h3>Filters</h3>
-          <v-select v-model="selectedPopularity" :label="$t('track.filters.popularity')" :items="popularities" item-title="name"
-            item-value="value" variant="outlined" density="comfortable"></v-select>
+          <v-select v-model="selectedPopularity" :label="$t('track.filters.popularity')" :items="popularities"
+            item-title="name" item-value="value" variant="outlined" density="comfortable"></v-select>
 
-          <v-select v-model="selectedGenres" :label="$t('track.filters.genres')" :items="getSortedGenres()" item-title="cap_name"
-            item-value="name" variant="outlined" density="comfortable" multiple style="text-transform: capitalize">
+          <v-select v-model="selectedGenres" :label="$t('track.filters.genres')" :items="getSortedGenres()"
+            item-title="cap_name" item-value="name" variant="outlined" density="comfortable" multiple
+            style="text-transform: capitalize">
           </v-select>
 
           <v-switch v-model="isExclusiveGenres" :label="$t('track.exclusive-filter')"></v-switch>
@@ -26,24 +29,28 @@
         </div>
       </div>
 
+      <!-- Track list -->
       <div id="right-part" style="width: 100%">
-        <h2>Placeholder title - {{ filteredTracks.length }}</h2>
+        <h2>{{ generalTitle }}</h2>
+        <v-card-subtitle>{{ filteredTracks.length }} {{ $t('track.name') }}</v-card-subtitle>
         <div id="tracks" v-if="filteredTracks.length > 0">
 
-          <TrackCard v-for="track of filteredTracks" :key="track.id" :id="track.id" :name="track.name"
+          <TrackCard v-for="(track, index) in filteredTracks" :key="track.id" :id="track.id" :name="track.name"
             :image="track.album.images[0].url" :artists="track.artists" :genres="track.genres" :isIndie="track.isIndie"
-            :trackURI="track.uri" />
-
+            :trackURI="track.uri" :trackIndex="index"/>
         </div>
       </div>
     </div>
 
+    <!-- Load more tracks to lazy-load all of them -->
     <LoadMoreTracksPopup v-if="isHugePlaylist" :playlist="playlists[playlistId]" :trackRequestLimit="trackRequestLimit"
       @allTracksLoaded="resetFilters" />
   </div>
+
+  <!-- No tracks in the playlist -->
   <div id="no-tracks" v-else>
     <h1>{{ $t("playlist.no-tracks") }}</h1>
-    <v-btn @click="openPlaylistOnSpotify" id="open-spotify" variant="outlined">
+    <v-btn @click="openPlaylistOnSpotify" id="open-spotify" variant="outlined" rounded="pill" size="x-large">
       {{ $t("playlist.open-on-spotify") }}
       <v-img width="25" :src="spotifyLogo" alt="Spotify Logo" />
     </v-btn>
@@ -196,28 +203,12 @@ export default {
     }
   },
   computed: {
-    // Get the general playlist isIndie % from the mean of all tracks
-    indiePercentage () {
-      let indieTracks = 0
-      for (const track of this.playlists[this.playlistId].tracks) {
-        indieTracks += track.isIndie
-      }
-      return parseInt(
-        (indieTracks / this.playlists[this.playlistId].tracks.length) * 100
-      )
-    },
-    getImage () {
-      return (indiePercentage) => {
-        let image = ''
-        if (indiePercentage < 25) image = 'cold'
-        else if (indiePercentage < 50) image = 'sunglasses'
-        else if (indiePercentage < 75) image = 'hot'
-        else image = 'fire'
-        return require(`@/assets/${image}.png`)
-      }
-    },
     spotifyLogo () {
       return require('@/assets/spotify.png')
+    },
+    generalTitle () {
+      const separator = (this.isExclusiveGenres) ? ' and ' : ' or '
+      return this.selectedGenres.map(g => this.capitalize(g)).join(separator) || this.$t('track.all-tracks')
     }
   },
   watch: {
@@ -278,7 +269,10 @@ export default {
 }
 
 #open-spotify {
-  background-color: white;
+  background-color: #A33327 !important;
+  color: #dff9fb !important;
+  letter-spacing: 0px;
+  padding: 20px !important;
 }
 
 #open-spotify .v-btn__content {

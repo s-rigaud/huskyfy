@@ -1,23 +1,46 @@
 <template>
-  <apexchart
-    type="radialBar"
-    height="350"
-    :options="chartOptions"
-    :series="series"
-  ></apexchart>
+  <apexchart type="radialBar" height="350" :options="chartOptions" :series="series"></apexchart>
 </template>
 
 <script>
+import { usePlaylistsStore } from '@/stores/playlists'
+import { storeToRefs } from 'pinia'
+
 export default {
   name: 'IndieChart',
   props: {
-    indiePercentage: Number,
-    image: String
+    playlistId: String
+  },
+  setup () {
+    const playlistsStore = usePlaylistsStore()
+    const { playlists } = storeToRefs(playlistsStore)
+    return { playlists }
+  },
+  methods: {
+    // Get the general playlist isIndie % from the mean of all tracks
+    getIndiePercentage () {
+      let indieTracks = 0
+      for (const track of this.playlists[this.playlistId].tracks) {
+        indieTracks += track.isIndie
+      }
+      return parseInt(
+        (indieTracks / this.playlists[this.playlistId].tracks.length) * 100
+      )
+    },
+    getImage () {
+      let image = ''
+      const indiePercentage = this.getIndiePercentage()
+      if (indiePercentage < 25) image = 'cold'
+      else if (indiePercentage < 50) image = 'sunglasses'
+      else if (indiePercentage < 75) image = 'hot'
+      else image = 'fire'
+      return require(`@/assets/${image}.png`)
+    }
   },
   data () {
     // All data needed to customize graph UI and data
     return {
-      series: [this.indiePercentage],
+      series: [this.getIndiePercentage()],
       chartOptions: {
         chart: {
           height: 350,
@@ -28,7 +51,7 @@ export default {
             hollow: {
               margin: 15,
               size: '30%',
-              image: this.image,
+              image: this.getImage(),
               imageWidth: 64,
               imageHeight: 64,
               imageClipped: false

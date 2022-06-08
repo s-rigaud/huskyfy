@@ -1,24 +1,17 @@
 <template>
+  <!-- Display all playlists in the Spotify user library -->
   <div id="full-page">
     <h1>{{ $t("playlist.header") }}</h1>
 
     <div id="playlists">
-      <PlaylistCard
-        v-for="playlist in playlistsStore.playlists"
-        :key="playlist.id"
-        :id="playlist.id"
-        :name="formatName(playlist)"
-        :images="playlist.images"
-        :owner="usernameToDisplay(playlist.owner['display_name'])"
-        :public="playlist.public"
-        :collaborative="playlist.collaborative"
-      />
+      <PlaylistCard v-for="playlist in playlistsStore.playlists" :key="playlist.id" :id="playlist.id"
+        :name="formatName(playlist)" :images="playlist.images"
+        :owner="usernameToDisplay(playlist.owner['display_name'])" :public="playlist.public"
+        :collaborative="playlist.collaborative" />
     </div>
 
-    <v-btn
-      @click="loadMorePlaylists"
-      v-if="playlistsStore.playlists.length < playlistTotal"
-    >
+    <!-- TODO not really tested -->
+    <v-btn @click="loadMorePlaylists" v-if="playlistsStore.playlists.length < playlistTotal">
       {{ $t("playlist.load-more-playlists") }}
     </v-btn>
   </div>
@@ -81,6 +74,7 @@ export default {
   text-align: center;
   width: 100%;
 }
+
 #playlists {
   display: flex;
   flex-direction: row;

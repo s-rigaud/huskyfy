@@ -1,4 +1,6 @@
 <template>
+  <!-- Ask the user if he really want to load all the tracks for a huge playlist (> 150 tracks) -->
+  <!-- This allow to lazy load playlist tracks -->
   <v-snackbar id="load-more-snackbar" v-model="notLoaded" :timeout="-1">
     <div id="loading-create-new-playlist">
       <p>

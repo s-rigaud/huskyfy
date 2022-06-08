@@ -241,16 +241,18 @@ export const usePlaylistsStore = defineStore('playlists', {
     },
     // Create new empty playlist
     async createPlaylist (basePlaylistId: string, selectedGenres: Array<string>, totalTrack: number): Promise<string> {
+      const i18n = VueI18n.global
       const basePlaylist = this.playlists[basePlaylistId]
-      let newPlaylistName = `Copy of ${basePlaylist.name}`
+
+      let newPlaylistName = `${i18n.t('playlist.duplicate.copy-of')} ${basePlaylist.name}`
       let newPlaylistDescription = ''
       if (selectedGenres.length !== 0) {
         newPlaylistName += ` • ${selectedGenres}`
-        newPlaylistDescription += `${basePlaylist.name} • ${selectedGenres}`
+        newPlaylistDescription += `'${basePlaylist.name}' • ${selectedGenres} •`
       } else {
-        newPlaylistDescription += `Copy of ${basePlaylist.name}`
+        newPlaylistDescription += `${i18n.t('playlist.duplicate.copy-of')} '${basePlaylist.name}'`
       }
-      newPlaylistDescription += ' • created by Horus 𓂀'
+      newPlaylistDescription += ` ${i18n.t('playlist.duplicate.created-by')}`
 
       const name = newPlaylistName
       const description = newPlaylistDescription

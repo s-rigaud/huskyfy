@@ -1,11 +1,14 @@
 <template>
+  <!-- Navbar -->
   <v-app-bar v-if="userStore.connected" fixed flat style="font-family: 'Righteous'">
+    <!-- Left part -->
     <router-link id="explore" to="/explore">
       <img id="logo" :src="logo" alt="Horus logo" />
     </router-link>
 
     <v-spacer></v-spacer>
 
+    <!-- Right part -->
     <v-menu open-on-hover transition="slide-y-transition">
       <template v-slot:activator="{ props }">
         <div id="user-info" v-bind="props">
@@ -26,11 +29,13 @@
       </v-btn>
     </v-menu>
 
+    <!-- TODO DELETE - Dev button to facilitate -->
     <v-btn @click="clearLocalStorage" variant="outlined">
       Clear local storage
     </v-btn>
     <LocaleSelector />
 
+    <!-- Second part which extend on the playlist detail -->
     <template v-slot:extension>
       <NavbarPlaylistSelected />
     </template>
@@ -82,7 +87,7 @@ export default {
       // wantsToChangeAccount is not reset
       this.userStore.reset()
       this.authStore.reset()
-      this.playlistsStore.selectedPlaylistId = null
+      this.playlistsStore.reset()
       this.$router.push({ name: 'LoginView' })
     }
   }

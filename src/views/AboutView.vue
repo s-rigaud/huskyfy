@@ -1,4 +1,5 @@
 <template>
+  <!-- General page with info about the app -->
   <div id="about-content">
     <div id="text">
       <div style="display: inline-flex">
@@ -16,23 +17,26 @@
       <h2>{{ $t("about.title.creator") }}</h2>
       <p>
         {{ $t("about.content.creator1") }}
-        <a href="https://github.com/s-rigaud" target="_blank">{{ $t("me") }}</a>
-        {{ $t("about.content.creator2") }}
+        <a href="https://github.com/s-rigaud" target="_blank">{{ $t("about.content.creator2") }}</a>
+        {{ $t("about.content.creator3") }}
         <a href="mailto:horusproject.bugtracker@gmail.com?subject=Horus%20improvement%20request">
-          {{ $t("about.content.creator3") }}
+          {{ $t("about.content.creator4") }} 📧
         </a>
-        😃
       </p>
     </div>
     <a href="https://github.com/s-rigaud" target="_blank">
       <v-img width="70" :src="githubImg" alt="Github Image"></v-img>
     </a>
   </div>
+  <!-- @click="getAppStats" -->
+  <button>Add app stats later</button>
 
   <v-btn id="exit-button" @click="backToPreviousPage">X</v-btn>
 </template>
 
 <script>
+import api from '@/api'
+
 export default {
   name: 'AboutView',
   computed: {
@@ -46,6 +50,9 @@ export default {
   methods: {
     backToPreviousPage () {
       this.$router.go(-1)
+    },
+    async getAppStats () {
+      await api.spotify.stats.getAppStats()
     }
   }
 }
@@ -78,18 +85,26 @@ export default {
 h1 {
   font-size: xxx-large;
 }
+
+h1,
+h2 {
+  color: #A33327 !important;
+}
+
 p {
   margin-bottom: 20px;
 }
-a{
+
+a {
   text-decoration: none;
-  color: #F0932B
+  color: #A33327 !important;
 }
 
 @media (max-width: 992px) {
-  h1{
+  h1 {
     font-size: xx-large;
   }
+
   h2 {
     font-size: large;
   }

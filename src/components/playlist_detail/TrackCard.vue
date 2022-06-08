@@ -1,13 +1,16 @@
 <template>
-  <v-card flat border rounded="0" @click="openTrackOnSpotify" loading>
-    <div class="track-card">
-      <v-avatar class="ma-3" size="80" rounded="0">
+  <!-- Card to represent a track, many of them are stacks -->
+  <v-card flat border rounded="0" @click="openTrackOnSpotify" loading class="track-card" :style="animationDelay">
+    <div class="card-content">
+      <!-- Cover -->
+      <v-avatar class="ma-3" size="80" rounded="0" style="min-width: 80px">
         <v-img v-bind:src="image" :lazy-src="loadingCover"></v-img>
       </v-avatar>
 
       <div>
         <v-card-header>
           <v-card-header-text>
+            <!-- All track info -->
             <v-card-title class="text-h6"> {{ name }} </v-card-title>
             <a v-for="artist in artists" class="artist-name" :key="artist" :href="artist.uri">
               <v-card-subtitle style="display: inline-flex">{{ addComma(artist.name) }}</v-card-subtitle>
@@ -20,17 +23,18 @@
           </v-card-header-text>
         </v-card-header>
 
+        <!-- Genre chips -->
         <div v-if="genres.length > 0">
           <v-card-text>
-            <v-chip v-for="genre in genres.slice(0, 3)" :key="genre" :text="genre.toUpperCase()" label size="small"
+            <v-chip v-for="genre in genres" :key="genre" :text="genre.toUpperCase()" label size="small"
               class="genre-chip">
             </v-chip>
 
-            <v-chip v-if="genres.length > 3" :text="`+${genres.length - 3}`" label size="small" class="genre-chip">
-            </v-chip>
+            <!--<v-chip v-if="genres.length > 3" :text="`+${genres.length - 3}`" label size="small" class="genre-chip">
+            </v-chip>-->
           </v-card-text>
         </div>
-        <v-card-subtitle v-else> {{ $t("track.no-genre")}}</v-card-subtitle>
+        <v-card-subtitle v-else> {{ $t("track.no-genre") }}</v-card-subtitle>
       </div>
     </div>
   </v-card>
@@ -46,7 +50,8 @@ export default {
     artists: Array,
     genres: Object,
     isIndie: Boolean,
-    trackURI: String
+    trackURI: String,
+    trackIndex: Number
   },
   computed: {
     addComma () {
@@ -59,6 +64,11 @@ export default {
     },
     loadingCover () {
       return require('@/assets/default_cover.jpg')
+    },
+    // Delay animation so cards appear one after another
+    animationDelay () {
+      const duration = (this.trackIndex < 20) ? `${200 * this.trackIndex}ms` : '0ms'
+      return { 'animation-delay': duration }
     }
   },
   methods: {
@@ -69,7 +79,27 @@ export default {
 }
 </script>
 <style scoped>
+@keyframes track-append {
+  from {
+    -webkit-transform: translate3d(0, -4px, 0);
+    transform: translate3d(0, -4px, 0);
+    opacity: 0;
+  }
+
+  to {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    opacity: 1;
+  }
+}
+
 .track-card {
+  animation: track-append 200ms linear;
+  animation-fill-mode: forwards;
+  opacity: 0
+}
+
+.card-content {
   display: flex !important;
   align-items: center;
 }

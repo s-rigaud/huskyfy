@@ -1,6 +1,10 @@
 <template>
+  <!-- All the app encapsulated -->
   <v-app>
+    <!-- Navbar -->
     <NavbarComponent />
+
+    <!-- Main view with routing -->
     <v-main id="main" v-bind:class="{
       'no-padding': true,
       'small-padding-top': ['Explore', 'About'].includes(
@@ -13,6 +17,8 @@
         <router-view />
       </v-container>
     </v-main>
+
+    <!-- Footer -->
     <FooterComponent />
   </v-app>
 </template>

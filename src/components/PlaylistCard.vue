@@ -1,4 +1,5 @@
 <template>
+  <!-- Playlist representation as a card -->
   <v-card flat @click="displayDetails" class="playlist-card">
     <v-img v-bind:src="images[0].url" :lazy-src="loadingCover" height="400px" cover></v-img>
 
@@ -50,6 +51,16 @@ export default {
 /!\ Not scoped css as v-card__overlay is only define internally in Vuetify
 
 */
+@keyframes playlist-append {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
 .playlist-card {
   width: 250px;
   height: 250px;
@@ -60,6 +71,9 @@ export default {
   display: flex;
   flex-direction: column;
   color: #dff9fb !important;
+  animation: playlist-append 500ms linear;
+  animation-fill-mode: forwards;
+  opacity: 0
 }
 
 .playlist-card .v-img .v-img__img--cover {

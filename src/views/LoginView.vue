@@ -1,4 +1,5 @@
 <template>
+  <!-- Login view with a large background and a simple buttons -->
   <div id="login">
     <div id="upper-part">
       <h1 style="color: white">{{ $t("login.header") }}</h1>
@@ -6,13 +7,7 @@
     </div>
 
     <div id="lower-part">
-      <v-btn
-        id="connect-button"
-        @click="accessOAuthPage"
-        v-if="!userStore.connected"
-        rounded
-        color="#f0932b"
-      >
+      <v-btn id="connect-button" @click="accessOAuthPage" v-if="!userStore.connected" rounded>
         {{ $t("login.connect") }}
         <v-icon right dark> mdi-account-circle </v-icon>
       </v-btn>
@@ -55,39 +50,54 @@ export default {
   z-index: 1;
   padding: 12px;
 }
+
 #upper-part {
   display: inline-flex;
   flex-wrap: wrap;
   justify-content: flex-end;
   align-items: center;
 }
+
 #lower-part {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-#lower-part > button {
-  position: absolute;
-  bottom: 10%;
-}
-#lower-part > a {
+
+#lower-part>a {
   position: absolute;
   bottom: 5%;
   font-size: large;
 }
+
 #link-about {
   color: white;
 }
+
 #connect-button {
   font-size: larger;
   padding: 20px;
   text-transform: none;
   letter-spacing: 0;
+  background-color: #A33327 !important;
+  color: #dff9fb !important;
+  position: absolute;
+  bottom: 10%;
 }
+
+#connect-button:hover {
+  outline: #A33327 solid 2px;
+}
+
+#connect-button:focus {
+  outline: #CC4031 solid 2px;
+}
+
 a,
 h1 {
   background: rgba(0, 0, 0, 0.3);
 }
+
 .mdi {
   margin-left: 3px;
 }

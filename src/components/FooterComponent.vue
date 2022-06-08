@@ -1,4 +1,5 @@
 <template>
+  <!-- Footer with simple links at the bottom of the page -->
   <v-footer id="footer" v-if="userStore.connected">
     <v-row justify="center" no-gutters>
       <router-link to="/explore">
@@ -8,6 +9,7 @@
         <v-btn> About </v-btn>
       </router-link>
 
+      <!-- Created with ♥ -->
       <v-col class="primary lighten-2 py-4 text-center white--text" cols="12">
         {{ new Date().getFullYear() }} —
         <strong>

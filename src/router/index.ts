@@ -37,7 +37,7 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
-  scrollBehavior() {
+  scrollBehavior () {
     // always scroll to top
     return { top: 0, behavior: 'smooth' }
   }
@@ -61,7 +61,7 @@ router.beforeEach(async function (to, from, next) {
     const response = await api.spotify.users.getUserProfile()
     const data = response.data
 
-    const userPicture = (data.images.length > 0) ? data.images[0].url : ''
+    const userPicture = (data.images.length > 0) ? data.images[0].url : require('@/assets/no-user.png')
     useUserStore().$patch({
       id: data.id,
       username: data.display_name,

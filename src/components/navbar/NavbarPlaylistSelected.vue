@@ -1,18 +1,20 @@
 <template>
+  <!-- Part which extend on the playlist detail -->
   <div v-if="playlistsStore.selectedPlaylistId != null && playlistsStore.playlists[playlistsStore.selectedPlaylistId]"
     id="header-blocks">
+
+    <!-- Info about the playlist -->
     <div id="playlist-info">
       <v-img v-bind:src="
         playlistsStore.playlists[playlistsStore.selectedPlaylistId].images[0]
           .url
-      " id="playlist-image" lazy-src="https://picsum.photos/id/11/90/90" cover></v-img>
+      " id="playlist-image" :lazy-src="loadingCover" cover></v-img>
       <div>
         <div id="title">
           <h3 style="margin-right: 5px">
-            {{
-                playlistsStore.playlists[playlistsStore.selectedPlaylistId].name
-            }}
+            {{ playlistsStore.playlists[playlistsStore.selectedPlaylistId].name }}
           </h3>
+
           <v-tooltip location="top">
             <template v-slot:activator="{ props: tooltip }">
               <h3 v-bind="tooltip">{{ getEmojiFromVisibility }}</h3>
@@ -20,10 +22,11 @@
             <span>{{ gettextFromVisibility }}</span>
           </v-tooltip>
         </div>
+
         <p>
           {{
               playlistsStore.playlists[playlistsStore.selectedPlaylistId]
-                .description
+                .description.replace( /(<([^>]+)>)/ig, '')
           }}
         </p>
         <p style="opacity: 0.5">
@@ -32,6 +35,7 @@
       </div>
     </div>
 
+    <!-- Buttons to manage playlist options -->
     <div style="
         position: fixed;
         right: 0;
@@ -57,7 +61,7 @@
 
       <v-btn id="duplicate-playlist-button" variant="outlined"
         v-if="playlistsStore.playlists[playlistsStore.selectedPlaylistId].tracks.length > 1" @click="createNewPlaylist">
-        {{ $t("playlist.duplicate") }}
+        {{ $t("playlist.duplicate.button") }}
       </v-btn>
 
       <v-btn @click="exportPreview" variant="outlined" v-bind="tooltip">
@@ -70,7 +74,7 @@
 
       <v-dialog persistent v-model="isDeleteModalOpen">
         <template v-slot:activator="{ props }">
-          <v-btn v-bind="props" color="error" variant="outlined">
+          <v-btn v-bind="props" variant="outlined">
             {{ $t("playlist.unfollow") }}
           </v-btn>
         </template>
@@ -162,6 +166,9 @@ export default {
       if (playlist.collaborative) return this.$t('playlist.collaborative')
       if (playlist.public) return this.$t('playlist.public')
       return this.$t('playlist.private')
+    },
+    loadingCover () {
+      return require('@/assets/default_cover.jpg')
     }
   },
   methods: {
@@ -221,6 +228,7 @@ export default {
   flex-direction: row;
   margin-bottom: 10px;
   max-height: 72px;
+  margin: inherit;
 }
 
 #playlist-image {
@@ -229,6 +237,15 @@ export default {
   height: 70px !important;
   max-height: 70px !important;
   margin: 1px 10px 1px 1px;
+}
+
+.v-btn {
+  margin: 0px 2px;
+}
+
+.v-btn.v-btn--density-default {
+  height: 30px;
+  padding: 0px 5px
 }
 
 #open-spotify-playlist-button .v-btn__content {
