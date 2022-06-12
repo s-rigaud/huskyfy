@@ -13,8 +13,6 @@ request.interceptors.request.use(function (config) {
     config.headers!.Authorization = `Bearer ${authStore.accessToken}`
   }
   return config
-}, async (error) => {
-  console.error(error)
 })
 
 request.interceptors.response.use(response => {
@@ -35,13 +33,6 @@ request.interceptors.response.use(response => {
       config.headers.Authorization = `Bearer ${accessToken}`
       return request(config)
     }
-  }
-
-  // Handle access token refresh for 401
-  if (error.response && status === 429) {
-    console.error(error)
-    console.error(config)
-    // return request(config);
   }
 
   console.log('Exception while trying to handle error')

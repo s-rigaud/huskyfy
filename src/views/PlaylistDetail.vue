@@ -14,11 +14,15 @@
         <div id="filters">
           <h3>Filters</h3>
           <v-select v-model="selectedPopularity" :label="$t('track.filters.popularity')" :items="popularities"
-            item-title="name" item-value="value" variant="outlined" density="comfortable"></v-select>
+            item-title="name" item-value="value" variant="outlined" density="comfortable" hide-selected></v-select>
 
           <v-select v-model="selectedGenres" :label="$t('track.filters.genres')" :items="getSortedGenres()"
             item-title="cap_name" item-value="name" variant="outlined" density="comfortable" multiple
             style="text-transform: capitalize">
+          </v-select>
+
+          <v-select v-model="selectedArtists" :label="$t('track.filters.artists')" :items="getSortedArtists()"
+            variant="outlined" density="comfortable" multiple style="text-transform: capitalize">
           </v-select>
 
           <v-switch v-model="isExclusiveGenres" :label="$t('track.exclusive-filter')"></v-switch>
@@ -37,7 +41,7 @@
 
           <TrackCard v-for="(track, index) in filteredTracks" :key="track.id" :id="track.id" :name="track.name"
             :image="track.album.images[0].url" :artists="track.artists" :genres="track.genres" :isIndie="track.isIndie"
-            :trackURI="track.uri" :trackIndex="index"/>
+            :trackURI="track.uri" :trackIndex="index" />
         </div>
       </div>
     </div>
@@ -119,6 +123,8 @@ export default {
       ],
       selectedPopularity: 'No filter',
 
+      selectedArtists: [],
+
       isExclusiveGenres: false
     }
   },
@@ -170,6 +176,21 @@ export default {
         (t) => t.isIndie === isIndieSelected
       )
     },
+    filterTracksByArtists () {
+      const artists = this.selectedArtists
+      if (artists.length === 0) return this.resetFilters()
+
+      const currentPlaylistTracks = this.playlists[this.playlistId].tracks
+      if (this.isExclusiveGenres) {
+        this.filteredTracks = currentPlaylistTracks.filter(
+          (t) => artists.every((artist) => t.artists.map(a => a.name).includes(artist))
+        )
+      } else {
+        this.filteredTracks = currentPlaylistTracks.filter(
+          (t) => artists.some((artist) => t.artists.map(a => a.name).includes(artist))
+        )
+      }
+    },
     resetFilters () {
       this.selectedGenres = []
       this.selectedPopularity = 'No filter'
@@ -200,6 +221,13 @@ export default {
     },
     capitalize (string) {
       return string.charAt(0).toUpperCase() + string.slice(1)
+    },
+    getSortedArtists () {
+      const allArtists = new Set()
+      for (const track of this.playlists[this.playlistId].tracks) {
+        track.artists.map(a => allArtists.add(a.name))
+      }
+      return Array.from(allArtists).sort((a1, a2) => a1.localeCompare(a2))
     }
   },
   computed: {
@@ -212,11 +240,16 @@ export default {
     }
   },
   watch: {
+    isExclusiveGenres () {
+      this.filterTracksByGenres()
+    },
     selectedPopularity (newSelectedPopularity) {
       this.filterTracksByPopularity(newSelectedPopularity)
     },
-    isExclusiveGenres () {
-      this.filterTracksByGenres()
+    selectedArtists (newValue, oldValue) {
+      if (oldValue.length !== 0 || newValue.length !== 0) {
+        this.filterTracksByArtists()
+      }
     },
     selectedGenres (newValue, oldValue) {
       if (oldValue.length !== 0 || newValue.length !== 0) {
@@ -231,7 +264,7 @@ export default {
   display: flex;
   flex-direction: column;
   border-right: 2px solid;
-  border-color: gray;
+  border-color: #A33327 !important;
   margin: 0 5px;
   min-width: 380px !important;
 }

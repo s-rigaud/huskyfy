@@ -6,9 +6,15 @@
       </v-progress-circular>
       <p>{{ loadingPercentage }}% - {{ loadingText }}</p>
     </div>
+
     <v-btn id="get-to-new-playlist" v-if="newPlaylistId != ''" @click="displayNewPlaylistDetails">
       {{ $t("playlist.next") }}
     </v-btn>
+
+    <template v-slot:actions>
+      <v-btn color="blue" variant="text" @click="snackbar = false"> X </v-btn>
+    </template>
+
   </v-snackbar>
 </template>
 
@@ -20,22 +26,21 @@ export default {
   props: {
     playlistId: String
   },
-  setup () {
+  setup() {
     const playlistsStore = usePlaylistsStore()
     return { playlistsStore }
   },
-  async created () {
+  async created() {
     await this.createNewPlaylist()
   },
   methods: {
-    async createNewPlaylist () {
+    async createNewPlaylist() {
       this.startDuplication = true
       this.loadingText = this.$t('playlist.new.create')
       this.loadingPercentage = 1
       const newPlaylistId = await this.playlistsStore.createPlaylist(
         this.playlistId,
-        this.playlistsStore.selectedGenres,
-        this.playlistsStore.filteredTracks.length
+        this.playlistsStore.selectedGenres
       )
 
       this.loadingText = this.$t('playlist.new.cover')
@@ -57,11 +62,11 @@ export default {
       this.loadingPercentage = 100
       this.newPlaylistId = newPlaylistId
     },
-    displayNewPlaylistDetails () {
+    displayNewPlaylistDetails() {
       window.location.href = `/playlist/${this.newPlaylistId}`
     }
   },
-  data () {
+  data() {
     return {
       loadingPercentage: 0,
       loadingText: '',

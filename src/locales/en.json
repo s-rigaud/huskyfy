@@ -1,88 +1,89 @@
 {
     "about": {
-        "title": {
-            "description": "Horus playlist manager",
-            "connection": "Spotify connection and account access 🔑",
-            "process": "How it works ⚙️",
-            "creator": "Creator 😃"
-        },
         "content": {
-            "description": "Horus is a small web project that aims to provide new functionalities when manipulating Spotify playlists. Right now, it is not possible to create sub-playlists on Spotify filtering by track genres or artists. Moreover, indie artists are not really promoted on the platform so Horus try to highlight their work.",
             "connection": "This website is using well designed Spotify OAuth2 access account which allow the website to access your data safely. There is no data stored in any server so you are totally safe when browsing or exiting the website without signing out.",
-            "process": "Horus is using the really open Spotify API to gather genres and data about artists, genre and tracks of your playlists. Once done, the app tries to provide a nice interface for you to filter and create new playlists from previous ones easily.",
             "creator1": "This website was",
-            "creator2":" created by me",
+            "creator2": " created by me",
             "creator3": "as a side project during my studies. I hope you will find it useful ! If you find any bug or you want new functionalities do not hesitate to ",
-            "creator4": "report it to me"
+            "creator4": "report it to me",
+            "description": "Horus is a small web project that aims to provide new functionalities when manipulating Spotify playlists. Right now, it is not possible to create sub-playlists on Spotify filtering by track genres or artists. Moreover, indie artists are not really promoted on the platform so Horus try to highlight their work.",
+            "process": "Horus is using the really open Spotify API to gather genres and data about artists, genre and tracks of your playlists. Once done, the app tries to provide a nice interface for you to filter and create new playlists from previous ones easily."
+        },
+        "title": {
+            "connection": "Spotify connection and account access 🔑",
+            "creator": "Creator 😃",
+            "description": "Horus playlist manager",
+            "process": "How it works ⚙️"
         }
     },
     "footer": {
         "built": "Built with ♥ by"
     },
     "login": {
-        "header": "Explore, duplicate, split and share your Spotify playlists easily with Horus",
+        "about": "Learn more about this website",
         "connect": "Log in with Spotify",
-        "about": "Learn more about this website"
+        "header": "Explore, duplicate, split and share your Spotify playlists easily with Horus"
     },
     "me": "me",
     "navbar": {
-        "logout": "Sign out",
-        "change-account": "Change account"
+        "change-account": "Change account",
+        "logout": "Sign out"
     },
     "playlist": {
-        "public": "Public playlist 📣",
         "collaborative": "Collaborative playlist 🤝",
+        "created-by": "Created by",
+        "delete": {
+            "agree": "Delete",
+            "confirm-message": "Do you really want to delete this playlist from your library ?",
+            "delete": "Delete ",
+            "disagree": "No"
+        },
+        "duplicate": {
+            "button": "Create new playlist with following tracks ⏭️",
+            "copy-of": "Copy of",
+            "created-by": "created by Horus 𓂀"
+        },
+        "export-preview": "Export playlist preview 🖼️",
+        "fully-loaded": "All artists, tracks and genres have been retrieved",
+        "header": "Start browsing your playlists to gather some useful data on them, split them by genre and so much more",
+        "load-more-button": "Load all tracks",
+        "load-more-playlists": "Load more playlists",
+        "load-more-warning": "Your playlist has more than {limit} tracks, do you want to load all of them ?",
+        "new": {
+            "cover": "Updating playlist cover",
+            "create": "Creating new playlist",
+            "done": "Done",
+            "tracks": "Adding all selected tracks"
+        },
+        "next": "Jump to new playlist",
+        "no-tracks": "This playlist doesn't have any track now. Open the playlist on Spotify and try to add tracks to start seeing them here",
+        "open-on-spotify": "Open on Spotify",
         "private": "Private playlist 🔒",
+        "public": "Public playlist 📣",
         "reset-filters": "Reset filters",
-		"duplicate": {
-			"button": "Create new playlist with following tracks ⏭️",
-			"copy-of": "Copy of",
-			"created-by": "created by Horus 𓂀"
-		} ,
-        "unfollow": "Unfollow 🗑️",
         "set-private": "Set private 🔒",
         "set-public": "Set public 📣",
-        "next": "Jump to new playlist",
-        "load-more-playlists": "Load more playlists",
-        "header": "Start browsing your playlists to gather some useful data on them, split them by genre and so much more",
-        "created-by": "Created by",
+        "unfollow": "Unfollow 🗑️",
         "your-music": {
-            "name": "Your music",
-            "description": "Spotify playlist with all your favorite songs"
-        },
-        "new": {
-            "create": "Creating new playlist",
-            "cover": "Updating playlist cover",
-            "tracks": "Adding all selected tracks",
-            "done": "Done"
-        },
-        "load-more-warning": "Your playlist has more than {limit} tracks, do you want to load all of them ?",
-        "load-more-button": "Load all tracks",
-        "fully-loaded": "All artists, tracks and genres have been retrieved",
-        "open-on-spotify": "Open on Spotify",
-        "export-preview": "Export playlist preview 🖼️",
-        "no-tracks": "This playlist doesn't have any track now. Open the playlist on Spotify and try to add tracks to start seeing them here",
-        "delete": {
-            "delete": "Delete ",
-            "confirm-message": "Do you really want to delete this playlist from your library ?",
-            "agree": "Delete",
-            "disagree": "No"
+            "description": "Spotify playlist with all your favorite songs",
+            "name": "Your music"
         }
     },
     "track": {
-        "name": "tracks",
-        "popular": "🔥 Popular artist",
-        "indie": "🌴 Indie artist",
-        "filters": {
-            "popular": "🔥 Popular",
-            "indie": "🌴 Indie",
-            "no-filter": "No filter",
-            "name": "Filters",
-            "popularity": "Popularity",
-            "genres": "Genres"
-        },
-        "no-genre": "No genre provided",
+        "all-tracks": "All playlist tracks",
         "exclusive-filter": "Make selected genre exclusive",
-        "all-tracks": "All playlist tracks"
+        "filters": {
+            "artists": "Artists",
+            "genres": "Genres",
+            "indie": "🌴 Indie",
+            "name": "Filters",
+            "no-filter": "No filter",
+            "popular": "🔥 Popular",
+            "popularity": "Popularity"
+        },
+        "indie": "🌴 Indie artist",
+        "name": "tracks",
+        "no-genre": "No genre provided",
+        "popular": "🔥 Popular artist"
     }
 }

@@ -9,7 +9,7 @@
         playlistsStore.playlists[playlistsStore.selectedPlaylistId].images[0]
           .url
       " id="playlist-image" :lazy-src="loadingCover" cover></v-img>
-      <div>
+      <div id="info-embedded">
         <div id="title">
           <h3 style="margin-right: 5px">
             {{ playlistsStore.playlists[playlistsStore.selectedPlaylistId].name }}
@@ -26,7 +26,7 @@
         <p>
           {{
               playlistsStore.playlists[playlistsStore.selectedPlaylistId]
-                .description.replace( /(<([^>]+)>)/ig, '')
+                .description.replace(/(<([^>]+)>)/ig, '')
           }}
         </p>
         <p style="opacity: 0.5">
@@ -217,7 +217,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  border-top: 2px #ccc solid;
+  border-top: 2px #dff9fb solid;
   margin: 5px;
   width: 100%;
   transition: 55s all ease;
@@ -229,6 +229,12 @@ export default {
   margin-bottom: 10px;
   max-height: 72px;
   margin: inherit;
+}
+
+#info-embedded {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 #playlist-image {
