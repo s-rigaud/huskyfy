@@ -71,7 +71,7 @@
     },
     "track": {
         "all-tracks": "All playlist tracks",
-        "exclusive-filter": "Make selected genre exclusive",
+        "exclusive-filter": "Make selected filters exclusive",
         "filters": {
             "artists": "Artists",
             "genres": "Genres",

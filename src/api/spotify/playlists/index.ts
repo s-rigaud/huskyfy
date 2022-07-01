@@ -2,8 +2,6 @@ import { useUserStore } from '@/stores/user'
 import { AxiosResponse } from 'axios'
 import { SimplifiedSpotifyPlaylist, SpotifyGetPlaylistResponse, SpotifyTrackResponse } from '../model'
 import request from '../request'
-// eslint-disable-next-line
-const Base64 = require('js-base64').Base64
 
 interface Callback {
   (base64cover: string): void;

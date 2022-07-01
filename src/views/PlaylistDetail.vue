@@ -22,7 +22,19 @@
           </v-select>
 
           <v-select v-model="selectedArtists" :label="$t('track.filters.artists')" :items="getSortedArtists()"
-            variant="outlined" density="comfortable" multiple style="text-transform: capitalize">
+            item-title="name" item-value="name" variant="outlined" density="comfortable" multiple
+            style="text-transform: capitalize">
+            <template v-slot:selection="{ item, index }">
+              <v-chip v-if="index < 2">
+                <v-avatar>
+                  <v-img width="20" :src="item.images[0].url" alt="John"></v-img>
+                </v-avatar>
+                <span>{{ item.name }}</span>
+              </v-chip>
+              <span v-if="index >= 2" class="text-grey text-caption align-self-center">
+                (+{{ selectedArtists.length - 2 }} others)
+              </span>
+            </template>
           </v-select>
 
           <v-switch v-model="isExclusiveGenres" :label="$t('track.exclusive-filter')"></v-switch>
@@ -69,9 +81,11 @@ import TrackCard from '@/components/playlist_detail/TrackCard.vue'
 import { usePlaylistsStore } from '@/stores/playlists'
 import { useUserStore } from '@/stores/user'
 import { storeToRefs } from 'pinia'
+import TitleMixin from '@/mixins/TitleMixin.js'
 
 export default {
   name: 'PlaylistDetail',
+  mixins: [TitleMixin],
   props: {
     playlistId: {
       type: String,
@@ -102,6 +116,9 @@ export default {
       filteredTracks,
       selectedGenres
     }
+  },
+  created () {
+    this.title = `Horus | ${this.playlists[this.playlistId].name}`
   },
   async mounted () {
     this.playlistsStore.selectedPlaylistId = this.playlistId
@@ -225,9 +242,10 @@ export default {
     getSortedArtists () {
       const allArtists = new Set()
       for (const track of this.playlists[this.playlistId].tracks) {
-        track.artists.map(a => allArtists.add(a.name))
+        track.artists.map(a => allArtists.add(a))
       }
-      return Array.from(allArtists).sort((a1, a2) => a1.localeCompare(a2))
+      console.log(Array.from(allArtists).sort((a1, a2) => a1.name.localeCompare(a2.name)))
+      return Array.from(allArtists).sort((a1, a2) => a1.name.localeCompare(a2.name))
     }
   },
   computed: {

@@ -111,6 +111,7 @@
 import DuplicatorPopup from '@/components/navbar/DuplicatorPopup.vue'
 import { usePlaylistsStore } from '@/stores/playlists'
 import { useUserStore } from '@/stores/user'
+import makeImage from '@/services/playlistImageMaker.ts'
 
 export default {
   name: 'NavbarPlaylistSelected',
@@ -178,8 +179,16 @@ export default {
           this.playlistsStore.selectedPlaylistId
         ].uri
     },
-    exportPreview () {
-      alert('Preview no available right now')
+    async exportPreview () {
+      const top16Artists = this.playlistsStore.getTopArtists(16)
+      const url = await makeImage(top16Artists.map(res => res.artist.images[0].url))
+
+      const a = document.createElement('a')
+      a.download = 'Horus_playlist_overview.png'
+      a.rel = 'noopener'
+      a.target = '_blank'
+      a.href = url
+      a.click()
     },
     createNewPlaylist () {
       this.startDuplication = true

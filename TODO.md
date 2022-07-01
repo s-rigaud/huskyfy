@@ -1,8 +1,5 @@
 # Login
 
-
-* Update window title on tab
-
 * Update Image ? (Put dynamic image background instead)
 
 # Explore
@@ -23,12 +20,12 @@
 
 * Add nice css effect for genre tags (left to right)
 
-* Add artists filter
-
 * Improve general design
 
 * Ensure responsiveness
 
 # Later
+
+* Make website loads faster
 
 * https://frontendchecklist.io/

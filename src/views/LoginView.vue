@@ -22,13 +22,19 @@
 import api from '@/api'
 import LocaleSelector from '@/components/LocaleSelector.vue'
 import { useUserStore } from '@/stores/user'
+import TitleMixin from '@/mixins/TitleMixin.js'
+
 export default {
   name: 'LoginView',
+  mixins: [TitleMixin],
   setup () {
     const userStore = useUserStore()
     return { userStore }
   },
   components: { LocaleSelector },
+  created () {
+    this.title = 'Horus | Login'
+  },
   methods: {
     accessOAuthPage () {
       window.location.href = api.spotify.auth.getOAuthUrl()

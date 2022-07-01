@@ -36,9 +36,14 @@
 
 <script>
 import api from '@/api'
+import TitleMixin from '@/mixins/TitleMixin.js'
 
 export default {
   name: 'AboutView',
+  mixins: [TitleMixin],
+  created () {
+    this.title = 'Horus | About'
+  },
   computed: {
     githubImg () {
       return require('@/assets/github.png')

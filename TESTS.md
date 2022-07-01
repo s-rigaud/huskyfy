@@ -2,7 +2,7 @@
 
 * Pas d'accès à l'API en mode restreint (Pas un soucis en prod)
 
-* Pas de playlists sur le compte
+* Pas de playlists sur le compte (pas possible ==> toujours les playlists likées)
 
 * Pas de tracks dans une playlist
 

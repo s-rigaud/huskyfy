@@ -26,15 +26,15 @@ export default {
   props: {
     playlistId: String
   },
-  setup() {
+  setup () {
     const playlistsStore = usePlaylistsStore()
     return { playlistsStore }
   },
-  async created() {
+  async created () {
     await this.createNewPlaylist()
   },
   methods: {
-    async createNewPlaylist() {
+    async createNewPlaylist () {
       this.startDuplication = true
       this.loadingText = this.$t('playlist.new.create')
       this.loadingPercentage = 1
@@ -62,11 +62,11 @@ export default {
       this.loadingPercentage = 100
       this.newPlaylistId = newPlaylistId
     },
-    displayNewPlaylistDetails() {
+    displayNewPlaylistDetails () {
       window.location.href = `/playlist/${this.newPlaylistId}`
     }
   },
-  data() {
+  data () {
     return {
       loadingPercentage: 0,
       loadingText: '',

@@ -21,9 +21,12 @@
 import PlaylistCard from '@/components/PlaylistCard.vue'
 import { usePlaylistsStore } from '@/stores/playlists'
 import { useUserStore } from '@/stores/user'
+import TitleMixin from '@/mixins/TitleMixin.js'
+
 export default {
   name: 'PlaylistExplorer',
   components: { PlaylistCard },
+  mixins: [TitleMixin],
   setup () {
     const userStore = useUserStore()
     const playlistsStore = usePlaylistsStore()
@@ -47,6 +50,7 @@ export default {
     }
   },
   async created () {
+    this.title = 'Horus | Playlist explorer'
     await this.loadMorePlaylists()
   },
   methods: {
