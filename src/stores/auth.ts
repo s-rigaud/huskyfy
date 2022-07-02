@@ -7,6 +7,8 @@ type AuthState = {
   temporaryToken: RemovableRef<string> | LocationQueryValue[];
   accessToken: RemovableRef<string>;
   refreshToken: RemovableRef<string>;
+  codeVerifier:RemovableRef<string>;
+  secretCodeChallenge:RemovableRef<string>;
 }
 
 export const useAuthStore = defineStore('auth', {
@@ -14,11 +16,14 @@ export const useAuthStore = defineStore('auth', {
     stateAuthorizationCode: useStorage('stateAuthorizationCode', ''),
     temporaryToken: useStorage('temporaryToken', ''),
     accessToken: useStorage('accessToken', ''),
-    refreshToken: useStorage('refreshToken', '')
+    refreshToken: useStorage('refreshToken', ''),
+    codeVerifier: useStorage('authState', ''),
+    secretCodeChallenge: useStorage('authState', '')
   } as AuthState),
   actions: {
     reset () {
       // Manually update state as local storage and states are linked now
+      this.stateAuthorizationCode = ''
       this.temporaryToken = ''
       this.accessToken = ''
       this.refreshToken = ''

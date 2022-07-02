@@ -1,13 +1,13 @@
 import { useAuthStore } from '@/stores/auth'
 import { useUserStore } from '@/stores/user'
 import axios, { AxiosResponse } from 'axios'
+import sha256 from 'crypto-js/sha256'
 import { Base64 } from 'js-base64'
 import { SpotifyAuthResponse } from '../model'
 
 const CLIENT_ID: string = process.env.VUE_APP_SPOTIFY_CLIENT_ID
 const CLIENT_SECRET: string = process.env.VUE_APP_SPOTIFY_CLIENT_SECRET
 const ENCODED_CREDENTIALS = Base64.encode(`${CLIENT_ID}:${CLIENT_SECRET}`)
-
 const REDIRECT_URL = `${process.env.VUE_APP_BASE_SERVER_URL}/login`
 const SCOPES = [
   // Read all tracks and playlists
@@ -37,7 +37,15 @@ export default {
   // On this url, the user can accept terms and scope and a temporary token is returned
   getOAuthUrl (): string {
     const authStore = useAuthStore()
-    authStore.stateAuthorizationCode = generateRandomString(15)
+
+    const CODE_VERIFIER = generateRandomString(60)
+    const SECRET_CODE_CHALLENGE = sha256(CODE_VERIFIER).toString()
+
+    useAuthStore().$patch({
+      stateAuthorizationCode: generateRandomString(15),
+      secretCodeChallenge: SECRET_CODE_CHALLENGE,
+      codeVerifier: CODE_VERIFIER
+    })
 
     const BASE_URL = 'https://accounts.spotify.com/authorize'
     const QUERY_PARAMS = [
@@ -46,7 +54,9 @@ export default {
       `scope=${SCOPES}`,
       `redirect_uri=${REDIRECT_URL}`,
       `show_dialog=${useUserStore().wantsToChangeAccount}`,
-      `state=${authStore.stateAuthorizationCode}`
+      `state=${authStore.stateAuthorizationCode}`,
+      'code_challenge_method=S256',
+      `code_challenge=${SECRET_CODE_CHALLENGE}`
     ].join('&')
     return `${BASE_URL}?${QUERY_PARAMS}`
   },
@@ -54,6 +64,14 @@ export default {
   // Request first access token from the previous temporary token received
   async requestFirstAccessToken () {
     const authStore = useAuthStore()
+    console.error(authStore.codeVerifier)
+    const data = [
+      `code=${authStore.temporaryToken}`,
+      `redirect_uri=${REDIRECT_URL}`,
+      'grant_type=authorization_code',
+      `code_verifier=${authStore.codeVerifier}`
+    ].join('&')
+
     await axios({
       method: 'post',
       url: 'https://accounts.spotify.com/api/token',
@@ -61,17 +79,16 @@ export default {
         Authorization: `Basic ${ENCODED_CREDENTIALS}`,
         'Content-Type': 'application/x-www-form-urlencoded'
       },
-      data: `code=${authStore.temporaryToken}&redirect_uri=${REDIRECT_URL}&grant_type=authorization_code`
-    }).then(
-      function ({ data }: AxiosResponse<SpotifyAuthResponse, SpotifyAuthResponse>) {
-        // Delete old tokens not useful anymore
-        authStore.$patch({
-          temporaryToken: '',
-          stateAuthorizationCode: '',
-          accessToken: data.access_token,
-          refreshToken: data.refresh_token
-        })
+      data
+    }).then(function ({ data }: AxiosResponse<SpotifyAuthResponse, SpotifyAuthResponse>) {
+      // Delete old token not useful anymore
+      authStore.$patch({
+        temporaryToken: '',
+        stateAuthorizationCode: '',
+        accessToken: data.access_token,
+        refreshToken: data.refresh_token
       })
+    })
   },
 
   // Refresh new access token
