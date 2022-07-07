@@ -1,4 +1,0 @@
-# Spotify
-
-Client ID 0c26ab311d744f8faae1f5c8ccc4ae21
-Client Secret 144c002f948a438a958b25783f2835fe

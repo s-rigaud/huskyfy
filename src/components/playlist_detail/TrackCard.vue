@@ -5,7 +5,7 @@
       <p style="margin: 5px">{{ trackIndex + 1 }}</p>
       <!-- Cover -->
       <v-avatar class="ma-3" size="80" rounded="0" style="min-width: 80px">
-        <v-img v-bind:src="image" :lazy-src="loadingCover"></v-img>
+        <v-img v-bind:src="image" :lazy-src="loadingCover" alt="Cover image"></v-img>
       </v-avatar>
 
       <div>

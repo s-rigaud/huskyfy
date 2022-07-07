@@ -1,7 +1,7 @@
 <template>
   <!-- Playlist representation as a card -->
   <v-card flat @click="displayDetails" class="playlist-card">
-    <v-img v-bind:src="images[0].url" :lazy-src="loadingCover" height="400px" cover></v-img>
+    <v-img :src="images[0].url" alt="Playlist cover" :lazy-src="loadingCover" height="400px" cover></v-img>
 
     <v-card-title class="text-truncate"> {{ name }} </v-card-title>
     <v-card-subtitle style="padding: 0">
@@ -28,15 +28,15 @@ export default {
     collaborative: Boolean
   },
   computed: {
-    loadingCover () {
+    loadingCover() {
       return require('@/assets/default_cover.jpg')
     },
-    horus () {
+    horus() {
       return require('@/assets/oeil-dhorus.png')
     }
   },
   methods: {
-    displayDetails () {
+    displayDetails() {
       this.$router.push({
         name: 'Explore playlist',
         params: { playlistId: this.id }
@@ -74,6 +74,12 @@ export default {
   animation: playlist-append 500ms linear;
   animation-fill-mode: forwards;
   opacity: 0
+}
+
+.playlist-card:hover {
+  transform: rotateX(-10deg);
+  transform: rotateY(-10deg);
+  /*transform: rotateZ(10deg);*/
 }
 
 .playlist-card .v-img .v-img__img--cover {

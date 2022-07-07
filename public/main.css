@@ -1,0 +1,10 @@
+html {
+    overflow: auto !important;
+    scroll-behavior: smooth;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-color: #907163 !important;
+    color: #dff9fb !important;
+}

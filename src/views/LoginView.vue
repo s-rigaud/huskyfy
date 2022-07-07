@@ -45,7 +45,7 @@ export default {
 <style scoped>
 #login {
   text-align: center;
-  background: url("../../public/home-background.jpg");
+  background: url("../../public/home-background.webp");
   background-size: cover;
   background-position: 50%;
   position: absolute;

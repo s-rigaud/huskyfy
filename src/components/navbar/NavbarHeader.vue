@@ -15,7 +15,7 @@
           <h3 id="profile-name"> {{ userStore.username }} </h3>
           <v-badge content="🎵" color="#CCA04F">
             <v-avatar style="align-items: initial">
-              <v-img v-bind:src="this.userStore.profilePicture" alt="Profile picture"></v-img>
+              <v-img :src="this.userStore.profilePicture" alt="Profile picture"></v-img>
             </v-avatar>
           </v-badge>
         </div>

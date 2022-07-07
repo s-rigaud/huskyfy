@@ -8,7 +8,11 @@
         :name="formatName(playlist)" :images="playlist.images"
         :owner="usernameToDisplay(playlist.owner['display_name'])" :public="playlist.public"
         :collaborative="playlist.collaborative" />
+      <v-progress-circular v-if="playlistTotal < 1" :size="70" :width="7" color="#A33327"
+        indeterminate>
+      </v-progress-circular>
     </div>
+
 
     <!-- TODO not really tested -->
     <v-btn @click="loadMorePlaylists" v-if="playlistsStore.playlists.length < playlistTotal">
@@ -27,21 +31,21 @@ export default {
   name: 'PlaylistExplorer',
   components: { PlaylistCard },
   mixins: [TitleMixin],
-  setup () {
+  setup() {
     const userStore = useUserStore()
     const playlistsStore = usePlaylistsStore()
     const currentUserUsername = userStore.username
     return { currentUserUsername, playlistsStore }
   },
   computed: {
-    usernameToDisplay () {
+    usernameToDisplay() {
       return (ownerUsername) => {
         return this.currentUserUsername === ownerUsername
           ? this.$t('me')
           : ownerUsername
       }
     },
-    formatName () {
+    formatName() {
       return (playlist) => {
         return playlist.id === 'my-music'
           ? this.$t('playlist.your-music.name')
@@ -49,20 +53,20 @@ export default {
       }
     }
   },
-  async created () {
+  async created() {
     this.title = 'Horus | Playlist explorer'
     await this.loadMorePlaylists()
   },
   methods: {
-    async loadMorePlaylists () {
+    async loadMorePlaylists() {
       const response = await this.playlistsStore.getUserPlaylists(this.offset)
       this.playlistTotal = response.total
       this.offset = response.offset
     }
   },
-  data () {
+  data() {
     return {
-      playlistTotal: 1,
+      playlistTotal: 0,
       offset: 0,
       isTrue: true
     }
