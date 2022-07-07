@@ -100,7 +100,7 @@ export default {
     IndieChart,
     TrackCard
   },
-  setup() {
+  setup () {
     const userStore = useUserStore()
     const playlistsStore = usePlaylistsStore()
 
@@ -119,17 +119,17 @@ export default {
       selectedGenres
     }
   },
-  created() {
+  created () {
     this.title = `Horus | ${this.playlists[this.playlistId].name}`
   },
-  async mounted() {
+  async mounted () {
     this.playlistsStore.selectedPlaylistId = this.playlistId
     // this.playlistsStore.$subscribe(this.watchForGenreUpdate)
 
     await this.loadFirstTracks()
     this.filteredTracks = this.playlists[this.playlistId].tracks
   },
-  data() {
+  data () {
     return {
       trackRequestLimit: 150,
 
@@ -148,7 +148,7 @@ export default {
     }
   },
   methods: {
-    getGenreCount() {
+    getGenreCount () {
       // default dict with 0 as default value
       const genreCounter = new Proxy(
         {},
@@ -163,7 +163,7 @@ export default {
       }
       return genreCounter
     },
-    async loadFirstTracks() {
+    async loadFirstTracks () {
       await this.downloadPlaylistTracks(
         this.playlistId,
         this.trackRequestLimit
@@ -172,7 +172,7 @@ export default {
         this.playlists[this.playlistId].total > this.trackRequestLimit
       this.resetFilters()
     },
-    filterTracksByGenres() {
+    filterTracksByGenres () {
       const genres = this.selectedGenres
       if (genres.length === 0) return this.resetFilters()
 
@@ -187,7 +187,7 @@ export default {
         )
       }
     },
-    filterTracksByPopularity(popularity) {
+    filterTracksByPopularity (popularity) {
       if (popularity === 'No filter') return this.resetFilters()
 
       const isIndieSelected = popularity === 'Indie'
@@ -195,7 +195,7 @@ export default {
         (t) => t.isIndie === isIndieSelected
       )
     },
-    filterTracksByArtists() {
+    filterTracksByArtists () {
       const artists = this.selectedArtists
       if (artists.length === 0) return this.resetFilters()
 
@@ -210,16 +210,16 @@ export default {
         )
       }
     },
-    resetFilters() {
+    resetFilters () {
       this.selectedGenres = []
       this.selectedPopularity = 'No filter'
       this.filteredTracks = this.playlists[this.playlistId].tracks
     },
-    openPlaylistOnSpotify() {
+    openPlaylistOnSpotify () {
       window.location.href = this.playlists[this.playlistId].uri
     },
     // Returns only top genres sorted by most to least popular
-    getSortedGenres() {
+    getSortedGenres () {
       const genreCounter = this.getGenreCount()
       const genreMapping = Object.keys(genreCounter).map((label) => [
         label,
@@ -238,10 +238,10 @@ export default {
         cap_name: this.capitalize(genre[0])
       }))
     },
-    capitalize(string) {
+    capitalize (string) {
       return string.charAt(0).toUpperCase() + string.slice(1)
     },
-    getSortedArtists() {
+    getSortedArtists () {
       const allArtists = new Set()
       for (const track of this.playlists[this.playlistId].tracks) {
         track.artists.map(a => allArtists.add(a))
@@ -251,27 +251,27 @@ export default {
     }
   },
   computed: {
-    spotifyLogo() {
+    spotifyLogo () {
       return require('@/assets/spotify.png')
     },
-    generalTitle() {
+    generalTitle () {
       const separator = (this.isExclusiveGenres) ? ' and ' : ' or '
       return this.selectedGenres.map(g => this.capitalize(g)).join(separator) || this.$t('track.all-tracks')
     }
   },
   watch: {
-    isExclusiveGenres() {
+    isExclusiveGenres () {
       this.filterTracksByGenres()
     },
-    selectedPopularity(newSelectedPopularity) {
+    selectedPopularity (newSelectedPopularity) {
       this.filterTracksByPopularity(newSelectedPopularity)
     },
-    selectedArtists(newValue, oldValue) {
+    selectedArtists (newValue, oldValue) {
       if (oldValue.length !== 0 || newValue.length !== 0) {
         this.filterTracksByArtists()
       }
     },
-    selectedGenres(newValue, oldValue) {
+    selectedGenres (newValue, oldValue) {
       if (oldValue.length !== 0 || newValue.length !== 0) {
         this.filterTracksByGenres()
       }

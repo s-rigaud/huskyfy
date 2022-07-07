@@ -28,7 +28,7 @@ import { useUserStore } from '@/stores/user'
 
 export default {
   name: 'FooterComponent',
-  setup() {
+  setup () {
     const userStore = useUserStore()
     return { userStore }
   }

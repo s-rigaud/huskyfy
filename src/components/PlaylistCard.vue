@@ -28,15 +28,15 @@ export default {
     collaborative: Boolean
   },
   computed: {
-    loadingCover() {
+    loadingCover () {
       return require('@/assets/default_cover.jpg')
     },
-    horus() {
+    horus () {
       return require('@/assets/oeil-dhorus.png')
     }
   },
   methods: {
-    displayDetails() {
+    displayDetails () {
       this.$router.push({
         name: 'Explore playlist',
         params: { playlistId: this.id }

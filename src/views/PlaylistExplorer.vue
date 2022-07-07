@@ -12,7 +12,6 @@
       </v-progress-circular>
     </div>
 
-
     <!-- TODO not really tested -->
     <v-btn @click="loadMorePlaylists" v-if="playlistsStore.playlists.length < playlistTotal">
       {{ $t("playlist.load-more-playlists") }}
@@ -30,21 +29,21 @@ export default {
   name: 'PlaylistExplorer',
   components: { PlaylistCard },
   mixins: [TitleMixin],
-  setup() {
+  setup () {
     const userStore = useUserStore()
     const playlistsStore = usePlaylistsStore()
     const currentUserUsername = userStore.username
     return { currentUserUsername, playlistsStore }
   },
   computed: {
-    usernameToDisplay() {
+    usernameToDisplay () {
       return (ownerUsername) => {
         return this.currentUserUsername === ownerUsername
           ? this.$t('me')
           : ownerUsername
       }
     },
-    formatName() {
+    formatName () {
       return (playlist) => {
         return playlist.id === 'my-music'
           ? this.$t('playlist.your-music.name')
@@ -52,18 +51,18 @@ export default {
       }
     }
   },
-  async created() {
+  async created () {
     this.title = 'Horus | Playlist explorer'
     await this.loadMorePlaylists()
   },
   methods: {
-    async loadMorePlaylists() {
+    async loadMorePlaylists () {
       const response = await this.playlistsStore.getUserPlaylists(this.offset)
       this.playlistTotal = response.total
       this.offset = response.offset
     }
   },
-  data() {
+  data () {
     return {
       playlistTotal: 0,
       offset: 0,

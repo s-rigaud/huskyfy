@@ -27,16 +27,16 @@ import TitleMixin from '@/mixins/TitleMixin.js'
 export default {
   name: 'LoginView',
   mixins: [TitleMixin],
-  setup() {
+  setup () {
     const userStore = useUserStore()
     return { userStore }
   },
   components: { LocaleSelector },
-  created() {
+  created () {
     this.title = 'Horus | Login'
   },
   methods: {
-    accessOAuthPage() {
+    accessOAuthPage () {
       window.location.href = api.spotify.auth.getOAuthUrl()
     }
   }
