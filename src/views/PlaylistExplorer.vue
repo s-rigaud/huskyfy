@@ -8,8 +8,7 @@
         :name="formatName(playlist)" :images="playlist.images"
         :owner="usernameToDisplay(playlist.owner['display_name'])" :public="playlist.public"
         :collaborative="playlist.collaborative" />
-      <v-progress-circular v-if="playlistTotal < 1" :size="70" :width="7" color="#A33327"
-        indeterminate>
+      <v-progress-circular v-if="playlistTotal < 1" :size="70" :width="7" color="var(--primary-color)" indeterminate>
       </v-progress-circular>
     </div>
 

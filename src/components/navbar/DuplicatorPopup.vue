@@ -2,7 +2,7 @@
   <!-- Layer on top to follow steps of playlist duplication -->
   <v-snackbar v-model="snackbar" :model-value="true" shaped>
     <div id="loading-create-new-playlist" v-if="loadingPercentage > 0">
-      <v-progress-circular :model-value="loadingPercentage" color="#A33327">
+      <v-progress-circular :model-value="loadingPercentage" color="var(--primary-color)">
       </v-progress-circular>
       <p>{{ loadingPercentage }}% - {{ loadingText }}</p>
     </div>

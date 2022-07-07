@@ -13,7 +13,7 @@
       <template v-slot:activator="{ props }">
         <div id="user-info" v-bind="props">
           <h3 id="profile-name"> {{ userStore.username }} </h3>
-          <v-badge content="🎵" color="#CCA04F">
+          <v-badge content="🎵" color="var(--link-color)">
             <v-avatar style="align-items: initial">
               <v-img :src="this.userStore.profilePicture" alt="Profile picture"></v-img>
             </v-avatar>
@@ -52,7 +52,7 @@ import { useUserStore } from '@/stores/user'
 export default {
   name: 'NavbarHeader',
   components: { LocaleSelector, NavbarPlaylistSelected },
-  setup () {
+  setup() {
     const userStore = useUserStore()
     const authStore = useAuthStore()
     const playlistsStore = usePlaylistsStore()
@@ -60,29 +60,29 @@ export default {
     return { authStore, playlistsStore, userStore }
   },
   computed: {
-    profilePictureOrDefault () {
+    profilePictureOrDefault() {
       // eslint-disable-next-line
       const DEFAULT_PICTURE = require("@/assets/no-user.png");
       return this.userStore.profilePicture !== ''
         ? this.userStore.profilePicture
         : DEFAULT_PICTURE
     },
-    logo () {
+    logo() {
       return require('@/assets/logo.png')
     }
   },
   methods: {
-    clearLocalStorage () {
+    clearLocalStorage() {
       localStorage.clear()
       this.logout()
     },
-    logout () {
+    logout() {
       this.userStore.reset()
       this.authStore.reset()
       this.playlistsStore.selectedPlaylistId = null
       this.$router.push({ name: 'LoginView' })
     },
-    logoutAndChangeAccount () {
+    logoutAndChangeAccount() {
       this.userStore.wantsToChangeAccount = true
       // wantsToChangeAccount is not reset
       this.userStore.reset()
@@ -95,8 +95,8 @@ export default {
 </script>
 <style>
 header {
-  background-color: #A33327 !important;
-  color: #dff9fb !important;
+  background-color: var(--primary-color) !important;
+  color: var(--text-color) !important;
   letter-spacing: 1px !important;
 }
 

@@ -28,7 +28,7 @@ import { useUserStore } from '@/stores/user'
 
 export default {
   name: 'FooterComponent',
-  setup () {
+  setup() {
     const userStore = useUserStore()
     return { userStore }
   }
@@ -37,19 +37,19 @@ export default {
 <style scoped>
 #footer {
   max-height: 100px;
-  background-color: #A33327 !important;
-  color: #dff9fb !important;
+  background-color: var(--primary-color) !important;
+  color: var(--text-color) !important;
   display: table;
 }
 
 button {
-  background-color: #A33327;
-  color: #dff9fb !important;
+  background-color: var(--primary-color);
+  color: var(--text-color) !important;
   font-weight: 700;
 }
 
 #github-link {
-  color: #130f40;
+  color: var(--link-color);
   text-decoration: none;
 }
 

@@ -61,7 +61,7 @@ export default {
 }
 
 .select:hover::after {
-  color: #A33327;
+  color: var(--primary-color);
 }
 
 select {

@@ -54,7 +54,8 @@
             :image="track.album.images[0].url" :artists="track.artists" :genres="track.genres" :isIndie="track.isIndie"
             :trackURI="track.uri" :trackIndex="index" />
         </div>
-        <v-progress-circular v-if="filteredTracks.length < 1" :size="70" :width="7" color="#A33327" indeterminate>
+        <v-progress-circular v-if="filteredTracks.length < 1" :size="70" :width="7" color="var(--primary-color)"
+          indeterminate>
         </v-progress-circular>
       </div>
     </div>
@@ -283,7 +284,7 @@ export default {
   display: flex;
   flex-direction: column;
   border-right: 2px solid;
-  border-color: #A33327 !important;
+  border-color: var(--primary-color) !important;
   margin: 0 5px;
   min-width: 380px !important;
 }
@@ -321,8 +322,8 @@ export default {
 }
 
 #open-spotify {
-  background-color: #A33327 !important;
-  color: #dff9fb !important;
+  background-color: var(--primary-color) !important;
+  color: var(--text-color) !important;
   letter-spacing: 0px;
   padding: 20px !important;
 }

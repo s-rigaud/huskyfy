@@ -27,16 +27,16 @@ import TitleMixin from '@/mixins/TitleMixin.js'
 export default {
   name: 'LoginView',
   mixins: [TitleMixin],
-  setup () {
+  setup() {
     const userStore = useUserStore()
     return { userStore }
   },
   components: { LocaleSelector },
-  created () {
+  created() {
     this.title = 'Horus | Login'
   },
   methods: {
-    accessOAuthPage () {
+    accessOAuthPage() {
       window.location.href = api.spotify.auth.getOAuthUrl()
     }
   }
@@ -85,14 +85,14 @@ export default {
   padding: 20px;
   text-transform: none;
   letter-spacing: 0;
-  background-color: #A33327 !important;
-  color: #dff9fb !important;
+  background-color: var(--primary-color) !important;
+  color: var(--text-color) !important;
   position: absolute;
   bottom: 10%;
 }
 
 #connect-button:hover {
-  outline: #A33327 solid 2px;
+  outline: var(--primary-color) solid 2px;
 }
 
 #connect-button:focus {

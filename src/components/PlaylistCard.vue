@@ -70,7 +70,7 @@ export default {
   padding: 10px;
   display: flex;
   flex-direction: column;
-  color: #dff9fb !important;
+  color: var(--text-color) !important;
   animation: playlist-append 500ms linear;
   animation-fill-mode: forwards;
   opacity: 0

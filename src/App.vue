@@ -48,8 +48,8 @@ export default defineComponent({
 
 #container {
   padding: 12px;
-  background-color: #907163 !important;
-  color: #dff9fb !important;
+  background-color: var(--secondary-color) !important;
+  color: var(--text-color) !important;
   font-family: "Oswald" !important;
   min-height: 100%;
 
@@ -62,8 +62,8 @@ export default defineComponent({
 }
 
 #main {
-  background-color: #A33327 !important;
-  color: #dff9fb !important;
+  background-color: var(--primary-color) !important;
+  color: var(--text-color) !important;
 }
 
 .no-padding {

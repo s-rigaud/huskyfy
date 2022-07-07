@@ -226,7 +226,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  border-top: 2px #dff9fb solid;
+  border-top: 2px var(--text-color) solid;
   margin: 5px;
   width: 100%;
   transition: 55s all ease;

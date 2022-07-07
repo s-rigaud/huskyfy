@@ -93,7 +93,7 @@ h1 {
 
 h1,
 h2 {
-  color: #A33327 !important;
+  color: var(--primary-color) !important;
 }
 
 p {
@@ -102,7 +102,7 @@ p {
 
 a {
   text-decoration: none;
-  color: #A33327 !important;
+  color: var(--primary-color) !important;
 }
 
 @media (max-width: 992px) {
