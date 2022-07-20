@@ -1,9 +1,13 @@
 <template>
   <!-- Playlist representation as a card -->
   <v-card flat @click="displayDetails" class="playlist-card">
-    <v-img :src="images[0].url" alt="Playlist cover" :lazy-src="loadingCover" height="400px" cover></v-img>
+    <v-img rel="preconnect" :src="images[0].url" alt="Playlist cover" :lazy-src="loadingCover" height="400px" cover>
+    </v-img>
 
-    <v-card-title class="text-truncate"> {{ name }} </v-card-title>
+    <v-card-title>
+      <p class="text-truncate"> {{ name }} </p>
+    </v-card-title>
+
     <v-card-subtitle style="padding: 0">
       <p>{{ $t("playlist.created-by") }} {{ owner }}</p>
     </v-card-subtitle>
@@ -12,7 +16,7 @@
       <p v-else-if="public">{{ $t("playlist.public") }}</p>
       <p v-else> {{ $t("playlist.private") }} </p>
     </v-card-subtitle>
-    <v-img width="30" :src="horus" alt="Horus Image" class="horus-img"></v-img>
+    <v-img rel="preconnect" width="30" :src="horus" alt="Horus Image" class="horus-img"></v-img>
   </v-card>
 </template>
 

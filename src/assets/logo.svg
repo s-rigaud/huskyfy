@@ -1,3 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="200" height="90">
-    <text x="0" y="15" fill="red">Horus</text>
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" id="HorusLogo"
+    xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="90">
+    <text x="0" y="65" fill="#FF9F29" font-family="Verdana" style="font-size: 45; font-weight: 600">H💽rus</text>
 </svg>

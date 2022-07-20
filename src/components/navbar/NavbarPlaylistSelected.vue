@@ -5,13 +5,13 @@
 
     <!-- Info about the playlist -->
     <div id="playlist-info">
-      <v-img v-bind:src="
+      <v-img rel="preconnect" v-bind:src="
         playlistsStore.playlists[playlistsStore.selectedPlaylistId].images[0]
           .url
       " id="playlist-image" :lazy-src="loadingCover" alt="Cover image" cover></v-img>
       <div id="info-embedded">
         <div id="title">
-          <h3 style="margin-right: 5px">
+          <h3 style="margin-right: 5px" class="text-truncate">
             {{ playlistsStore.playlists[playlistsStore.selectedPlaylistId].name }}
           </h3>
 
@@ -23,13 +23,13 @@
           </v-tooltip>
         </div>
 
-        <p>
+        <p class="text-truncate">
           {{
               playlistsStore.playlists[playlistsStore.selectedPlaylistId]
                 .description.replace(/(<([^>]+)>)/ig, '')
           }}
         </p>
-        <p style="opacity: 0.5">
+        <p style="opacity: 0.8">
           {{ $t("playlist.created-by") }} {{ usernameToDisplay }}
         </p>
       </div>
@@ -69,7 +69,7 @@
       </v-btn>
       <v-btn @click="openPlaylistOnSpotify" id="open-spotify-playlist-button" variant="outlined">
         {{ $t("playlist.open-on-spotify") }}
-        <v-img width="25" :src="spotifyLogo" alt="Spotify Logo" />
+        <v-img rel="preconnect" width="25" :src="spotifyLogo" alt="Spotify Logo" />
       </v-btn>
 
       <v-dialog persistent v-model="isDeleteModalOpen">
@@ -116,7 +116,7 @@ import makeImage from '@/services/playlistImageMaker.ts'
 export default {
   name: 'NavbarPlaylistSelected',
   components: { DuplicatorPopup },
-  setup () {
+  setup() {
     const userStore = useUserStore()
     const playlistsStore = usePlaylistsStore()
 
@@ -124,7 +124,7 @@ export default {
 
     return { currentUserUsername, playlistsStore }
   },
-  data () {
+  data() {
     return {
       isDeleteModalOpen: false,
       startDuplication: false,
@@ -133,7 +133,7 @@ export default {
     }
   },
   computed: {
-    usernameToDisplay () {
+    usernameToDisplay() {
       const playlistCreator =
         this.playlistsStore.playlists[this.playlistsStore.selectedPlaylistId]
           .owner.display_name
@@ -142,25 +142,25 @@ export default {
         ? this.$t('me')
         : playlistCreator
     },
-    userOwnsPlaylist () {
+    userOwnsPlaylist() {
       return (
         this.currentUserUsername ===
         this.playlistsStore.playlists[this.playlistsStore.selectedPlaylistId]
           .owner.display_name
       )
     },
-    spotifyLogo () {
+    spotifyLogo() {
       return require('@/assets/spotify.png')
     },
-    getEmojiFromVisibility () {
+    getEmojiFromVisibility() {
       const playlist =
         this.playlistsStore.playlists[this.playlistsStore.selectedPlaylistId]
 
-      if (playlist.collaborative) return '🤝'
+      if (playlist.collaborative) return '👪'
       if (playlist.public) return '📣'
       return '🔒'
     },
-    gettextFromVisibility () {
+    gettextFromVisibility() {
       const playlist =
         this.playlistsStore.playlists[this.playlistsStore.selectedPlaylistId]
 
@@ -168,18 +168,18 @@ export default {
       if (playlist.public) return this.$t('playlist.public')
       return this.$t('playlist.private')
     },
-    loadingCover () {
+    loadingCover() {
       return require('@/assets/default_cover.jpg')
     }
   },
   methods: {
-    openPlaylistOnSpotify () {
+    openPlaylistOnSpotify() {
       window.location.href =
         this.playlistsStore.playlists[
           this.playlistsStore.selectedPlaylistId
         ].uri
     },
-    async exportPreview () {
+    async exportPreview() {
       const top16Artists = this.playlistsStore.getTopArtists(16)
       const url = await makeImage(top16Artists.map(res => res.artist.images[0].url))
 
@@ -190,10 +190,10 @@ export default {
       a.href = url
       a.click()
     },
-    createNewPlaylist () {
+    createNewPlaylist() {
       this.startDuplication = true
     },
-    async unfollowPlaylist () {
+    async unfollowPlaylist() {
       this.isDeleteModalOpen = false
       this.waitingForDeletion = true
       const toDeletePlaylistId = this.playlistsStore.selectedPlaylistId
@@ -202,13 +202,13 @@ export default {
       this.waitingForDeletion = false
       this.$router.push({ name: 'Explore' })
     },
-    async setPlaylistPublic () {
+    async setPlaylistPublic() {
       await this.playlistsStore.updatePlaylistPrivacy(
         this.playlistsStore.selectedPlaylistId,
         true
       )
     },
-    async setPlaylistPrivate () {
+    async setPlaylistPrivate() {
       await this.playlistsStore.updatePlaylistPrivacy(
         this.playlistsStore.selectedPlaylistId,
         false

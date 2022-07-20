@@ -5,7 +5,7 @@
       <p style="margin: 5px">{{ trackIndex + 1 }}</p>
       <!-- Cover -->
       <v-avatar class="ma-3" size="80" rounded="0" style="min-width: 80px">
-        <v-img v-bind:src="image" :lazy-src="loadingCover" alt="Cover image"></v-img>
+        <v-img rel="preconnect" v-bind:src="image" :lazy-src="loadingCover" alt="Cover image"></v-img>
       </v-avatar>
 
       <div>
@@ -73,7 +73,7 @@ export default {
     },
     genreAnimationDelay () {
       return (index) => {
-        return { 'animation-delay': `${index * 1000}ms` }
+        return { 'animation-delay': `${index * 500}ms` }
       }
     }
   },

@@ -27,7 +27,7 @@
             <template v-slot:selection="{ item, index }">
               <v-chip v-if="index < 2">
                 <v-avatar>
-                  <v-img width="20" :src="item.images[0].url" alt="Spotify artist cover"></v-img>
+                  <v-img rel="preconnect" width="20" :src="item.images[0].url" alt="Spotify artist cover"></v-img>
                 </v-avatar>
                 <span>{{ item.name }}</span>
               </v-chip>

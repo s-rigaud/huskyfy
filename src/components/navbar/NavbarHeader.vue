@@ -9,22 +9,22 @@
     <v-spacer></v-spacer>
 
     <!-- Right part -->
-    <v-menu open-on-hover transition="slide-y-transition">
+    <v-menu open-on-hover transition="fade-transition">
       <template v-slot:activator="{ props }">
         <div id="user-info" v-bind="props">
           <h3 id="profile-name"> {{ userStore.username }} </h3>
           <v-badge content="🎵" color="var(--link-color)">
             <v-avatar style="align-items: initial">
-              <v-img :src="this.userStore.profilePicture" alt="Profile picture"></v-img>
+              <v-img rel="preconnect" :src="this.userStore.profilePicture" alt="Profile picture"></v-img>
             </v-avatar>
           </v-badge>
         </div>
       </template>
 
-      <v-btn id="logout-button" @click="logout" color="error" variant="outlined">
+      <v-btn id="logout-button" @click="logout" variant="outlined">
         {{ $t("navbar.logout") }}
       </v-btn>
-      <v-btn id="change-account-button" @click="logoutAndChangeAccount" color="error" variant="outlined">
+      <v-btn id="change-account-button" @click="logoutAndChangeAccount" variant="outlined">
         {{ $t("navbar.change-account") }}
       </v-btn>
     </v-menu>
@@ -68,7 +68,7 @@ export default {
         : DEFAULT_PICTURE
     },
     logo () {
-      return require('@/assets/logo.png')
+      return require('@/assets/logo.svg')
     }
   },
   methods: {
@@ -115,15 +115,17 @@ header {
   cursor: pointer;
 }
 
+#logout-button, #change-account-button{
+  background-color: var(--primary-color);
+}
+
 #logout-button {
-  background-color: white;
   position: absolute;
   top: 12px;
   font-family: "Oswald";
 }
 
 #change-account-button {
-  background-color: white;
   position: absolute;
   top: 45px;
   font-family: "Oswald";
