@@ -1,4 +1,9 @@
 {
+	"_emojis": {
+        "public": "📣",
+        "collaborative": "👪",
+        "private": "🔒"
+    },
 	"about": {
 		"content": {
 			"connection": "Horus utilise la méthode OAuth2 fournie par Spotify qui permetd'accéder à vos données Spotify en toute sécurité. Aucune donnée n'est stockée sur un serveur, vous êtes donc totalement en sécurité lorsque vous naviguez ou quittez le site sans vous déconnecter.",
@@ -33,7 +38,7 @@
 		"404": "Page non trouvée"
 	},
 	"playlist": {
-		"collaborative": "Playlist collaborative 👪",
+		"collaborative": "Playlist collaborative",
 		"created-by": "Créée par",
 		"delete": {
 			"agree": "Supprimer",
@@ -62,10 +67,10 @@
 		"no-tracks": "Cette playlist n'a pas de titres pour le moment. Ouvrez la playlist sur Spotify et essayez d'ajouter des titres pour commencer à les voir apparaître ici.",
 		"open-on-spotify": "Ouvrir dans Spotify",
 		"private": "Playlist privée 🔒",
-		"public": "Playlist publique📣",
+		"public": "Playlist publique",
 		"reset-filters": "Réinitialiser les filtres",
 		"set-private": "Rendre privée 🔒",
-		"set-public": "Rendre publique 📣",
+		"set-public": "Rendre publique",
 		"unfollow": "Supprimer de la bibliothèque 🗑️",
 		"your-music": {
 			"description": "Playlist Spotify avec tous les titres likés",

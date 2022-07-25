@@ -72,6 +72,8 @@ export const usePlaylistsStore = defineStore('playlists', {
       // Manually update state as local storage and states are linked now
       this.playlists = {}
       this.selectedPlaylistId = null
+      this.filteredTracks = []
+      this.selectedGenres = []
     },
     // Retrieve playlists for user
     async getUserPlaylists (offset: number) {

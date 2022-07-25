@@ -1,4 +1,9 @@
 {
+    "_emojis": {
+        "public": "📣",
+        "collaborative": "👪",
+        "private": "🔒"
+    },
     "about": {
         "content": {
             "connection": "This website is using well designed Spotify OAuth2 access account which allow the website to access your data safely. There is no data stored in any server so you are totally safe when browsing or exiting the website without signing out.",
@@ -30,7 +35,7 @@
         "logout": "Sign out"
     },
     "playlist": {
-        "collaborative": "Collaborative playlist 👪",
+        "collaborative": "Collaborative playlist",
         "created-by": "Created by",
         "delete": {
             "agree": "Delete",
@@ -58,11 +63,11 @@
         "next": "Jump to new playlist",
         "no-tracks": "This playlist doesn't have any track now. Open the playlist on Spotify and try to add tracks to start seeing them here",
         "open-on-spotify": "Open on Spotify",
-        "private": "Private playlist 🔒",
-        "public": "Public playlist 📣",
+        "private": "Private playlist",
+        "public": "Public playlist",
         "reset-filters": "Reset filters",
-        "set-private": "Set private 🔒",
-        "set-public": "Set public 📣",
+        "set-private": "Set private",
+        "set-public": "Set public",
         "unfollow": "Unfollow 🗑️",
         "your-music": {
             "description": "Spotify playlist with all your favorite songs",

@@ -1,10 +1,20 @@
-# Login
+# Fonctionnalités
+
+* Add nice export image
+
+* Make website loads faster
+
+* Load track UI elements as long as I receive them (Make track appear even if they don't have artist genre and popularity yet)
+
+# Design
+
+## Login
 
 * Update Image ? (Put dynamic image background instead)
 
-# Explore
+## Explore
 
-* White logo
+* Improve logo
 
 * Improve and center text in the middle (add hero or something cool if needed)
 
@@ -12,20 +22,14 @@
 
 * Ensure responsiveness
 
-# Playlist
+## Playlist
 
-* Add placeholders for tracks
-
-* Load track UI elements as long as I receive them (Make track appear even if they don't have artist genre and popularity yet)
-
-* Add nice css effect for genre tags (left to right)
+* Create better looking cover for playlist with logo on it
 
 * Improve general design
 
 * Ensure responsiveness
 
-# Later
-
-* Make website loads faster
+## Other
 
 * https://frontendchecklist.io/

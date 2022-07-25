@@ -12,9 +12,9 @@
       <p>{{ $t("playlist.created-by") }} {{ owner }}</p>
     </v-card-subtitle>
     <v-card-subtitle style="padding: 0">
-      <p v-if="collaborative">{{ $t("playlist.collaborative") }}</p>
-      <p v-else-if="public">{{ $t("playlist.public") }}</p>
-      <p v-else> {{ $t("playlist.private") }} </p>
+      <p v-if="collaborative">{{ $t("playlist.collaborative") }} {{ $t("_emojis.collaborative") }}</p>
+      <p v-else-if="public">{{ $t("playlist.public") }} {{ $t("_emojis.public") }}</p>
+      <p v-else> {{ $t("playlist.private") }} {{ $t("_emojis.private") }}</p>
     </v-card-subtitle>
     <v-img rel="preconnect" width="30" :src="horus" alt="Horus Image" class="horus-img"></v-img>
   </v-card>
@@ -32,15 +32,15 @@ export default {
     collaborative: Boolean
   },
   computed: {
-    loadingCover () {
+    loadingCover() {
       return require('@/assets/default_cover.jpg')
     },
-    horus () {
+    horus() {
       return require('@/assets/oeil-dhorus.png')
     }
   },
   methods: {
-    displayDetails () {
+    displayDetails() {
       this.$router.push({
         name: 'Explore playlist',
         params: { playlistId: this.id }
@@ -78,12 +78,6 @@ export default {
   animation: playlist-append 500ms linear;
   animation-fill-mode: forwards;
   opacity: 0
-}
-
-.playlist-card:hover {
-  transform: rotateX(-10deg);
-  transform: rotateY(-10deg);
-  /*transform: rotateZ(10deg);*/
 }
 
 .playlist-card .v-img .v-img__img--cover {

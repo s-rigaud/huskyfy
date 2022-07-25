@@ -88,6 +88,5 @@ export default {
   align-content: stretch;
   justify-content: space-evenly;
   align-items: stretch;
-  margin: 0px 30px 30px 30px;
 }
 </style>

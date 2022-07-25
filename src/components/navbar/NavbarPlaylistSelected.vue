@@ -55,7 +55,7 @@
           {{ $t("playlist.set-private") }}
         </v-btn>
         <v-btn v-else @click="setPlaylistPublic" variant="outlined">
-          {{ $t("playlist.set-public") }}
+          {{ $t("playlist.set-public") }} {{ $t("_emojis.public") }}
         </v-btn>
       </div>
 
@@ -64,7 +64,8 @@
         {{ $t("playlist.duplicate.button") }}
       </v-btn>
 
-      <v-btn @click="exportPreview" variant="outlined" v-bind="tooltip">
+      <v-btn v-if="playlistsStore.playlists[playlistsStore.selectedPlaylistId].tracks.length > 0" @click="exportPreview"
+        variant="outlined" v-bind="tooltip">
         {{ $t("playlist.export-preview") }}
       </v-btn>
       <v-btn @click="openPlaylistOnSpotify" id="open-spotify-playlist-button" variant="outlined">
@@ -156,17 +157,17 @@ export default {
       const playlist =
         this.playlistsStore.playlists[this.playlistsStore.selectedPlaylistId]
 
-      if (playlist.collaborative) return '👪'
-      if (playlist.public) return '📣'
-      return '🔒'
+      if (playlist.collaborative) return this.$t('_emojis.collaborative')
+      if (playlist.public) return this.$t('_emojis.public')
+      return this.$t('_emojis.private')
     },
     gettextFromVisibility() {
       const playlist =
         this.playlistsStore.playlists[this.playlistsStore.selectedPlaylistId]
 
-      if (playlist.collaborative) return this.$t('playlist.collaborative')
-      if (playlist.public) return this.$t('playlist.public')
-      return this.$t('playlist.private')
+      if (playlist.collaborative) return this.$t('playlist.collaborative') + " " + this.$t('_emojis.collaborative')
+      if (playlist.public) return this.$t('playlist.public') + " " + this.$t('_emojis.public')
+      return this.$t('playlist.private') + " " + this.$t('_emojis.private')
     },
     loadingCover() {
       return require('@/assets/default_cover.jpg')
@@ -180,11 +181,16 @@ export default {
         ].uri
     },
     async exportPreview() {
-      const top16Artists = this.playlistsStore.getTopArtists(16)
-      const url = await makeImage(top16Artists.map(res => res.artist.images[0].url))
+      // Creating image from top artists
+      const top12Artists = this.playlistsStore.getTopArtists(12)
+      const url = await makeImage(top12Artists.map(res => res.artist.images[0].url))
 
+      const playlist =
+        this.playlistsStore.playlists[this.playlistsStore.selectedPlaylistId]
+
+      // Downloading the image
       const a = document.createElement('a')
-      a.download = 'Horus_playlist_overview.png'
+      a.download = `${playlist.name}.png`
       a.rel = 'noopener'
       a.target = '_blank'
       a.href = url
