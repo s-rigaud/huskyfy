@@ -2,11 +2,12 @@
   <apexchart type="radialBar" height="350" :options="chartOptions" :series="series"></apexchart>
 </template>
 
-<script>
+<script lang="ts">
 import { usePlaylistsStore } from '@/stores/playlists'
 import { storeToRefs } from 'pinia'
+import { defineComponent } from 'vue'
 
-export default {
+export default defineComponent({
   name: 'IndieChart',
   props: {
     playlistId: String
@@ -18,16 +19,14 @@ export default {
   },
   methods: {
     // Get the general playlist isIndie % from the mean of all tracks
-    getIndiePercentage () {
+    getIndiePercentage (): number {
       let indieTracks = 0
-      for (const track of this.playlists[this.playlistId].tracks) {
-        indieTracks += track.isIndie
+      for (const track of this.playlists[this.playlistId!].tracks) {
+        indieTracks += track.isIndie ? 1 : 0
       }
-      return parseInt(
-        (indieTracks / this.playlists[this.playlistId].tracks.length) * 100
-      )
+      return indieTracks / this.playlists[this.playlistId!].tracks.length * 100
     },
-    getImage () {
+    getImage (): string {
       let image = ''
       const indiePercentage = this.getIndiePercentage()
       if (indiePercentage < 25) image = 'cold'
@@ -80,5 +79,5 @@ export default {
       }
     }
   }
-}
+})
 </script>

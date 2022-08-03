@@ -1,8 +1,8 @@
 import { useAuthStore } from '@/stores/auth'
 import { useUserStore } from '@/stores/user'
 import axios, { AxiosResponse } from 'axios'
-import { SpotifyAuthResponse } from '../model'
 import { Base64 } from 'js-base64'
+import { SpotifyAuthResponse } from '../model'
 
 const CLIENT_ID: string = process.env.VUE_APP_SPOTIFY_CLIENT_ID
 const CLIENT_SECRET: string = process.env.VUE_APP_SPOTIFY_CLIENT_SECRET

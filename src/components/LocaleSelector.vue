@@ -7,10 +7,11 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { useUserStore } from '@/stores/user'
+import { defineComponent } from 'vue'
 
-export default {
+export default defineComponent({
   name: 'LocaleSelector',
   setup () {
     const userStore = useUserStore()
@@ -19,21 +20,23 @@ export default {
   computed: {
     sortedLocales () {
       // Set current locale first (preselected option)
-      let locales = this.$i18n.availableLocales
-      const currentLocale = this.$i18n.locale
+      let locales: Array<string> = this.$i18n.availableLocales
+      const currentLocale: string = this.$i18n.locale
       locales = locales.filter((l) => l !== currentLocale)
       locales.unshift(currentLocale)
       return locales
     }
   },
   methods: {
-    updateLocale (event) {
-      const locale = event.target.value
+    updateLocale (event: Event) {
+      console.error(event)
+
+      const locale: string = (event.target as HTMLInputElement).value
       this.$i18n.locale = locale
       this.userStore.locale = locale
     }
   }
-}
+})
 </script>
 <style scoped>
 .select {

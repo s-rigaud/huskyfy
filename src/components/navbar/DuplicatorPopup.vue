@@ -18,10 +18,12 @@
   </v-snackbar>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
+
 import { usePlaylistsStore } from '@/stores/playlists'
 
-export default {
+export default defineComponent({
   name: 'DuplicatorPopup',
   props: {
     playlistId: String
@@ -35,11 +37,10 @@ export default {
   },
   methods: {
     async createNewPlaylist () {
-      this.startDuplication = true
       this.loadingText = this.$t('playlist.new.create')
       this.loadingPercentage = 1
       const newPlaylistId = await this.playlistsStore.createPlaylist(
-        this.playlistId,
+        this.playlistId!,
         this.playlistsStore.selectedGenres
       )
 
@@ -47,13 +48,13 @@ export default {
       this.loadingPercentage = 33
       await this.playlistsStore.updatePlaylistCover(
         newPlaylistId,
-        this.playlistsStore.playlists[this.playlistId].images[0].url
+        this.playlistsStore.playlists[this.playlistId!].images[0].url
       )
 
       this.loadingText = this.$t('playlist.new.tracks')
       this.loadingPercentage = 66
       await this.playlistsStore.addTracksToPlaylist(
-        this.playlistId,
+        this.playlistId!,
         newPlaylistId,
         this.playlistsStore.filteredTracks.map((t) => t.uri)
       )
@@ -76,7 +77,7 @@ export default {
       snackbar: true
     }
   }
-}
+})
 </script>
 <style scoped>
 #loading-create-new-playlist {

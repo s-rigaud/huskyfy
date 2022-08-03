@@ -2,7 +2,7 @@
   <!-- Card to represent a track, many of them are stacks -->
   <v-card flat border rounded="0" @click="openTrackOnSpotify" class="track-card" :style="trackAnimationDelay">
     <div class="card-content">
-      <p style="margin: 5px">{{ trackIndex + 1 }}</p>
+      <p style="margin: 5px">{{ trackIndex! + 1 }}</p>
       <!-- Cover -->
       <v-avatar class="ma-3" size="80" rounded="0" style="min-width: 80px">
         <v-img rel="preconnect" v-bind:src="image" :lazy-src="loadingCover" alt="Cover image"></v-img>
@@ -13,7 +13,7 @@
           <v-card-header-text>
             <!-- All track info -->
             <v-card-title class="text-h6"> {{ name }} </v-card-title>
-            <a v-for="artist in artists" class="artist-name" :key="artist" :href="artist.uri">
+            <a v-for="artist in artists" class="artist-name" :key="artist.id" :href="artist.uri">
               <v-card-subtitle style="display: inline-flex">{{ addComma(artist.name) }}</v-card-subtitle>
             </a>
             <v-chip v-if="isIndie" :text="$t('track.indie')" color="green" label text-color="white" size="small"
@@ -25,7 +25,7 @@
         </v-card-header>
 
         <!-- Genre chips -->
-        <div v-if="genres.length > 0">
+        <div v-if="genres!.length > 0">
           <v-card-text>
             <v-chip v-for="(genre, index) in genres" :key="genre" :text="genre.toUpperCase()" label size="small"
               class="genre-chip" :style="genreAnimationDelay(index)">
@@ -41,48 +41,55 @@
   </v-card>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { SpotifyArtist } from '@/api/spotify/model'
+import { defineComponent } from 'vue'
+
+export default defineComponent({
   name: 'TrackCard',
   props: {
     id: String,
     name: String,
     image: String,
-    artists: Array,
-    genres: Object,
+    artists: {
+      type: Array as () => Array<SpotifyArtist>
+    },
+    genres: {
+      type: Array as () => Array<string>
+    },
     isIndie: Boolean,
     trackURI: String,
     trackIndex: Number
   },
   computed: {
     addComma () {
-      return (artistName) => {
-        if (this.artists[this.artists.length - 1].name === artistName) {
+      return (artistName: string): string => {
+        if (this.artists![this.artists!.length - 1].name === artistName) {
           return artistName
         }
         return `${artistName},`
       }
     },
-    loadingCover () {
+    loadingCover (): string {
       return require('@/assets/default_cover.jpg')
     },
     // Delay animation so cards appear one after another
-    trackAnimationDelay () {
-      const duration = (this.trackIndex < 20) ? `${200 * this.trackIndex}ms` : '0ms'
+    trackAnimationDelay (): object {
+      const duration = (this.trackIndex! < 20) ? `${200 * this.trackIndex!}ms` : '0ms'
       return { 'animation-delay': duration }
     },
     genreAnimationDelay () {
-      return (index) => {
+      return (index: number): object => {
         return { 'animation-delay': `${index * 500}ms` }
       }
     }
   },
   methods: {
     openTrackOnSpotify () {
-      window.location.href = this.trackURI
+      window.location.href = this.trackURI!
     }
   }
-}
+})
 </script>
 <style scoped>
 @keyframes track-append {

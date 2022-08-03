@@ -1,9 +1,9 @@
 {
 	"_emojis": {
-        "public": "📣",
-        "collaborative": "👪",
-        "private": "🔒"
-    },
+		"public": "📣",
+		"collaborative": "👪",
+		"private": "🔒"
+	},
 	"about": {
 		"content": {
 			"connection": "Horus utilise la méthode OAuth2 fournie par Spotify qui permetd'accéder à vos données Spotify en toute sécurité. Aucune donnée n'est stockée sur un serveur, vous êtes donc totalement en sécurité lorsque vous naviguez ou quittez le site sans vous déconnecter.",

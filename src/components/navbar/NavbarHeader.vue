@@ -15,7 +15,7 @@
           <h3 id="profile-name"> {{ userStore.username }} </h3>
           <v-badge content="🎵" color="var(--link-color)">
             <v-avatar style="align-items: initial">
-              <v-img rel="preconnect" :src="this.userStore.profilePicture" alt="Profile picture"></v-img>
+              <v-img rel="preconnect" :src="userStore.profilePicture" alt="Profile picture"></v-img>
             </v-avatar>
           </v-badge>
         </div>
@@ -42,14 +42,15 @@
   </v-app-bar>
 </template>
 
-<script>
+<script lang="ts">
 import LocaleSelector from '@/components/LocaleSelector.vue'
 import NavbarPlaylistSelected from '@/components/navbar/NavbarPlaylistSelected.vue'
 import { useAuthStore } from '@/stores/auth'
 import { usePlaylistsStore } from '@/stores/playlists'
 import { useUserStore } from '@/stores/user'
+import { defineComponent } from 'vue'
 
-export default {
+export default defineComponent({
   name: 'NavbarHeader',
   components: { LocaleSelector, NavbarPlaylistSelected },
   setup () {
@@ -60,14 +61,14 @@ export default {
     return { authStore, playlistsStore, userStore }
   },
   computed: {
-    profilePictureOrDefault () {
+    profilePictureOrDefault (): string {
       // eslint-disable-next-line
       const DEFAULT_PICTURE = require("@/assets/no-user.png");
       return this.userStore.profilePicture !== ''
         ? this.userStore.profilePicture
         : DEFAULT_PICTURE
     },
-    logo () {
+    logo (): string {
       return require('@/assets/logo-dark.svg')
     }
   },
@@ -91,7 +92,7 @@ export default {
       this.$router.push({ name: 'LoginView' })
     }
   }
-}
+})
 </script>
 <style>
 header {
@@ -116,7 +117,8 @@ header {
   cursor: pointer;
 }
 
-#logout-button, #change-account-button{
+#logout-button,
+#change-account-button {
   background-color: var(--primary-color);
 }
 

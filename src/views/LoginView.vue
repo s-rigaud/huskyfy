@@ -18,13 +18,14 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import api from '@/api'
 import LocaleSelector from '@/components/LocaleSelector.vue'
+import TitleMixin from '@/mixins/TitleMixin'
 import { useUserStore } from '@/stores/user'
-import TitleMixin from '@/mixins/TitleMixin.js'
+import { defineComponent } from 'vue'
 
-export default {
+export default defineComponent({
   name: 'LoginView',
   mixins: [TitleMixin],
   setup () {
@@ -40,7 +41,7 @@ export default {
       window.location.href = api.spotify.auth.getOAuthUrl()
     }
   }
-}
+})
 </script>
 <style scoped>
 #login {

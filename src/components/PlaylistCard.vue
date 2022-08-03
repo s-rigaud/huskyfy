@@ -1,7 +1,7 @@
 <template>
   <!-- Playlist representation as a card -->
   <v-card flat @click="displayDetails" class="playlist-card">
-    <v-img rel="preconnect" :src="images[0].url" alt="Playlist cover" :lazy-src="loadingCover" height="400px" cover>
+    <v-img rel="preconnect" :src="images![0].url" alt="Playlist cover" :lazy-src="loadingCover" height="400px" cover>
     </v-img>
 
     <v-card-title>
@@ -20,34 +20,40 @@
   </v-card>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from 'vue'
+
+import { SpotifyImage } from '@/api/spotify/model'
+
+export default defineComponent({
   name: 'PlaylistCard',
   props: {
     id: String,
     name: String,
-    images: Array,
+    images: {
+      type: Array as () => Array<SpotifyImage>
+    },
     owner: String,
     public: Boolean,
     collaborative: Boolean
   },
   computed: {
-    loadingCover() {
+    loadingCover (): string {
       return require('@/assets/default_cover.jpg')
     },
-    horus() {
+    horus (): string {
       return require('@/assets/oeil-dhorus.png')
     }
   },
   methods: {
-    displayDetails() {
+    displayDetails () {
       this.$router.push({
         name: 'Explore playlist',
         params: { playlistId: this.id }
       })
     }
   }
-}
+})
 </script>
 <style>
 /*

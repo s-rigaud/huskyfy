@@ -23,16 +23,18 @@
   </v-footer>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
+
 import { useUserStore } from '@/stores/user'
 
-export default {
+export default defineComponent({
   name: 'FooterComponent',
   setup () {
     const userStore = useUserStore()
     return { userStore }
   }
-}
+})
 </script>
 <style scoped>
 #footer {

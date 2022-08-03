@@ -77,17 +77,22 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import GenreChart from '@/components/playlist_detail/GenreChart.vue'
 import IndieChart from '@/components/playlist_detail/IndieChart.vue'
 import LoadMoreTracksPopup from '@/components/playlist_detail/LoadMoreTracksPopup.vue'
 import TrackCard from '@/components/playlist_detail/TrackCard.vue'
+
+import { SpotifyArtist } from '@/api/spotify/model'
+
+import TitleMixin from '@/mixins/TitleMixin'
+import { Genre } from '@/model'
 import { usePlaylistsStore } from '@/stores/playlists'
 import { useUserStore } from '@/stores/user'
 import { storeToRefs } from 'pinia'
-import TitleMixin from '@/mixins/TitleMixin.js'
+import { defineComponent } from 'vue'
 
-export default {
+export default defineComponent({
   name: 'PlaylistDetail',
   mixins: [TitleMixin],
   props: {
@@ -189,7 +194,7 @@ export default {
         )
       }
     },
-    filterTracksByPopularity (popularity) {
+    filterTracksByPopularity (popularity: string) {
       if (popularity === 'No filter') return this.resetFilters()
 
       const isIndieSelected = popularity === 'Indie'
@@ -221,7 +226,7 @@ export default {
       window.location.href = this.playlists[this.playlistId].uri
     },
     // Returns only top genres sorted by most to least popular
-    getSortedGenres () {
+    getSortedGenres (): Array<Genre> {
       const genreCounter = this.getGenreCount()
       const genreMapping = Object.keys(genreCounter).map((label) => [
         label,
@@ -240,11 +245,11 @@ export default {
         cap_name: this.capitalize(genre[0])
       }))
     },
-    capitalize (string) {
+    capitalize (string: string): string {
       return string.charAt(0).toUpperCase() + string.slice(1)
     },
-    getSortedArtists () {
-      const allArtists = new Set()
+    getSortedArtists (): Array<SpotifyArtist> {
+      const allArtists: Set<SpotifyArtist> = new Set()
       for (const track of this.playlists[this.playlistId].tracks) {
         track.artists.map(a => allArtists.add(a))
       }
@@ -253,10 +258,10 @@ export default {
     }
   },
   computed: {
-    spotifyLogo () {
+    spotifyLogo (): string {
       return require('@/assets/spotify.png')
     },
-    generalTitle () {
+    generalTitle (): string {
       const separator = (this.isExclusiveGenres) ? ' and ' : ' or '
       return this.selectedGenres.map(g => this.capitalize(g)).join(separator) || this.$t('track.all-tracks')
     }
@@ -265,21 +270,21 @@ export default {
     isExclusiveGenres () {
       this.filterTracksByGenres()
     },
-    selectedPopularity (newSelectedPopularity) {
+    selectedPopularity (newSelectedPopularity: string) {
       this.filterTracksByPopularity(newSelectedPopularity)
     },
-    selectedArtists (newValue, oldValue) {
+    selectedArtists (newValue: Array<string>, oldValue: Array<string>) {
       if (oldValue.length !== 0 || newValue.length !== 0) {
         this.filterTracksByArtists()
       }
     },
-    selectedGenres (newValue, oldValue) {
+    selectedGenres (newValue: Array<string>, oldValue: Array<string>) {
       if (oldValue.length !== 0 || newValue.length !== 0) {
         this.filterTracksByGenres()
       }
     }
   }
-}
+})
 </script>
 <style>
 #left-part {

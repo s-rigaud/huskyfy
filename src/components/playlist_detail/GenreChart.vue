@@ -2,11 +2,16 @@
   <apexchart type="donut" width="380" :options="chartOptions" :series="series"></apexchart>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { Genre } from '@/model'
+import { defineComponent } from 'vue'
+
+export default defineComponent({
   name: 'GenreChart',
   props: {
-    genres: Array
+    genres: {
+      type: Array as () => Array<Genre>
+    }
   },
   methods: {
     appendData () {
@@ -26,13 +31,13 @@ export default {
     return {
       lastGenreSelected: false,
       lastClickedWasSelection: false,
-      series: this.genres.map((genre) => genre.value),
+      series: this.genres!.map((genre) => genre.value),
       chartOptions: {
         chart: {
           width: 380,
           type: 'donut'
         },
-        labels: this.genres.map((genre) => genre.cap_name),
+        labels: this.genres!.map((genre) => genre.cap_name),
         dataLabels: {
           enabled: false
         },
@@ -55,7 +60,7 @@ export default {
       }
     }
   }
-}
+})
 </script>
 <style scoped>
 .apexcharts-legend-text:hover {

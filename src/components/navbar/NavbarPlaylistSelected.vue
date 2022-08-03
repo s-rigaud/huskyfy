@@ -19,7 +19,7 @@
             <template v-slot:activator="{ props: tooltip }">
               <h3 v-bind="tooltip">{{ getEmojiFromVisibility }}</h3>
             </template>
-            <span>{{ gettextFromVisibility }}</span>
+            <span>{{ getTextFromVisibility }}</span>
           </v-tooltip>
         </div>
 
@@ -105,19 +105,21 @@
   </div>
 
   <DuplicatorPopup v-if="startDuplication"
-    :playlistId="playlistsStore.playlists[playlistsStore.selectedPlaylistId].id" />
+    :playlistId="playlistsStore.playlists[playlistsStore.selectedPlaylistId!].id" />
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
+
 import DuplicatorPopup from '@/components/navbar/DuplicatorPopup.vue'
+import makeImage from '@/services/playlistImageMaker'
 import { usePlaylistsStore } from '@/stores/playlists'
 import { useUserStore } from '@/stores/user'
-import makeImage from '@/services/playlistImageMaker.ts'
 
-export default {
+export default defineComponent({
   name: 'NavbarPlaylistSelected',
   components: { DuplicatorPopup },
-  setup() {
+  setup () {
     const userStore = useUserStore()
     const playlistsStore = usePlaylistsStore()
 
@@ -125,7 +127,7 @@ export default {
 
     return { currentUserUsername, playlistsStore }
   },
-  data() {
+  data () {
     return {
       isDeleteModalOpen: false,
       startDuplication: false,
@@ -134,59 +136,59 @@ export default {
     }
   },
   computed: {
-    usernameToDisplay() {
+    usernameToDisplay (): string {
       const playlistCreator =
-        this.playlistsStore.playlists[this.playlistsStore.selectedPlaylistId]
+        this.playlistsStore.playlists[this.playlistsStore.selectedPlaylistId!]
           .owner.display_name
 
       return this.currentUserUsername === playlistCreator
         ? this.$t('me')
         : playlistCreator
     },
-    userOwnsPlaylist() {
+    userOwnsPlaylist (): boolean {
       return (
         this.currentUserUsername ===
-        this.playlistsStore.playlists[this.playlistsStore.selectedPlaylistId]
+        this.playlistsStore.playlists[this.playlistsStore.selectedPlaylistId!]
           .owner.display_name
       )
     },
-    spotifyLogo() {
+    spotifyLogo (): string {
       return require('@/assets/spotify.png')
     },
-    getEmojiFromVisibility() {
+    getEmojiFromVisibility (): string {
       const playlist =
-        this.playlistsStore.playlists[this.playlistsStore.selectedPlaylistId]
+        this.playlistsStore.playlists[this.playlistsStore.selectedPlaylistId!]
 
       if (playlist.collaborative) return this.$t('_emojis.collaborative')
       if (playlist.public) return this.$t('_emojis.public')
       return this.$t('_emojis.private')
     },
-    gettextFromVisibility() {
+    getTextFromVisibility (): string {
       const playlist =
-        this.playlistsStore.playlists[this.playlistsStore.selectedPlaylistId]
+        this.playlistsStore.playlists[this.playlistsStore.selectedPlaylistId!]
 
-      if (playlist.collaborative) return this.$t('playlist.collaborative') + " " + this.$t('_emojis.collaborative')
-      if (playlist.public) return this.$t('playlist.public') + " " + this.$t('_emojis.public')
-      return this.$t('playlist.private') + " " + this.$t('_emojis.private')
+      if (playlist.collaborative) return this.$t('playlist.collaborative') + ' ' + this.$t('_emojis.collaborative')
+      if (playlist.public) return this.$t('playlist.public') + ' ' + this.$t('_emojis.public')
+      return this.$t('playlist.private') + ' ' + this.$t('_emojis.private')
     },
-    loadingCover() {
+    loadingCover (): string {
       return require('@/assets/default_cover.jpg')
     }
   },
   methods: {
-    openPlaylistOnSpotify() {
+    openPlaylistOnSpotify () {
       window.location.href =
         this.playlistsStore.playlists[
-          this.playlistsStore.selectedPlaylistId
+          this.playlistsStore.selectedPlaylistId!
         ].uri
     },
-    async exportPreview() {
+    async exportPreview () {
       // Creating image from top artists
       const top16Artists = this.playlistsStore.getTopArtists(16)
       const url = await makeImage(top16Artists.map(res => res.artist.images[0].url))
 
       const playlist =
-        this.playlistsStore.playlists[this.playlistsStore.selectedPlaylistId]
+        this.playlistsStore.playlists[this.playlistsStore.selectedPlaylistId!]
 
       // Downloading the image
       const a = document.createElement('a')
@@ -196,32 +198,32 @@ export default {
       a.href = url
       a.click()
     },
-    createNewPlaylist() {
+    createNewPlaylist () {
       this.startDuplication = true
     },
-    async unfollowPlaylist() {
+    async unfollowPlaylist () {
       this.isDeleteModalOpen = false
       this.waitingForDeletion = true
-      const toDeletePlaylistId = this.playlistsStore.selectedPlaylistId
+      const toDeletePlaylistId = this.playlistsStore.selectedPlaylistId!
       await this.playlistsStore.unfollowPlaylist(toDeletePlaylistId)
       this.playlistsStore.selectedPlaylistId = null
       this.waitingForDeletion = false
       this.$router.push({ name: 'Explore' })
     },
-    async setPlaylistPublic() {
+    async setPlaylistPublic () {
       await this.playlistsStore.updatePlaylistPrivacy(
-        this.playlistsStore.selectedPlaylistId,
+        this.playlistsStore.selectedPlaylistId!,
         true
       )
     },
-    async setPlaylistPrivate() {
+    async setPlaylistPrivate () {
       await this.playlistsStore.updatePlaylistPrivacy(
-        this.playlistsStore.selectedPlaylistId,
+        this.playlistsStore.selectedPlaylistId!,
         false
       )
     }
   }
-}
+})
 </script>
 <style>
 #title {

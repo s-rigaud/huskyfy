@@ -18,7 +18,7 @@
       <p>
         {{ $t("about.content.creator1") }}
         <a href="https://github.com/s-rigaud" target="_blank">{{ $t("about.content.creator2") }}</a>
-        {{ $t("about.content.creator3") }}
+        {{ $t("about .content.creator3") }}
         <a href="mailto:horusproject.bugtracker@gmail.com?subject=Horus%20improvement%20request">
           {{ $t("about.content.creator4") }} 📧
         </a>
@@ -34,21 +34,23 @@
   <v-btn id="exit-button" @click="backToPreviousPage">X</v-btn>
 </template>
 
-<script>
-import api from '@/api'
-import TitleMixin from '@/mixins/TitleMixin.js'
+<script lang="ts">
+import { defineComponent } from 'vue'
 
-export default {
+import api from '@/api'
+import TitleMixin from '@/mixins/TitleMixin'
+
+export default defineComponent({
   name: 'AboutView',
   mixins: [TitleMixin],
   created () {
     this.title = 'Horus | About'
   },
   computed: {
-    githubImg () {
+    githubImg (): string {
       return require('@/assets/github.png')
     },
-    horus () {
+    horus (): string {
       return require('@/assets/oeil-dhorus.png')
     }
   },
@@ -60,7 +62,7 @@ export default {
       await api.spotify.stats.getAppStats()
     }
   }
-}
+})
 </script>
 <style scoped>
 #about-content {

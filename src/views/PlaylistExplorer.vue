@@ -19,13 +19,14 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { SpotifyPlaylist } from '@/api/spotify/model'
 import PlaylistCard from '@/components/PlaylistCard.vue'
+import TitleMixin from '@/mixins/TitleMixin'
 import { usePlaylistsStore } from '@/stores/playlists'
 import { useUserStore } from '@/stores/user'
-import TitleMixin from '@/mixins/TitleMixin.js'
-
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'PlaylistExplorer',
   components: { PlaylistCard },
   mixins: [TitleMixin],
@@ -37,14 +38,14 @@ export default {
   },
   computed: {
     usernameToDisplay () {
-      return (ownerUsername) => {
+      return (ownerUsername: string): string => {
         return this.currentUserUsername === ownerUsername
           ? this.$t('me')
           : ownerUsername
       }
     },
     formatName () {
-      return (playlist) => {
+      return (playlist: SpotifyPlaylist): string => {
         return playlist.id === 'my-music'
           ? this.$t('playlist.your-music.name')
           : playlist.name
@@ -69,7 +70,7 @@ export default {
       isTrue: true
     }
   }
-}
+})
 </script>
 
 <style scoped>

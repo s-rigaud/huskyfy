@@ -1,4 +1,6 @@
-const TitleMixin = {
+import { defineComponent } from 'vue'
+
+const TitleMixin = defineComponent({
   mounted () {
     document.title = this.title
   },
@@ -7,5 +9,5 @@ const TitleMixin = {
       title: ''
     }
   }
-}
+})
 export default TitleMixin

@@ -4,7 +4,7 @@ interface Callback {
   (base64cover: any): void;
 }
 
-function getPictureContentFromURL(url: string, uploadCallback: Callback) {
+function getPictureContentFromURL (url: string, uploadCallback: Callback) {
   const xhRequest = new XMLHttpRequest()
   xhRequest.onload = function () {
     const reader = new FileReader()
@@ -17,7 +17,6 @@ function getPictureContentFromURL(url: string, uploadCallback: Callback) {
   xhRequest.responseType = 'blob'
   xhRequest.send()
 }
-
 
 // H is Horus logo
 // X is an artist cover
@@ -37,7 +36,7 @@ function getPictureContentFromURL(url: string, uploadCallback: Callback) {
 // X X
 // X H
 
-async function makeImage(artistImageUrls: Array<string>) {
+async function makeImage (artistImageUrls: Array<string>) {
   // artistImageUrls is the urls for the top X artists in the playlist
   const width = 400
   const height = 400
@@ -63,10 +62,10 @@ async function makeImage(artistImageUrls: Array<string>) {
   for (let i = 0; i < rows; i++) {
     for (let j = 0; j < columns; j++) {
       const callback = async (rawCoverContent: any) => {
-        console.error(typeof rawCoverContent);
+        console.error(typeof rawCoverContent)
 
         const cover = await loadImage(rawCoverContent)
-        console.error(cover);
+        console.error(cover)
 
         context.drawImage(
           cover,
@@ -74,24 +73,24 @@ async function makeImage(artistImageUrls: Array<string>) {
           j * height / rows,
           1 / rows * width,
           1 / columns * height
-        );
+        )
       }
       const url = artistImageUrls[i * rows + j]
       getPictureContentFromURL(url, callback)
 
       // Not working
-      /*const downloadedImg = new Image();
+      /* const downloadedImg = new Image();
       downloadedImg.crossOrigin = "Anonymous";
-      downloadedImg.src = url;*/
+      downloadedImg.src = url; */
 
       // Placeholder to try drawing images
-      /*context.drawImage(
+      /* context.drawImage(
         logo,
         i * width / columns,
         j * height / rows,
         1 / rows * width,
         1 / columns * height
-      );*/
+      ); */
     }
   }
   return canvas.toDataURL()

@@ -18,13 +18,18 @@
   </v-snackbar>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
+
+import { SpotifyPlaylist } from '@/api/spotify/model'
 import { usePlaylistsStore } from '@/stores/playlists'
 
-export default {
+export default defineComponent({
   name: 'LoadMoreTracksPopup',
   props: {
-    playlist: Object,
+    playlist: {
+      type: Object as () => SpotifyPlaylist
+    },
     trackRequestLimit: Number
   },
   emits: ['allTracksLoaded'],
@@ -37,7 +42,7 @@ export default {
   methods: {
     async loadAllTracks () {
       this.notLoaded = false
-      await this.downloadPlaylistTracks(this.playlist.id, this.playlist.total)
+      await this.downloadPlaylistTracks(this.playlist!.id, this.playlist!.total)
       this.isLoaded = true
       this.$emit('allTracksLoaded')
     }
@@ -48,7 +53,7 @@ export default {
       isLoaded: false
     }
   }
-}
+})
 </script>
 <style>
 #load-more-snackbar .v-snackbar__content {

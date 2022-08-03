@@ -7,7 +7,7 @@ interface SpotifyFollowers {
     total: number;
 }
 
-interface SpotifyImage {
+export interface SpotifyImage {
     height?: number;
     url: string;
     width?: number;
