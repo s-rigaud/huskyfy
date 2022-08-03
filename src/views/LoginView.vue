@@ -92,11 +92,11 @@ export default {
 }
 
 #connect-button:hover {
-  outline: var(--primary-color) solid 2px;
+  outline: var(--primary-color) solid 2px !important;
 }
 
 #connect-button:focus {
-  outline: #CC4031 solid 2px;
+  outline: var(--primary-color) solid 2px;
 }
 
 a,

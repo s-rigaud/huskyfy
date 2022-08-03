@@ -54,7 +54,9 @@
             :image="track.album.images[0].url" :artists="track.artists" :genres="track.genres" :isIndie="track.isIndie"
             :trackURI="track.uri" :trackIndex="index" />
         </div>
-        <v-progress-circular v-if="filteredTracks.length < 1" :size="70" :width="7" color="var(--primary-color)"
+
+        <!-- Download loader -->
+        <v-progress-circular v-if="filteredTracks.length < 1" :size="70" :width="7" color="var(--text-color)"
           indeterminate>
         </v-progress-circular>
       </div>

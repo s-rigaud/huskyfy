@@ -182,8 +182,8 @@ export default {
     },
     async exportPreview() {
       // Creating image from top artists
-      const top12Artists = this.playlistsStore.getTopArtists(12)
-      const url = await makeImage(top12Artists.map(res => res.artist.images[0].url))
+      const top16Artists = this.playlistsStore.getTopArtists(16)
+      const url = await makeImage(top16Artists.map(res => res.artist.images[0].url))
 
       const playlist =
         this.playlistsStore.playlists[this.playlistsStore.selectedPlaylistId]

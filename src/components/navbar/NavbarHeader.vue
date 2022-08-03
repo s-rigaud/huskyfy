@@ -68,7 +68,7 @@ export default {
         : DEFAULT_PICTURE
     },
     logo () {
-      return require('@/assets/logo.svg')
+      return require('@/assets/logo-dark.svg')
     }
   },
   methods: {
@@ -105,6 +105,7 @@ header {
 }
 
 #logo {
+  margin-top: 5px;
   width: 150px;
 }
 

@@ -8,7 +8,7 @@ interface Callback {
 }
 
 // Legacy code not optimized used to gather Spotify cover img in base64
-function getEncodedPictureFromURL (url: string, uploadCallback: Callback) {
+function getPictureContentFromURL (url: string, uploadCallback: Callback) {
   const xhRequest = new XMLHttpRequest()
   xhRequest.onload = function () {
     const reader = new FileReader()
@@ -70,7 +70,7 @@ export default {
         headers: { 'Content-Type': 'image/jpeg' }
       })
     }
-    getEncodedPictureFromURL(coverUrl, callback)
+    getPictureContentFromURL(coverUrl, callback)
   },
   // Unfollow a specific playlist
   unfollowPlaylist (playlistId: string) {
