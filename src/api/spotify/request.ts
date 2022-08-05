@@ -17,7 +17,6 @@ request.interceptors.request.use(function (config) {
 
 request.interceptors.response.use(response => {
   // Log every request
-  console.log(response.config.url, response)
   return response
 }, async (error) => {
   const { status } = error.response

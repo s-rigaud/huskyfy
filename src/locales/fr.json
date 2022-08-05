@@ -15,10 +15,10 @@
 			"process": "Horus utilise l'API de Spotify pour rassembler les genres et les données sur les artistes, le genre et les titres de vos playlists. L'application essaie ensuite de fournir une interface agréable pour vous permettre de filtrer et de créer facilement de nouvelles playlists à partir de celles déjà existantes."
 		},
 		"title": {
-			"connection": "Connexion et accès au compte Spotify 🔑",
-			"creator": "Créateur 😃",
+			"connection": "Connexion et accès au compte Spotify  ",
+			"creator": "Créateur  ",
 			"description": "Horus playlist manager",
-			"process": "Comment ça marche ⚙️"
+			"process": "Comment ça marche  "
 		}
 	},
 	"footer": {

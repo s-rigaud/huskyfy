@@ -7,8 +7,8 @@
     <!-- Main view with routing -->
     <v-main id="main" v-bind:class="{
       'no-padding': true,
-      'small-padding-top': ['Explore', 'About'].includes(
-        $router.currentRoute.value.name
+      'small-padding-top': ['/explore', '/about'].includes(
+        $router.currentRoute.value.path
       ),
       'huge-padding-top':
         $router.currentRoute.value.name === 'Explore playlist',
@@ -23,7 +23,7 @@
   </v-app>
 </template>
 
-<script>
+<script lang="ts">
 import FooterComponent from '@/components/FooterComponent.vue'
 import NavbarComponent from '@/components/navbar/NavbarHeader.vue'
 import { defineComponent } from 'vue'

@@ -29,8 +29,6 @@ export default defineComponent({
   },
   methods: {
     updateLocale (event: Event) {
-      console.error(event)
-
       const locale: string = (event.target as HTMLInputElement).value
       this.$i18n.locale = locale
       this.userStore.locale = locale

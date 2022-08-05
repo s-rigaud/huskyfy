@@ -15,10 +15,10 @@
             "process": "Horus is using the really open Spotify API to gather genres and data about artists, genre and tracks of your playlists. Once done, the app tries to provide a nice interface for you to filter and create new playlists from previous ones easily."
         },
         "title": {
-            "connection": "Spotify connection and account access 🔑",
-            "creator": "Creator 😃",
+            "connection": "Spotify connection and account access  ",
+            "creator": "Creator  ",
             "description": "Horus playlist manager",
-            "process": "How it works ⚙️"
+            "process": "How it works  "
         }
     },
     "footer": {

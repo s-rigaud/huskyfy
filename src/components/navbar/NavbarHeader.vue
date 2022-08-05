@@ -1,6 +1,6 @@
 <template>
   <!-- Navbar -->
-  <v-app-bar v-if="userStore.connected" fixed flat style="font-family: 'Righteous'">
+  <v-app-bar fixed flat style="font-family: 'Righteous'" v-if="$router.currentRoute.value.path !== '/login'">
     <!-- Left part -->
     <router-link id="explore" to="/explore">
       <img id="logo" :src="logo" alt="Horus logo" />
@@ -9,7 +9,7 @@
     <v-spacer></v-spacer>
 
     <!-- Right part -->
-    <v-menu open-on-hover transition="fade-transition">
+    <v-menu open-on-hover transition="fade-transition" v-if="userStore.connected">
       <template v-slot:activator="{ props }">
         <div id="user-info" v-bind="props">
           <h3 id="profile-name"> {{ userStore.username }} </h3>
@@ -53,7 +53,7 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'NavbarHeader',
   components: { LocaleSelector, NavbarPlaylistSelected },
-  setup () {
+  setup() {
     const userStore = useUserStore()
     const authStore = useAuthStore()
     const playlistsStore = usePlaylistsStore()
@@ -61,29 +61,29 @@ export default defineComponent({
     return { authStore, playlistsStore, userStore }
   },
   computed: {
-    profilePictureOrDefault (): string {
+    profilePictureOrDefault(): string {
       // eslint-disable-next-line
       const DEFAULT_PICTURE = require("@/assets/no-user.png");
       return this.userStore.profilePicture !== ''
         ? this.userStore.profilePicture
         : DEFAULT_PICTURE
     },
-    logo (): string {
-      return require('@/assets/logo-dark.svg')
+    logo(): string {
+      return require('@/assets/fiverr/basic.svg')
     }
   },
   methods: {
-    clearLocalStorage () {
+    clearLocalStorage() {
       localStorage.clear()
       this.logout()
     },
-    logout () {
+    logout() {
       this.userStore.reset()
       this.authStore.reset()
       this.playlistsStore.selectedPlaylistId = null
       this.$router.push({ name: 'LoginView' })
     },
-    logoutAndChangeAccount () {
+    logoutAndChangeAccount() {
       this.userStore.wantsToChangeAccount = true
       // wantsToChangeAccount is not reset
       this.userStore.reset()
@@ -107,7 +107,7 @@ header {
 
 #logo {
   margin-top: 5px;
-  width: 150px;
+  width: 250px;
 }
 
 #user-info {

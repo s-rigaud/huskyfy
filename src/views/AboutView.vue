@@ -8,17 +8,20 @@
       </div>
       <p> {{ $t("about.content.description") }} </p>
 
-      <h2>{{ $t("about.title.connection") }}</h2>
+      <h2 class="subtitle">{{ $t("about.title.connection") }}</h2>
+      <h2>⚙️</h2>
       <p>{{ $t("about.content.connection") }} </p>
 
-      <h2>{{ $t("about.title.process") }}</h2>
+      <h2 class="subtitle">{{ $t("about.title.process") }}</h2>
+      <h2>🔑</h2>
       <p> {{ $t("about.content.process") }} </p>
 
-      <h2>{{ $t("about.title.creator") }}</h2>
+      <h2 class="subtitle">{{ $t("about.title.creator") }}</h2>
+      <h2>😃</h2>
       <p>
         {{ $t("about.content.creator1") }}
         <a href="https://github.com/s-rigaud" target="_blank">{{ $t("about.content.creator2") }}</a>
-        {{ $t("about .content.creator3") }}
+        {{ $t("about.content.creator3") }}
         <a href="mailto:horusproject.bugtracker@gmail.com?subject=Horus%20improvement%20request">
           {{ $t("about.content.creator4") }} 📧
         </a>
@@ -43,22 +46,22 @@ import TitleMixin from '@/mixins/TitleMixin'
 export default defineComponent({
   name: 'AboutView',
   mixins: [TitleMixin],
-  created () {
+  created() {
     this.title = 'Horus | About'
   },
   computed: {
-    githubImg (): string {
+    githubImg(): string {
       return require('@/assets/github.png')
     },
-    horus (): string {
+    horus(): string {
       return require('@/assets/oeil-dhorus.png')
     }
   },
   methods: {
-    backToPreviousPage () {
+    backToPreviousPage() {
       this.$router.go(-1)
     },
-    async getAppStats () {
+    async getAppStats() {
       await api.spotify.stats.getAppStats()
     }
   }
@@ -91,11 +94,22 @@ export default defineComponent({
 
 h1 {
   font-size: xxx-large;
+  background: -webkit-linear-gradient(var(--text-color), var(--link-color));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: var(--text-color) 0 0 2px;
 }
 
-h1,
 h2 {
-  color: var(--primary-color) !important;
+  display: inline-block;
+}
+
+.subtitle {
+  background: -webkit-linear-gradient(var(--text-color), var(--link-color));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 p {
@@ -104,7 +118,7 @@ p {
 
 a {
   text-decoration: none;
-  color: var(--primary-color) !important;
+  color: var(--link-color) !important;
 }
 
 @media (max-width: 992px) {

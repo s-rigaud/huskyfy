@@ -36,6 +36,10 @@ export default defineComponent({
     const currentUserUsername = userStore.username
     return { currentUserUsername, playlistsStore }
   },
+    mounted(){
+    console.error(this.$router.currentRoute.value.path);
+
+  },
   computed: {
     usernameToDisplay () {
       return (ownerUsername: string): string => {

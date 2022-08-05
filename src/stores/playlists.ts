@@ -133,7 +133,6 @@ export const usePlaylistsStore = defineStore('playlists', {
     },
     // Special playlist from user liked song treated differently in Spotify API
     getLikedSongPlaylist (userStore: Store<'user', UserState>): SimplifiedSpotifyPlaylist {
-      const i18n = VueI18n.global
       return {
         collaborative: false,
         description: '',
@@ -143,7 +142,7 @@ export const usePlaylistsStore = defineStore('playlists', {
             url: require('@/assets/my-music.jpeg')
           }
         ],
-        name: i18n.t('playlist.your-music.name'),
+        name: VueI18n.t('playlist.your-music.name'),
         owner: {
           display_name: userStore.username,
           external_urls: { spotify: '' },
@@ -272,18 +271,18 @@ export const usePlaylistsStore = defineStore('playlists', {
     },
     // Create new empty playlist
     async createPlaylist (basePlaylistId: string, selectedGenres: Array<string>): Promise<string> {
-      const i18n = VueI18n.global
+      const translate = VueI18n.t
       const basePlaylist = this.playlists[basePlaylistId]
 
-      let newPlaylistName = `${i18n.t('playlist.duplicate.copy-of')} ${basePlaylist.name}`
+      let newPlaylistName = `${translate('playlist.duplicate.copy-of')} ${basePlaylist.name}`
       let newPlaylistDescription = ''
       if (selectedGenres.length !== 0) {
         newPlaylistName += ` • ${selectedGenres}`
         newPlaylistDescription += `'${basePlaylist.name}' • ${selectedGenres} •`
       } else {
-        newPlaylistDescription += `${i18n.t('playlist.duplicate.copy-of')} "${basePlaylist.name}"`
+        newPlaylistDescription += `${translate('playlist.duplicate.copy-of')} "${basePlaylist.name}"`
       }
-      newPlaylistDescription += ` ${i18n.t('playlist.duplicate.created-by')}`
+      newPlaylistDescription += ` ${translate('playlist.duplicate.created-by')}`
 
       const name = newPlaylistName
       const description = newPlaylistDescription

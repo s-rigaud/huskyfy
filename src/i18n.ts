@@ -1,20 +1,22 @@
-import { createI18n } from 'vue-i18n'
-import en from 'vuetify/lib/locale/en'
-import fr from 'vuetify/lib/locale/fr'
+import { createI18n, FallbackLocale } from 'vue-i18n'
+import en from '@/locales/en.json'
+import fr from '@/locales/fr.json'
+
+type MessageSchema = typeof en
 
 const messages = {
-  en: {
-    ...require('@/locales/en.json'),
-    $vuetify: en
-  },
-  fr: {
-    ...require('@/locales/fr.json'),
-    $vuetify: fr
-  }
+  en: { ...en, $vuetify: 'en' },
+  fr: { ...fr, $vuetify: 'fr' }
 }
 
-export default createI18n({
-  locale: localStorage.getItem('locale') || process.env.VUE_APP_I18N_LOCALE || 'en',
-  fallbackLocale: process.env.VUE_APP_I18N_FALLBACK_LOCALE || 'en',
+const locale: string = localStorage.getItem('locale') || process.env.VUE_APP_I18N_LOCALE || 'en'
+const fallbackLocale: FallbackLocale = process.env.VUE_APP_I18N_FALLBACK_LOCALE || 'en'
+
+const i18n = createI18n<[MessageSchema], 'fr' | 'en'>({
+  locale,
+  fallbackLocale,
   messages
 })
+const t = i18n.global.t
+
+export default { i18n, t }

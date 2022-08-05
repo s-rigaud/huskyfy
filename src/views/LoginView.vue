@@ -9,7 +9,7 @@
     <div id="lower-part">
       <v-btn id="connect-button" @click="accessOAuthPage" v-if="!userStore.connected" rounded>
         {{ $t("login.connect") }}
-        <v-icon right dark> mdi-account-circle </v-icon>
+        <v-icon right light> mdi-account-circle </v-icon>
       </v-btn>
       <router-link to="/about" id="link-about">
         {{ $t("login.about") }}
@@ -86,7 +86,6 @@ export default defineComponent({
   padding: 20px;
   text-transform: none;
   letter-spacing: 0;
-  background-color: var(--primary-color) !important;
   color: var(--text-color) !important;
   position: absolute;
   bottom: 10%;
