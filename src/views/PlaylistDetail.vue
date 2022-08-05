@@ -27,9 +27,10 @@
             <template v-slot:selection="{ item, index }">
               <v-chip v-if="index < 2">
                 <v-avatar>
-                  <v-img rel="preconnect" width="20" :src="item.images[0].url" alt="Spotify artist cover"></v-img>
+                  <v-img rel="preconnect" width="20" :src="getArtistCover(item)"
+                    alt="Spotify artist cover"></v-img>
                 </v-avatar>
-                <span>{{ item.name }}</span>
+                <span>{{ getArtistName(item) }}</span>
               </v-chip>
               <span v-if="index >= 2" class="text-grey text-caption align-self-center">
                 (+{{ selectedArtists.length - 2 }} others)
@@ -264,6 +265,16 @@ export default defineComponent({
     generalTitle (): string {
       const separator = (this.isExclusiveGenres) ? ' and ' : ' or '
       return this.selectedGenres.map(g => this.capitalize(g)).join(separator) || this.$t('track.all-tracks')
+    },
+    getArtistName () {
+      return (artist: SpotifyArtist) => {
+        return artist.name
+      }
+    },
+    getArtistCover () {
+      return (artist: SpotifyArtist) => {
+        return artist.name
+      }
     }
   },
   watch: {

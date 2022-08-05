@@ -13,8 +13,7 @@ const messages = {
   }
 }
 
-// eslint-disable-next-line
-export default new createI18n({
+export default createI18n({
   locale: localStorage.getItem('locale') || process.env.VUE_APP_I18N_LOCALE || 'en',
   fallbackLocale: process.env.VUE_APP_I18N_FALLBACK_LOCALE || 'en',
   messages

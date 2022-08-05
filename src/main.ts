@@ -13,6 +13,3 @@ createApp(App)
   .use(VueI18n)
   .use(VueApexCharts)
   .mount('#app')
-
-// Color palette
-// https://flatuicolors.com/palette/au

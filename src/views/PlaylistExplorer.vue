@@ -13,7 +13,7 @@
     </div>
 
     <!-- TODO not really tested -->
-    <v-btn @click="loadMorePlaylists" v-if="playlistsStore.playlists.length < playlistTotal">
+    <v-btn @click="loadMorePlaylists" v-if="Object.keys(playlistsStore.playlists).length < playlistTotal">
       {{ $t("playlist.load-more-playlists") }}
     </v-btn>
   </div>
