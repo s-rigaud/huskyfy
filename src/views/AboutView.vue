@@ -46,22 +46,22 @@ import TitleMixin from '@/mixins/TitleMixin'
 export default defineComponent({
   name: 'AboutView',
   mixins: [TitleMixin],
-  created() {
+  created () {
     this.title = 'Horus | About'
   },
   computed: {
-    githubImg(): string {
+    githubImg (): string {
       return require('@/assets/github.png')
     },
-    horus(): string {
+    horus (): string {
       return require('@/assets/oeil-dhorus.png')
     }
   },
   methods: {
-    backToPreviousPage() {
+    backToPreviousPage () {
       this.$router.go(-1)
     },
-    async getAppStats() {
+    async getAppStats () {
       await api.spotify.stats.getAppStats()
     }
   }

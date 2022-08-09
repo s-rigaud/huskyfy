@@ -68,7 +68,6 @@ export interface SpotifyProfile {
     country: string;
     // eslint-disable-next-line
     display_name: string;
-    email: string;
     // eslint-disable-next-line
     explicit_content: SpotifyExplicitContent;
     // eslint-disable-next-line

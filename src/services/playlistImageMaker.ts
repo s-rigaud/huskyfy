@@ -62,10 +62,7 @@ async function makeImage (artistImageUrls: Array<string>) {
   for (let i = 0; i < rows; i++) {
     for (let j = 0; j < columns; j++) {
       const callback = async (rawCoverContent: any) => {
-        console.error(typeof rawCoverContent)
-
         const cover = await loadImage(rawCoverContent)
-        console.error(cover)
 
         context.drawImage(
           cover,

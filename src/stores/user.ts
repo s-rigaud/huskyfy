@@ -6,7 +6,6 @@ export type UserState = {
   username: RemovableRef<string>;
   profilePicture: RemovableRef<string>;
   isPremium: RemovableRef<boolean>;
-  mail: RemovableRef<string>;
   country: RemovableRef<string>;
   connected: RemovableRef<boolean>;
   locale: RemovableRef<string>;
@@ -20,7 +19,6 @@ export const useUserStore = defineStore('user', {
     username: useStorage('username', ''),
     profilePicture: useStorage('profilePicture', ''),
     isPremium: useStorage('isPremium', false),
-    mail: useStorage('mail', ''),
     country: useStorage('country', ''),
     connected: useStorage('connected', false),
     locale: useStorage('locale', 'en'),
@@ -33,7 +31,6 @@ export const useUserStore = defineStore('user', {
       this.username = ''
       this.profilePicture = ''
       this.isPremium = false
-      this.mail = ''
       this.country = ''
       this.connected = false
       // Do not reset locale

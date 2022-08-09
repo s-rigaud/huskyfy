@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 import { LocationQueryValue } from 'vue-router'
 
 type AuthState = {
+  stateAuthorizationCode: RemovableRef<string>;
   temporaryToken: RemovableRef<string> | LocationQueryValue[];
   accessToken: RemovableRef<string>;
   refreshToken: RemovableRef<string>;
@@ -10,6 +11,7 @@ type AuthState = {
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
+    stateAuthorizationCode: useStorage('stateAuthorizationCode', ''),
     temporaryToken: useStorage('temporaryToken', ''),
     accessToken: useStorage('accessToken', ''),
     refreshToken: useStorage('refreshToken', '')

@@ -52,6 +52,15 @@ router.beforeEach(async function (to, from, next) {
   } else if (to.name === 'LoginView' && to.query.code) {
     // Intercept and autolog user when code is received
     const code = to.query.code
+
+    if (to.query.state !== authStore.stateAuthorizationCode) {
+      console.error(
+        'Possibly a CSRF, state received from Spotify ' +
+        'is not the one used to make request for authentification'
+      )
+      next({ name: 'LoginView' })
+    }
+
     authStore.temporaryToken = code
 
     // Retrieving access token
@@ -67,7 +76,6 @@ router.beforeEach(async function (to, from, next) {
       username: data.display_name,
       profilePicture: userPicture,
       isPremium: data.product === 'premium',
-      mail: data.email,
       country: data.country,
       connected: true,
       wantsToChangeAccount: false
