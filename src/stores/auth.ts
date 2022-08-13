@@ -27,6 +27,8 @@ export const useAuthStore = defineStore('auth', {
       this.temporaryToken = ''
       this.accessToken = ''
       this.refreshToken = ''
+      this.codeVerifier = ''
+      this.secretCodeChallenge = ''
     }
   }
 })

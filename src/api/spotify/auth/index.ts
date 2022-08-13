@@ -1,7 +1,6 @@
 import { useAuthStore } from '@/stores/auth'
 import { useUserStore } from '@/stores/user'
 import axios, { AxiosResponse } from 'axios'
-import sha256 from 'crypto-js/sha256'
 import { Base64 } from 'js-base64'
 import { SpotifyAuthResponse } from '../model'
 
@@ -24,7 +23,7 @@ const SCOPES = [
 
 const generateRandomString = function (length: number): string {
   let text = ''
-  const possible = 'abcdefghijklmnopqrstuvwxyz0123456789_,-~'
+  const possible = 'abcdefghijklmnopqrstuvwxyz123456789'
 
   for (let i = 0; i < length; i++) {
     text += possible.charAt(Math.floor(Math.random() * possible.length))
@@ -32,17 +31,41 @@ const generateRandomString = function (length: number): string {
   return text
 }
 
+const sha256 = async (plain: string) => {
+  const encoder = new TextEncoder()
+  const data = encoder.encode(plain)
+
+  return window.crypto.subtle.digest('SHA-256', data)
+}
+
+const base64urlencode = (a: ArrayBuffer) => {
+  const encoded = btoa(
+    String.fromCharCode.apply(null, [...new Uint8Array(a)])
+  )
+  return encoded.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
+}
+
+
 export default {
   // Return Spotify OAuth url
   // On this url, the user can accept terms and scope and a temporary token is returned
-  getOAuthUrl (): string {
+  async getOAuthUrl(): Promise<string> {
     const authStore = useAuthStore()
 
-    const CODE_VERIFIER = generateRandomString(60)
-    const SECRET_CODE_CHALLENGE = sha256(CODE_VERIFIER).toString()
+    const STATE_AUTHORIZATION_CODE = generateRandomString(15)
+    console.error("state " + STATE_AUTHORIZATION_CODE);
 
-    useAuthStore().$patch({
-      stateAuthorizationCode: generateRandomString(15),
+    const CODE_VERIFIER = generateRandomString(128)
+    console.error("code verifier " + CODE_VERIFIER);
+
+    const sha256Code = await sha256(CODE_VERIFIER)
+    const SECRET_CODE_CHALLENGE = base64urlencode(sha256Code)
+    console.error("computed secret code challenge " + SECRET_CODE_CHALLENGE);
+
+    alert("breakpoint");
+
+    authStore.$patch({
+      stateAuthorizationCode: STATE_AUTHORIZATION_CODE,
       secretCodeChallenge: SECRET_CODE_CHALLENGE,
       codeVerifier: CODE_VERIFIER
     })
@@ -54,21 +77,23 @@ export default {
       `scope=${SCOPES}`,
       `redirect_uri=${REDIRECT_URL}`,
       `show_dialog=${useUserStore().wantsToChangeAccount}`,
-      `state=${authStore.stateAuthorizationCode}`,
+      `state=${STATE_AUTHORIZATION_CODE}`,
       'code_challenge_method=S256',
       `code_challenge=${SECRET_CODE_CHALLENGE}`
     ].join('&')
+
     return `${BASE_URL}?${QUERY_PARAMS}`
   },
 
   // Request first access token from the previous temporary token received
-  async requestFirstAccessToken () {
+  async requestFirstAccessToken() {
     const authStore = useAuthStore()
-    console.error(authStore.codeVerifier)
+    console.error("In memory code verifier " + authStore.codeVerifier)
+
     const data = [
+      'grant_type=authorization_code',
       `code=${authStore.temporaryToken}`,
       `redirect_uri=${REDIRECT_URL}`,
-      'grant_type=authorization_code',
       `code_verifier=${authStore.codeVerifier}`
     ].join('&')
 
@@ -92,7 +117,7 @@ export default {
   },
 
   // Refresh new access token
-  async requestNewAccessToken (): Promise<string | void> {
+  async requestNewAccessToken(): Promise<string | void> {
     const authStore = useAuthStore()
     console.log('trying to refresh token before retrying call')
 

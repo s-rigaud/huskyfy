@@ -37,8 +37,8 @@ export default defineComponent({
     this.title = 'Horus | Login'
   },
   methods: {
-    accessOAuthPage () {
-      window.location.href = api.spotify.auth.getOAuthUrl()
+    async accessOAuthPage () {
+      window.location.href = await api.spotify.auth.getOAuthUrl()
     }
   }
 })
