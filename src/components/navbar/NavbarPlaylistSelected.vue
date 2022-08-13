@@ -262,11 +262,11 @@ export default defineComponent({
   margin: 1px 10px 1px 1px;
 }
 
-.v-btn {
+#header-blocks .v-btn {
   margin: 0px 2px;
 }
 
-.v-btn.v-btn--density-default {
+#header-blocks .v-btn.v-btn--density-default {
   height: 30px;
   padding: 0px 5px
 }

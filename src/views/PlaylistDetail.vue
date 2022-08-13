@@ -4,11 +4,18 @@
     <div id="content" style="display: flex">
       <div id="left-part">
 
-        <!-- Charts -->
-        <div id="charts">
-          <IndieChart v-if="filteredTracks.length > 0" :playlistId="playlistId" />
-          <GenreChart v-if="filteredTracks.length > 0" :genres="getSortedGenres()" />
-        </div>
+        <v-tabs v-model="selectedTab" background-color="var(--primary-color)" fixed-tabs end>
+          <v-tab :value="0">Artists</v-tab>
+          <v-tab :value="1">Genres</v-tab>
+        </v-tabs>
+        <v-window v-model="selectedTab" v-if="filteredTracks.length > 0" id="charts">
+          <v-window-item>
+            <IndieChart :playlistId="playlistId" />
+          </v-window-item>
+          <v-window-item>
+            <GenreChart :genres="getSortedGenres()" />
+          </v-window-item>
+        </v-window>
 
         <!-- Filters -->
         <div id="filters">
@@ -27,8 +34,7 @@
             <template v-slot:selection="{ item, index }">
               <v-chip v-if="index < 2">
                 <v-avatar>
-                  <v-img rel="preconnect" width="20" :src="getArtistCover(item)"
-                    alt="Spotify artist cover"></v-img>
+                  <v-img rel="preconnect" width="20" :src="getArtistCover(item)" alt="Spotify artist cover"></v-img>
                 </v-avatar>
                 <span>{{ getArtistName(item) }}</span>
               </v-chip>
@@ -142,6 +148,8 @@ export default defineComponent({
       trackRequestLimit: 150,
 
       isHugePlaylist: false,
+
+      selectedTab: 0,
 
       popularities: [
         { name: this.$t('track.filters.indie'), value: 'Indie' },

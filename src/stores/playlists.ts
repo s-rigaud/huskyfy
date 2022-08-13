@@ -3,7 +3,7 @@ import { SimplifiedSpotifyPlaylist, SpotifyPlaylist, SpotifyTrack, SpotifyTrackM
 import { UserState, useUserStore } from '@/stores/user'
 import { RemovableRef, useStorage } from '@vueuse/core'
 import { defineStore, Store } from 'pinia'
-import VueI18n from '../i18n'
+import VueI18n from '@/i18n'
 
 type KeyPlaylist = {
   [key: string]: SpotifyPlaylist

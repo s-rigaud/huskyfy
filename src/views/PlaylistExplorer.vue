@@ -8,7 +8,7 @@
         :name="formatName(playlist)" :images="playlist.images"
         :owner="usernameToDisplay(playlist.owner['display_name'])" :public="playlist.public"
         :collaborative="playlist.collaborative" />
-      <v-progress-circular v-if="playlistTotal < 1" :size="70" :width="7" color="var(--primary-color)" indeterminate>
+      <v-progress-circular v-if="playlistTotal < 1" :size="70" :width="7" color="var(--text-color)" indeterminate>
       </v-progress-circular>
     </div>
 
@@ -26,6 +26,7 @@ import TitleMixin from '@/mixins/TitleMixin'
 import { usePlaylistsStore } from '@/stores/playlists'
 import { useUserStore } from '@/stores/user'
 import { defineComponent } from 'vue'
+
 export default defineComponent({
   name: 'PlaylistExplorer',
   components: { PlaylistCard },
