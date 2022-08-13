@@ -8,7 +8,7 @@ interface Callback {
 }
 
 // Legacy code not optimized used to gather Spotify cover img in base64
-function getPictureContentFromURL (url: string, uploadCallback: Callback) {
+const getPictureContentFromURL = (url: string, uploadCallback: Callback) => {
   const xhRequest = new XMLHttpRequest()
   xhRequest.onload = function () {
     const reader = new FileReader()

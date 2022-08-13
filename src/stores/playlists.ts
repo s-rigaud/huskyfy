@@ -1,15 +1,15 @@
 import api from '@/api'
 import { SimplifiedSpotifyPlaylist, SpotifyPlaylist, SpotifyTrack, SpotifyTrackMetadata } from '@/api/spotify/model'
+import VueI18n from '@/i18n'
 import { UserState, useUserStore } from '@/stores/user'
 import { RemovableRef, useStorage } from '@vueuse/core'
 import { defineStore, Store } from 'pinia'
-import VueI18n from '@/i18n'
 
 type KeyPlaylist = {
   [key: string]: SpotifyPlaylist
 }
 
-type PlaylistState = {
+export type PlaylistState = {
   playlists: RemovableRef<KeyPlaylist>;
   MAX_TRACKS_LIMIT: RemovableRef<number>;
   MAX_PLAYLISTS_LIMIT: RemovableRef<number>;
@@ -19,7 +19,7 @@ type PlaylistState = {
   selectedGenres: RemovableRef<Array<string>>;
 }
 
-function chunkArray (array: Array<string>, chunkSize: number): Array<Array<string>> {
+const chunkArray = (array: Array<string>, chunkSize: number): Array<Array<string>> => {
   const results: Array<Array<string>> = []
   const copyArray = [...array]
   while (copyArray.length) {
@@ -28,7 +28,7 @@ function chunkArray (array: Array<string>, chunkSize: number): Array<Array<strin
   return results
 }
 
-function range (start: number, stop: number, step = 1): Array<number> {
+const range = (start: number, stop: number, step = 1): Array<number> => {
   return Array(Math.ceil((stop - start) / step)).fill(start).map((x, y) => x + y * step)
 }
 
@@ -44,9 +44,9 @@ export const usePlaylistsStore = defineStore('playlists', {
   } as PlaylistState),
   getters: {
     getTopArtists: (state) => {
-      return (n: number) => {
+      return (playlistId: string, n: number) => {
         const artistCount = {}
-        for (const track of state.playlists[state.selectedPlaylistId!].tracks) {
+        for (const track of state.playlists[playlistId].tracks) {
           for (const artist of track.artists) {
             const artistsDictKey = artist.name
             if (artistCount[artistsDictKey]) {
@@ -65,7 +65,38 @@ export const usePlaylistsStore = defineStore('playlists', {
           return b[1].count - a[1].count
         }).slice(0, n).map(a => a[1])
       }
+    },
+    getTopGenres: (state) => {
+      return (playlistId: string, n: number) => {
+        const genreCounter = new Proxy(
+          {},
+          {
+            get: (target, name) => (name in target ? target[name] : 0)
+          }
+        )
+        for (const track of state.playlists[playlistId].tracks) {
+          for (const genre of track.genres) {
+            genreCounter[genre] += 1
+          }
+        }
+        const genreMapping = Object.keys(genreCounter).map((label) => [
+          label,
+          genreCounter[label]
+        ])
+
+        // DESC sort
+        genreMapping.sort((a, b) => {
+          return b[1] - a[1]
+        })
+
+        // Sampling
+        return genreMapping.slice(0, n).map((genre) => ({
+          name: genre[0],
+          value: genre[1]
+        }))
+      }
     }
+
   },
   actions: {
     reset () {

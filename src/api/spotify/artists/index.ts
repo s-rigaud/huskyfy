@@ -3,7 +3,7 @@ import { SpotifyArtist, SpotifyArtistResponse } from '../model'
 import request from '../request'
 
 // Chunk list into smaller lists
-function chunkArray (myArray: Array<string>, chunkSize: number): Array<Array<string>> {
+const chunkArray = (myArray: Array<string>, chunkSize: number): Array<Array<string>> => {
   const results: Array<Array<string>> = []
   while (myArray.length) {
     results.push(myArray.splice(0, chunkSize))

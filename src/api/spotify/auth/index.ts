@@ -21,7 +21,7 @@ const SCOPES = [
   'ugc-image-upload'
 ].join(' ')
 
-const generateRandomString = function (length: number): string {
+const generateRandomString = (length: number): string => {
   let text = ''
   const possible = 'abcdefghijklmnopqrstuvwxyz123456789'
 

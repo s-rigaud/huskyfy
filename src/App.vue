@@ -35,14 +35,13 @@ export default defineComponent({
 <style scoped>
 @font-face {
   font-family: "Righteous";
-  src: local("Righteous"),
-    url(./fonts/righteous/Righteous-j7av.ttf) format("truetype");
+  src: local("Righteous"), url(../public/Righteous-j7av.ttf) format("truetype");
   font-display: swap;
 }
 
 @font-face {
   font-family: "Oswald";
-  src: local("Oswald"), url(./fonts/oswald/Oswald-Medium.ttf) format("truetype");
+  src: local("Oswald"), url(../public/Oswald-Medium.ttf) format("truetype");
   font-display: swap;
 }
 
