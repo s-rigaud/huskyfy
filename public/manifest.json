@@ -1,0 +1,15 @@
+{
+    "short_name": "Horus",
+    "name": "Horus website helps you manipulate your Spotify playlists easily",
+    "icons": [
+        {
+            "src": "favicon.png",
+            "sizes": "128x128",
+            "type": "image/png"
+        }
+    ],
+    "start_url": ".",
+    "display": "standalone",
+    "theme_color": "#F39200",
+    "background_color": "#191919"
+}

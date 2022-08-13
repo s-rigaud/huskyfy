@@ -1,5 +1,6 @@
 import { PlaylistState, usePlaylistsStore } from '@/stores/playlists'
 import { Store } from 'pinia'
+const LOGO = require('@/assets/fiverr/basic.svg')
 
 const makeAndDownloadImage = (playlistId: string) => {
   // artistImageUrls is the urls for the top X artists in the playlist
@@ -8,7 +9,7 @@ const makeAndDownloadImage = (playlistId: string) => {
   const top16Artists = playlistsStore.getTopArtists(playlistId, 16)
   const artistImageUrls = top16Artists.map(res => res.artist.images[0].url)
 
-  artistImageUrls.unshift(require('@/assets/fiverr/basic.svg'))
+  artistImageUrls.unshift(LOGO)
   const images = artistImageUrls.map(src => {
     const image = new Image()
     image.crossOrigin = ''
@@ -33,7 +34,7 @@ const makeAndDownloadImage = (playlistId: string) => {
 
 const createCanvas = (
   images: HTMLImageElement[],
-  playlistsStore: Store<'playlists', PlaylistState, {}>,
+  playlistsStore: Store<'playlists', PlaylistState, any>,
   playlistId: string
 ): string => {
   const canvas = document.createElement('canvas')
@@ -43,9 +44,9 @@ const createCanvas = (
   canvas.height = 500
 
   let gridSize: number
-  if (images.length <= 9) {
+  if (images.length < 9) {
     gridSize = 2
-  } else if (images.length <= 12) {
+  } else if (images.length < 12) {
     gridSize = 3
   } else {
     gridSize = 4
@@ -97,15 +98,15 @@ const addCanvasLegend = (
 }
 
 const getEmojiForRank = (rank: number): string => {
-  if (rank == 0) return '🥇'
-  if (rank == 1) return '🥈'
-  if (rank == 2) return '🥉'
+  if (rank === 0) return '🥇'
+  if (rank === 1) return '🥈'
+  if (rank === 2) return '🥉'
   return '🏅'
 }
 
 const downloadImage = (
   url: string,
-  playlistsStore: Store<'playlists', PlaylistState, {}>,
+  playlistsStore: Store<'playlists', PlaylistState, any>,
   playlistId: string
 ) => {
   // Downloading the image

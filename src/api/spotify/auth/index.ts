@@ -48,7 +48,7 @@ const base64urlencode = (a: ArrayBuffer) => {
 export default {
   // Return Spotify OAuth url
   // On this url, the user can accept terms and scope and a temporary token is returned
-  async getOAuthUrl (): Promise<string> {
+  async getOAuthUrl(): Promise<string> {
     const authStore = useAuthStore()
 
     const STATE_AUTHORIZATION_CODE = generateRandomString(15)
@@ -67,17 +67,20 @@ export default {
       `client_id=${CLIENT_ID}`,
       `scope=${SCOPES}`,
       `redirect_uri=${REDIRECT_URL}`,
-      `show_dialog=${useUserStore().wantsToChangeAccount}`,
       `state=${STATE_AUTHORIZATION_CODE}`,
       'code_challenge_method=S256',
       `code_challenge=${SECRET_CODE_CHALLENGE}`
-    ].join('&')
+    ]
 
-    return `${BASE_URL}?${QUERY_PARAMS}`
+    if (useUserStore().wantsToChangeAccount) {
+      QUERY_PARAMS.push(`show_dialog=${useUserStore().wantsToChangeAccount}`)
+    }
+
+    return `${BASE_URL}?${QUERY_PARAMS.join('&')}`
   },
 
   // Request first access token from the previous temporary token received
-  async requestFirstAccessToken () {
+  async requestFirstAccessToken() {
     const authStore = useAuthStore()
     const data = [
       'grant_type=authorization_code',
@@ -106,7 +109,7 @@ export default {
   },
 
   // Refresh new access token
-  async requestNewAccessToken (): Promise<string | void> {
+  async requestNewAccessToken(): Promise<string | void> {
     const authStore = useAuthStore()
     console.log('trying to refresh token before retrying call')
 

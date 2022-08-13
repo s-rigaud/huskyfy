@@ -29,7 +29,10 @@ import NavbarComponent from '@/components/navbar/NavbarHeader.vue'
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'App',
-  components: { NavbarComponent, FooterComponent }
+  components: { NavbarComponent, FooterComponent },
+  created() {
+    document.documentElement.lang = this.$i18n.locale
+  }
 })
 </script>
 <style scoped>

@@ -2,40 +2,41 @@
 <html lang="en" dir="ltr">
 
 <head>
-  <!--checked header-->
+  <title>Horus | Playlist Manager</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="description" content="Horus website helps you split your Spotify playlists easily">
-
-  <!-- TODO link to real image-->
-  <link rel="apple-touch-icon" href="/custom-icon.png">
+  <meta name="description" content="Horus helps you manipulate your Spotify playlists easily">
+  <meta name="theme-color" content="#C6E1DC">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="msapplication-config" content="<%= BASE_URL %>browserconfig.xml" />
 
-  <meta name="msapplication-config" content="browserconfig.xml" />
+  <meta property="og:url" content="https://www.horus-playlist.com" />
+  <meta property="og:title" content="Horus" />
+  <meta property="og:image" content="https://www.horus-playlist.com/favicon.png" />
+  <meta property="og:description" content="Horus helps you manipulate your Spotify playlists easily" />
 
+  <link rel="apple-touch-icon" href="<%= BASE_URL %>favicon.png">
+  <link rel="shortcut icon" href="<%= BASE_URL %>favicon.ico">
+  <link rel="manifest" href="<%= BASE_URL %>manifest.json">
   <link rel="icon" type="image/png" href="<%= BASE_URL %>favicon.png">
 
-  <!-- TODO update with real languages here -->
-  <link rel="alternate" href="https://example.com/" hreflang="x-default" />
-  <link rel="alternate" href="https://es.example.com/" hreflang="es">
-  <link rel="alternate" href="https://es.example.com/" hreflang="es">
-  <link rel="alternate" href="https://es.example.com/" hreflang="es">
-
-  <title>Horus | Playlist Manager</title>
-
-  <!-- TODO see https://github.com/thedaviddias/Front-End-Checklist#social-meta -->
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
-  <link rel="preload" href="Oswald-Medium.ttf" as="font" type="font/ttf" crossorigin>
-  <link rel="preload" href="Righteous-j7av.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="<%= BASE_URL %>Oswald-Medium.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="<%= BASE_URL %>Righteous-j7av.ttf" as="font" type="font/ttf" crossorigin>
 
   <link rel="stylesheet" href="<%= BASE_URL %>normalize.css" />
   <link rel="stylesheet" href="<%= BASE_URL %>main.css" />
+
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=GTM-TB26HF5"></script>
+  <script>function gtag() { dataLayer.push(arguments) } window.dataLayer = window.dataLayer || [], gtag("js", new Date), gtag("config", "GTM-TB26HF5")</script>
 </head>
 
 <body>
   <noscript>
+    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TB26HF5" height="0" width="0"
+      style="display:none;visibility:hidden"></iframe>
     <strong>We're sorry but Horus doesn't work properly without JavaScript enabled.
       Please enable it to continue.</strong>
   </noscript>
