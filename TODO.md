@@ -2,9 +2,9 @@
 
 * Add nice export image
 
-* Make website loads faster
+* Make website loads faster => Load track UI elements as long as I receive them (Make track appear even if they don't have artist genre and popularity yet)
 
-* Load track UI elements as long as I receive them (Make track appear even if they don't have artist genre and popularity yet)
+* Fix local track artist calls
 
 # Design
 

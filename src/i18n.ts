@@ -1,4 +1,4 @@
-import { createI18n, FallbackLocale } from 'vue-i18n'
+import { createI18n, FallbackLocale, Locale } from 'vue-i18n'
 import en from '@/locales/en.json'
 import fr from '@/locales/fr.json'
 
@@ -9,7 +9,7 @@ const messages = {
   fr: { ...fr, $vuetify: 'fr' }
 }
 
-const locale: string = localStorage.getItem('locale') || process.env.VUE_APP_I18N_LOCALE || 'en'
+const locale: Locale = localStorage.getItem('locale') || process.env.VUE_APP_I18N_LOCALE || 'en'
 const fallbackLocale: FallbackLocale = process.env.VUE_APP_I18N_FALLBACK_LOCALE || 'en'
 
 const i18n = createI18n<[MessageSchema], 'fr' | 'en'>({

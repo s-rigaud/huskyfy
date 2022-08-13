@@ -61,7 +61,6 @@ router.beforeEach(async function (to, from, next) {
       next({ name: 'LoginView' })
     }
 
-    console.log(to.query)
     authStore.temporaryToken = code
 
     // Retrieving access token

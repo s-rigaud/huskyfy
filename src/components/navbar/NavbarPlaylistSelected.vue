@@ -112,14 +112,14 @@
 import { defineComponent } from 'vue'
 
 import DuplicatorPopup from '@/components/navbar/DuplicatorPopup.vue'
-import makeImage from '@/services/playlistImageMaker'
+import makeAndDownloadImage from '@/services/playlistImageMaker'
 import { usePlaylistsStore } from '@/stores/playlists'
 import { useUserStore } from '@/stores/user'
 
 export default defineComponent({
   name: 'NavbarPlaylistSelected',
   components: { DuplicatorPopup },
-  setup () {
+  setup() {
     const userStore = useUserStore()
     const playlistsStore = usePlaylistsStore()
 
@@ -127,7 +127,7 @@ export default defineComponent({
 
     return { currentUserUsername, playlistsStore }
   },
-  data () {
+  data() {
     return {
       isDeleteModalOpen: false,
       startDuplication: false,
@@ -136,7 +136,7 @@ export default defineComponent({
     }
   },
   computed: {
-    usernameToDisplay (): string {
+    usernameToDisplay(): string {
       const playlistCreator =
         this.playlistsStore.playlists[this.playlistsStore.selectedPlaylistId!]
           .owner.display_name
@@ -145,17 +145,17 @@ export default defineComponent({
         ? this.$t('me')
         : playlistCreator
     },
-    userOwnsPlaylist (): boolean {
+    userOwnsPlaylist(): boolean {
       return (
         this.currentUserUsername ===
         this.playlistsStore.playlists[this.playlistsStore.selectedPlaylistId!]
           .owner.display_name
       )
     },
-    spotifyLogo (): string {
+    spotifyLogo(): string {
       return require('@/assets/spotify.png')
     },
-    getEmojiFromVisibility (): string {
+    getEmojiFromVisibility(): string {
       const playlist =
         this.playlistsStore.playlists[this.playlistsStore.selectedPlaylistId!]
 
@@ -163,7 +163,7 @@ export default defineComponent({
       if (playlist.public) return this.$t('_emojis.public')
       return this.$t('_emojis.private')
     },
-    getTextFromVisibility (): string {
+    getTextFromVisibility(): string {
       const playlist =
         this.playlistsStore.playlists[this.playlistsStore.selectedPlaylistId!]
 
@@ -171,37 +171,32 @@ export default defineComponent({
       if (playlist.public) return this.$t('playlist.public') + ' ' + this.$t('_emojis.public')
       return this.$t('playlist.private') + ' ' + this.$t('_emojis.private')
     },
-    loadingCover (): string {
+    loadingCover(): string {
       return require('@/assets/default_cover.jpg')
     }
   },
   methods: {
-    openPlaylistOnSpotify () {
+    openPlaylistOnSpotify() {
       window.location.href =
         this.playlistsStore.playlists[
           this.playlistsStore.selectedPlaylistId!
         ].uri
     },
-    async exportPreview () {
-      // Creating image from top artists
-      const top16Artists = this.playlistsStore.getTopArtists(16)
-      const url = await makeImage(top16Artists.map(res => res.artist.images[0].url))
-
+    async exportPreview() {
       const playlist =
         this.playlistsStore.playlists[this.playlistsStore.selectedPlaylistId!]
 
-      // Downloading the image
-      const a = document.createElement('a')
-      a.download = `${playlist.name}.png`
-      a.rel = 'noopener'
-      a.target = '_blank'
-      a.href = url
-      a.click()
+      // Creating image from top artists
+      const top16Artists = this.playlistsStore.getTopArtists(16)
+      makeAndDownloadImage(
+        top16Artists.map(res => res.artist.images[0].url),
+        playlist.name
+      )
     },
-    createNewPlaylist () {
+    createNewPlaylist() {
       this.startDuplication = true
     },
-    async unfollowPlaylist () {
+    async unfollowPlaylist() {
       this.isDeleteModalOpen = false
       this.waitingForDeletion = true
       const toDeletePlaylistId = this.playlistsStore.selectedPlaylistId!
@@ -210,13 +205,13 @@ export default defineComponent({
       this.waitingForDeletion = false
       this.$router.push({ name: 'Explore' })
     },
-    async setPlaylistPublic () {
+    async setPlaylistPublic() {
       await this.playlistsStore.updatePlaylistPrivacy(
         this.playlistsStore.selectedPlaylistId!,
         true
       )
     },
-    async setPlaylistPrivate () {
+    async setPlaylistPrivate() {
       await this.playlistsStore.updatePlaylistPrivacy(
         this.playlistsStore.selectedPlaylistId!,
         false

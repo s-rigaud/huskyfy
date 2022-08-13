@@ -262,7 +262,6 @@ export default defineComponent({
       for (const track of this.playlists[this.playlistId].tracks) {
         track.artists.map(a => allArtists.add(a))
       }
-      console.log(Array.from(allArtists).sort((a1, a2) => a1.name.localeCompare(a2.name)))
       return Array.from(allArtists).sort((a1, a2) => a1.name.localeCompare(a2.name))
     }
   },

@@ -98,7 +98,6 @@ h1 {
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  text-shadow: var(--text-color) 0 0 2px;
 }
 
 h2 {

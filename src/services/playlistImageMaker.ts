@@ -1,23 +1,3 @@
-import { createCanvas, loadImage } from 'canvas'
-
-interface Callback {
-  (base64cover: any): void;
-}
-
-function getPictureContentFromURL (url: string, uploadCallback: Callback) {
-  const xhRequest = new XMLHttpRequest()
-  xhRequest.onload = function () {
-    const reader = new FileReader()
-    reader.onloadend = function () {
-      uploadCallback(reader.result)
-    }
-    reader.readAsDataURL(xhRequest.response)
-  }
-  xhRequest.open('GET', url)
-  xhRequest.responseType = 'blob'
-  xhRequest.send()
-}
-
 // H is Horus logo
 // X is an artist cover
 
@@ -36,61 +16,66 @@ function getPictureContentFromURL (url: string, uploadCallback: Callback) {
 // X X
 // X H
 
-async function makeImage (artistImageUrls: Array<string>) {
+const makeAndDownloadImage = (artistImageUrls: Array<string>, filename: string): any => {
   // artistImageUrls is the urls for the top X artists in the playlist
-  const width = 400
-  const height = 400
-  let rows: number, columns: number
-  if (artistImageUrls.length < 9) {
-    rows = 2
-    columns = 2
-  } else if (artistImageUrls.length < 12) {
-    rows = 3
-    columns = 3
-  } else {
-    rows = 4
-    columns = 4
-  }
 
-  const canvas = createCanvas(width, height)
-  const context = canvas.getContext('2d')
-  context.fillStyle = '#000'
-  context.fillRect(0, 0, width, height)
+  artistImageUrls.unshift(require('@/assets/fiverr/basic.svg'))
+  const images = artistImageUrls.map(src => {
+    const image = new Image()
+    image.crossOrigin = ''
+    image.src = src
+    return image
+  })
 
-  const logo = await loadImage(require('@/assets/logo.svg'))
+  let imageLoadCounter = 0
 
-  for (let i = 0; i < rows; i++) {
-    for (let j = 0; j < columns; j++) {
-      const callback = async (rawCoverContent: any) => {
-        const cover = await loadImage(rawCoverContent)
+  images.map(
+    imageElement => (
+      imageElement.onload = () => {
+        imageLoadCounter++
 
-        context.drawImage(
-          cover,
-          i * width / columns,
-          j * height / rows,
-          1 / rows * width,
-          1 / columns * height
-        )
-      }
-      const url = artistImageUrls[i * rows + j]
-      getPictureContentFromURL(url, callback)
-
-      // Not working
-      /* const downloadedImg = new Image();
-      downloadedImg.crossOrigin = "Anonymous";
-      downloadedImg.src = url; */
-
-      // Placeholder to try drawing images
-      /* context.drawImage(
-        logo,
-        i * width / columns,
-        j * height / rows,
-        1 / rows * width,
-        1 / columns * height
-      ); */
-    }
-  }
-  return canvas.toDataURL()
+        if (imageLoadCounter === images.length) {
+          const url = createCanvas(images)
+          downloadImage(url, filename)
+        }
+      })
+  )
 }
 
-export default makeImage
+const createCanvas = (images: HTMLImageElement[]): string => {
+  const canvas = document.createElement('canvas')
+  const ctx = canvas.getContext('2d')!
+
+  canvas.width = 400
+  canvas.height = 500
+
+  ctx.fillStyle = '#000'
+  ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+  ctx.drawImage(images[1], 0, 0, 400, 400)
+
+  const logo = images[0]
+  ctx.drawImage(logo, 200, 400, 200, 60)
+
+  addCanvasText(ctx)
+
+  return canvas.toDataURL('image/jpeg', 1)
+}
+
+const addCanvasText = (ctx: CanvasRenderingContext2D) => {
+
+}
+
+const downloadImage = (url: string, filename: string) => {
+  // Downloading the image
+  const a = document.createElement('a')
+  a.download = `${filename}.jpg`
+  a.rel = 'noopener'
+  a.target = '_blank'
+
+  a.href = url
+  a.click()
+  // a.remove()
+}
+
+export default makeAndDownloadImage
