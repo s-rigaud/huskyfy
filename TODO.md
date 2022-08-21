@@ -25,3 +25,5 @@
 ## Other
 
 * https://frontendchecklist.io/
+
+* Current SEO --> 16 on Google.com for 'horus playlist spotify'

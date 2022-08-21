@@ -4,26 +4,29 @@
     <div id="text">
       <div style="display: inline-flex">
         <v-img width="40" :src="horus" alt="Horus Image"></v-img>
-        <h1 style="margin-right: 10px">{{ $t("about.title.description") }}</h1>
+        <h1>{{ $t("about.description.title") }}</h1>
       </div>
-      <p> {{ $t("about.content.description") }} </p>
+      <p> {{ $t("about.description.content.part1") }} </p>
+      <p> {{ $t("about.description.content.part2") }}{{ $t("_emojis.indie") }} </p>
 
-      <h2 class="subtitle">{{ $t("about.title.connection") }}</h2>
+      <h2 class="subtitle">{{ $t("about.connection.title") }}</h2>
       <h2>⚙️</h2>
-      <p>{{ $t("about.content.connection") }} </p>
+      <p>{{ $t("about.connection.content") }} </p>
 
-      <h2 class="subtitle">{{ $t("about.title.process") }}</h2>
-      <h2>🔑</h2>
-      <p> {{ $t("about.content.process") }} </p>
+      <h2 class="subtitle">{{ $t("about.process.title") }}</h2>
+      <p> {{ $t("about.process.content") }} 🔑</p>
 
-      <h2 class="subtitle">{{ $t("about.title.creator") }}</h2>
+      <h2 class="subtitle">{{ $t("about.origin.title") }}</h2>
+      <p> {{ $t("about.origin.content") }} 🔑</p>
+
+      <h2 class="subtitle">{{ $t("about.creator.title") }}</h2>
       <h2>😃</h2>
       <p>
-        {{ $t("about.content.creator1") }}
-        <a href="https://github.com/s-rigaud" target="_blank">{{ $t("about.content.creator2") }}</a>
-        {{ $t("about.content.creator3") }}
+        {{ $t("about.creator.content.part1") }}
+        <a href="https://github.com/s-rigaud" target="_blank">{{ $t("about.creator.content.part2") }}</a>
+        {{ $t("about.creator.content.part3") }}
         <a href="mailto:horusproject.bugtracker@gmail.com?subject=Horus%20improvement%20request">
-          {{ $t("about.content.creator4") }} 📧
+          {{ $t("about.creator.content.part4") }} 📧
         </a>
       </p>
     </div>
@@ -31,38 +34,28 @@
       <v-img width="70" :src="githubImg" alt="Github Image"></v-img>
     </a>
   </div>
-  <!-- @click="getAppStats" -->
-  <button>Add app stats later</button>
 
-  <v-btn id="exit-button" @click="backToPreviousPage">X</v-btn>
+  <v-btn id="exit-button" @click="backToPreviousPage">
+    <v-icon>mdi-arrow-left-circle</v-icon>
+  </v-btn>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
 
-import api from '@/api'
-import TitleMixin from '@/mixins/TitleMixin'
-
 export default defineComponent({
   name: 'AboutView',
-  mixins: [TitleMixin],
-  created () {
-    this.title = 'Horus | About'
-  },
   computed: {
-    githubImg (): string {
+    githubImg(): string {
       return require('@/assets/github.png')
     },
-    horus (): string {
+    horus(): string {
       return require('@/assets/oeil-dhorus.png')
     }
   },
   methods: {
-    backToPreviousPage () {
+    backToPreviousPage() {
       this.$router.go(-1)
-    },
-    async getAppStats () {
-      await api.spotify.stats.getAppStats()
     }
   }
 })
@@ -98,6 +91,7 @@ h1 {
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  margin-right: 10px
 }
 
 h2 {

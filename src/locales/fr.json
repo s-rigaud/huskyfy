@@ -2,23 +2,44 @@
 	"_emojis": {
 		"public": "📣",
 		"collaborative": "👪",
-		"private": "🔒"
+		"private": "🔒",
+		"popular": "🔥",
+		"indie": "🌴"
+	},
+	"page-title": {
+		"about": "A propos",
+		"explore": "Explore",
+		"login": "Login",
+		"playlist": "Playlist"
 	},
 	"about": {
-		"content": {
-			"connection": "Horus utilise la méthode OAuth2 fournie par Spotify qui permetd'accéder à vos données Spotify en toute sécurité. Aucune donnée n'est stockée sur un serveur, vous êtes donc totalement en sécurité lorsque vous naviguez ou quittez le site sans vous déconnecter.",
-			"creator1": "Ce site a été",
-			"creator2": " créé par moi",
-			"creator3": "comme un projet personnel pendant mes études. J'espère que vous le trouverez utile ! Si vous trouvez un bug ou si vous voulez de nouvelles fonctionnalités,",
-			"creator4": "n'hésitez pas me joindre ici",
-			"description": "Horus est un petit site web qui vise à fournir de nouvelles fonctionnalités en manipulant des playlists Spotify. Actuellement, il n'est pas possible de créer des sous-playlists sur Spotify en filtrant par genres musicaux ou par artistes. Horus essaie aussi de mettre en avant les artistes indépendants",
-			"process": "Horus utilise l'API de Spotify pour rassembler les genres et les données sur les artistes, le genre et les titres de vos playlists. L'application essaie ensuite de fournir une interface agréable pour vous permettre de filtrer et de créer facilement de nouvelles playlists à partir de celles déjà existantes."
+		"connection": {
+			"title": "Connexion et accès au compte Spotify  ",
+			"content": "Horus utilise la méthode sécurisée OAuth2 avec PKCE fournie par Spotify qui permet d'accéder à vos données Spotify en toute sécurité. Aucune donnée n'est stockée sur un serveur, vous êtes donc totalement en sécurité lorsque vous naviguez ou quittez le site sans vous déconnecter."
 		},
-		"title": {
-			"connection": "Connexion et accès au compte Spotify  ",
-			"creator": "Créateur  ",
-			"description": "Horus playlist manager",
-			"process": "Comment ça marche  "
+		"creator": {
+			"title": "Créateur  ",
+			"content": {
+				"part1": "Ce site a été",
+				"part2": " créé par moi",
+				"part3": "comme un projet personnel pendant mes études. J'espère que vous le trouverez utile ! Si vous trouvez un bug ou si vous voulez de nouvelles fonctionnalités,",
+				"part4": "n'hésitez pas me joindre ici"
+			}
+		},
+		"description": {
+			"title": "Horus playlist manager",
+			"content": {
+				"part1": "Horus est un site web qui vise à fournir de nouvelles fonctionnalités en manipulant des playlists Spotify. Actuellement, il n'est pas possible de créer des sous-playlists sur Spotify en filtrant par genres musicaux ou par artistes. Maintenant c'est possible avec Horus !",
+				"part2": "De plus, les artistes indépendants ne sont pas vraiment mis en avant sur la plateforme, c'est pourquoi Horus essaie de les valoriser"
+			}
+		},
+		"origin": {
+			"title": "Origine",
+			"content": "Si Horus a été créé c'est avant tout à cause d'un besoin : "
+		},
+		"process": {
+			"title": "Comment ça marche ?",
+			"content": "Horus utilise l'API de Spotify pour rassembler les genres et les données sur les artistes, le genre et les titres de vos playlists. L'application essaie ensuite de fournir une interface agréable pour vous permettre de filtrer et de créer facilement de nouvelles playlists à partir de celles déjà existantes."
 		}
 	},
 	"footer": {

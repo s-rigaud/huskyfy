@@ -1,4 +1,5 @@
 import api from '@/api'
+import VueI18n from '@/i18n'
 import { useAuthStore } from '@/stores/auth'
 import { usePlaylistsStore } from '@/stores/playlists'
 import { useUserStore } from '@/stores/user'
@@ -37,7 +38,7 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
-  scrollBehavior () {
+  scrollBehavior() {
     // always scroll to top
     return { top: 0, behavior: 'smooth' }
   }
@@ -49,8 +50,9 @@ router.beforeEach(async function (to, from, next) {
   // Does not allow to visit other pages while not connected
   if (!authStore.accessToken && to.name !== 'LoginView' && to.name !== 'About') {
     next({ name: 'LoginView' })
-  } else if (to.name === 'LoginView' && to.query.code) {
+
     // Intercept and autolog user when code is received
+  } else if (to.name === 'LoginView' && to.query.code) {
     const code = to.query.code
 
     if (to.query.state !== authStore.stateAuthorizationCode) {
@@ -81,14 +83,29 @@ router.beforeEach(async function (to, from, next) {
       wantsToChangeAccount: false
     })
     next({ name: 'Explore' })
-  } else if (to.name !== 'Explore playlist') {
-    const playlistsStore = usePlaylistsStore()
-    playlistsStore.$patch({ selectedPlaylistId: null, filteredTracks: [], selectedGenres: [] })
+
+    // Selecting selected playlist
+  } else if (to.name === 'Explore playlist') {
+    usePlaylistsStore().selectedPlaylistId = (to.params['playlistId'] as string)
     next()
-  } else {
+
     // Default routing
+  } else {
+    usePlaylistsStore().$patch({ selectedPlaylistId: null, filteredTracks: [], selectedGenres: [] })
     next()
   }
 })
+
+router.afterEach((to, from) => {
+  const translationKey = to.path.split('/')[1]
+  if (translationKey !== "playlist") {
+    document.title = VueI18n.t(`page-title.${translationKey}`) +" - Horus"
+  }
+  else {
+    const playlistStore = usePlaylistsStore()
+    const playlistName = playlistStore.playlists[playlistStore.selectedPlaylistId!].name
+    document.title = `${playlistName} - Horus`
+  }
+});
 
 export default router

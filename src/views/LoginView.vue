@@ -1,5 +1,5 @@
 <template>
-  <!-- Login view with a large background and a simple buttons -->
+  <!-- Login view with a large background and a simple button -->
   <div id="login">
     <div id="upper-part">
       <h1 style="color: white">{{ $t("login.header") }}</h1>
@@ -21,21 +21,16 @@
 <script lang="ts">
 import api from '@/api'
 import LocaleSelector from '@/components/LocaleSelector.vue'
-import TitleMixin from '@/mixins/TitleMixin'
 import { useUserStore } from '@/stores/user'
 import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'LoginView',
-  mixins: [TitleMixin],
   setup () {
     const userStore = useUserStore()
     return { userStore }
   },
   components: { LocaleSelector },
-  created () {
-    this.title = 'Horus | Login'
-  },
   methods: {
     async accessOAuthPage () {
       window.location.href = await api.spotify.auth.getOAuthUrl()

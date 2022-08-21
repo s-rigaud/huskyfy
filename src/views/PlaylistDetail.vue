@@ -92,7 +92,6 @@ import TrackCard from '@/components/playlist_detail/TrackCard.vue'
 
 import { SpotifyArtist } from '@/api/spotify/model'
 
-import TitleMixin from '@/mixins/TitleMixin'
 import { Genre } from '@/model'
 import { usePlaylistsStore } from '@/stores/playlists'
 import { useUserStore } from '@/stores/user'
@@ -101,7 +100,6 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'PlaylistDetail',
-  mixins: [TitleMixin],
   props: {
     playlistId: {
       type: String,
@@ -133,13 +131,7 @@ export default defineComponent({
       selectedGenres
     }
   },
-  created () {
-    this.title = `Horus | ${this.playlists[this.playlistId].name}`
-  },
   async mounted () {
-    this.playlistsStore.selectedPlaylistId = this.playlistId
-    // this.playlistsStore.$subscribe(this.watchForGenreUpdate)
-
     await this.loadFirstTracks()
     this.filteredTracks = this.playlists[this.playlistId].tracks
   },
@@ -327,7 +319,6 @@ export default defineComponent({
   flex-wrap: wrap;
   justify-content: space-around;
   align-items: center;
-  min-height: 613px;
 }
 
 #tracks {

@@ -22,7 +22,6 @@
 <script lang="ts">
 import { SpotifyPlaylist } from '@/api/spotify/model'
 import PlaylistCard from '@/components/PlaylistCard.vue'
-import TitleMixin from '@/mixins/TitleMixin'
 import { usePlaylistsStore } from '@/stores/playlists'
 import { useUserStore } from '@/stores/user'
 import { defineComponent } from 'vue'
@@ -30,7 +29,6 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'PlaylistExplorer',
   components: { PlaylistCard },
-  mixins: [TitleMixin],
   setup () {
     const userStore = useUserStore()
     const playlistsStore = usePlaylistsStore()
@@ -54,7 +52,6 @@ export default defineComponent({
     }
   },
   async created () {
-    this.title = 'Horus | Playlist explorer'
     await this.loadMorePlaylists()
   },
   methods: {
