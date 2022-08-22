@@ -33,9 +33,12 @@
 				"part2": "De plus, les artistes indépendants ne sont pas vraiment mis en avant sur la plateforme, c'est pourquoi Horus essaie de les valoriser"
 			}
 		},
-		"origin": {
-			"title": "Origine",
-			"content": "Si Horus a été créé c'est avant tout à cause d'un besoin : "
+		"expose-liked-songs": {
+			"title": "Rendre publique sa playlist Titres Likées",
+			"content": {
+				"part1": "C'est malheureusement impossible de rendre publique sa playlist de titres likés sur Spotify. Heureusement si vous cherchez à le faire vous pouvez utiliser Horus. Il vous suffit de dupliquer votre playlist, de rendre la nouvelle playlist publique puis de partager la nouvelle playlist avec tous vos amis",
+				"part2": "Cliquez ici pour vous rendre directement sur votre playlist de titres likées."
+			}
 		},
 		"process": {
 			"title": "Comment ça marche ?",

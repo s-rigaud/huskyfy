@@ -1,4 +1,6 @@
 <template>
+  <h3>Indie score</h3>
+
   <apexchart type="radialBar" height="350" :options="chartOptions" :series="series"></apexchart>
 </template>
 
@@ -24,7 +26,7 @@ export default defineComponent({
       for (const track of this.playlists[this.playlistId!].tracks) {
         indieTracks += track.isIndie ? 1 : 0
       }
-      return indieTracks / this.playlists[this.playlistId!].tracks.length * 100
+      return ~~(indieTracks / this.playlists[this.playlistId!].tracks.length * 100)
     },
     getImage (): string {
       let image = ''

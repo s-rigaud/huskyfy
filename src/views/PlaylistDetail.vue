@@ -156,21 +156,6 @@ export default defineComponent({
     }
   },
   methods: {
-    getGenreCount () {
-      // default dict with 0 as default value
-      const genreCounter = new Proxy(
-        {},
-        {
-          get: (target, name) => (name in target ? target[name] : 0)
-        }
-      )
-      for (const track of this.playlists[this.playlistId].tracks) {
-        for (const genre of track.genres) {
-          genreCounter[genre] += 1
-        }
-      }
-      return genreCounter
-    },
     async loadFirstTracks () {
       await this.downloadPlaylistTracks(
         this.playlistId,
@@ -227,24 +212,8 @@ export default defineComponent({
       window.location.href = this.playlists[this.playlistId].uri
     },
     // Returns only top genres sorted by most to least popular
-    getSortedGenres (): Array<Genre> {
-      const genreCounter = this.getGenreCount()
-      const genreMapping = Object.keys(genreCounter).map((label) => [
-        label,
-        genreCounter[label]
-      ])
-
-      // DESC sort
-      genreMapping.sort((a, b) => {
-        return b[1] - a[1]
-      })
-
-      // Sampling
-      return genreMapping.slice(0, 15).map((genre) => ({
-        name: genre[0],
-        value: genre[1],
-        cap_name: this.capitalize(genre[0])
-      }))
+    getSortedGenres (): Genre[] {
+      return this.playlistsStore.getTopGenres(this.playlistId, 15)
     },
     capitalize (string: string): string {
       return string.charAt(0).toUpperCase() + string.slice(1)

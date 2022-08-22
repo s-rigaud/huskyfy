@@ -38,7 +38,7 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
-  scrollBehavior() {
+  scrollBehavior () {
     // always scroll to top
     return { top: 0, behavior: 'smooth' }
   }
@@ -86,7 +86,7 @@ router.beforeEach(async function (to, from, next) {
 
     // Selecting selected playlist
   } else if (to.name === 'Explore playlist') {
-    usePlaylistsStore().selectedPlaylistId = (to.params['playlistId'] as string)
+    usePlaylistsStore().selectedPlaylistId = (to.params.playlistId as string)
     next()
 
     // Default routing
@@ -98,14 +98,13 @@ router.beforeEach(async function (to, from, next) {
 
 router.afterEach((to, from) => {
   const translationKey = to.path.split('/')[1]
-  if (translationKey !== "playlist") {
-    document.title = VueI18n.t(`page-title.${translationKey}`) +" - Horus"
-  }
-  else {
+  if (translationKey !== 'playlist') {
+    document.title = VueI18n.t(`page-title.${translationKey}`) + ' - Horus'
+  } else {
     const playlistStore = usePlaylistsStore()
     const playlistName = playlistStore.playlists[playlistStore.selectedPlaylistId!].name
     document.title = `${playlistName} - Horus`
   }
-});
+})
 
 export default router

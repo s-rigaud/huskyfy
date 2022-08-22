@@ -10,14 +10,18 @@
       <p> {{ $t("about.description.content.part2") }}{{ $t("_emojis.indie") }} </p>
 
       <h2 class="subtitle">{{ $t("about.connection.title") }}</h2>
-      <h2>⚙️</h2>
+      <h2>🔒</h2>
       <p>{{ $t("about.connection.content") }} </p>
 
       <h2 class="subtitle">{{ $t("about.process.title") }}</h2>
-      <p> {{ $t("about.process.content") }} 🔑</p>
+      <p> {{ $t("about.process.content") }}</p>
 
-      <h2 class="subtitle">{{ $t("about.origin.title") }}</h2>
-      <p> {{ $t("about.origin.content") }} 🔑</p>
+      <h2 class="subtitle">{{ $t("about.expose-liked-songs.title") }}</h2>
+      <h2>{{ $t("_emojis.public") }}</h2>
+      <p>
+        {{ $t("about.expose-liked-songs.content.part1") }} {{ $t("_emojis.collaborative") }}
+        <a :href="likedSongLink"> {{ $t("about.expose-liked-songs.content.part2") }}</a>
+      </p>
 
       <h2 class="subtitle">{{ $t("about.creator.title") }}</h2>
       <h2>😃</h2>
@@ -46,15 +50,18 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'AboutView',
   computed: {
-    githubImg(): string {
+    githubImg (): string {
       return require('@/assets/github.png')
     },
-    horus(): string {
+    horus (): string {
       return require('@/assets/oeil-dhorus.png')
+    },
+    likedSongLink (): string {
+      return process.env.VUE_APP_BASE_SERVER_URL + '/playlist/my-music'
     }
   },
   methods: {
-    backToPreviousPage() {
+    backToPreviousPage () {
       this.$router.go(-1)
     }
   }

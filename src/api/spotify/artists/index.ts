@@ -13,8 +13,8 @@ const chunkArray = (myArray: Array<string>, chunkSize: number): Array<Array<stri
 
 export default {
   /* Spotify only returns a maximum of 50 artist detail at a time */
-  async getMultipleArtists(artistIds: Array<string>) {
-    const artists: Array<SpotifyArtist> = []
+  async getMultipleArtists (artistIds: Array<string>): Promise<SpotifyArtist[]> {
+    const artists: SpotifyArtist[] = []
     for (const artistIdsChunk of chunkArray(artistIds, 50)) {
       const ids = artistIdsChunk.filter(a => a).join(',')
       const response: AxiosResponse<SpotifyArtistResponse, SpotifyArtistResponse> = await request.get('artists', { params: { ids } })

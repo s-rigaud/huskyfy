@@ -11,7 +11,7 @@ import VueI18n from '../i18n'
 export default createVuetify(
   {
     lang: {
-      t: (key: string, ...params: Array<any>): string => VueI18n.t(key, params)
+      t: (key: string, ...params: Array<string>): string => VueI18n.t(key, params)
     }
   }
 )

@@ -11,9 +11,8 @@
 
       <!-- Created with ♥ -->
       <v-col class="primary lighten-2 py-4 text-center white--text" cols="12">
-        {{ new Date().getFullYear() }} —
         <strong>
-          {{ $t("footer.built") }}
+          {{ new Date().getFullYear() }} - {{ $t("footer.built") }}
           <a id="github-link" href="https://github.com/s-rigaud" target="_blank">
             Hylectrif
           </a>

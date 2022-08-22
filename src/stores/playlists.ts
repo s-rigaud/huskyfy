@@ -1,5 +1,5 @@
 import api from '@/api'
-import { SimplifiedSpotifyPlaylist, SpotifyPlaylist, SpotifyTrack, SpotifyTrackMetadata } from '@/api/spotify/model'
+import { SimplifiedSpotifyPlaylist, SpotifyArtist, SpotifyPlaylist, SpotifyTrack, SpotifyTrackMetadata } from '@/api/spotify/model'
 import VueI18n from '@/i18n'
 import { UserState, useUserStore } from '@/stores/user'
 import { RemovableRef, useStorage } from '@vueuse/core'
@@ -32,6 +32,10 @@ const range = (start: number, stop: number, step = 1): Array<number> => {
   return Array(Math.ceil((stop - start) / step)).fill(start).map((x, y) => x + y * step)
 }
 
+const capitalize = (string: string): string => {
+  return string.charAt(0).toUpperCase() + string.slice(1)
+}
+
 export const usePlaylistsStore = defineStore('playlists', {
   state: () => ({
     playlists: useStorage('playlists', {}),
@@ -44,8 +48,16 @@ export const usePlaylistsStore = defineStore('playlists', {
   } as PlaylistState),
   getters: {
     getTopArtists: (state) => {
+      type TupleArtistCount = {
+        artist: SpotifyArtist
+        count: number
+      }
+      type ArtistCount = {
+        [artistName: string]: TupleArtistCount
+      }
+
       return (playlistId: string, n: number) => {
-        const artistCount = {}
+        const artistCount: ArtistCount = {}
         for (const track of state.playlists[playlistId].tracks) {
           for (const artist of track.artists) {
             const artistsDictKey = artist.name
@@ -62,16 +74,20 @@ export const usePlaylistsStore = defineStore('playlists', {
           label,
           artistCount[label]
         ]).sort((a, b) => {
-          return b[1].count - a[1].count
-        }).slice(0, n).map(a => a[1])
+          return (b[1] as TupleArtistCount).count - (a[1] as TupleArtistCount).count
+        }).slice(0, n).map(a => (a[1] as TupleArtistCount))
       }
     },
     getTopGenres: (state) => {
+      type GenreCount = {
+        [genre: string | number]: number
+      }
+
       return (playlistId: string, n: number) => {
-        const genreCounter = new Proxy(
+        const genreCounter: GenreCount = new Proxy(
           {},
           {
-            get: (target, name) => (name in target ? target[name] : 0)
+            get: (target: GenreCount, name: string) => (name in target ? target[name] : 0)
           }
         )
         for (const track of state.playlists[playlistId].tracks) {
@@ -86,20 +102,21 @@ export const usePlaylistsStore = defineStore('playlists', {
 
         // DESC sort
         genreMapping.sort((a, b) => {
-          return b[1] - a[1]
+          return (b[1] as number) - (a[1] as number)
         })
 
         // Sampling
         return genreMapping.slice(0, n).map((genre) => ({
-          name: genre[0],
-          value: genre[1]
+          name: (genre[0] as string),
+          value: (genre[1] as number),
+          cap_name: capitalize((genre[0] as string))
         }))
       }
     }
 
   },
   actions: {
-    reset() {
+    reset () {
       // Manually update state as local storage and states are linked now
       this.playlists = {}
       this.selectedPlaylistId = null
@@ -107,7 +124,7 @@ export const usePlaylistsStore = defineStore('playlists', {
       this.selectedGenres = []
     },
     // Retrieve playlists for user
-    async getUserPlaylists(offset: number) {
+    async getUserPlaylists (offset: number) {
       const userStore = useUserStore()
 
       const response = await api.spotify.playlists.getUserPlaylists(
@@ -163,7 +180,7 @@ export const usePlaylistsStore = defineStore('playlists', {
       }
     },
     // Special playlist from user liked song treated differently in Spotify API
-    getLikedSongPlaylist(userStore: Store<'user', UserState>): SimplifiedSpotifyPlaylist {
+    getLikedSongPlaylist (userStore: Store<'user', UserState>): SimplifiedSpotifyPlaylist {
       return {
         collaborative: false,
         description: '',
@@ -192,7 +209,7 @@ export const usePlaylistsStore = defineStore('playlists', {
         uri: ''
       }
     },
-    getTrackCount(requestPlaylist: SimplifiedSpotifyPlaylist, userStore: Store<'user', UserState>): number {
+    getTrackCount (requestPlaylist: SimplifiedSpotifyPlaylist, userStore: Store<'user', UserState>): number {
       // Spotify general Mix playlists have their total tracks set
       // to 0 while there are currently tracks in the playlist
       // We have to fix this
@@ -200,7 +217,7 @@ export const usePlaylistsStore = defineStore('playlists', {
       return requestPlaylist.tracks.total
     },
     // Download more tracks for a specific playlist from previous offset
-    async downloadPlaylistTracks(playlistId: string, limit: number) {
+    async downloadPlaylistTracks (playlistId: string, limit: number) {
       // Init playlist info or return already saved tracks
       let offset = this.playlists[playlistId].offset
       if (!offset) {
@@ -221,9 +238,9 @@ export const usePlaylistsStore = defineStore('playlists', {
         const response = await this.retrieveTracks(playlistId, requestOffset)
         // Filter deleted track appearing in API
         response.data.items = response.data.items.filter(
-          i => i.track != null
-            && i.track.type === 'track'
-            && !i.is_local
+          i => i.track != null &&
+            i.track.type === 'track' &&
+            !i.is_local
         )
         newTracks.push(...response.data.items)
         this.playlists[playlistId] = {
@@ -280,7 +297,7 @@ export const usePlaylistsStore = defineStore('playlists', {
       return this.playlists[playlistId].tracks
     },
     // Route request to standard playlist call or special "My music" one
-    async retrieveTracks(playlistId: string, offset: number) {
+    async retrieveTracks (playlistId: string, offset: number) {
       if (playlistId === 'my-music') {
         return await api.spotify.playlists.getUserSavedTracks(
           this.MAX_TRACKS_LIMIT,
@@ -295,17 +312,17 @@ export const usePlaylistsStore = defineStore('playlists', {
       }
     },
     // Update playlist privacy
-    async updatePlaylistPrivacy(playlistId: string, isPublic: boolean) {
+    async updatePlaylistPrivacy (playlistId: string, isPublic: boolean) {
       await api.spotify.playlists.updatePlaylistPrivacy(playlistId, isPublic)
       this.playlists[playlistId].public = isPublic
     },
     // Unfollow playlist
-    async unfollowPlaylist(playlistId: string) {
+    async unfollowPlaylist (playlistId: string) {
       await api.spotify.playlists.unfollowPlaylist(playlistId)
       delete this.playlists[playlistId]
     },
     // Create new empty playlist
-    async createPlaylist(basePlaylistId: string, selectedGenres: Array<string>): Promise<string> {
+    async createPlaylist (basePlaylistId: string, selectedGenres: Array<string>): Promise<string> {
       const translate = VueI18n.t
       const basePlaylist = this.playlists[basePlaylistId]
 
@@ -339,7 +356,7 @@ export const usePlaylistsStore = defineStore('playlists', {
       }
       return playlist.id
     },
-    async addTracksToPlaylist(originalPlaylistId: string, newPlaylistId: string, trackURIs: Array<string>) {
+    async addTracksToPlaylist (originalPlaylistId: string, newPlaylistId: string, trackURIs: Array<string>) {
       let lastSnapshotId = ''
       for (const trackIdBatch of chunkArray(trackURIs, 100)) {
         const { data } = await api.spotify.playlists.addTracksToPlaylist(
@@ -353,7 +370,7 @@ export const usePlaylistsStore = defineStore('playlists', {
       this.playlists[newPlaylistId].offset = trackURIs.length
       this.playlists[newPlaylistId].total = trackURIs.length
     },
-    updatePlaylistCover(playlistId: string, coverUrl: string) {
+    updatePlaylistCover (playlistId: string, coverUrl: string) {
       api.spotify.playlists.updatePlaylistCover(
         playlistId,
         coverUrl
