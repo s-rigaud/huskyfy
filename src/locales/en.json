@@ -33,13 +33,13 @@
                 "part2": "Moreover, indie artists are not really promoted on the platform so Horus try to highlight their work"
             }
         },
-		"expose-liked-songs": {
+        "expose-liked-songs": {
             "title": "How to make your Liked Tracks playlist public ?",
-			"content": {
+            "content": {
                 "part1": "Unfortunately it's impossible to make your playlist of liked tracks public on Spotify. If you want to do it anyway you can use Horus. Just duplicate your playlist, make the new playlist public and then share the new playlist with all your friends.",
-                "part2": "Click here to go directly to your playlist of liked tracks."
+                "part2": "Click here to go directly to your playlist of liked tracks ♥"
             }
-		},
+        },
         "process": {
             "title": "How does it work ?",
             "content": "Horus is using the really open Spotify API to gather genres and data about artists, genre and tracks of your playlists. Once done, the app tries to provide a nice interface for you to filter and create new playlists from previous ones easily"
@@ -102,6 +102,7 @@
         "all-tracks": "All playlist tracks",
         "exclusive-filter": "Make selected filters exclusive",
         "filters": {
+            "title": "Filters",
             "artists": "Artists",
             "genres": "Genres",
             "indie": "🌴 Indie",
@@ -114,5 +115,12 @@
         "name": "tracks",
         "no-genre": "No genre provided",
         "popular": "🔥 Popular artist"
+    },
+    "404": {
+        "title": {
+            "part1": "You are lost ! ",
+            "part2": "This is a 404 page"
+        },
+        "button": "Try to head back from where you come"
     }
 }

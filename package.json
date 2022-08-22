@@ -39,7 +39,7 @@
     "@vue/cli-service": "~5.0.4",
     "@vue/eslint-config-standard": "^7.0.0",
     "@vue/eslint-config-typescript": "^10.0.0",
-    "@vue/vue3-jest": "^28.1.0",
+    "@vue/vue3-jest": "^27.0.0",
     "@vue/test-utils": "^2.0.2",
     "eslint": "^8.17.0",
     "eslint-plugin-import": "^2.26.0",

@@ -12,7 +12,7 @@
     <v-menu open-on-hover transition="fade-transition" v-if="userStore.connected">
       <template v-slot:activator="{ props }">
         <div id="user-info" v-bind="props">
-          <h3 id="profile-name"> {{ userStore.username }} </h3>
+          <h3 id="profile-name" class="rainbow-text"> {{ userStore.username }} </h3>
           <v-badge content="🎵" color="var(--link-color)">
             <v-avatar style="align-items: initial">
               <v-img rel="preconnect" :src="userStore.profilePicture" alt="Profile picture"></v-img>
@@ -53,7 +53,7 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'NavbarHeader',
   components: { LocaleSelector, NavbarPlaylistSelected },
-  setup () {
+  setup() {
     const userStore = useUserStore()
     const authStore = useAuthStore()
     const playlistsStore = usePlaylistsStore()
@@ -61,29 +61,29 @@ export default defineComponent({
     return { authStore, playlistsStore, userStore }
   },
   computed: {
-    profilePictureOrDefault (): string {
+    profilePictureOrDefault(): string {
       // eslint-disable-next-line
       const DEFAULT_PICTURE = require("@/assets/no-user.png");
       return this.userStore.profilePicture !== ''
         ? this.userStore.profilePicture
         : DEFAULT_PICTURE
     },
-    logo (): string {
+    logo(): string {
       return require('@/assets/fiverr/basic.svg')
     }
   },
   methods: {
-    clearLocalStorage () {
+    clearLocalStorage() {
       localStorage.clear()
       this.logout()
     },
-    logout () {
+    logout() {
       this.userStore.reset()
       this.authStore.reset()
       this.playlistsStore.selectedPlaylistId = null
       this.$router.push({ name: 'LoginView' })
     },
-    logoutAndChangeAccount () {
+    logoutAndChangeAccount() {
       this.userStore.wantsToChangeAccount = true
       // wantsToChangeAccount is not reset
       this.userStore.reset()

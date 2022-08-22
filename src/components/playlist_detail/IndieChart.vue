@@ -6,7 +6,6 @@
 
 <script lang="ts">
 import { usePlaylistsStore } from '@/stores/playlists'
-import { storeToRefs } from 'pinia'
 import { defineComponent } from 'vue'
 
 export default defineComponent({
@@ -14,21 +13,15 @@ export default defineComponent({
   props: {
     playlistId: String
   },
-  setup () {
+  setup() {
     const playlistsStore = usePlaylistsStore()
-    const { playlists } = storeToRefs(playlistsStore)
-    return { playlists }
+    return { playlistsStore }
   },
   methods: {
-    // Get the general playlist isIndie % from the mean of all tracks
-    getIndiePercentage (): number {
-      let indieTracks = 0
-      for (const track of this.playlists[this.playlistId!].tracks) {
-        indieTracks += track.isIndie ? 1 : 0
-      }
-      return ~~(indieTracks / this.playlists[this.playlistId!].tracks.length * 100)
+    getIndiePercentage(): number {
+      return this.playlistsStore.getIndiePercentage(this.playlistId!)
     },
-    getImage (): string {
+    getImage(): string {
       let image = ''
       const indiePercentage = this.getIndiePercentage()
       if (indiePercentage < 25) image = 'cold'
@@ -38,7 +31,7 @@ export default defineComponent({
       return require(`@/assets/${image}.png`)
     }
   },
-  data () {
+  data() {
     // All data needed to customize graph UI and data
     return {
       series: [this.getIndiePercentage()],

@@ -5,27 +5,42 @@
   <title>Horus</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="description" content="Horus helps you manipulate your Spotify playlists easily">
   <meta name="theme-color" content="#C6E1DC">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="msapplication-config" content="<%= BASE_URL %>browserconfig.xml" />
 
+  <!-- OpenGraph -->
+  <meta property="og:type" content="website">
   <meta property="og:url" content="https://www.horus-playlist.com" />
   <meta property="og:title" content="Horus" />
   <meta property="og:image" content="https://www.horus-playlist.com/favicon.png" />
+  <meta property="og:image:width" content="506">
+  <meta property="og:image:width" content="508">
   <meta property="og:description" content="Horus helps you manipulate your Spotify playlists easily" />
-  <meta property='author-name' content='Hylectrif' />
-  <meta property='author-link' content='https://github.com/s-rigaud' />
+  <meta property="og:site_name" content="Horus Playlist">
+  <meta property="og:locale" content="en_US">
+
+  <!-- Twitter part -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:url" content="https://www.horus-playlist.com">
+  <meta name="twitter:title" content="Horus Playlist">
+  <meta name="twitter:description" content="Horus helps you manipulate your Spotify playlists easily">
+  <meta name="twitter:image" content="https://www.horus-playlist.com/favicon.png">
+
+  <meta name='author-name' content='Hylectrif' />
+  <meta name='author-link' content='https://github.com/s-rigaud' />
+  <meta name="description" content="Horus helps you manipulate your Spotify playlists easily">
+
 
   <link rel="apple-touch-icon" href="<%= BASE_URL %>favicon.png">
   <link rel="shortcut icon" href="<%= BASE_URL %>favicon.ico">
   <link rel="manifest" href="<%= BASE_URL %>manifest.json">
   <link rel="icon" type="image/png" href="<%= BASE_URL %>favicon.png">
 
-  <link rel="preload" href="<%= BASE_URL %>Oswald-Medium.ttf" as="font" type="font/ttf" crossorigin>
-  <link rel="preload" href="<%= BASE_URL %>Righteous-j7av.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" as="font" href="<%= BASE_URL %>Oswald-Medium.ttf" type="font/ttf" crossorigin>
+  <link rel="preload" as="font" href="<%= BASE_URL %>Righteous-j7av.ttf" type="font/ttf" crossorigin>
 
   <link rel="stylesheet" href="<%= BASE_URL %>normalize.css" />
   <link rel="stylesheet" href="<%= BASE_URL %>main.css" />

@@ -13,7 +13,7 @@
       <v-col class="primary lighten-2 py-4 text-center white--text" cols="12">
         <strong>
           {{ new Date().getFullYear() }} - {{ $t("footer.built") }}
-          <a id="github-link" href="https://github.com/s-rigaud" target="_blank">
+          <a id="github-link" href="https://github.com/s-rigaud" target="_blank" rel="noopener">
             Hylectrif
           </a>
         </strong>
@@ -29,7 +29,7 @@ import { useUserStore } from '@/stores/user'
 
 export default defineComponent({
   name: 'FooterComponent',
-  setup () {
+  setup() {
     const userStore = useUserStore()
     return { userStore }
   }

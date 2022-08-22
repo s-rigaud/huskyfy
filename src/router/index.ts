@@ -7,6 +7,7 @@ import AboutView from '@/views/AboutView.vue'
 import LoginView from '@/views/LoginView.vue'
 import PlaylistDetail from '@/views/PlaylistDetail.vue'
 import PlaylistExplorer from '@/views/PlaylistExplorer.vue'
+import View404 from '@/views/View404.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
@@ -32,13 +33,17 @@ const routes = [
     name: 'About',
     component: AboutView
   },
-  { path: '/:pathMatch(.*)*', redirect: '/explore' }
+  {
+    path: '/:pathMatch(.*)*',
+    name: "404",
+    component: View404
+  }
 ]
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
-  scrollBehavior () {
+  scrollBehavior() {
     // always scroll to top
     return { top: 0, behavior: 'smooth' }
   }
@@ -99,7 +104,11 @@ router.beforeEach(async function (to, from, next) {
 router.afterEach((to, from) => {
   const translationKey = to.path.split('/')[1]
   if (translationKey !== 'playlist') {
-    document.title = VueI18n.t(`page-title.${translationKey}`) + ' - Horus'
+    if (VueI18n.t(`page-title.${translationKey}`) == `page-title.${translationKey}`) {
+      document.title = '404 - Horus'
+    } else {
+      document.title = VueI18n.t(`page-title.${translationKey}`) + ' - Horus'
+    }
   } else {
     const playlistStore = usePlaylistsStore()
     const playlistName = playlistStore.playlists[playlistStore.selectedPlaylistId!].name

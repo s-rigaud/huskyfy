@@ -3,12 +3,12 @@ import { Store } from 'pinia'
 const LOGO = require('@/assets/fiverr/basic.svg')
 
 const makeAndDownloadImage = (playlistId: string) => {
-  // artistImageUrls is the urls for the top X artists in the playlist
   const playlistsStore = usePlaylistsStore()
 
   const top16Artists = playlistsStore.getTopArtists(playlistId, 16)
   const artistImageUrls = top16Artists.map(res => res.artist.images[0].url)
 
+  // Logo should also be loaded asynchronously
   artistImageUrls.unshift(LOGO)
   const images = artistImageUrls.map(src => {
     const image = new Image()
@@ -55,6 +55,7 @@ const createCanvas = (
   ctx.fillStyle = '#000'
   ctx.fillRect(0, 0, canvas.width, canvas.height)
 
+  // Adding pictures
   for (let i = 0; i < gridSize; i++) {
     for (let j = 0; j < gridSize; j++) {
       const imageIndex = (i * gridSize + j) + 1
@@ -68,6 +69,7 @@ const createCanvas = (
     }
   }
 
+  // Adding logo to canvas
   const logo = images[0]
   ctx.drawImage(logo, 0, 440, 200, 60)
 
@@ -83,10 +85,23 @@ const addCanvasLegend = (
   playlistId: string
 ) => {
   const playlist = playlistsStore.playlists[playlistId]
+
+  // Logo already added
+
+  // Add playlist name
   ctx.font = '18px Arial'
   ctx.fillStyle = '#F39200'
   ctx.fillText(playlist.name, 10, 415)
 
+  // Adding INDIE %
+  ctx.font = '13px Arial'
+  const percentage = playlistsStore.getIndiePercentage(playlistId)
+  ctx.fillText(
+    `Indie score : ${percentage} %`,
+    150, 450
+  )
+
+  // Adding TOP Genres
   ctx.font = '13px Arial'
   const top5Genres = playlistsStore.getTopGenres(playlistId, 5)
   for (let i = 0; i < top5Genres.length; i++) {
@@ -109,7 +124,6 @@ const downloadImage = (
   playlistsStore: Store<'playlists', PlaylistState, any>,
   playlistId: string
 ) => {
-  // Downloading the image
   const playlist = playlistsStore.playlists[playlistId]
   const a = document.createElement('a')
   a.download = `${playlist.name}.jpg`
@@ -118,7 +132,7 @@ const downloadImage = (
 
   a.href = url
   a.click()
-  // a.remove()
+  a.remove()
 }
 
 export default makeAndDownloadImage

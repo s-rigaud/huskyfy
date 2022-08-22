@@ -4,37 +4,40 @@
     <div id="text">
       <div style="display: inline-flex">
         <v-img width="40" :src="horus" alt="Horus Image"></v-img>
-        <h1>{{ $t("about.description.title") }}</h1>
+        <h1 class="rainbow-text">{{ $t("about.description.title") }}</h1>
       </div>
       <p> {{ $t("about.description.content.part1") }} </p>
       <p> {{ $t("about.description.content.part2") }}{{ $t("_emojis.indie") }} </p>
 
-      <h2 class="subtitle">{{ $t("about.connection.title") }}</h2>
+      <h2 class="subtitle rainbow-text">{{ $t("about.connection.title") }}</h2>
       <h2>🔒</h2>
       <p>{{ $t("about.connection.content") }} </p>
 
-      <h2 class="subtitle">{{ $t("about.process.title") }}</h2>
+      <h2 class="subtitle rainbow-text">{{ $t("about.process.title") }}</h2>
       <p> {{ $t("about.process.content") }}</p>
 
-      <h2 class="subtitle">{{ $t("about.expose-liked-songs.title") }}</h2>
+      <h2 class="subtitle rainbow-text">{{ $t("about.expose-liked-songs.title") }}</h2>
       <h2>{{ $t("_emojis.public") }}</h2>
       <p>
         {{ $t("about.expose-liked-songs.content.part1") }} {{ $t("_emojis.collaborative") }}
+        <br />
         <a :href="likedSongLink"> {{ $t("about.expose-liked-songs.content.part2") }}</a>
       </p>
 
-      <h2 class="subtitle">{{ $t("about.creator.title") }}</h2>
+      <h2 class="subtitle rainbow-text">{{ $t("about.creator.title") }}</h2>
       <h2>😃</h2>
       <p>
         {{ $t("about.creator.content.part1") }}
-        <a href="https://github.com/s-rigaud" target="_blank">{{ $t("about.creator.content.part2") }}</a>
+        <a href="https://github.com/s-rigaud" target="_blank" rel="noopener">
+          {{ $t("about.creator.content.part2") }}
+        </a>
         {{ $t("about.creator.content.part3") }}
         <a href="mailto:horusproject.bugtracker@gmail.com?subject=Horus%20improvement%20request">
           {{ $t("about.creator.content.part4") }} 📧
         </a>
       </p>
     </div>
-    <a href="https://github.com/s-rigaud" target="_blank">
+    <a href="https://github.com/s-rigaud" target="_blank" rel="noopener">
       <v-img width="70" :src="githubImg" alt="Github Image"></v-img>
     </a>
   </div>
@@ -50,18 +53,18 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'AboutView',
   computed: {
-    githubImg (): string {
+    githubImg(): string {
       return require('@/assets/github.png')
     },
-    horus (): string {
+    horus(): string {
       return require('@/assets/oeil-dhorus.png')
     },
-    likedSongLink (): string {
+    likedSongLink(): string {
       return process.env.VUE_APP_BASE_SERVER_URL + '/playlist/my-music'
     }
   },
   methods: {
-    backToPreviousPage () {
+    backToPreviousPage() {
       this.$router.go(-1)
     }
   }

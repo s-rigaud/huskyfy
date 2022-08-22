@@ -5,13 +5,13 @@
     </v-img>
 
     <v-card-title>
-      <p class="text-truncate"> {{ name }} </p>
+      <p class="text-truncate rainbow-text"> {{ name }} </p>
     </v-card-title>
 
-    <v-card-subtitle style="padding: 0">
+    <v-card-subtitle class="pad-title-0">
       <p>{{ $t("playlist.created-by") }} {{ owner }}</p>
     </v-card-subtitle>
-    <v-card-subtitle style="padding: 0">
+    <v-card-subtitle class="pad-title-0">
       <p v-if="collaborative">{{ $t("playlist.collaborative") }} {{ $t("_emojis.collaborative") }}</p>
       <p v-else-if="public">{{ $t("playlist.public") }} {{ $t("_emojis.public") }}</p>
       <p v-else> {{ $t("playlist.private") }} {{ $t("_emojis.private") }}</p>
@@ -38,15 +38,15 @@ export default defineComponent({
     collaborative: Boolean
   },
   computed: {
-    loadingCover (): string {
+    loadingCover(): string {
       return require('@/assets/default_cover.jpg')
     },
-    horus (): string {
+    horus(): string {
       return require('@/assets/oeil-dhorus.png')
     }
   },
   methods: {
-    displayDetails () {
+    displayDetails() {
       this.$router.push({
         name: 'Explore playlist',
         params: { playlistId: this.id }
@@ -125,5 +125,9 @@ export default defineComponent({
 
 .playlist-card:hover .horus-img {
   opacity: 1;
+}
+
+.pad-title-0 {
+  padding: 0;
 }
 </style>
