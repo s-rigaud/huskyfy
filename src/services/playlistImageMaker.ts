@@ -106,7 +106,7 @@ const addCanvasLegend = (
   const top5Genres = playlistsStore.getTopGenres(playlistId, 5)
   for (let i = 0; i < top5Genres.length; i++) {
     ctx.fillText(
-      getEmojiForRank(i) + ' ' + top5Genres[i].value + '% ' + top5Genres[i].name,
+      `${getEmojiForRank(i)} ${top5Genres[i].value}% ${top5Genres[i].name}`,
       270, 435 + 14 * i
     )
   }

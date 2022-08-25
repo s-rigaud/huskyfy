@@ -43,7 +43,7 @@
 
 <script lang="ts">
 import { SpotifyArtist } from '@/api/spotify/model'
-import { defineComponent } from 'vue'
+import { defineComponent, StyleValue } from 'vue'
 
 export default defineComponent({
   name: 'TrackCard',
@@ -62,7 +62,7 @@ export default defineComponent({
     trackIndex: Number
   },
   computed: {
-    addComma() {
+    addComma () {
       return (artistName: string): string => {
         if (this.artists![this.artists!.length - 1].name === artistName) {
           return artistName
@@ -70,22 +70,22 @@ export default defineComponent({
         return `${artistName},`
       }
     },
-    loadingCover(): string {
+    loadingCover (): string {
       return require('@/assets/default_cover.jpg')
     },
     // Delay animation so cards appear one after another
-    trackAnimationDelay(): object {
+    trackAnimationDelay (): StyleValue {
       const duration = (this.trackIndex! < 20) ? `${200 * this.trackIndex!}ms` : '0ms'
       return { 'animation-delay': duration }
     },
-    genreAnimationDelay() {
-      return (index: number): object => {
+    genreAnimationDelay () {
+      return (index: number): StyleValue => {
         return { 'animation-delay': `${index * 500}ms` }
       }
     }
   },
   methods: {
-    openTrackOnSpotify() {
+    openTrackOnSpotify () {
       window.location.href = this.trackURI!
     }
   }

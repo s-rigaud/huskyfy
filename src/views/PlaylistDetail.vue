@@ -113,7 +113,7 @@ export default defineComponent({
     IndieChart,
     TrackCard
   },
-  setup() {
+  setup () {
     const userStore = useUserStore()
     const playlistsStore = usePlaylistsStore()
 
@@ -132,11 +132,11 @@ export default defineComponent({
       selectedGenres
     }
   },
-  async mounted() {
+  async mounted () {
     await this.loadFirstTracks()
     this.filteredTracks = this.playlists[this.playlistId].tracks
   },
-  data() {
+  data () {
     return {
       trackRequestLimit: 150,
 
@@ -157,7 +157,7 @@ export default defineComponent({
     }
   },
   methods: {
-    async loadFirstTracks() {
+    async loadFirstTracks () {
       await this.downloadPlaylistTracks(
         this.playlistId,
         this.trackRequestLimit
@@ -166,7 +166,7 @@ export default defineComponent({
         this.playlists[this.playlistId].total > this.trackRequestLimit
       this.resetFilters()
     },
-    filterTracksByGenres() {
+    filterTracksByGenres () {
       const genres = this.selectedGenres
       if (genres.length === 0) return this.resetFilters()
 
@@ -182,7 +182,7 @@ export default defineComponent({
       }
       this.scrollTop()
     },
-    filterTracksByPopularity(popularity: string) {
+    filterTracksByPopularity (popularity: string) {
       if (popularity === 'No filter') return this.resetFilters()
 
       const isIndieSelected = popularity === 'Indie'
@@ -191,7 +191,7 @@ export default defineComponent({
       )
       this.scrollTop()
     },
-    filterTracksByArtists() {
+    filterTracksByArtists () {
       const artists = this.selectedArtists
       if (artists.length === 0) return this.resetFilters()
 
@@ -207,65 +207,65 @@ export default defineComponent({
       }
       this.scrollTop()
     },
-    resetFilters() {
+    resetFilters () {
       this.selectedGenres = []
       this.selectedPopularity = 'No filter'
       this.filteredTracks = this.playlists[this.playlistId].tracks
       this.scrollTop()
     },
-    openPlaylistOnSpotify() {
+    openPlaylistOnSpotify () {
       window.location.href = this.playlists[this.playlistId].uri
     },
     // Returns only top genres sorted by most to least popular
-    getSortedGenres(): Genre[] {
+    getSortedGenres (): Genre[] {
       return this.playlistsStore.getTopGenres(this.playlistId, 15)
     },
-    capitalize(string: string): string {
+    capitalize (string: string): string {
       return string.charAt(0).toUpperCase() + string.slice(1)
     },
-    getSortedArtists(): Array<SpotifyArtist> {
+    getSortedArtists (): Array<SpotifyArtist> {
       const allArtists: Set<SpotifyArtist> = new Set()
       for (const track of this.playlists[this.playlistId].tracks) {
         track.artists.map(a => allArtists.add(a))
       }
       return Array.from(allArtists).sort((a1, a2) => a1.name.localeCompare(a2.name))
     },
-    scrollTop() {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    scrollTop () {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
     }
   },
   computed: {
-    spotifyLogo(): string {
+    spotifyLogo (): string {
       return require('@/assets/spotify.png')
     },
-    generalTitle(): string {
+    generalTitle (): string {
       const separator = (this.isExclusiveGenres) ? ' and ' : ' or '
       return this.selectedGenres.map(g => this.capitalize(g)).join(separator) || this.$t('track.all-tracks')
     },
-    getArtistName() {
+    getArtistName () {
       return (artist: SpotifyArtist) => {
         return artist.name
       }
     },
-    getArtistCover() {
+    getArtistCover () {
       return (artist: SpotifyArtist) => {
         return artist.name
       }
     }
   },
   watch: {
-    isExclusiveGenres() {
+    isExclusiveGenres () {
       this.filterTracksByGenres()
     },
-    selectedPopularity(newSelectedPopularity: string) {
+    selectedPopularity (newSelectedPopularity: string) {
       this.filterTracksByPopularity(newSelectedPopularity)
     },
-    selectedArtists(newValue: Array<string>, oldValue: Array<string>) {
+    selectedArtists (newValue: Array<string>, oldValue: Array<string>) {
       if (oldValue.length !== 0 || newValue.length !== 0) {
         this.filterTracksByArtists()
       }
     },
-    selectedGenres(newValue: Array<string>, oldValue: Array<string>) {
+    selectedGenres (newValue: Array<string>, oldValue: Array<string>) {
       if (oldValue.length !== 0 || newValue.length !== 0) {
         this.filterTracksByGenres()
       }

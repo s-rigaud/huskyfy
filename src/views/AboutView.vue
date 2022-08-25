@@ -21,11 +21,15 @@
       <p>
         {{ $t("about.expose-liked-songs.content.part1") }} {{ $t("_emojis.collaborative") }}
         <br />
-        <a :href="likedSongLink"> {{ $t("about.expose-liked-songs.content.part2") }}</a>
+        <a :href="myMusicLink">
+          {{ $t("about.expose-liked-songs.content.part2") }}
+          <v-img id="my-song-img" width="20" :src="myMusicImage" alt="My Music playlist"></v-img>
+        </a>
       </p>
 
       <h2 class="subtitle rainbow-text">{{ $t("about.creator.title") }}</h2>
       <h2>😃</h2>
+
       <p>
         {{ $t("about.creator.content.part1") }}
         <a href="https://github.com/s-rigaud" target="_blank" rel="noopener">
@@ -37,13 +41,14 @@
         </a>
       </p>
     </div>
+
     <a href="https://github.com/s-rigaud" target="_blank" rel="noopener">
       <v-img width="70" :src="githubImg" alt="Github Image"></v-img>
     </a>
   </div>
 
-  <v-btn id="exit-button" @click="backToPreviousPage">
-    <v-icon>mdi-arrow-left-circle</v-icon>
+  <v-btn id="exit-button" @click="backToPreviousPage" class="rainbow-v-btn">
+    <v-icon>mdi-home</v-icon>
   </v-btn>
 </template>
 
@@ -59,7 +64,10 @@ export default defineComponent({
     horus(): string {
       return require('@/assets/oeil-dhorus.png')
     },
-    likedSongLink(): string {
+    myMusicImage(): string {
+      return require('@/assets/my-music.jpeg')
+    },
+    myMusicLink(): string {
       return process.env.VUE_APP_BASE_SERVER_URL + '/playlist/my-music'
     }
   },
@@ -93,6 +101,11 @@ export default defineComponent({
   position: fixed;
   top: 70px;
   right: 10px;
+}
+
+#my-song-img {
+  display: inline-block;
+  top: 5px;
 }
 
 h1 {

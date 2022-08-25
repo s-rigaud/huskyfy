@@ -37,7 +37,7 @@
 			"title": "Rendre publique sa playlist Titres Likées",
 			"content": {
 				"part1": "C'est malheureusement impossible de rendre publique sa playlist de titres likés sur Spotify. Heureusement si vous cherchez à le faire vous pouvez utiliser Horus. Il vous suffit de dupliquer votre playlist, de rendre la nouvelle playlist publique puis de partager la nouvelle playlist avec tous vos amis",
-				"part2": "Cliquez ici pour vous rendre directement sur votre playlist de titres likées ♥"
+				"part2": "Cliquez ici pour vous rendre directement sur votre playlist de titres likées "
 			}
 		},
 		"process": {
@@ -71,9 +71,10 @@
 			"disagree": "Non"
 		},
 		"duplicate": {
-			"button": "Dupliquer la playlist ⏭️",
+			"button": "Dupliquer la playlist ",
 			"copy-of": "Copie de ",
-			"created-by": "créée par Horus 𓂀"
+			"created-by": "créée par Horus 𓂀",
+			"tooltip": "Créer une nouvelle playlist avec tous les titres actuellement sélectionnés"
 		},
 		"export-preview": "Sauvegarder un aperçu 🖼️",
 		"fully-loaded": "Tous les artistes, les titres et les genres ont pu être récupérés",

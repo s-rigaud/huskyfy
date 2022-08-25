@@ -45,8 +45,8 @@ html {
 */
 
 .rainbow-text {
-    background: rgb(243, 146, 0);
-    background: linear-gradient(180deg, rgba(243, 146, 0, 1) 20%, rgba(249, 182, 33, 1) 51%, rgba(243, 146, 0, 1) 86%);
+    background: var(--text-color);
+    background: linear-gradient(180deg, var(--text-color) 20%, var(--link-color) 51%, var(--text-color) 86%);
     background-size: 100%;
     background-repeat: repeat;
     -webkit-background-clip: text;
@@ -55,5 +55,5 @@ html {
 }
 
 .rainbow-v-btn {
-    background: linear-gradient(180deg, rgba(243, 146, 0, 1) 20%, rgba(249, 182, 33, 1) 51%, rgba(243, 146, 0, 1) 86%) !important;
+    background: linear-gradient(180deg, var(--text-color) 20%, var(--link-color) 51%, var(--text-color) 86%) !important;
 }

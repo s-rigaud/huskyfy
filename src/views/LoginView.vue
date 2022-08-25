@@ -2,18 +2,19 @@
   <!-- Login view with a large background and a simple button -->
   <div id="login">
     <div id="upper-part">
-      <h1 style="color: white">{{ $t("login.header") }}</h1>
-      <LocaleSelector />
+      <h1 style="color: white" class="rainbow-text">{{ $t("login.header") }}</h1>
     </div>
 
     <div id="lower-part">
-      <v-btn id="connect-button" @click="accessOAuthPage" v-if="!userStore.connected" rounded>
+      <v-btn id="connect-button" @click="accessOAuthPage" v-if="!userStore.connected" rounded class="rainbow-v-btn">
         {{ $t("login.connect") }}
         <v-icon right light> mdi-account-circle </v-icon>
       </v-btn>
+
       <router-link to="/about" id="link-about">
         {{ $t("login.about") }}
       </router-link>
+      <LocaleSelector id="locale-selector" :width="60" :height="30" />
     </div>
   </div>
 </template>
@@ -26,13 +27,13 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'LoginView',
-  setup () {
+  setup() {
     const userStore = useUserStore()
     return { userStore }
   },
   components: { LocaleSelector },
   methods: {
-    async accessOAuthPage () {
+    async accessOAuthPage() {
       window.location.href = await api.spotify.auth.getOAuthUrl()
     }
   }
@@ -72,6 +73,13 @@ export default defineComponent({
   font-size: large;
 }
 
+#locale-selector {
+  position: absolute;
+  bottom: 10%;
+  right: 5%;
+  font-size: large;
+}
+
 #link-about {
   color: white;
 }
@@ -81,7 +89,7 @@ export default defineComponent({
   padding: 20px;
   text-transform: none;
   letter-spacing: 0;
-  color: var(--text-color) !important;
+  color: black !important;
   position: absolute;
   bottom: 10%;
 }
@@ -91,11 +99,10 @@ export default defineComponent({
 }
 
 #connect-button:focus {
-  outline: var(--primary-color) solid 2px;
+  outline: var(--primary-color) solid 2px !important;
 }
 
-a,
-h1 {
+a {
   background: rgba(0, 0, 0, 0.3);
 }
 

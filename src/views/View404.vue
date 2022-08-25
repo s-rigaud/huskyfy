@@ -1,7 +1,7 @@
 <template>
     <section>
-        <h1 class="rainbow-text" style="display:block">{{ $t('404.title.part1') }}</h1>
-        <h1><span class="rainbow-text">{{ $t('404.title.part2') }}</span>😕</h1>
+        <h1 class="rainbow-text title-404" style="display:block">{{ $t('404.title.part1') }}</h1>
+        <h2 class="title-404"><span class="rainbow-text">{{ $t('404.title.part2') }}</span>😕</h2>
         <v-btn @click="backToPreviousPage" class="rainbow-v-btn" append-icon="mdi-map-search-outline">
             {{ $t('404.button') }}
         </v-btn>
@@ -9,17 +9,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent } from 'vue'
 
 export default defineComponent({
-    name: 'View404',
-    computed: {
-    },
-    methods: {
-        backToPreviousPage() {
-            this.$router.go(-1)
-        }
+  name: 'View404',
+  computed: {
+  },
+  methods: {
+    backToPreviousPage () {
+      this.$router.go(-1)
     }
+  }
 })
 </script>
 <style scoped>
@@ -35,7 +35,14 @@ section {
     justify-content: center;
 }
 
-h1 {
+h1,
+h2 {
     text-align: center;
+}
+
+.title-404 {
+    margin: 10px 0px;
+    padding: 0px 0px;
+    font-size: xx-large;
 }
 </style>

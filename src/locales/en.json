@@ -34,10 +34,10 @@
             }
         },
         "expose-liked-songs": {
-            "title": "How to make your Liked Tracks playlist public ?",
+            "title": "How to make your My Music playlist public ?",
             "content": {
                 "part1": "Unfortunately it's impossible to make your playlist of liked tracks public on Spotify. If you want to do it anyway you can use Horus. Just duplicate your playlist, make the new playlist public and then share the new playlist with all your friends.",
-                "part2": "Click here to go directly to your playlist of liked tracks ♥"
+                "part2": "Click here to go directly to your playlist of liked tracks "
             }
         },
         "process": {
@@ -68,9 +68,10 @@
             "disagree": "No"
         },
         "duplicate": {
-            "button": "Create new playlist with following tracks ⏭️",
+            "button": "Duplicate the playlist ",
             "copy-of": "Copy of",
-            "created-by": "created by Horus 𓂀"
+            "created-by": "created by Horus 𓂀",
+            "tooltip": "Create a new playlist with currently selected tracks"
         },
         "export-preview": "Export playlist preview 🖼️",
         "fully-loaded": "All artists, tracks and genres have been retrieved",

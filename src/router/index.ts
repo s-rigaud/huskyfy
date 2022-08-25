@@ -35,7 +35,7 @@ const routes = [
   },
   {
     path: '/:pathMatch(.*)*',
-    name: "404",
+    name: '404',
     component: View404
   }
 ]
@@ -43,7 +43,7 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
-  scrollBehavior() {
+  scrollBehavior () {
     // always scroll to top
     return { top: 0, behavior: 'smooth' }
   }
@@ -101,10 +101,10 @@ router.beforeEach(async function (to, from, next) {
   }
 })
 
-router.afterEach((to, from) => {
+router.afterEach((to) => {
   const translationKey = to.path.split('/')[1]
   if (translationKey !== 'playlist') {
-    if (VueI18n.t(`page-title.${translationKey}`) == `page-title.${translationKey}`) {
+    if (VueI18n.t(`page-title.${translationKey}`) === `page-title.${translationKey}`) {
       document.title = '404 - Horus'
     } else {
       document.title = VueI18n.t(`page-title.${translationKey}`) + ' - Horus'

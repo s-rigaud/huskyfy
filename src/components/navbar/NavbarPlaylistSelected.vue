@@ -15,15 +15,15 @@
             {{ playlistsStore.playlists[playlistsStore.selectedPlaylistId].name }}
           </h3>
 
-          <v-tooltip location="top">
-            <template v-slot:activator="{ props: tooltip }">
-              <h3 v-bind="tooltip">{{ getEmojiFromVisibility }}</h3>
+          <v-tooltip location="bottom">
+            <template v-slot:activator="{ props: visibilityTooltip }">
+              <h3 v-bind="visibilityTooltip">{{ getEmojiFromVisibility }}</h3>
             </template>
             <span>{{ getTextFromVisibility }}</span>
           </v-tooltip>
         </div>
 
-        <p class="text-truncate">
+        <p id="description" class="text-truncate">
           {{
               playlistsStore.playlists[playlistsStore.selectedPlaylistId]
                 .description.replace(/(<([^>]+)>)/ig, '')
@@ -59,14 +59,19 @@
         </v-btn>
       </div>
 
-      <v-btn id="duplicate-playlist-button" variant="outlined"
-        v-if="playlistsStore.playlists[playlistsStore.selectedPlaylistId].tracks.length > 1" @click="createNewPlaylist">
-        {{ $t("playlist.duplicate.button") }}
-      </v-btn>
+      <v-tooltip location="bottom" v-if="playlistsStore.playlists[playlistsStore.selectedPlaylistId].tracks.length > 1">
+        <template v-slot:activator="{ props: visibilityTooltip }">
+          <v-btn id="duplicate-playlist-button" variant="outlined" v-bind="visibilityTooltip"
+            append-icon="mdi-content-duplicate" @click="createNewPlaylist">
+            {{ $t("playlist.duplicate.button") }}
+          </v-btn>
+        </template>
+        <span> {{ $t("playlist.duplicate.tooltip") }} </span>
+      </v-tooltip>
 
       <!-- At least 4 tracks to download image -->
       <v-btn v-if="playlistsStore.playlists[playlistsStore.selectedPlaylistId].tracks.length > 3" @click="exportPreview"
-        variant="outlined" v-bind="tooltip">
+        variant="outlined">
         {{ $t("playlist.export-preview") }}
       </v-btn>
       <v-btn @click="openPlaylistOnSpotify" id="open-spotify-playlist-button" variant="outlined">
@@ -120,7 +125,7 @@ import { useUserStore } from '@/stores/user'
 export default defineComponent({
   name: 'NavbarPlaylistSelected',
   components: { DuplicatorPopup },
-  setup() {
+  setup () {
     const userStore = useUserStore()
     const playlistsStore = usePlaylistsStore()
 
@@ -128,16 +133,17 @@ export default defineComponent({
 
     return { currentUserUsername, playlistsStore }
   },
-  data() {
+  data () {
     return {
       isDeleteModalOpen: false,
       startDuplication: false,
-      tooltip: null,
+      visibilityTooltip: null,
+      duplicateTooltip: null,
       waitingForDeletion: false
     }
   },
   computed: {
-    usernameToDisplay(): string {
+    usernameToDisplay (): string {
       const playlistCreator =
         this.playlistsStore.playlists[this.playlistsStore.selectedPlaylistId!]
           .owner.display_name
@@ -146,17 +152,17 @@ export default defineComponent({
         ? this.$t('me')
         : playlistCreator
     },
-    userOwnsPlaylist(): boolean {
+    userOwnsPlaylist (): boolean {
       return (
         this.currentUserUsername ===
         this.playlistsStore.playlists[this.playlistsStore.selectedPlaylistId!]
           .owner.display_name
       )
     },
-    spotifyLogo(): string {
+    spotifyLogo (): string {
       return require('@/assets/spotify.png')
     },
-    getEmojiFromVisibility(): string {
+    getEmojiFromVisibility (): string {
       const playlist =
         this.playlistsStore.playlists[this.playlistsStore.selectedPlaylistId!]
 
@@ -164,7 +170,7 @@ export default defineComponent({
       if (playlist.public) return this.$t('_emojis.public')
       return this.$t('_emojis.private')
     },
-    getTextFromVisibility(): string {
+    getTextFromVisibility (): string {
       const playlist =
         this.playlistsStore.playlists[this.playlistsStore.selectedPlaylistId!]
 
@@ -172,24 +178,24 @@ export default defineComponent({
       if (playlist.public) return this.$t('playlist.public') + ' ' + this.$t('_emojis.public')
       return this.$t('playlist.private') + ' ' + this.$t('_emojis.private')
     },
-    loadingCover(): string {
+    loadingCover (): string {
       return require('@/assets/default_cover.jpg')
     }
   },
   methods: {
-    openPlaylistOnSpotify() {
+    openPlaylistOnSpotify () {
       window.location.href =
         this.playlistsStore.playlists[
           this.playlistsStore.selectedPlaylistId!
         ].uri
     },
-    async exportPreview() {
+    async exportPreview () {
       makeAndDownloadImage(this.playlistsStore.selectedPlaylistId!)
     },
-    createNewPlaylist() {
+    createNewPlaylist () {
       this.startDuplication = true
     },
-    async unfollowPlaylist() {
+    async unfollowPlaylist () {
       this.isDeleteModalOpen = false
       this.waitingForDeletion = true
       const toDeletePlaylistId = this.playlistsStore.selectedPlaylistId!
@@ -198,13 +204,13 @@ export default defineComponent({
       this.waitingForDeletion = false
       this.$router.push({ name: 'Explore' })
     },
-    async setPlaylistPublic() {
+    async setPlaylistPublic () {
       await this.playlistsStore.updatePlaylistPrivacy(
         this.playlistsStore.selectedPlaylistId!,
         true
       )
     },
-    async setPlaylistPrivate() {
+    async setPlaylistPrivate () {
       await this.playlistsStore.updatePlaylistPrivacy(
         this.playlistsStore.selectedPlaylistId!,
         false
@@ -216,6 +222,10 @@ export default defineComponent({
 <style>
 #title {
   display: inline-flex;
+}
+
+#description {
+  width: 90%;
 }
 
 #header-blocks {
@@ -234,12 +244,14 @@ export default defineComponent({
   margin-bottom: 10px;
   max-height: 72px;
   margin: inherit;
+  width: 100%;
 }
 
 #info-embedded {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  width: 100%;
 }
 
 #playlist-image {

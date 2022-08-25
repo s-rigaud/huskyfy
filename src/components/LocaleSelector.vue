@@ -1,6 +1,6 @@
 <template>
   <!-- Language selector -->
-  <div class="select">
+  <div class="select" :style="sizeStyle">
     <select @change="updateLocale">
       <option v-for="locale in sortedLocales" :key="locale" :label="locale" :value="locale" type="text"></option>
     </select>
@@ -9,26 +9,33 @@
 
 <script lang="ts">
 import { useUserStore } from '@/stores/user'
-import { defineComponent } from 'vue'
+import { defineComponent, StyleValue } from 'vue'
 
 export default defineComponent({
   name: 'LocaleSelector',
-  setup () {
+  setup() {
     const userStore = useUserStore()
     return { userStore }
   },
+  props: {
+    width: { type: Number, default: 60 },
+    height: { type: Number, default: 30 }
+  },
   computed: {
-    sortedLocales () {
+    sortedLocales() {
       // Set current locale first (preselected option)
       let locales: Array<string> = this.$i18n.availableLocales
       const currentLocale: string = this.$i18n.locale
       locales = locales.filter((l) => l !== currentLocale)
       locales.unshift(currentLocale)
       return locales
-    }
+    },
+    sizeStyle(): StyleValue {
+      return { 'width': `${this.width}px`, 'height': `${this.height}px` }
+    },
   },
   methods: {
-    updateLocale (event: Event) {
+    updateLocale(event: Event) {
       const locale: string = (event.target as HTMLInputElement).value
       this.$i18n.locale = locale
       this.userStore.locale = locale
@@ -40,8 +47,6 @@ export default defineComponent({
 .select {
   position: relative;
   display: flex;
-  width: 60px;
-  height: 30px;
   line-height: 1;
   background: #5c6664;
   overflow: hidden;
@@ -54,11 +59,12 @@ export default defineComponent({
   position: absolute;
   top: 0;
   right: 0;
-  padding: 7px 7px;
+  padding: 7px 5px;
   background: #3c3e3e;
   cursor: pointer;
   pointer-events: none;
   transition: 0.25s all ease;
+  height: 100%;
 }
 
 .select:hover::after {
