@@ -1,9 +1,12 @@
 <template>
   <!-- Language selector -->
-  <div class="select" :style="sizeStyle">
-    <select @change="updateLocale">
+  <div id="select-container">
+    <select id="select-country" class="rainbow-v-btn" @change="updateLocale" :style="sizeStyle">
       <option v-for="locale in sortedLocales" :key="locale" :label="locale" :value="locale" type="text"></option>
     </select>
+    <div id="select-flag">
+      <v-img id="country-flag" :src="flag" alt="Country flag" width="30"></v-img>
+    </div>
   </div>
 </template>
 
@@ -18,8 +21,8 @@ export default defineComponent({
     return { userStore }
   },
   props: {
-    width: { type: Number, default: 60 },
-    height: { type: Number, default: 30 }
+    width: { type: Number, default: 100 },
+    height: { type: Number, default: 50 }
   },
   computed: {
     sortedLocales() {
@@ -33,6 +36,9 @@ export default defineComponent({
     sizeStyle(): StyleValue {
       return { 'width': `${this.width}px`, 'height': `${this.height}px` }
     },
+    flag(): string {
+      return require(`@/assets/${this.$i18n.locale}.png`)
+    }
   },
   methods: {
     updateLocale(event: Event) {
@@ -40,55 +46,51 @@ export default defineComponent({
       this.$i18n.locale = locale
       this.userStore.locale = locale
     }
+  },
+  data() {
+    return {
+      isSelectOpen: false
+    }
   }
 })
 </script>
 <style scoped>
-.select {
-  position: relative;
-  display: flex;
-  line-height: 1;
-  background: #5c6664;
-  overflow: hidden;
-  border-radius: 0.25em;
-  margin: 10px;
-}
-
-.select::after {
-  content: "\25BC";
-  position: absolute;
-  top: 0;
-  right: 0;
-  padding: 7px 5px;
-  background: #3c3e3e;
-  cursor: pointer;
-  pointer-events: none;
-  transition: 0.25s all ease;
-  height: 100%;
-}
-
-.select:hover::after {
-  color: var(--primary-color);
+#select-container {
+  padding: 10px;
 }
 
 select {
+  font-size: 100%;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 5%;
+  border: none;
+  color: black;
+  appearance: none;
+  padding: 10px;
+  padding-right: 20px;
   -webkit-appearance: none;
   -moz-appearance: none;
-  -ms-appearance: none;
-  appearance: none;
-  outline: 0;
-  box-shadow: none;
-  border: 0 !important;
-  background: #5c6664;
-  background-image: none;
-  flex: 1;
-  padding: 0 0.5em;
-  color: #fff;
-  cursor: pointer;
-  font-size: 1em;
+  transition: color 0.3s ease;
 }
 
+select:hover {
+  color: var(--primary-color);
+}
+
+
+/* For IE <= 11 */
 select::-ms-expand {
   display: none;
+}
+
+#select-flag {
+  position: absolute;
+  width: 50px;
+  height: 100%;
+  top: 0;
+  right: 0;
+  display: flex;
+  border-left: 5px var(--primary-color) dotted;
 }
 </style>

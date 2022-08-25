@@ -14,7 +14,7 @@
       <router-link to="/about" id="link-about">
         {{ $t("login.about") }}
       </router-link>
-      <LocaleSelector id="locale-selector" :width="60" :height="30" />
+      <LocaleSelector id="locale-selector" />
     </div>
   </div>
 </template>
@@ -75,8 +75,8 @@ export default defineComponent({
 
 #locale-selector {
   position: absolute;
-  bottom: 10%;
-  right: 5%;
+  top: 0%;
+  right: 0%;
   font-size: large;
 }
 
@@ -108,5 +108,12 @@ a {
 
 .mdi {
   margin-left: 3px;
+}
+
+@media (max-width: 992px) {
+  #locale-selector {
+    top: auto;
+    bottom: 0;
+  }
 }
 </style>

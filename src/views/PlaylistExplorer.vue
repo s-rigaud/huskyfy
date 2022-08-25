@@ -29,21 +29,21 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'PlaylistExplorer',
   components: { PlaylistCard },
-  setup () {
+  setup() {
     const userStore = useUserStore()
     const playlistsStore = usePlaylistsStore()
     const currentUserUsername = userStore.username
     return { currentUserUsername, playlistsStore }
   },
   computed: {
-    usernameToDisplay () {
+    usernameToDisplay() {
       return (ownerUsername: string): string => {
         return this.currentUserUsername === ownerUsername
           ? this.$t('me')
           : ownerUsername
       }
     },
-    formatName () {
+    formatName() {
       return (playlist: SpotifyPlaylist): string => {
         return playlist.id === 'my-music'
           ? this.$t('playlist.your-music.name')
@@ -51,17 +51,17 @@ export default defineComponent({
       }
     }
   },
-  async created () {
+  async created() {
     await this.loadMorePlaylists()
   },
   methods: {
-    async loadMorePlaylists () {
+    async loadMorePlaylists() {
       const response = await this.playlistsStore.getUserPlaylists(this.offset)
       this.playlistTotal = response.total
       this.offset = response.offset
     }
   },
-  data () {
+  data() {
     return {
       playlistTotal: 0,
       offset: 0,
@@ -87,5 +87,11 @@ export default defineComponent({
   align-content: stretch;
   justify-content: space-evenly;
   align-items: stretch;
+}
+
+@media (max-width: 992px) {
+  h1 {
+    font-size: large;
+  }
 }
 </style>
