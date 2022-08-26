@@ -81,7 +81,7 @@ export const usePlaylistsStore = defineStore('playlists', {
     },
     getTopGenres: (state) => {
       type GenreCount = {
-        [genre: string | number]: number
+        [genre: string]: number
       }
 
       return (playlistId: string, n: number): Genre[] => {
@@ -234,6 +234,7 @@ export const usePlaylistsStore = defineStore('playlists', {
       // Init playlist info or return already saved tracks
       let offset = this.playlists[playlistId].offset
       if (!offset) {
+        console.log('First time downloading playlist tracks')
         offset = 0
         this.playlists[playlistId] = { ...this.playlists[playlistId], offset, tracks: [] }
       } else if (limit <= offset) {
@@ -247,7 +248,6 @@ export const usePlaylistsStore = defineStore('playlists', {
 
       const newTracks: Array<SpotifyTrackMetadata> = []
       for (const requestOffset of range(offset, limit, this.MAX_TRACKS_LIMIT)) {
-        // Save track infos
         const response = await this.retrieveTracks(playlistId, requestOffset)
         // Filter deleted track appearing in API
         response.data.items = response.data.items.filter(
@@ -255,6 +255,7 @@ export const usePlaylistsStore = defineStore('playlists', {
             i.track.type === 'track' &&
             !i.is_local
         )
+        // Save track infos
         newTracks.push(...response.data.items)
         this.playlists[playlistId] = {
           ...response.data,

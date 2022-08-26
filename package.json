@@ -6,6 +6,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
+    "fix": "vue-cli-service lint --fix",
     "test": "jest"
   },
   "dependencies": {
@@ -13,9 +14,7 @@
     "@vueuse/core": "^9.0.2",
     "apexcharts": "^3.35.5",
     "axios": "^0.27.2",
-    "canvas": "^2.9.3",
     "core-js": "^3.24.1",
-    "crypto-js": "^4.1.1",
     "dotenv": "^16.0.1",
     "js-base64": "^3.7.2",
     "pinia": "^2.0.20",

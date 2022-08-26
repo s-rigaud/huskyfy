@@ -38,15 +38,15 @@ export default defineComponent({
     collaborative: Boolean
   },
   computed: {
-    loadingCover(): string {
+    loadingCover (): string {
       return require('@/assets/default_cover.jpg')
     },
-    horus(): string {
+    horus (): string {
       return require('@/assets/oeil-dhorus.png')
     }
   },
   methods: {
-    displayDetails() {
+    displayDetails () {
       this.$router.push({
         name: 'Explore playlist',
         params: { playlistId: this.id }

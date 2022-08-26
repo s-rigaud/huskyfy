@@ -12,7 +12,7 @@
         <v-card-header>
           <v-card-header-text>
             <!-- All track info -->
-            <v-card-title class="text-h6"> {{ name }} </v-card-title>
+            <v-card-title class="rainbow-text text-h6"> {{ name }} </v-card-title>
             <a v-for="artist in artists" class="artist-name" :key="artist.id" :href="artist.uri">
               <v-card-subtitle style="display: inline-flex">{{ addComma(artist.name) }}</v-card-subtitle>
             </a>
@@ -133,11 +133,12 @@ export default defineComponent({
 
 .v-card {
   width: 100%;
-  background-color: #ecf0f1;
+  color: var(--text-color);
+  background-color: var(--primary-color);
 }
 
 .v-card:hover {
-  background-color: white !important;
+  color: var(--link-color);
 }
 
 .v-card-header {
@@ -158,8 +159,9 @@ export default defineComponent({
 
 .artist-name {
   margin-right: 5px;
+  padding-bottom: 7px;
   text-decoration: none;
-  color: black;
+  color: var(--link-color);
 }
 
 .genre-chip {
@@ -172,6 +174,7 @@ export default defineComponent({
 .popularity-chip {
   font-family: "Righteous" !important;
   opacity: 1 !important;
+  margin-bottom: 5px;
 }
 
 .text-h6 {

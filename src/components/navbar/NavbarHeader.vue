@@ -3,7 +3,7 @@
   <v-app-bar fixed flat style="font-family: 'Righteous'" v-if="$router.currentRoute.value.path !== '/login'">
     <!-- Left part -->
     <router-link id="explore" to="/explore">
-      <img id="logo" :src="logo" alt="Horus logo" />
+      <v-img id="logo" :src="logo" alt="Horus logo"></v-img>
     </router-link>
 
     <v-spacer></v-spacer>
@@ -13,11 +13,9 @@
       <template v-slot:activator="{ props }">
         <div id="user-info" v-bind="props">
           <h3 id="profile-name" class="rainbow-text"> {{ userStore.username }} </h3>
-          <v-badge content="🎵" color="var(--link-color)">
-            <v-avatar style="align-items: initial">
-              <v-img rel="preconnect" :src="userStore.profilePicture" alt="Profile picture"></v-img>
-            </v-avatar>
-          </v-badge>
+          <v-avatar style="align-items: initial">
+            <v-img rel="preconnect" :src="userStore.profilePicture" alt="Profile picture"></v-img>
+          </v-avatar>
         </div>
       </template>
 
@@ -32,7 +30,7 @@
     </v-menu>
 
     <!-- TODO DELETE - Dev button to facilitate -->
-    <v-btn @click="clearLocalStorage" variant="outlined">
+    <v-btn @click="clearLocalStorage" variant="outlined" v-if="isDevEnv">
       Clear local storage
     </v-btn>
     <LocaleSelector />
@@ -72,6 +70,9 @@ export default defineComponent({
     },
     logo(): string {
       return require('@/assets/fiverr/basic.svg')
+    },
+    isDevEnv(): boolean {
+      return process.env.NODE_ENV !== 'production'
     }
   },
   methods: {
@@ -144,10 +145,10 @@ header {
   width: 500px !important;
 }
 
-@media (max-width: 992px) {
+@media (max-width: 600px) {
   #logo {
     height: 50px;
-    width: auto;
+    width: 100px;
   }
 
   header {

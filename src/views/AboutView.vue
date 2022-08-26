@@ -58,21 +58,21 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'AboutView',
   computed: {
-    githubImg(): string {
+    githubImg (): string {
       return require('@/assets/github.png')
     },
-    horus(): string {
+    horus (): string {
       return require('@/assets/oeil-dhorus.png')
     },
-    myMusicImage(): string {
+    myMusicImage (): string {
       return require('@/assets/my-music.jpeg')
     },
-    myMusicLink(): string {
+    myMusicLink (): string {
       return process.env.VUE_APP_BASE_SERVER_URL + '/playlist/my-music'
     }
   },
   methods: {
-    backToPreviousPage() {
+    backToPreviousPage () {
       this.$router.go(-1)
     }
   }

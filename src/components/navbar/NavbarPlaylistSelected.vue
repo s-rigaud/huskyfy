@@ -5,10 +5,11 @@
 
     <!-- Info about the playlist -->
     <div id="playlist-info">
-      <v-img rel="preconnect" v-bind:src="
-        playlistsStore.playlists[playlistsStore.selectedPlaylistId].images[0]
-          .url
-      " id="playlist-image" :lazy-src="loadingCover" alt="Cover image" cover></v-img>
+      <v-img id="playlist-image" :lazy-src="loadingCover" alt="Cover image" cover rel="preconnect"
+        @click="openPlaylistOnSpotify" v-bind:src="
+          playlistsStore.playlists[playlistsStore.selectedPlaylistId].images[0]
+            .url
+        "></v-img>
       <div id="info-embedded">
         <div id="title">
           <h3 style="margin-right: 5px" class="text-truncate rainbow-text">
@@ -260,6 +261,7 @@ export default defineComponent({
   height: 70px !important;
   max-height: 70px !important;
   margin: 1px 10px 1px 1px;
+  cursor: pointer;
 }
 
 #header-blocks .v-btn {

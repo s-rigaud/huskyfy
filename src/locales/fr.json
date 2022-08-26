@@ -113,7 +113,11 @@
 			"name": "Filtres",
 			"no-filter": "Pas de filtre",
 			"popular": "🔥 Populaire",
-			"popularity": "Popularité"
+			"popularity": "Popularité",
+			"keyword": {
+				"and": "et",
+				"or": "ou"
+			}
 		},
 		"indie": "🌴 Artiste Indé",
 		"name": "titres",

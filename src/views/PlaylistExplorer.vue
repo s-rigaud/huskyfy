@@ -1,7 +1,7 @@
 <template>
   <!-- Display all playlists in the Spotify user library -->
   <div id="full-page">
-    <h1 class="rainbow-text">{{ $t("playlist.header") }}</h1>
+    <h1><span class="rainbow-text">{{ $t("playlist.header") }}</span>💽</h1>
 
     <div id="playlists">
       <PlaylistCard v-for="playlist in playlistsStore.playlists" :key="playlist.id" :id="playlist.id"

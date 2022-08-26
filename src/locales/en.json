@@ -110,7 +110,11 @@
             "name": "Filters",
             "no-filter": "No filter",
             "popular": "🔥 Popular",
-            "popularity": "Popularity"
+            "popularity": "Popularity",
+            "keyword": {
+                "and": "and",
+                "or": "or"
+            }
         },
         "indie": "🌴 Indie artist",
         "name": "tracks",

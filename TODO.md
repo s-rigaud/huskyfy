@@ -1,24 +1,12 @@
-# Fonctionnalités
+# Functionalities
 
 * Improve nice export image
 
 * Make website loads faster => Load track UI elements as long as I receive them (Make track appear even if they don't have artist genre and popularity yet)
 
-# Design
+* Improve logic for multiple filters
 
-## Explore
-
-* Improve and center text in the middle (add hero or something cool if needed)
-
-* Improve general design
-
-* Ensure responsiveness
-
-## Playlist
-
-* Improve general design
-
-* Ensure responsiveness
+* Ensure responsiveness for PlaylistDetail
 
 ## Other
 

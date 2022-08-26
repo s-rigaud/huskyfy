@@ -7,7 +7,7 @@
         {{ $t("playlist.load-more-warning", { limit: trackRequestLimit }) }}
       </p>
     </div>
-    <v-btn id="load-more-button" @click="loadAllTracks">
+    <v-btn id="load-more-button" @click="loadAllTracks" class="rainbow-v-btn">
       {{ $t("playlist.load-more-button") }}
     </v-btn>
   </v-snackbar>
