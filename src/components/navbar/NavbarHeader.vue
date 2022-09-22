@@ -2,8 +2,16 @@
   <!-- Navbar -->
   <v-app-bar fixed flat style="font-family: 'Righteous'" v-if="$router.currentRoute.value.path !== '/login'">
     <!-- Left part -->
-    <router-link id="explore" to="/explore">
+    <router-link to="/explore">
       <v-img id="logo" :src="logo" alt="Horus logo"></v-img>
+    </router-link>
+
+    <router-link to="/explore" class="navbar-link-text">
+      <p class="rainbow-text">%% Explore %%</p>
+    </router-link>
+
+    <router-link to="/duplicate-my-music" class="navbar-link-text">
+      <p class="rainbow-text">%% DUP %%</p>
     </router-link>
 
     <v-spacer></v-spacer>
@@ -22,9 +30,6 @@
       <div>
         <v-btn id="logout-button" @click="logout" variant="outlined">
           {{ $t("navbar.logout") }}
-        </v-btn>
-        <v-btn id="change-account-button" @click="logoutAndChangeAccount" variant="outlined">
-          {{ $t("navbar.change-account") }}
         </v-btn>
       </div>
     </v-menu>
@@ -53,7 +58,7 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'NavbarHeader',
   components: { LocaleSelector, NavbarPlaylistSelected },
-  setup() {
+  setup () {
     const userStore = useUserStore()
     const authStore = useAuthStore()
     const playlistsStore = usePlaylistsStore()
@@ -61,37 +66,29 @@ export default defineComponent({
     return { authStore, playlistsStore, userStore }
   },
   computed: {
-    profilePictureOrDefault(): string {
+    profilePictureOrDefault (): string {
       // eslint-disable-next-line
       const DEFAULT_PICTURE = require("@/assets/no-user.png");
       return this.userStore.profilePicture !== ''
         ? this.userStore.profilePicture
         : DEFAULT_PICTURE
     },
-    logo(): string {
+    logo (): string {
       return require('@/assets/fiverr/basic.svg')
     },
-    isDevEnv(): boolean {
+    isDevEnv (): boolean {
       return process.env.NODE_ENV !== 'production'
     }
   },
   methods: {
-    clearLocalStorage() {
+    clearLocalStorage () {
       localStorage.clear()
       this.logout()
     },
-    logout() {
+    logout () {
       this.userStore.reset()
       this.authStore.reset()
       this.playlistsStore.selectedPlaylistId = null
-      this.$router.push({ name: 'LoginView' })
-    },
-    logoutAndChangeAccount() {
-      this.userStore.wantsToChangeAccount = true
-      // wantsToChangeAccount is not reset
-      this.userStore.reset()
-      this.authStore.reset()
-      this.playlistsStore.reset()
       this.$router.push({ name: 'LoginView' })
     }
   }
@@ -102,6 +99,12 @@ header {
   background-color: var(--primary-color) !important;
   color: var(--text-color) !important;
   letter-spacing: 1px !important;
+  padding: 0 !important;
+}
+
+header .v-toolbar__content {
+  padding: 0 !important;
+  height: 100% !important;
 }
 
 #profile-name {
@@ -109,7 +112,6 @@ header {
 }
 
 #logo {
-  margin-top: 5px;
   width: 250px;
 }
 
@@ -120,8 +122,7 @@ header {
   cursor: pointer;
 }
 
-#logout-button,
-#change-account-button {
+#logout-button {
   background-color: var(--primary-color);
 }
 
@@ -131,18 +132,49 @@ header {
   font-family: "Oswald";
 }
 
-#change-account-button {
-  position: absolute;
-  top: 55px;
-  font-family: "Oswald";
-}
-
 .v-toolbar__extension {
   height: fit-content !important;
 }
 
-.v-menu .v-overlay__content {
-  width: 500px !important;
+.navbar-link-text {
+  text-decoration: none;
+  font-size: larger;
+  height: 64px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 10px;
+}
+
+header.v-toolbar__content :nth-child(1) {
+  border-left: 4px dotted blue;
+}
+
+.navbar-link-text :nth-child(1) {
+  border-right: 4px dotted blue;
+}
+
+.router-link-active.navbar-link-text {
+  box-shadow: 0 -3px 0 0 var(--text-color) inset;
+}
+
+.router-link-active.navbar-link-text p {
+  /* Rainbow text when selected */
+  background: linear-gradient(180deg, var(--text-color) 20%, var(--link-color) 51%, var(--text-color) 86%);
+  background-size: 100%;
+  background-repeat: repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.navbar-link-text p {
+  background: linear-gradient(180deg, white 100%, transparent);
+  background-size: 100%;
+  background-repeat: repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 @media (max-width: 600px) {

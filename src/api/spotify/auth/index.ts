@@ -1,5 +1,4 @@
 import { useAuthStore } from '@/stores/auth'
-import { useUserStore } from '@/stores/user'
 import axios, { AxiosResponse } from 'axios'
 import { Base64 } from 'js-base64'
 import { SpotifyAuthResponse } from '../model'
@@ -71,10 +70,6 @@ export default {
       'code_challenge_method=S256',
       `code_challenge=${SECRET_CODE_CHALLENGE}`
     ]
-
-    if (useUserStore().wantsToChangeAccount) {
-      QUERY_PARAMS.push(`show_dialog=${useUserStore().wantsToChangeAccount}`)
-    }
 
     return `${BASE_URL}?${QUERY_PARAMS.join('&')}`
   },

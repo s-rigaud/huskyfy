@@ -10,7 +10,8 @@
 		"about": "A propos",
 		"explore": "Explore",
 		"login": "Login",
-		"playlist": "Playlist"
+		"playlist": "Playlist",
+		"duplicate-my-music": "Dupliquer ma playlist favorite"
 	},
 	"about": {
 		"connection": {
@@ -51,11 +52,14 @@
 	"login": {
 		"about": "En apprendre plus sur ce site",
 		"connect": "Se connecter à Spotify",
-		"header": "Explorez, dupliquez, divisez et partagez vos playlists Spotify facilement avec Horus"
+		"header": "Commencez à utiliser certaines fonctionnalités avancées non encore disponibles dans Spotify :",
+		"functionality1": "Découvrez les genres musicaux que vous écoutez le plus souvent",
+		"functionality2": "Dupliquer et partager votre liste de lecture facilement",
+		"functionality3": "Partagez vos chansons préférées avec tous vos amis",
+		"functionality4": "Filtrez et analysez votre liste de lecture en fonction de la popularité des artistes ou des genres musicaux"
 	},
 	"me": "moi",
 	"navbar": {
-		"change-account": "Changer de compte",
 		"logout": "Déconnexion"
 	},
 	"not-found": {
@@ -100,6 +104,10 @@
 		"your-music": {
 			"description": "Playlist Spotify avec tous les titres likés",
 			"name": "Titres likés"
+		},
+		"indie-text": {
+			"high": " des artistes de la playlist sont indépendants ! On dirait que vous vous y intéressez.",
+			"low": " des artistes de la liste de lecture sont indépendants."
 		}
 	},
 	"track": {

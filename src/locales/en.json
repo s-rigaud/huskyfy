@@ -10,7 +10,8 @@
         "about": "About",
         "explore": "Explore",
         "login": "Login",
-        "playlist": "Playlist"
+        "playlist": "Playlist",
+        "duplicate-my-music": "Duplicate My Music playlist"
     },
     "about": {
         "connection": {
@@ -51,11 +52,14 @@
     "login": {
         "about": "Learn more about this website",
         "connect": "Log in with Spotify",
-        "header": "Explore, duplicate, split and share your Spotify playlists easily with Horus"
+        "header": "Start using some advanced functionalities not yet available in Spotify with Horus :",
+        "functionality1": "Find out which music genres you are mostly listening to",
+        "functionality2": "Duplicate and share your playlist easily",
+        "functionality3": "Share your liked songs with all your friends",
+        "functionality4": "Filter and analyse your playlist by artist popularity or music genres"
     },
     "me": "me",
     "navbar": {
-        "change-account": "Change account",
         "logout": "Sign out"
     },
     "playlist": {
@@ -97,6 +101,10 @@
         "your-music": {
             "description": "Spotify playlist with all your favorite songs",
             "name": "Your music"
+        },
+        "indie-text": {
+            "high": " of the artists of the playlist are indie ! Seems like you have an interest in it.",
+            "low": " of the artists of the playlist are indie."
         }
     },
     "track": {

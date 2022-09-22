@@ -2,11 +2,13 @@
 
 * Improve nice export image
 
-* Make website loads faster => Load track UI elements as long as I receive them (Make track appear even if they don't have artist genre and popularity yet)
-
-* Improve logic for multiple filters
-
 * Ensure responsiveness for PlaylistDetail
+
+* Add less info visually
+
+* Add functionality to sort whole playlist by genre (ordered)
+
+* Add dedicated header tab to duplicate Liked PlaylistDetail
 
 ## Other
 

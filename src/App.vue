@@ -7,7 +7,7 @@
     <!-- Main view with routing -->
     <v-main id="main" v-bind:class="{
       'no-padding': true,
-      'small-padding-top': ['/explore', '/about'].includes(
+      'small-padding-top': ['/explore', '/duplicate-my-music', '/about'].includes(
         $router.currentRoute.value.path
       ),
       'huge-padding-top':

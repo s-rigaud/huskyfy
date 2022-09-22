@@ -1,4 +1,6 @@
 <template>
+  <h3>Top 15 Genres</h3>
+
   <apexchart type="donut" width="380" :options="chartOptions" :series="series"></apexchart>
 </template>
 

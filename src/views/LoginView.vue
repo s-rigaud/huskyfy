@@ -1,8 +1,22 @@
 <template>
   <!-- Login view with a large background and a simple button -->
   <div id="login">
+    <div id="locale-selector">
+      <LocaleSelector />
+    </div>
+
     <div id="upper-part">
+      <v-img rel="preconnect" width="400" :src="logo" alt="Horus Image"></v-img>
+    </div>
+
+    <div id="hero">
       <h1 style="color: white" class="rainbow-text">{{ $t("login.header") }}</h1>
+      <ul>
+        <li>{{ $t("login.functionality1") }}</li>
+        <li>{{ $t("login.functionality2") }}</li>
+        <li>{{ $t("login.functionality3") }}</li>
+        <li>{{ $t("login.functionality4") }}</li>
+      </ul>
     </div>
 
     <div id="lower-part">
@@ -14,7 +28,6 @@
       <router-link to="/about" id="link-about">
         {{ $t("login.about") }}
       </router-link>
-      <LocaleSelector id="locale-selector" />
     </div>
   </div>
 </template>
@@ -32,6 +45,11 @@ export default defineComponent({
     return { userStore }
   },
   components: { LocaleSelector },
+  computed: {
+    logo (): string {
+      return require('@/assets/fiverr/basic.svg')
+    }
+  },
   methods: {
     async accessOAuthPage () {
       window.location.href = await api.spotify.auth.getOAuthUrl()
@@ -52,6 +70,11 @@ export default defineComponent({
   bottom: 0;
   z-index: 1;
   padding: 12px;
+
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  align-items: center;
 }
 
 #upper-part {
@@ -108,6 +131,14 @@ a {
 
 .mdi {
   margin-left: 3px;
+}
+
+#hero {
+  background-color: rgba(0, 0, 0, 0.5);
+  width: 80%;
+  height: 50%;
+  margin-top: 40px;
+  border-radius: 15px;
 }
 
 @media (max-width: 992px) {

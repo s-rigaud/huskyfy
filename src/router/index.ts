@@ -1,13 +1,17 @@
 import api from '@/api'
 import VueI18n from '@/i18n'
+
 import { useAuthStore } from '@/stores/auth'
 import { usePlaylistsStore } from '@/stores/playlists'
 import { useUserStore } from '@/stores/user'
+
 import AboutView from '@/views/AboutView.vue'
+import DuplicateLikedSongPlaylistView from '@/views/DuplicateLikedSongPlaylistView.vue'
 import LoginView from '@/views/LoginView.vue'
 import PlaylistDetail from '@/views/PlaylistDetail.vue'
 import PlaylistExplorer from '@/views/PlaylistExplorer.vue'
 import View404 from '@/views/View404.vue'
+
 import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
@@ -21,6 +25,11 @@ const routes = [
     path: '/explore',
     name: 'Explore',
     component: PlaylistExplorer
+  },
+  {
+    path: '/duplicate-my-music',
+    name: 'Duplicate',
+    component: DuplicateLikedSongPlaylistView
   },
   {
     path: '/playlist/:playlistId',
@@ -84,8 +93,7 @@ router.beforeEach(async function (to, from, next) {
       profilePicture: userPicture,
       isPremium: data.product === 'premium',
       country: data.country,
-      connected: true,
-      wantsToChangeAccount: false
+      connected: true
     })
     next({ name: 'Explore' })
 

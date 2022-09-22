@@ -2,6 +2,8 @@
   <h3>Indie score</h3>
 
   <apexchart type="radialBar" height="350" :options="chartOptions" :series="series"></apexchart>
+
+  <h5>{{ getIndiePercentage() }}% {{ indieText }}</h5>
 </template>
 
 <script lang="ts">
@@ -17,18 +19,24 @@ export default defineComponent({
     const playlistsStore = usePlaylistsStore()
     return { playlistsStore }
   },
+  computed: {
+    indieText (): string {
+      if (this.getIndiePercentage() > 35) return this.$t('playlist.indie-text.high')
+      return this.$t('playlist.indie-text.low')
+    }
+  },
   methods: {
-    getIndiePercentage (): number {
-      return this.playlistsStore.getIndiePercentage(this.playlistId!)
-    },
     getImage (): string {
-      let image = ''
       const indiePercentage = this.getIndiePercentage()
+      let image = ''
       if (indiePercentage < 25) image = 'cold'
       else if (indiePercentage < 50) image = 'sunglasses'
       else if (indiePercentage < 75) image = 'hot'
       else image = 'fire'
       return require(`@/assets/${image}.png`)
+    },
+    getIndiePercentage (): number {
+      return this.playlistsStore.getIndiePercentage(this.playlistId!)
     }
   },
   data () {
