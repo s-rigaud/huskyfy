@@ -1,7 +1,10 @@
 import { useUserStore } from '@/stores/user'
+import { chunkArray } from '@/utils/functions'
 import { AxiosResponse } from 'axios'
-import { SimplifiedSpotifyPlaylist, SpotifyGetPlaylistResponse, SpotifyTrackResponse } from '../model'
+
 import request from '../request'
+import { SimplifiedSpotifyPlaylist, SpotifyTrack } from '../types/entities'
+import { SpotifyGetPlaylistResponse, SpotifyTrackResponse } from '../types/responses'
 
 interface Callback {
   (base64cover: string): void;
@@ -51,7 +54,7 @@ export default {
     })
   },
   // Create new empty playlist
-  async createPlaylist (name: string, public_: boolean, description: string, collaborative: boolean): Promise<AxiosResponse<SimplifiedSpotifyPlaylist, SimplifiedSpotifyPlaylist>> {
+  async createPlaylist (name: string, description: string, public_: boolean, collaborative: boolean): Promise<AxiosResponse<SimplifiedSpotifyPlaylist, SimplifiedSpotifyPlaylist>> {
     const userStore = useUserStore()
     const userId = userStore.id
 
@@ -77,13 +80,29 @@ export default {
     return request.delete(`playlists/${playlistId}/followers`)
   },
   // Add multiple tracks to an existing playlist
-  addTracksToPlaylist (playlistId: string, trackIds: Array<string>) {
-    return request.post(`/playlists/${playlistId}/tracks`, {
-      uris: trackIds
-    })
+  // LIMIT is 100 tracks
+  async addTracksToPlaylist (playlistId: string, trackIds: Array<string>): Promise<string> {
+    let data = null
+    for (const trackBucket of chunkArray(trackIds, 100)) {
+      data = await request.post(`/playlists/${playlistId}/tracks`, {
+        uris: trackBucket
+      })
+    }
+    return data?.data.snapshot_id
   },
   // Update playlist privacy, the playlist is either public or private
   updatePlaylistPrivacy (playlistId: string, isPublic: boolean) {
     return request.put(`/playlists/${playlistId}`, { public: isPublic })
+  },
+  async deleteTracks (playlistId: string, playlistTracks: SpotifyTrack[]) {
+    // LIMIT is 100 tracks
+    const formattedTracks = []
+    for (const track of playlistTracks) {
+      formattedTracks.push({ uri: track.uri })
+    }
+
+    for (const tracks of chunkArray(formattedTracks, 100)) {
+      await request.delete(`/playlists/${playlistId}/tracks`, { data: { tracks } })
+    }
   }
 }

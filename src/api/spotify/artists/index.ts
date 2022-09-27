@@ -1,15 +1,8 @@
+import { chunkArray } from '@/utils/functions'
 import { AxiosResponse } from 'axios'
-import { SpotifyArtist, SpotifyArtistResponse } from '../model'
 import request from '../request'
-
-// Chunk list into smaller lists
-const chunkArray = (myArray: Array<string>, chunkSize: number): Array<Array<string>> => {
-  const results: Array<Array<string>> = []
-  while (myArray.length) {
-    results.push(myArray.splice(0, chunkSize))
-  }
-  return results
-}
+import { SpotifyArtist } from '../types/entities'
+import { SpotifyArtistResponse } from '../types/responses'
 
 export default {
   /* Spotify only returns a maximum of 50 artist detail at a time */

@@ -1,6 +1,6 @@
 import { PlaylistState, usePlaylistsStore } from '@/stores/playlists'
 import { Store } from 'pinia'
-const LOGO = require('@/assets/fiverr/basic.svg')
+const LOGO: string = require('@/assets/fiverr/basic.svg')
 
 const makeAndDownloadImage = (playlistId: string) => {
   const playlistsStore = usePlaylistsStore()

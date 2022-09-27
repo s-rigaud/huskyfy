@@ -42,7 +42,7 @@
 </template>
 
 <script lang="ts">
-import { SpotifyArtist } from '@/api/spotify/model'
+import { SpotifyArtist } from '@/api/spotify/types/entities'
 import { defineComponent, StyleValue } from 'vue'
 
 export default defineComponent({

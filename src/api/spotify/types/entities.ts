@@ -134,7 +134,7 @@ export interface SpotifyTrack {
     type: string;
     uri: string;
     isIndie: boolean;
-    genres: Array<string>
+    genres: string[];
 }
 
 // Spotify API Track embedded with metadata
@@ -156,11 +156,11 @@ export interface SpotifyTrackMetadata {
 interface SimplifiedSpotifyTracks {
     href: string;
     total: number;
-    items?: Array<string>
-    limit?: number
-    next?: string
-    offset?: number
-    previous?: string
+    items?: string[];
+    limit?: number;
+    next?: string;
+    offset?: number;
+    previous?: string;
 }
 
 interface _BasePlaylistAttributes {
@@ -183,57 +183,11 @@ interface _BasePlaylistAttributes {
 }
 
 export interface SpotifyPlaylist extends _BasePlaylistAttributes {
-    tracks: Array<SpotifyTrack>;
+    tracks: SpotifyTrack[];
     offset?: number;
     total: number;
 }
 
 export interface SimplifiedSpotifyPlaylist extends _BasePlaylistAttributes {
-    tracks: SimplifiedSpotifyTracks
-}
-
-// Spotify API Response for /playlists
-export interface SpotifyGetPlaylistResponse {
-    href: string;
-    items: SimplifiedSpotifyPlaylist[];
-    limit: number;
-    next?: string;
-    offset: number;
-    previous?: string;
-    total: number;
-}
-
-// Spotify API Response for /playlist/id
-export interface SpotifyGetDetailedPlaylistResponse {
-    href: string;
-    items: SpotifyPlaylist[];
-    limit: number;
-    next?: string;
-    offset: number;
-    previous?: string;
-    total: number;
-}
-
-// Spotify API Response for /tracks
-export interface SpotifyTrackResponse {
-    href: string;
-    items: SpotifyTrackMetadata[];
-    limit: number;
-    next?: string;
-    offset: number;
-    previous?: string;
-    total: number;
-}
-
-// Spotify API Response for /artists
-export interface SpotifyArtistResponse {
-    artists: Array<SpotifyArtist>;
-}
-
-// Spotify API Response for /artists
-export interface SpotifyAuthResponse {
-    // eslint-disable-next-line
-    access_token: string;
-    // eslint-disable-next-line
-    refresh_token: string;
+    tracks: SimplifiedSpotifyTracks;
 }

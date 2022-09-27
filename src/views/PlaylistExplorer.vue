@@ -8,7 +8,7 @@
         :name="formatName(playlist)" :images="playlist.images"
         :owner="usernameToDisplay(playlist.owner['display_name'])" :public="playlist.public"
         :collaborative="playlist.collaborative" />
-      <v-progress-circular v-if="playlistTotal < 1" :size="70" :width="7" color="var(--text-color)" indeterminate>
+      <v-progress-circular v-if="!playlistLoaded" :size="70" :width="7" color="var(--text-color)" indeterminate>
       </v-progress-circular>
     </div>
 
@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts">
-import { SpotifyPlaylist } from '@/api/spotify/model'
+import { SpotifyPlaylist } from '@/api/spotify/types/entities'
 import PlaylistCard from '@/components/PlaylistCard.vue'
 import { usePlaylistsStore } from '@/stores/playlists'
 import { useUserStore } from '@/stores/user'
@@ -53,6 +53,7 @@ export default defineComponent({
   },
   async created () {
     await this.loadMorePlaylists()
+    this.playlistLoaded = true
   },
   methods: {
     async loadMorePlaylists () {
@@ -65,7 +66,7 @@ export default defineComponent({
     return {
       playlistTotal: 0,
       offset: 0,
-      isTrue: true
+      playlistLoaded: false
     }
   }
 })

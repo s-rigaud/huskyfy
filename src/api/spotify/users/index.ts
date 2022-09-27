@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios'
-import { SpotifyProfile } from '../model'
+import { SpotifyProfile } from '../types/entities'
 import request from '../request'
 
 export default {

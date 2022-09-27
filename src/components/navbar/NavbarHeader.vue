@@ -17,7 +17,7 @@
     <v-spacer></v-spacer>
 
     <!-- Right part -->
-    <v-menu open-on-hover transition="fade-transition" v-if="userStore.connected">
+    <v-menu transition="fade-transition" v-if="userStore.connected">
       <template v-slot:activator="{ props }">
         <div id="user-info" v-bind="props">
           <h3 id="profile-name" class="rainbow-text"> {{ userStore.username }} </h3>
@@ -27,11 +27,9 @@
         </div>
       </template>
 
-      <div>
         <v-btn id="logout-button" @click="logout" variant="outlined">
           {{ $t("navbar.logout") }}
         </v-btn>
-      </div>
     </v-menu>
 
     <!-- TODO DELETE - Dev button to facilitate -->
@@ -146,12 +144,8 @@ header .v-toolbar__content {
   padding: 0 10px;
 }
 
-header.v-toolbar__content :nth-child(1) {
-  border-left: 4px dotted blue;
-}
-
-.navbar-link-text :nth-child(1) {
-  border-right: 4px dotted blue;
+.navbar-link-text:hover {
+  outline: 1px solid rgb(107, 107, 107);
 }
 
 .router-link-active.navbar-link-text {

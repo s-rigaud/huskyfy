@@ -21,7 +21,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 
-import { SpotifyPlaylist } from '@/api/spotify/model'
+import { SpotifyPlaylist } from '@/api/spotify/types/entities'
 import { usePlaylistsStore } from '@/stores/playlists'
 
 export default defineComponent({

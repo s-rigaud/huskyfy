@@ -23,7 +23,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 
-import { SpotifyImage } from '@/api/spotify/model'
+import { SpotifyImage } from '@/api/spotify/types/entities'
 
 export default defineComponent({
   name: 'PlaylistCard',

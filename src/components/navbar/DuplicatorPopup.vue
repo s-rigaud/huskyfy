@@ -41,7 +41,9 @@ export default defineComponent({
       this.loadingPercentage = 1
       const newPlaylistId = await this.playlistsStore.createPlaylist(
         this.playlistId!,
-        this.playlistsStore.selectedGenres
+        this.playlistsStore.selectedGenres,
+        false,
+        false
       )
 
       this.loadingText = this.$t('playlist.new.cover')
@@ -54,9 +56,8 @@ export default defineComponent({
       this.loadingText = this.$t('playlist.new.tracks')
       this.loadingPercentage = 66
       await this.playlistsStore.addTracksToPlaylist(
-        this.playlistId!,
         newPlaylistId,
-        this.playlistsStore.filteredTracks.map((t) => t.uri)
+        this.playlistsStore.filteredTracks
       )
 
       this.loadingText = this.$t('playlist.new.done')

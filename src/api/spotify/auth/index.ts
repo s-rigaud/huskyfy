@@ -1,7 +1,7 @@
 import { useAuthStore } from '@/stores/auth'
 import axios, { AxiosResponse } from 'axios'
 import { Base64 } from 'js-base64'
-import { SpotifyAuthResponse } from '../model'
+import { SpotifyAuthResponse } from '../types/responses'
 
 const CLIENT_ID: string = process.env.VUE_APP_SPOTIFY_CLIENT_ID
 const CLIENT_SECRET: string = process.env.VUE_APP_SPOTIFY_CLIENT_SECRET
@@ -30,14 +30,14 @@ const generateRandomString = (length: number): string => {
   return text
 }
 
-const sha256 = async (plain: string) => {
+const sha256 = async (plain: string): Promise<ArrayBuffer> => {
   const encoder = new TextEncoder()
   const data = encoder.encode(plain)
 
   return window.crypto.subtle.digest('SHA-256', data)
 }
 
-const base64urlencode = (a: ArrayBuffer) => {
+const base64urlencode = (a: ArrayBuffer): string => {
   const encoded = btoa(
     String.fromCharCode.apply(null, [...new Uint8Array(a)])
   )

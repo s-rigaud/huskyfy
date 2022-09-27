@@ -26,8 +26,8 @@
 
         <p id="description" class="text-truncate">
           {{
-              playlistsStore.playlists[playlistsStore.selectedPlaylistId]
-                .description.replace(/(<([^>]+)>)/ig, '')
+                    playlistsStore.playlists[playlistsStore.selectedPlaylistId]
+                    .description.replace(/(<([^>]+)>)/ig, '')
           }}
         </p>
         <p style="opacity: 0.8">
@@ -80,7 +80,19 @@
         <v-img rel="preconnect" width="25" :src="spotifyLogo" alt="Spotify Logo" />
       </v-btn>
 
-      <v-dialog persistent v-model="isDeleteModalOpen">
+      <v-btn @click="sortPlaylistTracksByGenres" variant="outlined">
+        %% sort genre %%
+      </v-btn>
+
+      <v-btn @click="sortPlaylistTracksByArtistPopularity" variant="outlined">
+        %% sort artist pop %%
+      </v-btn>
+
+      <v-btn @click="sortPlaylistTracksByArtistName" variant="outlined">
+        %% sort artist name %%
+      </v-btn>
+
+      <v-dialog v-model="isDeleteModalOpen">
         <template v-slot:activator="{ props }">
           <v-btn v-bind="props" variant="outlined">
             {{ $t("playlist.unfollow") }}
@@ -89,11 +101,13 @@
 
         <!-- DELETE MODAL -->
         <v-card>
-          <v-card-title class="text-h5">
+          <v-card-title class="text-h5 rainbow-text font-weight-bold">
             {{ $t('playlist.delete.delete') }}
-            '{{ playlistsStore.playlists[playlistsStore.selectedPlaylistId].name }}'
+            '<span class="font-italic">
+              {{ playlistsStore.playlists[playlistsStore.selectedPlaylistId].name }}
+            </span>'
           </v-card-title>
-          <v-card-text>
+          <v-card-text class="rainbow-text">
             {{ $t('playlist.delete.confirm-message') }}
           </v-card-text>
           <v-card-actions>
@@ -126,7 +140,7 @@ import { useUserStore } from '@/stores/user'
 export default defineComponent({
   name: 'NavbarPlaylistSelected',
   components: { DuplicatorPopup },
-  setup () {
+  setup() {
     const userStore = useUserStore()
     const playlistsStore = usePlaylistsStore()
 
@@ -134,7 +148,7 @@ export default defineComponent({
 
     return { currentUserUsername, playlistsStore }
   },
-  data () {
+  data() {
     return {
       isDeleteModalOpen: false,
       startDuplication: false,
@@ -144,7 +158,7 @@ export default defineComponent({
     }
   },
   computed: {
-    usernameToDisplay (): string {
+    usernameToDisplay(): string {
       const playlistCreator =
         this.playlistsStore.playlists[this.playlistsStore.selectedPlaylistId!]
           .owner.display_name
@@ -153,17 +167,17 @@ export default defineComponent({
         ? this.$t('me')
         : playlistCreator
     },
-    userOwnsPlaylist (): boolean {
+    userOwnsPlaylist(): boolean {
       return (
         this.currentUserUsername ===
         this.playlistsStore.playlists[this.playlistsStore.selectedPlaylistId!]
           .owner.display_name
       )
     },
-    spotifyLogo (): string {
+    spotifyLogo(): string {
       return require('@/assets/spotify.png')
     },
-    getEmojiFromVisibility (): string {
+    getEmojiFromVisibility(): string {
       const playlist =
         this.playlistsStore.playlists[this.playlistsStore.selectedPlaylistId!]
 
@@ -171,7 +185,7 @@ export default defineComponent({
       if (playlist.public) return this.$t('_emojis.public')
       return this.$t('_emojis.private')
     },
-    getTextFromVisibility (): string {
+    getTextFromVisibility(): string {
       const playlist =
         this.playlistsStore.playlists[this.playlistsStore.selectedPlaylistId!]
 
@@ -179,24 +193,24 @@ export default defineComponent({
       if (playlist.public) return this.$t('playlist.public') + ' ' + this.$t('_emojis.public')
       return this.$t('playlist.private') + ' ' + this.$t('_emojis.private')
     },
-    loadingCover (): string {
+    loadingCover(): string {
       return require('@/assets/default_cover.jpg')
     }
   },
   methods: {
-    openPlaylistOnSpotify () {
+    openPlaylistOnSpotify() {
       window.location.href =
         this.playlistsStore.playlists[
           this.playlistsStore.selectedPlaylistId!
         ].uri
     },
-    async exportPreview () {
+    async exportPreview() {
       makeAndDownloadImage(this.playlistsStore.selectedPlaylistId!)
     },
-    createNewPlaylist () {
+    createNewPlaylist() {
       this.startDuplication = true
     },
-    async unfollowPlaylist () {
+    async unfollowPlaylist() {
       this.isDeleteModalOpen = false
       this.waitingForDeletion = true
       const toDeletePlaylistId = this.playlistsStore.selectedPlaylistId!
@@ -205,13 +219,28 @@ export default defineComponent({
       this.waitingForDeletion = false
       this.$router.push({ name: 'Explore' })
     },
-    async setPlaylistPublic () {
+    async setPlaylistPublic() {
       await this.playlistsStore.updatePlaylistPrivacy(
         this.playlistsStore.selectedPlaylistId!,
         true
       )
     },
-    async setPlaylistPrivate () {
+    async sortPlaylistTracksByGenres() {
+      await this.playlistsStore.sortPlaylistTracksByGenres(
+        this.playlistsStore.selectedPlaylistId!
+      )
+    },
+    async sortPlaylistTracksByArtistPopularity() {
+      await this.playlistsStore.sortPlaylistTracksByArtistPopularity(
+        this.playlistsStore.selectedPlaylistId!
+      )
+    },
+    async sortPlaylistTracksByArtistName() {
+      await this.playlistsStore.sortPlaylistTracksByArtistName(
+        this.playlistsStore.selectedPlaylistId!
+      )
+    },
+    async setPlaylistPrivate() {
       await this.playlistsStore.updatePlaylistPrivacy(
         this.playlistsStore.selectedPlaylistId!,
         false
@@ -234,7 +263,7 @@ export default defineComponent({
   justify-content: space-between;
   align-items: flex-end;
   border-top: 2px var(--text-color) solid;
-  margin: 5px;
+  margin: 0px 5px;
   width: 100%;
   transition: 55s all ease;
 }
@@ -244,7 +273,6 @@ export default defineComponent({
   flex-direction: row;
   margin-bottom: 10px;
   max-height: 72px;
-  margin: inherit;
   width: 100%;
 }
 

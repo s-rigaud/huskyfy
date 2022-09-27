@@ -91,13 +91,14 @@ import IndieChart from '@/components/playlist_detail/IndieChart.vue'
 import LoadMoreTracksPopup from '@/components/playlist_detail/LoadMoreTracksPopup.vue'
 import TrackCard from '@/components/playlist_detail/TrackCard.vue'
 
-import { SpotifyArtist, SpotifyTrack } from '@/api/spotify/model'
+import { SpotifyArtist, SpotifyTrack } from '@/api/spotify/types/entities'
 
 import { Genre } from '@/model'
 import { usePlaylistsStore } from '@/stores/playlists'
 import { useUserStore } from '@/stores/user'
 import { storeToRefs } from 'pinia'
 import { defineComponent } from 'vue'
+import { capitalize } from '@/utils/functions'
 
 export default defineComponent({
   name: 'PlaylistDetail',
@@ -132,7 +133,11 @@ export default defineComponent({
     }
   },
   async mounted () {
+    const playlist = this.playlists[this.playlistId]
     this.TRACK_REQUEST_LIMIT = this.playlistsStore.MAX_TRACKS_LIMIT * 3
+    if (playlist.id === 'my-music') {
+      await this.playlistsStore.refreshMyMusicTotalTrack()
+    }
     await this.loadFirstTracks()
     this.filteredTracks = this.playlists[this.playlistId].tracks
   },
@@ -228,14 +233,13 @@ export default defineComponent({
       this.scrollTop()
     },
     openPlaylistOnSpotify () {
+      console.log(this.playlists[this.playlistId].uri)
+
       window.location.href = this.playlists[this.playlistId].uri
     },
     // Returns only top genres sorted by most to least popular
     getSortedGenres (): Genre[] {
       return this.playlistsStore.getTopGenres(this.playlistId, 15)
-    },
-    capitalize (string: string): string {
-      return string.charAt(0).toUpperCase() + string.slice(1)
     },
     getSortedArtists (): Array<SpotifyArtist> {
       const allArtists: Set<SpotifyArtist> = new Set()
@@ -257,7 +261,7 @@ export default defineComponent({
       const separator = ` ${keyword} `
       const popularityFilter = (this.selectedPopularity !== 'No filter') ? [this.selectedPopularity] : []
       const filters = popularityFilter.concat(this.selectedArtists).concat(this.selectedGenres)
-      return filters.map(f => this.capitalize(f)).join(separator) || this.$t('track.all-tracks')
+      return filters.map(f => capitalize(f)).join(separator) || this.$t('track.all-tracks')
     },
     getArtistName () {
       return (artist: SpotifyArtist) => {

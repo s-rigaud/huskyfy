@@ -1,6 +1,12 @@
 # Functionalities
 
+* Improve login page functionality list
+
 * Improve nice export image
+
+* Update /about with new functionalities
+
+* Create definitive UI for PlaylistDetail
 
 * Ensure responsiveness for PlaylistDetail
 
@@ -8,7 +14,11 @@
 
 * Add functionality to sort whole playlist by genre (ordered)
 
-* Add dedicated header tab to duplicate Liked PlaylistDetail
+* Improve duplicator over pop-up (UI)
+
+* Improve Duplicate now tab (UI + Add warning if playlist too big + load only track Ids not artists and genre)
+
+* Fix bug when duplicated tracks after sorting by artist
 
 ## Other
 
