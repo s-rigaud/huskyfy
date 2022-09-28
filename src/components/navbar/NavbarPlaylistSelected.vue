@@ -34,14 +34,7 @@
     </div>
 
     <!-- Buttons to manage playlist options -->
-    <div style="
-        position: fixed;
-        right: 0;
-        bottom: 0;
-        margin-top: 5px;
-        padding: 3px;
-        display: flex;
-      ">
+    <div id="action-buttons">
       <div id="update-playlist-privacy" v-if="
         userOwnsPlaylist &&
         !playlistsStore.playlists[playlistsStore.selectedPlaylistId]
@@ -67,55 +60,70 @@
         <span> {{ $t("playlist.duplicate.tooltip") }} </span>
       </v-tooltip>
 
-      <!-- At least 4 tracks to download image -->
-      <v-btn v-if="playlistsStore.playlists[playlistsStore.selectedPlaylistId].tracks.length > 3" @click="exportPreview"
-        variant="outlined">
-        {{ $t("playlist.export-preview") }}
-      </v-btn>
-
-      <v-btn @click="sortPlaylistTracksByGenres" variant="outlined">
-        %% sort genre %%
-      </v-btn>
-
-      <v-btn @click="sortPlaylistTracksByArtistPopularity" variant="outlined">
-        %% sort artist pop %%
-      </v-btn>
-
-      <v-btn @click="sortPlaylistTracksByArtistName" variant="outlined">
-        %% sort artist name %%
-      </v-btn>
-
-      <v-dialog v-model="isDeleteModalOpen">
+      <!-- Playlist modification menu -->
+      <v-menu open-on-hover>
         <template v-slot:activator="{ props }">
-          <v-btn v-bind="props" variant="outlined">
-            {{ $t("playlist.unfollow") }}
+          <v-btn v-bind="props">
+            %% update playlist %%
           </v-btn>
         </template>
+        <v-list>
+          <v-list-item @click="exportPreview"
+            v-if="playlistsStore.playlists[playlistsStore.selectedPlaylistId].tracks.length > 3">
+            <!-- (At least 4 tracks to download image) -->
+            <v-list-item-title>{{ $t("playlist.export-preview") }}</v-list-item-title>
+          </v-list-item>
+          <v-dialog v-model="isDeleteModalOpen">
+            <template v-slot:activator="{ props }">
+              <v-list-item v-bind="props">
+                {{ $t("playlist.unfollow") }}
+              </v-list-item>
+            </template>
+            <v-card>
+              <v-card-title class="text-h5 rainbow-text font-weight-bold">
+                {{ $t('playlist.delete.delete') }}
+                '<span class="font-italic">
+                  {{ playlistsStore.playlists[playlistsStore.selectedPlaylistId].name }}
+                </span>'
+              </v-card-title>
+              <v-card-text class="rainbow-text">
+                {{ $t('playlist.delete.confirm-message') }}
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="error" plain @click="isDeleteModalOpen = false">
+                  {{ $t('playlist.delete.disagree') }}
+                </v-btn>
+                <v-btn v-if="!waitingForDeletion" plain color="success" @click="unfollowPlaylist">
+                  {{ $t('playlist.delete.agree') }} 🗑️
+                </v-btn>
 
-        <!-- DELETE MODAL -->
-        <v-card>
-          <v-card-title class="text-h5 rainbow-text font-weight-bold">
-            {{ $t('playlist.delete.delete') }}
-            '<span class="font-italic">
-              {{ playlistsStore.playlists[playlistsStore.selectedPlaylistId].name }}
-            </span>'
-          </v-card-title>
-          <v-card-text class="rainbow-text">
-            {{ $t('playlist.delete.confirm-message') }}
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="error" plain @click="isDeleteModalOpen = false">
-              {{ $t('playlist.delete.disagree') }}
-            </v-btn>
-            <v-btn v-if="!waitingForDeletion" plain color="success" @click="unfollowPlaylist">
-              {{ $t('playlist.delete.agree') }} 🗑️
-            </v-btn>
+                <v-progress-circular v-else indeterminate color="red"></v-progress-circular>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-list>
+      </v-menu>
 
-            <v-progress-circular v-else indeterminate color="red"></v-progress-circular>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
+      <!-- Sorting menu -->
+      <v-menu open-on-hover>
+        <template v-slot:activator="{ props }">
+          <v-btn v-bind="props">
+            %% réordonner %%
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item @click="sortPlaylistTracksByGenres">
+            <v-list-item-title>%% sort genre %%</v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="sortPlaylistTracksByArtistPopularity">
+            <v-list-item-title>%% sort artist pop %%</v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="sortPlaylistTracksByArtistName">
+            <v-list-item-title>%% sort artist name %%</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </div>
   </div>
 
@@ -252,7 +260,6 @@ export default defineComponent({
 #header-blocks {
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
   border-top: 2px var(--text-color) solid;
   margin: 0px 5px;
   width: 100%;
@@ -262,7 +269,6 @@ export default defineComponent({
 #playlist-info {
   display: flex;
   flex-direction: row;
-  margin-bottom: 20px;
   max-height: 72px;
   width: 100%;
   cursor: pointer;
@@ -277,10 +283,8 @@ export default defineComponent({
 
 #playlist-image {
   width: 70px !important;
-  max-width: 70px !important;
   height: 70px !important;
-  max-height: 70px !important;
-  margin: 1px 10px 1px 1px;
+  margin: 1px 10px 1px 0px;
 }
 
 #header-blocks .v-btn {
@@ -290,5 +294,23 @@ export default defineComponent({
 #header-blocks .v-btn.v-btn--density-default {
   height: 30px;
   padding: 0px 5px
+}
+
+#action-buttons {
+  display: flex;
+  height: 72px;
+}
+
+#action-buttons button {
+  height: 100% !important;
+  border: none;
+  margin: 0;
+  border-radius: 0;
+}
+
+#action-buttons button:hover {
+  /* rainbow-v-btn */
+  color: var(--text-color) !important;
+  background: linear-gradient(180deg, var(--text-color) 20%, var(--link-color) 51%, var(--text-color) 86%) !important;
 }
 </style>

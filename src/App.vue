@@ -77,6 +77,6 @@ export default defineComponent({
 }
 
 .huge-padding-top {
-  padding: 158px 0 0 0 !important;
+  padding: 138px 0 0 0 !important;
 }
 </style>
