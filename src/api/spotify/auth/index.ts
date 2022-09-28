@@ -108,7 +108,9 @@ export default {
     const authStore = useAuthStore()
     console.log('trying to refresh token before retrying call')
 
-    return await axios({
+    // The following should work but since I implemented PCKE, I'm not able to use the refresh token normally
+
+    /*return await axios({
       method: 'post',
       url: 'https://accounts.spotify.com/api/token',
       headers: {
@@ -120,6 +122,11 @@ export default {
       return data.access_token
     }).catch(function (err: Error) {
       console.log('Error while fetching new access token', err)
-    })
+    })*/
+
+
+    // Instead get a new fresh token
+    window.location.href = await this.getOAuthUrl()
+
   }
 }

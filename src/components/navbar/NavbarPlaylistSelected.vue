@@ -4,12 +4,10 @@
     id="header-blocks">
 
     <!-- Info about the playlist -->
-    <div id="playlist-info">
-      <v-img id="playlist-image" :lazy-src="loadingCover" alt="Cover image" cover rel="preconnect"
-        @click="openPlaylistOnSpotify" v-bind:src="
-          playlistsStore.playlists[playlistsStore.selectedPlaylistId].images[0]
-            .url
-        "></v-img>
+    <div id="playlist-info" @click="openPlaylistOnSpotify">
+      <v-img id="playlist-image" v-bind:src="playlistsStore.playlists[playlistsStore.selectedPlaylistId].images[0].url"
+        :lazy-src="loadingCover" alt="Cover image" cover rel="preconnect">
+      </v-img>
       <div id="info-embedded">
         <div id="title">
           <h3 style="margin-right: 5px" class="text-truncate rainbow-text">
@@ -26,8 +24,7 @@
 
         <p id="description" class="text-truncate">
           {{
-                    playlistsStore.playlists[playlistsStore.selectedPlaylistId]
-                    .description.replace(/(<([^>]+)>)/ig, '')
+                    playlistsStore.playlists[playlistsStore.selectedPlaylistId].description.replace(/(<([^>]+)>)/ig, '')
           }}
         </p>
         <p style="opacity: 0.8">
@@ -75,10 +72,6 @@
         variant="outlined">
         {{ $t("playlist.export-preview") }}
       </v-btn>
-      <v-btn @click="openPlaylistOnSpotify" id="open-spotify-playlist-button" variant="outlined">
-        {{ $t("playlist.open-on-spotify") }}
-        <v-img rel="preconnect" width="25" :src="spotifyLogo" alt="Spotify Logo" />
-      </v-btn>
 
       <v-btn @click="sortPlaylistTracksByGenres" variant="outlined">
         %% sort genre %%
@@ -112,12 +105,13 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="green darken-1" text @click="isDeleteModalOpen = false">
+            <v-btn color="error" plain @click="isDeleteModalOpen = false">
               {{ $t('playlist.delete.disagree') }}
             </v-btn>
-            <v-btn v-if="!waitingForDeletion" color="red darken-1" text @click="unfollowPlaylist">
-              {{ $t('playlist.delete.agree') }}
+            <v-btn v-if="!waitingForDeletion" plain color="success" @click="unfollowPlaylist">
+              {{ $t('playlist.delete.agree') }} 🗑️
             </v-btn>
+
             <v-progress-circular v-else indeterminate color="red"></v-progress-circular>
           </v-card-actions>
         </v-card>
@@ -173,9 +167,6 @@ export default defineComponent({
         this.playlistsStore.playlists[this.playlistsStore.selectedPlaylistId!]
           .owner.display_name
       )
-    },
-    spotifyLogo(): string {
-      return require('@/assets/spotify.png')
     },
     getEmojiFromVisibility(): string {
       const playlist =
@@ -271,9 +262,10 @@ export default defineComponent({
 #playlist-info {
   display: flex;
   flex-direction: row;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   max-height: 72px;
   width: 100%;
+  cursor: pointer;
 }
 
 #info-embedded {
@@ -289,7 +281,6 @@ export default defineComponent({
   height: 70px !important;
   max-height: 70px !important;
   margin: 1px 10px 1px 1px;
-  cursor: pointer;
 }
 
 #header-blocks .v-btn {
@@ -299,16 +290,5 @@ export default defineComponent({
 #header-blocks .v-btn.v-btn--density-default {
   height: 30px;
   padding: 0px 5px
-}
-
-#open-spotify-playlist-button .v-btn__content {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-
-#open-spotify-playlist-button .v-btn__content img {
-  margin: 0px 3px;
-  width: 20px;
 }
 </style>

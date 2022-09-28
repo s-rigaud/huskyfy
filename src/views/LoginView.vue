@@ -10,8 +10,8 @@
     </div>
 
     <div id="hero">
-      <h1 style="color: white" class="rainbow-text">{{ $t("login.header") }}</h1>
-      <ul>
+      <h1 id="title" class="rainbow-text">{{ $t("login.header") }}</h1>
+      <ul id="functionalities">
         <li>{{ $t("login.functionality1") }}</li>
         <li>{{ $t("login.functionality2") }}</li>
         <li>{{ $t("login.functionality3") }}</li>
@@ -40,18 +40,18 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'LoginView',
-  setup () {
+  setup() {
     const userStore = useUserStore()
     return { userStore }
   },
   components: { LocaleSelector },
   computed: {
-    logo (): string {
+    logo(): string {
       return require('@/assets/fiverr/basic.svg')
     }
   },
   methods: {
-    async accessOAuthPage () {
+    async accessOAuthPage() {
       window.location.href = await api.spotify.auth.getOAuthUrl()
     }
   }
@@ -139,6 +139,12 @@ a {
   height: 50%;
   margin-top: 40px;
   border-radius: 15px;
+  padding: 15px;
+}
+
+#functionalities {
+  list-style-position: inside;
+  list-style-image: url('https://yesyouweb.com/wp-content/uploads/2021/03/fish-bullet.png');
 }
 
 @media (max-width: 992px) {
@@ -146,5 +152,15 @@ a {
     top: auto;
     bottom: 0;
   }
+
+  #title {
+    font-size: xx-large;
+  }
+
+  #hero {
+    width: 95%;
+    background-color: rgba(0, 0, 0, 0.7);
+  }
+
 }
 </style>
