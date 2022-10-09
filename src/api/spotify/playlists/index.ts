@@ -81,7 +81,7 @@ export default {
   },
   // Add multiple tracks to an existing playlist
   // LIMIT is 100 tracks
-  async addTracksToPlaylist (playlistId: string, trackIds: Array<string>): Promise<string> {
+  async addTracksToPlaylist (playlistId: string, trackIds: string[]): Promise<string> {
     let data = null
     for (const trackBucket of chunkArray(trackIds, 100)) {
       data = await request.post(`/playlists/${playlistId}/tracks`, {

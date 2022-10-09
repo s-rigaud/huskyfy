@@ -1,5 +1,6 @@
 
 // Chunk list into smaller lists
+// May not be optimized
 export const chunkArray = <T>(array: Array<T>, chunkSize: number): Array<Array<T>> => {
   const results: Array<Array<T>> = []
   const copyArray = [...array]

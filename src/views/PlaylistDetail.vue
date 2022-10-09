@@ -2,8 +2,9 @@
   <!-- Description of all the playlist with all the tracks and filters -->
   <div id="playlist" v-if="playlists[playlistId] && playlists[playlistId].total > 0">
     <div id="content" style="display: flex">
-      <aside id="left-part">
 
+      <!-- old part-->
+      <aside id="left-part">
         <v-tabs v-model="selectedTab" background-color="var(--primary-color)" fixed-tabs end>
           <v-tab :value="0">Genres</v-tab>
           <v-tab :value="1">Artists</v-tab>
@@ -16,42 +17,59 @@
             <IndieChart :playlistId="playlistId" />
           </v-window-item>
         </v-window>
-
-        <!-- Filters -->
-        <div id="filters">
-          <h3 class="rainbow-text">{{ $t('track.filters.title') }}</h3>
-          <v-select v-model="selectedPopularity" :label="$t('track.filters.popularity')" :items="popularities"
-            item-title="name" item-value="value" variant="outlined" density="comfortable" hide-selected></v-select>
-
-          <v-select v-model="selectedGenres" :label="$t('track.filters.genres')" :items="getSortedGenres()"
-            item-title="cap_name" item-value="name" variant="outlined" density="comfortable" multiple
-            style="text-transform: capitalize">
-          </v-select>
-
-          <v-select v-model="selectedArtists" :label="$t('track.filters.artists')" :items="getSortedArtists()"
-            item-title="name" item-value="name" variant="outlined" density="comfortable" multiple
-            style="text-transform: capitalize">
-            <template v-slot:selection="{ item, index }">
-              <v-chip v-if="index < 2">
-                <v-avatar>
-                  <v-img rel="preconnect" width="20" :src="getArtistCover(item)" alt="Spotify artist cover"></v-img>
-                </v-avatar>
-                <span>{{ getArtistName(item) }}</span>
-              </v-chip>
-              <span v-if="index === 2" class="text-grey text-caption align-self-center">
-                (+{{ selectedArtists.length - 2 }} others)
-              </span>
-            </template>
-          </v-select>
-
-          <v-switch v-model="isFilterExclusive" :label="$t('track.exclusive-filter')"></v-switch>
-
-          <v-btn @click="resetFilters" v-if="selectedGenres.length !== 0 || selectedPopularity != 'No filter'"
-            class="rainbow-v-btn">
-            {{ $t("playlist.reset-filters") }}
-          </v-btn>
-        </div>
       </aside>
+
+      <!-- Filters -->
+      <div id="filters">
+        <h3 class="rainbow-text">{{ $t('track.filters.title') }}</h3>
+        <v-select v-model="selectedPopularity" :label="$t('track.filters.popularity')" :items="popularities"
+          item-title="name" item-value="value" variant="outlined" density="comfortable" hide-selected></v-select>
+
+        <v-select v-model="selectedGenres" :label="$t('track.filters.genres')" :items="getSortedGenres()"
+          item-title="cap_name" item-value="name" variant="outlined" density="comfortable" multiple
+          style="text-transform: capitalize">
+        </v-select>
+
+        <v-select v-model="selectedArtists" :label="$t('track.filters.artists')" :items="getSortedArtists()"
+          item-title="name" item-value="name" variant="outlined" density="comfortable" multiple
+          style="text-transform: capitalize">
+          <template v-slot:selection="{ item, index }: SlotProps">
+            <v-chip v-if="index < 2">
+              <v-avatar>
+                <v-img rel="preconnect" width="20" :src="getArtistCover(item)" alt="Spotify artist cover"></v-img>
+              </v-avatar>
+              <span>{{ getArtistName(item) }}</span>
+            </v-chip>
+            <span v-if="index === 2" class="text-grey text-caption align-self-center">
+              (+{{ selectedArtists.length - 2 }} others)
+            </span>
+          </template>
+        </v-select>
+
+        <v-switch v-model="isFilterExclusive" :label="$t('track.exclusive-filter')"></v-switch>
+
+        <v-btn @click="resetFilters" v-if="selectedGenres.length !== 0 || selectedPopularity != 'No filter'"
+          class="rainbow-v-btn">
+          {{ $t("playlist.reset-filters") }}
+        </v-btn>
+      </div>
+      <div id="filter-chips" style="width: 100%">
+        <div style="width: 100%">
+          <v-chip :text="popularities.find(p => p.value === selectedPopularity)!.name" label rounded
+            v-if="selectedPopularity !== 'No filter'"> </v-chip>
+
+          <div v-if="selectedGenres.length > 0">
+            <!-- One ship for each genre if exclusive else one ship with 'or' -->
+            <v-chip v-if="isFilterExclusive" v-for=" (genre, index) in selectedGenres" :key="genre"
+              :text="genre.toUpperCase()" label>
+            </v-chip>
+            <v-chip v-else :text="selectedGenres.join(' ').toUpperCase()" label>
+            </v-chip>
+          </div>
+        </div>
+
+      </div>
+
 
       <!-- Track list -->
       <section id="right-part" style="width: 100%">
@@ -96,9 +114,15 @@ import { SpotifyArtist, SpotifyTrack } from '@/api/spotify/types/entities'
 import { Genre } from '@/model'
 import { usePlaylistsStore } from '@/stores/playlists'
 import { useUserStore } from '@/stores/user'
+import { capitalize } from '@/utils/functions'
 import { storeToRefs } from 'pinia'
 import { defineComponent } from 'vue'
-import { capitalize } from '@/utils/functions'
+
+// it used for typing slot props
+interface SlotProps {
+  item: SpotifyArtist
+  index: number
+}
 
 export default defineComponent({
   name: 'PlaylistDetail',
@@ -114,7 +138,7 @@ export default defineComponent({
     IndieChart,
     TrackCard
   },
-  setup () {
+  setup() {
     const playlistsStore = usePlaylistsStore()
 
     // Shorthand
@@ -132,7 +156,7 @@ export default defineComponent({
       selectedGenres
     }
   },
-  async mounted () {
+  async mounted() {
     const playlist = this.playlists[this.playlistId]
     this.TRACK_REQUEST_LIMIT = this.playlistsStore.MAX_TRACKS_LIMIT * 3
     if (playlist.id === 'my-music') {
@@ -141,7 +165,7 @@ export default defineComponent({
     await this.loadFirstTracks()
     this.filteredTracks = this.playlists[this.playlistId].tracks
   },
-  data () {
+  data() {
     return {
       TRACK_REQUEST_LIMIT: 150,
 
@@ -157,7 +181,7 @@ export default defineComponent({
     }
   },
   methods: {
-    async loadFirstTracks () {
+    async loadFirstTracks() {
       // Only asking for the right number of tracks as we already know how many tracks are in the playlist
       const maxLimit = Math.min(
         this.TRACK_REQUEST_LIMIT, this.playlists[this.playlistId].total
@@ -168,7 +192,7 @@ export default defineComponent({
       this.playlistLoaded = true
       this.resetFilters()
     },
-    applyFilters () {
+    applyFilters() {
       const playlistTracks = this.playlists[this.playlistId].tracks
       let filteredTracks = this.playlists[this.playlistId].tracks
 
@@ -220,60 +244,60 @@ export default defineComponent({
       this.filteredTracks = filteredTracks
       this.scrollTop()
     },
-    addTracksConserveUnicity (filteredTracks: SpotifyTrack[], validTracks: SpotifyTrack[]) {
+    addTracksConserveUnicity(filteredTracks: SpotifyTrack[], validTracks: SpotifyTrack[]) {
       const alreadyKnownTrackIds = filteredTracks.map(t => t.id)
       const tracksToAdd = validTracks.filter(t => !alreadyKnownTrackIds.includes(t.id))
       filteredTracks.push(...tracksToAdd)
     },
-    resetFilters () {
+    resetFilters() {
       this.selectedGenres = []
       this.selectedArtists = []
       this.selectedPopularity = 'No filter'
       this.filteredTracks = this.playlists[this.playlistId].tracks
       this.scrollTop()
     },
-    openPlaylistOnSpotify () {
+    openPlaylistOnSpotify() {
       console.log(this.playlists[this.playlistId].uri)
 
       window.location.href = this.playlists[this.playlistId].uri
     },
     // Returns only top genres sorted by most to least popular
-    getSortedGenres (): Genre[] {
+    getSortedGenres(): Genre[] {
       return this.playlistsStore.getTopGenres(this.playlistId, 15)
     },
-    getSortedArtists (): Array<SpotifyArtist> {
+    getSortedArtists(): SpotifyArtist[] {
       const allArtists: Set<SpotifyArtist> = new Set()
       for (const track of this.playlists[this.playlistId].tracks) {
         track.artists.map(a => allArtists.add(a))
       }
       return Array.from(allArtists).sort((a1, a2) => a1.name.localeCompare(a2.name))
     },
-    scrollTop () {
+    scrollTop() {
       window.scrollTo({ top: 0, behavior: 'smooth' })
     }
   },
   computed: {
-    spotifyLogo (): string {
+    spotifyLogo(): string {
       return require('@/assets/spotify.png')
     },
-    generalTitle (): string {
+    generalTitle(): string {
       const keyword = (this.isFilterExclusive) ? this.$t('track.filters.keyword.and') : this.$t('track.filters.keyword.or')
       const separator = ` ${keyword} `
       const popularityFilter = (this.selectedPopularity !== 'No filter') ? [this.selectedPopularity] : []
       const filters = popularityFilter.concat(this.selectedArtists).concat(this.selectedGenres)
       return filters.map(f => capitalize(f)).join(separator) || this.$t('track.all-tracks')
     },
-    getArtistName () {
+    getArtistName() {
       return (artist: SpotifyArtist) => {
         return artist.name
       }
     },
-    getArtistCover () {
+    getArtistCover() {
       return (artist: SpotifyArtist) => {
         return artist.images[0].url
       }
     },
-    popularities () {
+    popularities() {
       return [
         { name: this.$t('track.filters.indie'), value: 'Indie' },
         { name: this.$t('track.filters.popular'), value: 'Popular' },
@@ -282,18 +306,18 @@ export default defineComponent({
     }
   },
   watch: {
-    isFilterExclusive () {
+    isFilterExclusive() {
       this.applyFilters()
     },
-    selectedPopularity () {
+    selectedPopularity() {
       this.applyFilters()
     },
-    selectedArtists (newValue: Array<string>, oldValue: Array<string>) {
+    selectedArtists(newValue: string[], oldValue: string[]) {
       if (oldValue.length !== 0 || newValue.length !== 0) {
         this.applyFilters()
       }
     },
-    selectedGenres (newValue: Array<string>, oldValue: Array<string>) {
+    selectedGenres(newValue: string[], oldValue: string[]) {
       if (oldValue.length !== 0 || newValue.length !== 0) {
         this.applyFilters()
       }
@@ -309,6 +333,14 @@ export default defineComponent({
   border-color: var(--primary-color) !important;
   margin: 0 5px;
   min-width: 380px !important;
+}
+
+#filters {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
 #playlist {

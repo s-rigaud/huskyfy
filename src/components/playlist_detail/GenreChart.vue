@@ -12,7 +12,7 @@ export default defineComponent({
   name: 'GenreChart',
   props: {
     genres: {
-      type: Array as () => Array<Genre>
+      type: Array as () => Genre[]
     }
   },
   methods: {

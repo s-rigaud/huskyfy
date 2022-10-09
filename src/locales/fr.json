@@ -69,7 +69,7 @@
 		"collaborative": "Playlist collaborative",
 		"created-by": "Créée par",
 		"delete": {
-			"agree": "Supprimer",
+			"agree": "Supprimer 🗑️",
 			"confirm-message": "Voulez vous vraiment supprimer cette playlist de votre bibliothèque ?",
 			"delete": "Supprimer ",
 			"disagree": "Non"

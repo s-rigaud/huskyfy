@@ -35,48 +35,49 @@
 
     <!-- Buttons to manage playlist options -->
     <div id="action-buttons">
-      <div id="update-playlist-privacy" v-if="
-        userOwnsPlaylist &&
-        !playlistsStore.playlists[playlistsStore.selectedPlaylistId]
-          .collaborative
-      ">
-        <v-btn @click="setPlaylistPrivate" v-if="
-          playlistsStore.playlists[playlistsStore.selectedPlaylistId].public
-        " variant="outlined">
-          {{ $t("playlist.set-private") }} {{ $t("_emojis.private") }}
-        </v-btn>
-        <v-btn v-else @click="setPlaylistPublic" variant="outlined">
-          {{ $t("playlist.set-public") }} {{ $t("_emojis.public") }}
-        </v-btn>
-      </div>
-
-      <v-tooltip location="bottom" v-if="playlistsStore.playlists[playlistsStore.selectedPlaylistId].tracks.length > 1">
-        <template v-slot:activator="{ props: visibilityTooltip }">
-          <v-btn id="duplicate-playlist-button" variant="outlined" v-bind="visibilityTooltip"
-            append-icon="mdi-content-duplicate" @click="createNewPlaylist">
-            {{ $t("playlist.duplicate.button") }}
-          </v-btn>
-        </template>
-        <span> {{ $t("playlist.duplicate.tooltip") }} </span>
-      </v-tooltip>
-
       <!-- Playlist modification menu -->
-      <v-menu open-on-hover>
+      <v-menu open-on-hover :location="userOwnsPlaylist? 'bottom': 'bottom end'">
         <template v-slot:activator="{ props }">
           <v-btn v-bind="props">
             %% update playlist %%
           </v-btn>
         </template>
         <v-list>
+
+          <!-- 1. Update playlist privacy -->
+          <div v-if="userOwnsPlaylist && !playlistsStore.playlists[playlistsStore.selectedPlaylistId].collaborative">
+            <v-list-item v-if="playlistsStore.playlists[playlistsStore.selectedPlaylistId].public"
+              @click="setPlaylistPrivate">
+              <v-list-item-title>{{ $t("playlist.set-private") }} {{ $t("_emojis.private") }}</v-list-item-title>
+            </v-list-item>
+            <v-list-item v-else @click="setPlaylistPublic">
+              <v-list-item-title>{{ $t("playlist.set-public") }} {{ $t("_emojis.public") }}</v-list-item-title>
+            </v-list-item>
+          </div>
+
+          <!-- 2. Duplicate playlist -->
+          <v-tooltip location="bottom"
+            v-if="playlistsStore.playlists[playlistsStore.selectedPlaylistId].tracks.length > 1">
+            <template v-slot:activator="{ props: visibilityTooltip }">
+              <v-list-item v-bind="visibilityTooltip" @click="createNewPlaylist">
+                <v-list-item-title>{{ $t("playlist.duplicate.button") }}</v-list-item-title>
+              </v-list-item>
+            </template>
+            <span> {{ $t("playlist.duplicate.tooltip") }} </span>
+          </v-tooltip>
+
+          <!-- 3. Export Image -->
           <v-list-item @click="exportPreview"
             v-if="playlistsStore.playlists[playlistsStore.selectedPlaylistId].tracks.length > 3">
             <!-- (At least 4 tracks to download image) -->
             <v-list-item-title>{{ $t("playlist.export-preview") }}</v-list-item-title>
           </v-list-item>
+
+          <!-- 4. Playlist deletion -->
           <v-dialog v-model="isDeleteModalOpen">
             <template v-slot:activator="{ props }">
               <v-list-item v-bind="props">
-                {{ $t("playlist.unfollow") }}
+                <v-list-item-title>{{ $t("playlist.unfollow") }}</v-list-item-title>
               </v-list-item>
             </template>
             <v-card>
@@ -95,7 +96,7 @@
                   {{ $t('playlist.delete.disagree') }}
                 </v-btn>
                 <v-btn v-if="!waitingForDeletion" plain color="success" @click="unfollowPlaylist">
-                  {{ $t('playlist.delete.agree') }} 🗑️
+                  {{ $t('playlist.delete.agree') }}
                 </v-btn>
 
                 <v-progress-circular v-else indeterminate color="red"></v-progress-circular>
@@ -106,7 +107,7 @@
       </v-menu>
 
       <!-- Sorting menu -->
-      <v-menu open-on-hover>
+      <v-menu open-on-hover location="bottom end" v-if="userOwnsPlaylist">
         <template v-slot:activator="{ props }">
           <v-btn v-bind="props">
             %% réordonner %%
@@ -270,7 +271,8 @@ export default defineComponent({
   display: flex;
   flex-direction: row;
   max-height: 72px;
-  width: 100%;
+  /* Image is 70px and 2 buttons of 100px */
+  width: calc(100% - 200px);
   cursor: pointer;
 }
 
@@ -278,12 +280,15 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 100%;
+  /* Image is 70px and 2 buttons of 100px */
+  width: calc(100% - 270px);
 }
 
 #playlist-image {
   width: 70px !important;
+  max-width: 70px !important;
   height: 70px !important;
+  max-height: 70px !important;
   margin: 1px 10px 1px 0px;
 }
 
@@ -306,6 +311,7 @@ export default defineComponent({
   border: none;
   margin: 0;
   border-radius: 0;
+  /*width: 100px !important;*/
 }
 
 #action-buttons button:hover {

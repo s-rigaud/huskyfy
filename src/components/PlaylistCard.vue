@@ -31,7 +31,7 @@ export default defineComponent({
     id: String,
     name: String,
     images: {
-      type: Array as () => Array<SpotifyImage>
+      type: Array as () => SpotifyImage[]
     },
     owner: String,
     public: Boolean,

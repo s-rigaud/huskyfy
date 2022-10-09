@@ -1,6 +1,6 @@
 <template>
   <!-- Language selector -->
-  <v-menu open-on-hover transition="slide-y-transition">
+  <v-menu open-on-hover transition="fade-transition">
     <template v-slot:activator="{ props }">
       <v-btn class="select-btn rainbow-v-btn" v-bind="props">
         <v-img :src="currentLocaleIcon" alt="Country flag" width="50"></v-img>
@@ -23,30 +23,30 @@ import { useUserStore } from '@/stores/user'
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  setup () {
+  setup() {
     const userStore = useUserStore()
     return { userStore }
   },
   computed: {
-    sortedLocales (): string[] {
+    sortedLocales(): string[] {
       // Set current locale first (preselected option)
-      let locales: Array<string> = this.$i18n.availableLocales
+      let locales: string[] = this.$i18n.availableLocales
       const currentLocale: string = this.$i18n.locale
       locales = locales.filter((l) => l !== currentLocale)
       locales.unshift(currentLocale)
       return locales
     },
-    currentLocaleIcon (): string {
+    currentLocaleIcon(): string {
       return this.getIconForLocale(this.$i18n.locale)
     },
-    getIconForLocale () {
+    getIconForLocale() {
       return (locale: string): string => {
         return require(`@/assets/${locale}.png`)
       }
     }
   },
   methods: {
-    updateLocale (event: Event) {
+    updateLocale(event: Event) {
       // Recursively retrieve list-item as the event can occur in child nodes
       let node = (event.target as HTMLElement)
       while (!node!.getAttribute('item-value')) {
@@ -62,6 +62,7 @@ export default defineComponent({
 <style scoped>
 #locale-list {
   width: 80px;
+  background-color: var(--text-color);
 }
 
 .locale-text {
@@ -71,6 +72,11 @@ export default defineComponent({
 
 .locale-item {
   padding: 7px !important;
+  background: linear-gradient(180deg, var(--text-color) 20%, var(--link-color) 51%, var(--text-color) 86%) !important;
+}
+
+.locale-item:hover {
+  background-color: black !important;
 }
 
 .select-btn {

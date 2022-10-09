@@ -40,18 +40,18 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'LoginView',
-  setup() {
+  setup () {
     const userStore = useUserStore()
     return { userStore }
   },
   components: { LocaleSelector },
   computed: {
-    logo(): string {
+    logo (): string {
       return require('@/assets/fiverr/basic.svg')
     }
   },
   methods: {
-    async accessOAuthPage() {
+    async accessOAuthPage () {
       window.location.href = await api.spotify.auth.getOAuthUrl()
     }
   }

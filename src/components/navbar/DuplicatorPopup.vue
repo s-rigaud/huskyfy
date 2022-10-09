@@ -2,17 +2,17 @@
   <!-- Layer on top to follow steps of playlist duplication -->
   <v-snackbar v-model="snackbar" :model-value="true" shaped>
     <div id="loading-create-new-playlist" v-if="loadingPercentage > 0">
-      <v-progress-circular :model-value="loadingPercentage" color="var(--primary-color)">
+      <v-progress-circular :model-value="loadingPercentage" color="var(--text-color)">
       </v-progress-circular>
-      <p>{{ loadingPercentage }}% - {{ loadingText }}</p>
+      <p class="rainbow-text">{{ loadingPercentage }}% - {{ loadingText }}</p>
     </div>
 
-    <v-btn id="get-to-new-playlist" v-if="newPlaylistId != ''" @click="displayNewPlaylistDetails">
+    <v-btn id="get-to-new-playlist" class="rainbow-v-btn" v-if="newPlaylistId != ''" @click="displayNewPlaylistDetails">
       {{ $t("playlist.next") }}
     </v-btn>
 
     <template v-slot:actions>
-      <v-btn color="blue" variant="text" @click="snackbar = false"> X </v-btn>
+      <v-btn color="var(--text-color)" variant="text" @click="snackbar = false"> X </v-btn>
     </template>
 
   </v-snackbar>

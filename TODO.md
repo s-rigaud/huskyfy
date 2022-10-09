@@ -1,10 +1,11 @@
 # Functionalities
 
-* Improve login page functionality list
 
 * Improve nice export image
 
-* Update /about with new functionalities
+* Fix bug when duplicated tracks after sorting by artist
+
+* Improve login page functionality list
 
 * Create definitive UI for PlaylistDetail
 
@@ -18,7 +19,7 @@
 
 * Improve Duplicate now tab (UI + Add warning if playlist too big + load only track Ids not artists and genre)
 
-* Fix bug when duplicated tracks after sorting by artist
+* Update /about with new functionalities
 
 ## Other
 

@@ -52,10 +52,10 @@ export default defineComponent({
     name: String,
     image: String,
     artists: {
-      type: Array as () => Array<SpotifyArtist>
+      type: Array as () => SpotifyArtist[]
     },
     genres: {
-      type: Array as () => Array<string>
+      type: Array as () => string[]
     },
     isIndie: Boolean,
     trackURI: String,

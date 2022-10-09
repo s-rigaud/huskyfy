@@ -35,7 +35,7 @@ export interface SpotifyTrackResponse {
 
 // Spotify API Response for /artists
 export interface SpotifyArtistResponse {
-    artists: Array<SpotifyArtist>;
+    artists: SpotifyArtist[];
 }
 
 export interface SpotifyAuthResponse {
