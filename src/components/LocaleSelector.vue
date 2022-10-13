@@ -23,12 +23,12 @@ import { useUserStore } from '@/stores/user'
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  setup() {
+  setup () {
     const userStore = useUserStore()
     return { userStore }
   },
   computed: {
-    sortedLocales(): string[] {
+    sortedLocales (): string[] {
       // Set current locale first (preselected option)
       let locales: string[] = this.$i18n.availableLocales
       const currentLocale: string = this.$i18n.locale
@@ -36,17 +36,17 @@ export default defineComponent({
       locales.unshift(currentLocale)
       return locales
     },
-    currentLocaleIcon(): string {
+    currentLocaleIcon (): string {
       return this.getIconForLocale(this.$i18n.locale)
     },
-    getIconForLocale() {
+    getIconForLocale () {
       return (locale: string): string => {
         return require(`@/assets/${locale}.png`)
       }
     }
   },
   methods: {
-    updateLocale(event: Event) {
+    updateLocale (event: Event) {
       // Recursively retrieve list-item as the event can occur in child nodes
       let node = (event.target as HTMLElement)
       while (!node!.getAttribute('item-value')) {

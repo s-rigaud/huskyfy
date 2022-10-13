@@ -143,7 +143,7 @@ import { useUserStore } from '@/stores/user'
 export default defineComponent({
   name: 'NavbarPlaylistSelected',
   components: { DuplicatorPopup },
-  setup() {
+  setup () {
     const userStore = useUserStore()
     const playlistsStore = usePlaylistsStore()
 
@@ -151,17 +151,16 @@ export default defineComponent({
 
     return { currentUserUsername, playlistsStore }
   },
-  data() {
+  data () {
     return {
       isDeleteModalOpen: false,
       startDuplication: false,
       visibilityTooltip: null,
-      duplicateTooltip: null,
       waitingForDeletion: false
     }
   },
   computed: {
-    usernameToDisplay(): string {
+    usernameToDisplay (): string {
       const playlistCreator =
         this.playlistsStore.playlists[this.playlistsStore.selectedPlaylistId!]
           .owner.display_name
@@ -170,14 +169,14 @@ export default defineComponent({
         ? this.$t('me')
         : playlistCreator
     },
-    userOwnsPlaylist(): boolean {
+    userOwnsPlaylist (): boolean {
       return (
         this.currentUserUsername ===
         this.playlistsStore.playlists[this.playlistsStore.selectedPlaylistId!]
           .owner.display_name
       )
     },
-    getEmojiFromVisibility(): string {
+    getEmojiFromVisibility (): string {
       const playlist =
         this.playlistsStore.playlists[this.playlistsStore.selectedPlaylistId!]
 
@@ -185,7 +184,7 @@ export default defineComponent({
       if (playlist.public) return this.$t('_emojis.public')
       return this.$t('_emojis.private')
     },
-    getTextFromVisibility(): string {
+    getTextFromVisibility (): string {
       const playlist =
         this.playlistsStore.playlists[this.playlistsStore.selectedPlaylistId!]
 
@@ -193,24 +192,24 @@ export default defineComponent({
       if (playlist.public) return this.$t('playlist.public') + ' ' + this.$t('_emojis.public')
       return this.$t('playlist.private') + ' ' + this.$t('_emojis.private')
     },
-    loadingCover(): string {
+    loadingCover (): string {
       return require('@/assets/default_cover.jpg')
     }
   },
   methods: {
-    openPlaylistOnSpotify() {
+    openPlaylistOnSpotify () {
       window.location.href =
         this.playlistsStore.playlists[
           this.playlistsStore.selectedPlaylistId!
         ].uri
     },
-    async exportPreview() {
+    async exportPreview () {
       makeAndDownloadImage(this.playlistsStore.selectedPlaylistId!)
     },
-    createNewPlaylist() {
+    createNewPlaylist () {
       this.startDuplication = true
     },
-    async unfollowPlaylist() {
+    async unfollowPlaylist () {
       this.isDeleteModalOpen = false
       this.waitingForDeletion = true
       const toDeletePlaylistId = this.playlistsStore.selectedPlaylistId!
@@ -219,28 +218,28 @@ export default defineComponent({
       this.waitingForDeletion = false
       this.$router.push({ name: 'Explore' })
     },
-    async setPlaylistPublic() {
+    async setPlaylistPublic () {
       await this.playlistsStore.updatePlaylistPrivacy(
         this.playlistsStore.selectedPlaylistId!,
         true
       )
     },
-    async sortPlaylistTracksByGenres() {
+    async sortPlaylistTracksByGenres () {
       await this.playlistsStore.sortPlaylistTracksByGenres(
         this.playlistsStore.selectedPlaylistId!
       )
     },
-    async sortPlaylistTracksByArtistPopularity() {
+    async sortPlaylistTracksByArtistPopularity () {
       await this.playlistsStore.sortPlaylistTracksByArtistPopularity(
         this.playlistsStore.selectedPlaylistId!
       )
     },
-    async sortPlaylistTracksByArtistName() {
+    async sortPlaylistTracksByArtistName () {
       await this.playlistsStore.sortPlaylistTracksByArtistName(
         this.playlistsStore.selectedPlaylistId!
       )
     },
-    async setPlaylistPrivate() {
+    async setPlaylistPrivate () {
       await this.playlistsStore.updatePlaylistPrivacy(
         this.playlistsStore.selectedPlaylistId!,
         false
