@@ -91,7 +91,6 @@ router.beforeEach(async function (to, from, next) {
       id: data.id,
       username: data.display_name,
       profilePicture: userPicture,
-      isPremium: data.product === 'premium',
       country: data.country,
       connected: true
     })

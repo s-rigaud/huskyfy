@@ -11,12 +11,12 @@
 
     <div id="hero">
       <h1 id="title" class="rainbow-text">{{ $t("login.header") }}</h1>
-      <ul id="functionalities">
-        <li>{{ $t("login.functionality1") }}</li>
-        <li>{{ $t("login.functionality2") }}</li>
-        <li>{{ $t("login.functionality3") }}</li>
-        <li>{{ $t("login.functionality4") }}</li>
-      </ul>
+      <div id="functionalities">
+        <div v-for="n of [1,2,3,4]" :key="n" class="functionality">
+          <v-img :src="boneImg" alt="small-bone" width="24"></v-img>
+          <h4>{{ $t(`login.functionality${n}`) }}</h4>
+        </div>
+      </div>
     </div>
 
     <div id="lower-part">
@@ -40,18 +40,21 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'LoginView',
-  setup () {
+  setup() {
     const userStore = useUserStore()
     return { userStore }
   },
   components: { LocaleSelector },
   computed: {
-    logo (): string {
+    logo(): string {
       return require('@/assets/fiverr/basic.svg')
+    },
+    boneImg(): string {
+      return require('@/assets/small-bone.png')
     }
   },
   methods: {
-    async accessOAuthPage () {
+    async accessOAuthPage() {
       window.location.href = await api.spotify.auth.getOAuthUrl()
     }
   }
@@ -136,15 +139,24 @@ a {
 #hero {
   background-color: rgba(0, 0, 0, 0.5);
   width: 80%;
-  height: 50%;
+  height: 70%;
   margin-top: 40px;
   border-radius: 15px;
   padding: 15px;
 }
 
 #functionalities {
-  list-style-position: inside;
-  list-style-image: url('https://yesyouweb.com/wp-content/uploads/2021/03/fish-bullet.png');
+  text-align: left;
+}
+
+.functionality {
+  display: inline-flex;
+  align-items: flex-start;
+  padding: 10px 0px;
+}
+
+.functionality>h4 {
+  margin-left: 5px;
 }
 
 @media (max-width: 992px) {
@@ -154,7 +166,7 @@ a {
   }
 
   #title {
-    font-size: xx-large;
+    font-size: x-large;
   }
 
   #hero {

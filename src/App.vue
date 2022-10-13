@@ -30,7 +30,7 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'App',
   components: { NavbarComponent, FooterComponent },
-  created () {
+  created() {
     document.documentElement.lang = this.$i18n.locale
   }
 })
@@ -49,7 +49,7 @@ export default defineComponent({
 }
 
 #container {
-  padding: 12px;
+  padding: 5px;
   background-color: var(--secondary-color) !important;
   color: var(--text-color) !important;
   font-family: "Oswald" !important;
@@ -73,10 +73,10 @@ export default defineComponent({
 }
 
 .small-padding-top {
-  padding: 64px 0 0 0 !important;
+  padding: 50px 0 0 0 !important;
 }
 
 .huge-padding-top {
-  padding: 138px 0 0 0 !important;
+  padding: 124px 0 0 0 !important;
 }
 </style>

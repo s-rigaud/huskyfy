@@ -1,42 +1,24 @@
 <template>
   <!-- Navbar -->
-  <v-app-bar fixed flat style="font-family: 'Righteous'" v-if="$router.currentRoute.value.path !== '/login'">
+  <v-app-bar flat style="font-family: 'Righteous'" v-if="$router.currentRoute.value.path !== '/login'">
     <!-- Left part -->
     <router-link to="/explore">
       <v-img id="logo" :src="logo" alt="Horus logo"></v-img>
     </router-link>
-
-    <router-link to="/explore" class="navbar-link-text">
-      <p class="rainbow-text">%% Explore %%</p>
-    </router-link>
-
-    <router-link to="/duplicate-my-music" class="navbar-link-text">
-      <p class="rainbow-text">%% DUP %%</p>
-    </router-link>
-
     <v-spacer></v-spacer>
 
     <!-- Right part -->
-    <v-menu transition="fade-transition" v-if="userStore.connected">
-      <template v-slot:activator="{ props }">
-        <div id="user-info" v-bind="props">
-          <h3 id="profile-name" class="rainbow-text"> {{ userStore.username }} </h3>
-          <v-avatar style="align-items: initial">
-            <v-img rel="preconnect" :src="userStore.profilePicture" alt="Profile picture"></v-img>
-          </v-avatar>
-        </div>
-      </template>
-
-        <v-btn id="logout-button" @click="logout" variant="outlined">
-          {{ $t("navbar.logout") }}
-        </v-btn>
-    </v-menu>
+    <div id="user-info">
+      <h3 id="profile-name" class="rainbow-text"> {{ userStore.username }} </h3>
+      <v-avatar style="align-items: initial">
+        <v-img rel="preconnect" :src="userStore.profilePicture" alt="Profile picture"></v-img>
+      </v-avatar>
+    </div>
 
     <!-- TODO DELETE - Dev button to facilitate -->
     <v-btn @click="clearLocalStorage" variant="outlined" v-if="isDevEnv">
       Clear local storage
     </v-btn>
-    <LocaleSelector />
 
     <!-- Second part which extend on the playlist detail -->
     <template v-slot:extension>
@@ -56,7 +38,7 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'NavbarHeader',
   components: { LocaleSelector, NavbarPlaylistSelected },
-  setup () {
+  setup() {
     const userStore = useUserStore()
     const authStore = useAuthStore()
     const playlistsStore = usePlaylistsStore()
@@ -64,26 +46,26 @@ export default defineComponent({
     return { authStore, playlistsStore, userStore }
   },
   computed: {
-    profilePictureOrDefault (): string {
+    profilePictureOrDefault(): string {
       // eslint-disable-next-line
       const DEFAULT_PICTURE = require("@/assets/no-user.png");
       return this.userStore.profilePicture !== ''
         ? this.userStore.profilePicture
         : DEFAULT_PICTURE
     },
-    logo (): string {
+    logo(): string {
       return require('@/assets/fiverr/basic.svg')
     },
-    isDevEnv (): boolean {
+    isDevEnv(): boolean {
       return process.env.NODE_ENV !== 'production'
     }
   },
   methods: {
-    clearLocalStorage () {
+    clearLocalStorage() {
       localStorage.clear()
       this.logout()
     },
-    logout () {
+    logout() {
       this.userStore.reset()
       this.authStore.reset()
       this.playlistsStore.selectedPlaylistId = null

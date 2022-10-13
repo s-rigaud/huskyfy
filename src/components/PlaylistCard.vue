@@ -11,7 +11,7 @@
     <v-card-subtitle class="pad-title-0">
       <p>{{ $t("playlist.created-by") }} {{ owner }}</p>
     </v-card-subtitle>
-    <v-card-subtitle class="pad-title-0">
+    <v-card-subtitle class="pad-title-0 visibility-status">
       <p v-if="collaborative">{{ $t("playlist.collaborative") }} {{ $t("_emojis.collaborative") }}</p>
       <p v-else-if="public">{{ $t("playlist.public") }} {{ $t("_emojis.public") }}</p>
       <p v-else> {{ $t("playlist.private") }} {{ $t("_emojis.private") }}</p>
@@ -38,15 +38,15 @@ export default defineComponent({
     collaborative: Boolean
   },
   computed: {
-    loadingCover (): string {
+    loadingCover(): string {
       return require('@/assets/default_cover.jpg')
     },
-    horus (): string {
+    horus(): string {
       return require('@/assets/oeil-dhorus.png')
     }
   },
   methods: {
-    displayDetails () {
+    displayDetails() {
       this.$router.push({
         name: 'Explore playlist',
         params: { playlistId: this.id }
@@ -129,6 +129,12 @@ export default defineComponent({
 
 .pad-title-0 {
   padding: 0;
+}
+
+.visibility-status {
+  padding: 0;
+  letter-spacing: 0;
+  white-space: nowrap;
 }
 
 @media (max-width: 992px) {

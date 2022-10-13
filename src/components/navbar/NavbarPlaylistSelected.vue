@@ -135,7 +135,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 
-import DuplicatorPopup from '@/components/navbar/DuplicatorPopup.vue'
+import DuplicatorPopup from '@/components/playlist_detail/DuplicatorPopup.vue'
 import makeAndDownloadImage from '@/services/playlistImageMaker'
 import { usePlaylistsStore } from '@/stores/playlists'
 import { useUserStore } from '@/stores/user'

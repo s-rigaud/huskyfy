@@ -52,11 +52,11 @@
 	"login": {
 		"about": "En apprendre plus sur ce site",
 		"connect": "Se connecter à Spotify",
-		"header": "Commencez à utiliser certaines fonctionnalités avancées non encore disponibles dans Spotify :",
+		"header": "Découvrez de nouvelles fonctionnalités avec vos playlists Spotify",
 		"functionality1": "Découvrez les genres musicaux que vous écoutez le plus souvent",
-		"functionality2": "Dupliquer et partager votre liste de lecture facilement",
+		"functionality2": "Dupliquer et partager votre playlist facilement",
 		"functionality3": "Partagez vos chansons préférées avec tous vos amis",
-		"functionality4": "Filtrez et analysez votre liste de lecture en fonction de la popularité des artistes ou des genres musicaux"
+		"functionality4": "Filtrez et analysez votre playlist en fonction de la popularité des artistes ou des genres musicaux"
 	},
 	"me": "moi",
 	"navbar": {
@@ -107,7 +107,7 @@
 		},
 		"indie-text": {
 			"high": " des artistes de la playlist sont indépendants ! On dirait que vous vous y intéressez.",
-			"low": " des artistes de la liste de lecture sont indépendants."
+			"low": " des artistes de la playlist sont indépendants."
 		}
 	},
 	"track": {

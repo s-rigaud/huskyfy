@@ -7,7 +7,7 @@
       <PlaylistCard v-for="playlist in playlistsStore.playlists" :key="playlist.id" :id="playlist.id"
         :name="formatName(playlist)" :images="playlist.images"
         :owner="usernameToDisplay(playlist.owner['display_name'])" :public="playlist.public"
-        :collaborative="playlist.collaborative" />
+        :collaborative="playlist.collaborative"/>
       <v-progress-circular v-if="!playlistLoaded" :size="70" :width="7" color="var(--text-color)" indeterminate>
       </v-progress-circular>
     </div>
@@ -29,21 +29,21 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'PlaylistExplorer',
   components: { PlaylistCard },
-  setup () {
+  setup() {
     const userStore = useUserStore()
     const playlistsStore = usePlaylistsStore()
     const currentUserUsername = userStore.username
     return { currentUserUsername, playlistsStore }
   },
   computed: {
-    usernameToDisplay () {
+    usernameToDisplay() {
       return (ownerUsername: string): string => {
         return this.currentUserUsername === ownerUsername
           ? this.$t('me')
           : ownerUsername
       }
     },
-    formatName () {
+    formatName() {
       return (playlist: SpotifyPlaylist): string => {
         return playlist.id === 'my-music'
           ? this.$t('playlist.your-music.name')
@@ -51,18 +51,20 @@ export default defineComponent({
       }
     }
   },
-  async created () {
+  async created() {
     await this.loadMorePlaylists()
+    console.log(this.$vuetify.display.name);
+
     this.playlistLoaded = true
   },
   methods: {
-    async loadMorePlaylists () {
+    async loadMorePlaylists() {
       const response = await this.playlistsStore.getUserPlaylists(this.offset)
       this.playlistTotal = response.total
       this.offset = response.offset
     }
   },
-  data () {
+  data() {
     return {
       playlistTotal: 0,
       offset: 0,
