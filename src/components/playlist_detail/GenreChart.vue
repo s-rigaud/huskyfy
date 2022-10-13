@@ -1,12 +1,11 @@
 <template>
-  <h3>Top 15 Genres</h3>
-
+  <h3>Top {{genres.length}} Genres</h3>
   <apexchart type="donut" width="380" :options="chartOptions" :series="series"></apexchart>
 </template>
 
 <script lang="ts">
-import { Genre } from '@/model'
-import { defineComponent } from 'vue'
+import { Genre } from '@/model';
+import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'GenreChart',
@@ -15,20 +14,13 @@ export default defineComponent({
       type: Array as () => Genre[]
     }
   },
-  methods: {
-    appendData () {
-      const arr = this.series.slice()
-      arr.push(Math.floor(Math.random() * (100 - 1 + 1)) + 1)
-      this.series = arr
-    },
-    removeData () {
-      if (this.series.length === 1) return
-      const arr = this.series.slice()
-      arr.pop()
-      this.series = arr
+  watch: {
+    genres(newValue: Genre[]) {
+      this.series = newValue.map((genre) => genre.value)
+      this.chartOptions.labels = newValue.map((genre) => genre.cap_name)
     }
   },
-  data () {
+  data() {
     // All data needed to customize graph UI and data
     return {
       lastGenreSelected: false,
@@ -64,8 +56,3 @@ export default defineComponent({
   }
 })
 </script>
-<style scoped>
-.apexcharts-legend-text:hover {
-  font-weight: bold;
-}
-</style>

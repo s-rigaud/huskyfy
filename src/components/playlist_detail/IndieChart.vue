@@ -3,7 +3,7 @@
 
   <apexchart type="radialBar" height="350" :options="chartOptions" :series="series"></apexchart>
 
-  <h5>{{ getIndiePercentage() }}% {{ indieText }}</h5>
+  <h5>{{ indiePercentage }}% {{ indieText }}</h5>
 </template>
 
 <script lang="ts">
@@ -13,36 +13,41 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'IndieChart',
   props: {
-    playlistId: String
+    indiePercentage: {
+      type: Number,
+      default: 0,
+    }
   },
-  setup () {
+  setup() {
     const playlistsStore = usePlaylistsStore()
     return { playlistsStore }
   },
   computed: {
-    indieText (): string {
-      if (this.getIndiePercentage() > 35) return this.$t('playlist.indie-text.high')
+    indieText(): string {
+      if (this.indiePercentage > 35) return this.$t('playlist.indie-text.high')
       return this.$t('playlist.indie-text.low')
     }
   },
   methods: {
-    getImage (): string {
-      const indiePercentage = this.getIndiePercentage()
+    getImage(): string {
       let image = ''
-      if (indiePercentage < 25) image = 'cold'
-      else if (indiePercentage < 50) image = 'sunglasses'
-      else if (indiePercentage < 75) image = 'hot'
+      if (this.indiePercentage < 25) image = 'cold'
+      else if (this.indiePercentage < 50) image = 'sunglasses'
+      else if (this.indiePercentage < 75) image = 'hot'
       else image = 'fire'
       return require(`@/assets/${image}.png`)
-    },
-    getIndiePercentage (): number {
-      return this.playlistsStore.getIndiePercentage(this.playlistId!)
     }
   },
-  data () {
+  watch: {
+    indiePercentage(newValue: number) {
+      this.series = [newValue]
+      this.chartOptions.plotOptions.radialBar.hollow.image = this.getImage()
+    }
+  },
+  data() {
     // All data needed to customize graph UI and data
     return {
-      series: [this.getIndiePercentage()],
+      series: [this.indiePercentage],
       chartOptions: {
         chart: {
           height: 350,
