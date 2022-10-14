@@ -38,7 +38,7 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'NavbarHeader',
   components: { LocaleSelector, NavbarPlaylistSelected },
-  setup() {
+  setup () {
     const userStore = useUserStore()
     const authStore = useAuthStore()
     const playlistsStore = usePlaylistsStore()
@@ -46,26 +46,26 @@ export default defineComponent({
     return { authStore, playlistsStore, userStore }
   },
   computed: {
-    profilePictureOrDefault(): string {
+    profilePictureOrDefault (): string {
       // eslint-disable-next-line
       const DEFAULT_PICTURE = require("@/assets/no-user.png");
       return this.userStore.profilePicture !== ''
         ? this.userStore.profilePicture
         : DEFAULT_PICTURE
     },
-    logo(): string {
+    logo (): string {
       return require('@/assets/fiverr/basic.svg')
     },
-    isDevEnv(): boolean {
+    isDevEnv (): boolean {
       return process.env.NODE_ENV !== 'production'
     }
   },
   methods: {
-    clearLocalStorage() {
+    clearLocalStorage () {
       localStorage.clear()
       this.logout()
     },
-    logout() {
+    logout () {
       this.userStore.reset()
       this.authStore.reset()
       this.playlistsStore.selectedPlaylistId = null

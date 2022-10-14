@@ -33,21 +33,21 @@ export default defineComponent({
     trackRequestLimit: Number
   },
   emits: ['allTracksLoaded'],
-  setup() {
+  setup () {
     const playlistsStore = usePlaylistsStore()
     const { downloadPlaylistTracks } = playlistsStore
 
     return { downloadPlaylistTracks, playlistsStore }
   },
   methods: {
-    async loadAllTracks() {
+    async loadAllTracks () {
       this.notLoaded = false
       await this.downloadPlaylistTracks(this.playlist!.id, this.playlist!.total)
       this.isLoaded = true
       this.$emit('allTracksLoaded')
     }
   },
-  data() {
+  data () {
     return {
       notLoaded: true,
       isLoaded: false

@@ -22,127 +22,22 @@
           </v-tooltip>
         </div>
 
-        <p id="description" class="text-truncate">
-          {{
-                    playlistsStore.playlists[playlistsStore.selectedPlaylistId].description.replace(/(<([^>]+)>)/ig, '')
-          }}
-        </p>
-        <p style="opacity: 0.8">
-          {{ $t("playlist.created-by") }} {{ usernameToDisplay }}
-        </p>
+        <p id="description" class="text-truncate"> {{ formattedDescription }} </p>
+        <p style="opacity: 0.8"> {{ $t("playlist.created-by") }} {{ usernameToDisplay }} </p>
       </div>
-    </div>
-
-    <!-- Buttons to manage playlist options -->
-    <div id="action-buttons">
-      <!-- Playlist modification menu -->
-      <v-menu open-on-hover :location="userOwnsPlaylist? 'bottom': 'bottom end'">
-        <template v-slot:activator="{ props }">
-          <v-btn v-bind="props">
-            %% update playlist %%
-          </v-btn>
-        </template>
-        <v-list>
-
-          <!-- 1. Update playlist privacy -->
-          <div v-if="userOwnsPlaylist && !playlistsStore.playlists[playlistsStore.selectedPlaylistId].collaborative">
-            <v-list-item v-if="playlistsStore.playlists[playlistsStore.selectedPlaylistId].public"
-              @click="setPlaylistPrivate">
-              <v-list-item-title>{{ $t("playlist.set-private") }} {{ $t("_emojis.private") }}</v-list-item-title>
-            </v-list-item>
-            <v-list-item v-else @click="setPlaylistPublic">
-              <v-list-item-title>{{ $t("playlist.set-public") }} {{ $t("_emojis.public") }}</v-list-item-title>
-            </v-list-item>
-          </div>
-
-          <!-- 2. Duplicate playlist -->
-          <v-tooltip location="bottom"
-            v-if="playlistsStore.playlists[playlistsStore.selectedPlaylistId].tracks.length > 1">
-            <template v-slot:activator="{ props: visibilityTooltip }">
-              <v-list-item v-bind="visibilityTooltip" @click="createNewPlaylist">
-                <v-list-item-title>{{ $t("playlist.duplicate.button") }}</v-list-item-title>
-              </v-list-item>
-            </template>
-            <span> {{ $t("playlist.duplicate.tooltip") }} </span>
-          </v-tooltip>
-
-          <!-- 3. Export Image -->
-          <v-list-item @click="exportPreview"
-            v-if="playlistsStore.playlists[playlistsStore.selectedPlaylistId].tracks.length > 3">
-            <!-- (At least 4 tracks to download image) -->
-            <v-list-item-title>{{ $t("playlist.export-preview") }}</v-list-item-title>
-          </v-list-item>
-
-          <!-- 4. Playlist deletion -->
-          <v-dialog v-model="isDeleteModalOpen">
-            <template v-slot:activator="{ props }">
-              <v-list-item v-bind="props">
-                <v-list-item-title>{{ $t("playlist.unfollow") }}</v-list-item-title>
-              </v-list-item>
-            </template>
-            <v-card>
-              <v-card-title class="text-h5 rainbow-text font-weight-bold">
-                {{ $t('playlist.delete.delete') }}
-                '<span class="font-italic">
-                  {{ playlistsStore.playlists[playlistsStore.selectedPlaylistId].name }}
-                </span>'
-              </v-card-title>
-              <v-card-text class="rainbow-text">
-                {{ $t('playlist.delete.confirm-message') }}
-              </v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="error" plain @click="isDeleteModalOpen = false">
-                  {{ $t('playlist.delete.disagree') }}
-                </v-btn>
-                <v-btn v-if="!waitingForDeletion" plain color="success" @click="unfollowPlaylist">
-                  {{ $t('playlist.delete.agree') }}
-                </v-btn>
-
-                <v-progress-circular v-else indeterminate color="red"></v-progress-circular>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
-        </v-list>
-      </v-menu>
-
-      <!-- Sorting menu -->
-      <v-menu open-on-hover location="bottom end" v-if="userOwnsPlaylist">
-        <template v-slot:activator="{ props }">
-          <v-btn v-bind="props">
-            %% réordonner %%
-          </v-btn>
-        </template>
-        <v-list>
-          <v-list-item @click="sortPlaylistTracksByGenres">
-            <v-list-item-title>%% sort genre %%</v-list-item-title>
-          </v-list-item>
-          <v-list-item @click="sortPlaylistTracksByArtistPopularity">
-            <v-list-item-title>%% sort artist pop %%</v-list-item-title>
-          </v-list-item>
-          <v-list-item @click="sortPlaylistTracksByArtistName">
-            <v-list-item-title>%% sort artist name %%</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
     </div>
   </div>
 
-  <DuplicatorPopup v-if="startDuplication"
-    :playlistId="playlistsStore.playlists[playlistsStore.selectedPlaylistId!].id" />
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
 
-import DuplicatorPopup from '@/components/playlist_detail/DuplicatorPopup.vue'
-import makeAndDownloadImage from '@/services/playlistImageMaker'
 import { usePlaylistsStore } from '@/stores/playlists'
 import { useUserStore } from '@/stores/user'
 
 export default defineComponent({
   name: 'NavbarPlaylistSelected',
-  components: { DuplicatorPopup },
   setup () {
     const userStore = useUserStore()
     const playlistsStore = usePlaylistsStore()
@@ -153,10 +48,7 @@ export default defineComponent({
   },
   data () {
     return {
-      isDeleteModalOpen: false,
-      startDuplication: false,
-      visibilityTooltip: null,
-      waitingForDeletion: false
+      visibilityTooltip: null
     }
   },
   computed: {
@@ -168,13 +60,6 @@ export default defineComponent({
       return this.currentUserUsername === playlistCreator
         ? this.$t('me')
         : playlistCreator
-    },
-    userOwnsPlaylist (): boolean {
-      return (
-        this.currentUserUsername ===
-        this.playlistsStore.playlists[this.playlistsStore.selectedPlaylistId!]
-          .owner.display_name
-      )
     },
     getEmojiFromVisibility (): string {
       const playlist =
@@ -194,6 +79,10 @@ export default defineComponent({
     },
     loadingCover (): string {
       return require('@/assets/default_cover.jpg')
+    },
+    formattedDescription (): string {
+      const playlist = this.playlistsStore.playlists[this.playlistsStore.selectedPlaylistId!]
+      return playlist.description.replace(/(<([^>]+)>)/ig, '')
     }
   },
   methods: {
@@ -202,48 +91,6 @@ export default defineComponent({
         this.playlistsStore.playlists[
           this.playlistsStore.selectedPlaylistId!
         ].uri
-    },
-    async exportPreview () {
-      makeAndDownloadImage(this.playlistsStore.selectedPlaylistId!)
-    },
-    createNewPlaylist () {
-      this.startDuplication = true
-    },
-    async unfollowPlaylist () {
-      this.isDeleteModalOpen = false
-      this.waitingForDeletion = true
-      const toDeletePlaylistId = this.playlistsStore.selectedPlaylistId!
-      await this.playlistsStore.unfollowPlaylist(toDeletePlaylistId)
-      this.playlistsStore.selectedPlaylistId = null
-      this.waitingForDeletion = false
-      this.$router.push({ name: 'Explore' })
-    },
-    async setPlaylistPublic () {
-      await this.playlistsStore.updatePlaylistPrivacy(
-        this.playlistsStore.selectedPlaylistId!,
-        true
-      )
-    },
-    async sortPlaylistTracksByGenres () {
-      await this.playlistsStore.sortPlaylistTracksByGenres(
-        this.playlistsStore.selectedPlaylistId!
-      )
-    },
-    async sortPlaylistTracksByArtistPopularity () {
-      await this.playlistsStore.sortPlaylistTracksByArtistPopularity(
-        this.playlistsStore.selectedPlaylistId!
-      )
-    },
-    async sortPlaylistTracksByArtistName () {
-      await this.playlistsStore.sortPlaylistTracksByArtistName(
-        this.playlistsStore.selectedPlaylistId!
-      )
-    },
-    async setPlaylistPrivate () {
-      await this.playlistsStore.updatePlaylistPrivacy(
-        this.playlistsStore.selectedPlaylistId!,
-        false
-      )
     }
   }
 })

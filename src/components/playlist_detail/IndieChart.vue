@@ -15,21 +15,21 @@ export default defineComponent({
   props: {
     indiePercentage: {
       type: Number,
-      default: 0,
+      default: 0
     }
   },
-  setup() {
+  setup () {
     const playlistsStore = usePlaylistsStore()
     return { playlistsStore }
   },
   computed: {
-    indieText(): string {
+    indieText (): string {
       if (this.indiePercentage > 35) return this.$t('playlist.indie-text.high')
       return this.$t('playlist.indie-text.low')
     }
   },
   methods: {
-    getImage(): string {
+    getImage (): string {
       let image = ''
       if (this.indiePercentage < 25) image = 'cold'
       else if (this.indiePercentage < 50) image = 'sunglasses'
@@ -39,12 +39,12 @@ export default defineComponent({
     }
   },
   watch: {
-    indiePercentage(newValue: number) {
+    indiePercentage (newValue: number) {
       this.series = [newValue]
       this.chartOptions.plotOptions.radialBar.hollow.image = this.getImage()
     }
   },
-  data() {
+  data () {
     // All data needed to customize graph UI and data
     return {
       series: [this.indiePercentage],

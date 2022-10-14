@@ -4,8 +4,8 @@
 </template>
 
 <script lang="ts">
-import { Genre } from '@/model';
-import { defineComponent } from 'vue';
+import { Genre } from '@/model'
+import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'GenreChart',
@@ -15,12 +15,12 @@ export default defineComponent({
     }
   },
   watch: {
-    genres(newValue: Genre[]) {
+    genres (newValue: Genre[]) {
       this.series = newValue.map((genre) => genre.value)
       this.chartOptions.labels = newValue.map((genre) => genre.cap_name)
     }
   },
-  data() {
+  data () {
     // All data needed to customize graph UI and data
     return {
       lastGenreSelected: false,
