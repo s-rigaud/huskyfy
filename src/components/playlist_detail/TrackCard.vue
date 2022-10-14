@@ -24,17 +24,21 @@
           </v-card-header-text>
         </v-card-header>
 
-        <!-- Genre chips -->
-        <div v-if="genres!.length > 0">
-          <v-card-text>
-            <v-chip v-for="(genre, index) in genres" :key="genre" :text="genre.toUpperCase()" label size="small"
-              class="genre-chip" :style="genreAnimationDelay(index)">
-            </v-chip>
+        <!-- TODO -->
+        <!-- Genre chips (Should be VSlideGroup but not yet implemented in Vuetify Beta 3.0.X)
+          <v-slide-group show-arrows>
+            <v-slide-group-item v-for="(genre, index) in genres" :key="genre">
+              <v-chip :text="genre.toUpperCase()" label size="small" class="genre-chip"
+                :style="genreAnimationDelay(index)">
+              </v-chip>
+            </v-slide-group-item>
+          </v-slide-group>-->
 
-            <!--<v-chip v-if="genres.length > 3" :text="`+${genres.length - 3}`" label size="small" class="genre-chip">
-            </v-chip>-->
-          </v-card-text>
-        </div>
+        <v-card-text v-if="genres!.length > 0">
+          <v-chip v-for="(genre, index) in genres" :key="genre" :text="genre.toUpperCase()" label size="small"
+            class="genre-chip" :style="genreAnimationDelay(index)">
+          </v-chip>
+        </v-card-text>
         <v-card-subtitle v-else> {{ $t("track.no-genre") }}</v-card-subtitle>
       </div>
     </div>
@@ -62,7 +66,7 @@ export default defineComponent({
     trackIndex: Number
   },
   computed: {
-    addComma () {
+    addComma() {
       return (artistName: string): string => {
         if (this.artists![this.artists!.length - 1].name === artistName) {
           return artistName
@@ -70,22 +74,22 @@ export default defineComponent({
         return `${artistName},`
       }
     },
-    loadingCover (): string {
+    loadingCover(): string {
       return require('@/assets/default_cover.jpg')
     },
     // Delay animation so cards appear one after another
-    trackAnimationDelay (): StyleValue {
+    trackAnimationDelay(): StyleValue {
       const duration = (this.trackIndex! < 20) ? `${200 * this.trackIndex!}ms` : '0ms'
       return { 'animation-delay': duration }
     },
-    genreAnimationDelay () {
+    genreAnimationDelay() {
       return (index: number): StyleValue => {
         return { 'animation-delay': `${index * 500}ms` }
       }
     }
   },
   methods: {
-    openTrackOnSpotify () {
+    openTrackOnSpotify() {
       window.location.href = this.trackURI!
     }
   }

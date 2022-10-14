@@ -3,72 +3,104 @@
   <div id="playlist" v-if="playlists[playlistId] && playlists[playlistId].total > 0">
     <div id="content" style="display: flex">
 
-      <!-- old part-->
-      <aside id="left-part">
-        <v-tabs v-model="selectedTab" background-color="var(--primary-color)" fixed-tabs end>
-          <v-tab :value="0">Genres</v-tab>
-          <v-tab :value="1">Artists</v-tab>
-        </v-tabs>
-        <v-window v-model="selectedTab" v-if="filteredTracks.length > 0" id="charts">
-          <v-window-item>
-            <GenreChart :genres="topGenres" />
-          </v-window-item>
-          <v-window-item>
-            <IndieChart :indiePercentage="indiePercentage" />
-          </v-window-item>
-        </v-window>
-      </aside>
+      <v-btn @click.stop="drawer = !drawer">%% Tap here %%</v-btn>
+      <v-navigation-drawer v-model="drawer" temporary location="right"
+        image="https://cdn.vuetifyjs.com/images/backgrounds/bg-2.jpg">
+        <v-list>
+          <v-list-item v-for="item in items" :key="item.title" :title="item.title" :prepend-avatar="item.avatar">
+          </v-list-item>
+          <v-list-subheader></v-list-subheader>
+          <v-list-item title=""></v-list-item>
+        </v-list>
+      </v-navigation-drawer>
 
-      <!-- Filters -->
-      <div id="filters">
-        <h3 class="rainbow-text">{{ $t('track.filters.title') }}</h3>
+      <v-expansion-panels variant="accordion">
+        <v-expansion-panel bg-color="var(--text-color)">
+          <v-expansion-panel-title color="var(--text-color)">
+            <div class="d-flex justify-start">
+              Stats
+            </div>
+          </v-expansion-panel-title>
+          <v-expansion-panel-text>
+            <aside id="left-part">
+              <v-tabs v-model="selectedTab" background-color="var(--primary-color)" fixed-tabs end>
+                <v-tab :value="0">Genres</v-tab>
+                <v-tab :value="1">Artists</v-tab>
+              </v-tabs>
+              <v-window v-model="selectedTab" v-if="filteredTracks.length > 0" id="charts">
+                <v-window-item>
+                  <GenreChart :genres="topGenres" />
+                </v-window-item>
+                <v-window-item>
+                  <IndieChart :indiePercentage="indiePercentage" />
+                </v-window-item>
+              </v-window>
+            </aside>
+          </v-expansion-panel-text>
+        </v-expansion-panel>
 
-        <v-select v-model="selectedGenres" :label="$t('track.filters.genres')" :items="getTopGenres()"
-          item-title="cap_name" item-value="name" variant="outlined" density="comfortable" multiple
-          style="text-transform: capitalize">
-        </v-select>
+        <v-expansion-panel>
+          <v-expansion-panel-title color="var(--link-color)">
+            <div class="d-flex justify-start">
+              Filters
+            </div>
+          </v-expansion-panel-title>
+          <v-expansion-panel-text>
 
-        <v-select v-model="selectedArtists" :label="$t('track.filters.artists')" :items="getSortedArtists()"
-          item-title="name" item-value="name" variant="outlined" density="comfortable" multiple
-          style="text-transform: capitalize">
-          <template v-slot:selection="{ item, index }: SlotProps">
-            <v-chip v-if="index < 2">
-              <v-avatar>
-                <v-img rel="preconnect" width="20" :src="getArtistCover(item)" alt="Spotify artist cover"></v-img>
-              </v-avatar>
-              <span>{{ getArtistName(item) }}</span>
-            </v-chip>
-            <span v-if="index === 2" class="text-grey text-caption align-self-center">
-              (+{{ selectedArtists.length - 2 }} others)
-            </span>
-          </template>
-        </v-select>
+            <!-- Filters -->
+            <div id="filters">
+              <h3 class="rainbow-text">{{ $t('track.filters.title') }}</h3>
 
-        <v-switch v-model="isFilterExclusive" :label="$t('track.exclusive-filter')"></v-switch>
+              <v-select v-model="selectedGenres" :label="$t('track.filters.genres')" :items="getTopGenres()"
+                item-title="cap_name" item-value="name" variant="outlined" density="comfortable" multiple
+                style="text-transform: capitalize">
+              </v-select>
 
-        <v-btn @click="resetFilters" v-if="selectedGenres.length !== 0 || selectedPopularity != NO_POPULARITY"
-          class="rainbow-v-btn">
-          {{ $t("playlist.reset-filters") }}
-        </v-btn>
-      </div>
-      <div id="filter-chips" style="width: 100%">
-        <div style="width: 100%">
-          <v-chip-group active-class="primary--text" column v-model="selectedPopularityVModel">
-            <v-chip :text="getTextForPopularity('Indie')" value="Indie"> </v-chip>
-            <v-chip :text="getTextForPopularity('Popular')" value="Popular"> </v-chip>
-          </v-chip-group>
+              <v-select v-model="selectedArtists" :label="$t('track.filters.artists')" :items="getSortedArtists()"
+                item-title="name" item-value="name" variant="outlined" density="comfortable" multiple
+                style="text-transform: capitalize">
+                <template v-slot:selection="{ item, index }: SlotProps">
+                  <v-chip v-if="index < 2">
+                    <v-avatar>
+                      <v-img rel="preconnect" width="20" :src="getArtistCover(item)" alt="Spotify artist cover"></v-img>
+                    </v-avatar>
+                    <span>{{ getArtistName(item) }}</span>
+                  </v-chip>
+                  <span v-if="index === 2" class="text-grey text-caption align-self-center">
+                    (+{{ selectedArtists.length - 2 }} others)
+                  </span>
+                </template>
+              </v-select>
 
-          <div v-if="selectedGenres.length > 0">
-            <!-- One ship for each genre if exclusive else one ship with 'or' -->
-            <v-chip v-if="isFilterExclusive"
-              :text="selectedGenres.join(` ${$t('track.filters.keyword.and')} `).toUpperCase()">
-            </v-chip>
-            <v-chip v-else v-for="genre in selectedGenres" :key="genre" :text="genre.toUpperCase()">
-            </v-chip>
-          </div>
-        </div>
+              <v-switch v-model="isFilterExclusive" :label="$t('track.exclusive-filter')"></v-switch>
 
-      </div>
+              <v-btn @click="resetFilters" v-if="selectedGenres.length !== 0 || selectedPopularity != NO_POPULARITY"
+                class="rainbow-v-btn">
+                {{ $t("playlist.reset-filters") }}
+              </v-btn>
+            </div>
+            <div id="filter-chips" style="width: 100%">
+              <div style="width: 100%">
+                <v-chip-group active-class="primary--text" column v-model="selectedPopularityVModel">
+                  <v-chip :text="getTextForPopularity('Indie')" value="Indie"> </v-chip>
+                  <v-chip :text="getTextForPopularity('Popular')" value="Popular"> </v-chip>
+                </v-chip-group>
+
+                <div v-if="selectedGenres.length > 0">
+                  <!-- One ship for each genre if exclusive else one ship with 'or' -->
+                  <v-chip v-if="isFilterExclusive"
+                    :text="selectedGenres.join(` ${$t('track.filters.keyword.and')} `).toUpperCase()">
+                  </v-chip>
+                  <v-chip v-else v-for="genre in selectedGenres" :key="genre" :text="genre.toUpperCase()">
+                  </v-chip>
+                </div>
+              </div>
+            </div>
+          </v-expansion-panel-text>
+        </v-expansion-panel>
+      </v-expansion-panels>
+
+      <!---->
 
       <!-- Track list -->
       <section id="right-part" style="width: 100%">
@@ -179,11 +211,47 @@ export default defineComponent({
 
       selectedArtists: ([] as string[]),
 
+      isFilterExclusive: false,
+      playlistLoaded: false,
+
+      // For child components
       topGenres: ([] as Genre[]),
       indiePercentage: 0,
 
-      isFilterExclusive: false,
-      playlistLoaded: false
+      drawer: false,
+      items: [
+        {
+          type: 'subheader', title: '%% Update playlist %%', avatar: '@/assets/fire.png',
+        },
+        {
+          title: 'Update playlist privacy',
+          value: 1,
+        },
+        {
+          title: 'Duplicate playlist',
+          value: 2,
+        },
+        {
+          title: '%% Export Image %%',
+          value: 3,
+        },
+        { type: 'divider' },
+        {
+          type: 'subheader', title: 'Group #2', avatar: 'https://randomuser.me/api/portraits/women/8.jpg',
+        },
+        {
+          title: 'Item #4',
+          value: 4,
+        },
+        {
+          title: 'Item #5',
+          value: 5,
+        },
+        {
+          title: 'Item #6',
+          value: 6,
+        },
+      ],
     }
   },
   methods: {
