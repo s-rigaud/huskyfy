@@ -17,7 +17,7 @@
       <!-- 1.2 Duplicate playlist -->
       <v-tooltip location="bottom" v-if="playlistsStore.playlists[playlistId].tracks.length > 1">
         <template v-slot:activator="{ props: visibilityTooltip }">
-          <v-list-item v-bind="visibilityTooltip" @click="createNewPlaylist">
+          <v-list-item v-bind="visibilityTooltip" @click="$emit('duplicatePlaylist')">
             <v-list-item-title>{{ $t("playlist.duplicate.button") }}</v-list-item-title>
           </v-list-item>
         </template>
@@ -89,7 +89,7 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'ActionDrawer',
-  emits: ['onClose'],
+  emits: ['onClose', 'duplicatePlaylist'],
   props: {
     open: {
       type: Boolean,
@@ -128,7 +128,6 @@ export default defineComponent({
     }
   },
   methods: {
-
     async setPlaylistPrivate () {
       await this.playlistsStore.updatePlaylistPrivacy(
         this.playlistId,

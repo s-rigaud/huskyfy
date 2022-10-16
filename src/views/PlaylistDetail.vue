@@ -1,8 +1,7 @@
 <template>
   <!-- Description of all the playlist with all the tracks and filters -->
-  <div id="playlist" v-if="playlists[playlistId] && playlists[playlistId].total > 0">
+  <div id="playlist" v-if="playlists[playlistId] && playlists[playlistId].total > 0" v-scroll="onScroll">
     <div id="content" style="display: flex">
-
       <v-card @click="openPlaylistOnSpotify" v-if="playlistId" style="width: 100%">
         <v-card-header>
           <v-card-header-text>
@@ -14,6 +13,9 @@
                 <h3 style="margin-right: 5px" class="text-truncate rainbow-text">
                   {{ playlistsStore.playlists[playlistId].name }}
                 </h3>
+
+                <v-icon id="burger-button" @click="drawer = !drawer" prepend-icon="mdi-menu">mdi-menu</v-icon>
+
                 <p v-bind="visibilityTooltip"> {{ getTextFromVisibility }} </p>
                 <p style="opacity: 0.8"> {{ $t("playlist.created-by") }} {{ usernameToDisplay }} </p>
                 <p>
@@ -30,8 +32,12 @@
         </v-card-text>
       </v-card>
 
-      <v-btn @click.stop="drawer = !drawer">%% Open actions %%</v-btn>
-      <ActionDrawer :open="drawer" @onClose="drawer = false" :playlistId="playlistId" />
+      <v-btn @click="scrollTop" id="scroll-top-button" class="rainbow-v-btn" icon :style="toButtonOpacity">
+        <v-icon>mdi-apple-keyboard-control</v-icon>
+      </v-btn>
+
+      <ActionDrawer :open="drawer" :playlistId="playlistId" @onClose="drawer = false"
+        @duplicatePlaylist="() => { startDuplication = true; drawer = false }" />
 
       <v-expansion-panels variant="accordion">
         <v-expansion-panel bg-color="var(--text-color)">
@@ -242,14 +248,16 @@ export default defineComponent({
       indiePercentage: 0,
 
       drawer: false,
-
       visibilityTooltip: null,
 
-      startDuplication: false
-
+      startDuplication: false,
+      displayGoTopButton: false
     }
   },
   methods: {
+    onScroll() {
+      this.displayGoTopButton = (window.scrollY > 100)
+    },
     async loadFirstTracks() {
       // Only asking for the right number of tracks as we already know how many tracks are in the playlist
       const maxLimit = Math.min(
@@ -266,9 +274,6 @@ export default defineComponent({
     refreshStats() {
       this.topGenres = this.getTopGenres()
       this.indiePercentage = this.getIndiePercentage()
-    },
-    createNewPlaylist() {
-      this.startDuplication = true
     },
     getIndiePercentage(): number {
       return this.playlistsStore.getIndiePercentage(this.playlistId)
@@ -428,6 +433,9 @@ export default defineComponent({
     formattedDescription(): string {
       const playlist = this.playlistsStore.playlists[this.playlistId]
       return playlist.description.replace(/(<([^>]+)>)/ig, '')
+    },
+    toButtonOpacity(): StyleValue {
+      return { opacity: (this.displayGoTopButton) ? 100 : 0 }
     }
   },
   watch: {
@@ -524,5 +532,22 @@ export default defineComponent({
 
 #dumb-title-container {
   width: 70%;
+}
+
+#scroll-top-button {
+  position: fixed;
+  right: 10px;
+  bottom: 125px;
+  z-index: 1004;
+  transition: 0.2s all ease-out;
+}
+
+#burger-button {
+  position: absolute;
+  top: 5px;
+  right: 0px;
+  border: 1px grey solid;
+  border-radius: 5px;
+  padding: 15px;
 }
 </style>

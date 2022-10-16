@@ -110,10 +110,7 @@ router.afterEach((to) => {
       document.title = VueI18n.t(`page-title.${translationKey}`) + ' - Horus'
     }
   } else {
-    const playlistStore = usePlaylistsStore()
-    console.error(to.params.playlistId)
-
-    const playlistName = playlistStore.playlists[(to.params.playlistId as string)].name
+    const playlistName = usePlaylistsStore().playlists[(to.params.playlistId as string)].name
     document.title = `${playlistName} - Horus`
   }
 })

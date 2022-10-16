@@ -1,5 +1,5 @@
-import { PlaylistState, usePlaylistsStore } from '@/stores/playlists'
-import { Store } from 'pinia'
+import { SpotifyPlaylist } from '@/api/spotify/types/entities'
+import { usePlaylistsStore } from '@/stores/playlists'
 const LOGO: string = require('@/assets/fiverr/basic.svg')
 
 const makeAndDownloadImage = (playlistId: string) => {
@@ -25,8 +25,8 @@ const makeAndDownloadImage = (playlistId: string) => {
         imageLoadCounter++
 
         if (imageLoadCounter === images.length) {
-          const url = createCanvas(images, playlistsStore, playlistId)
-          downloadImage(url, playlistsStore, playlistId)
+          const url = createCanvas(images, playlistId)
+          downloadImage(url, playlistsStore.playlists[playlistId])
         }
       })
   )
@@ -34,7 +34,6 @@ const makeAndDownloadImage = (playlistId: string) => {
 
 const createCanvas = (
   images: HTMLImageElement[],
-  playlistsStore: Store<'playlists', PlaylistState, any>,
   playlistId: string
 ): string => {
   const canvas = document.createElement('canvas')
@@ -73,7 +72,7 @@ const createCanvas = (
   const logo = images[0]
   ctx.drawImage(logo, 0, 440, 200, 60)
 
-  addCanvasLegend(ctx, playlistsStore, playlistId)
+  addCanvasLegend(ctx, playlistId)
 
   return canvas.toDataURL('image/jpeg', 1)
 }
@@ -81,9 +80,9 @@ const createCanvas = (
 const addCanvasLegend = (
   ctx: CanvasRenderingContext2D,
   // Real type is Store<"playlists", PlaylistState, {}>
-  playlistsStore: any,
   playlistId: string
 ) => {
+  const playlistsStore = usePlaylistsStore()
   const playlist = playlistsStore.playlists[playlistId]
 
   // Logo already added
@@ -121,10 +120,8 @@ const getEmojiForRank = (rank: number): string => {
 
 const downloadImage = (
   url: string,
-  playlistsStore: Store<'playlists', PlaylistState, any>,
-  playlistId: string
+  playlist: SpotifyPlaylist
 ) => {
-  const playlist = playlistsStore.playlists[playlistId]
   const a = document.createElement('a')
   a.download = `${playlist.name}.jpg`
   a.rel = 'noopener'

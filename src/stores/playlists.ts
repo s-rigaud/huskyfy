@@ -2,10 +2,10 @@ import api from '@/api'
 import { SimplifiedSpotifyPlaylist, SpotifyArtist, SpotifyPlaylist, SpotifyTrack, SpotifyTrackMetadata } from '@/api/spotify/types/entities'
 import VueI18n from '@/i18n'
 import { Genre } from '@/model'
-import { UserState, useUserStore } from '@/stores/user'
+import { useUserStore } from '@/stores/user'
 import { capitalize, range } from '@/utils/functions'
 import { RemovableRef, useStorage } from '@vueuse/core'
-import { defineStore, Store } from 'pinia'
+import { defineStore } from 'pinia'
 
 const DEFAULT_MY_MUSIC_PLAYLIST: SimplifiedSpotifyPlaylist = {
   collaborative: false,
@@ -166,7 +166,7 @@ export const usePlaylistsStore = defineStore('playlists', {
       )
       offset += this.MAX_PLAYLISTS_LIMIT
       const playlists = response.data.items
-      playlists.unshift(this.getLikedSongPlaylist(userStore))
+      playlists.unshift(this.getLikedSongPlaylist(userStore.username))
 
       // Update existing playlist or create it
       for (const requestPlaylist of playlists) {
@@ -193,7 +193,7 @@ export const usePlaylistsStore = defineStore('playlists', {
         } else {
           this.playlists[requestPlaylist.id] = {
             ...requestPlaylist,
-            total: this.getTrackCount(requestPlaylist, userStore),
+            total: this.getTrackCount(requestPlaylist, userStore.username),
             tracks: []
           }
         }
@@ -213,20 +213,19 @@ export const usePlaylistsStore = defineStore('playlists', {
       }
     },
     // Special playlist from user liked song treated differently in Spotify API
-    getLikedSongPlaylist (userStore: Store<'user', UserState>): SimplifiedSpotifyPlaylist {
+    getLikedSongPlaylist (username: string): SimplifiedSpotifyPlaylist {
       const myMusicPlaylist = DEFAULT_MY_MUSIC_PLAYLIST
-      myMusicPlaylist.owner.display_name = userStore.username
+      myMusicPlaylist.owner.display_name = username
       return myMusicPlaylist
     },
-    getTrackCount (requestPlaylist: SimplifiedSpotifyPlaylist, userStore: Store<'user', UserState>): number {
-      // Spotify general Mix playlists have their total tracks set
-      // to 0 while there are currently tracks in the playlist
-      // We have to fix this
-      if (requestPlaylist.name.includes(userStore.username) && requestPlaylist.name.includes('+')) return 50
+    getTrackCount (requestPlaylist: SimplifiedSpotifyPlaylist, username: string): number {
+      // BUG: Spotify general Mix playlists between several peoples have their
+      // total tracks set to 0 while there are currently tracks in the playlist
+      if (requestPlaylist.name.includes(username) && requestPlaylist.name.includes('+')) return 50
       return requestPlaylist.tracks.total
     },
     // Download more tracks for a specific playlist from previous offset
-    async downloadPlaylistTracks (playlistId: string, limit: number) {
+    async downloadPlaylistTracks (playlistId: string, limit: number): Promise<SpotifyTrack[]> {
       // Init playlist info or return already saved tracks
       let offset = this.playlists[playlistId].offset
       if (!offset) {
@@ -321,12 +320,10 @@ export const usePlaylistsStore = defineStore('playlists', {
         )
       }
     },
-    // Update playlist privacy
     async updatePlaylistPrivacy (playlistId: string, isPublic: boolean) {
       await api.spotify.playlists.updatePlaylistPrivacy(playlistId, isPublic)
       this.playlists[playlistId].public = isPublic
     },
-    // Unfollow playlist
     async unfollowPlaylist (playlistId: string) {
       await api.spotify.playlists.unfollowPlaylist(playlistId)
       delete this.playlists[playlistId]
