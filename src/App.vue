@@ -2,10 +2,10 @@
   <!-- All the app encapsulated -->
   <v-app>
     <!-- Navbar -->
-    <NavbarComponent class='not-fixed' />
+    <NavbarComponent :style="isNavbarSticky" />
 
     <!-- Main view with routing -->
-    <v-main id="main" class="no-padding">
+    <v-main id="main" :style="isPaddingRequired">
       <v-container id="container" fluid>
         <router-view />
       </v-container>
@@ -19,12 +19,23 @@
 <script lang="ts">
 import FooterComponent from '@/components/FooterComponent.vue'
 import NavbarComponent from '@/components/NavbarHeader.vue'
-import { defineComponent } from 'vue'
+import { defineComponent, StyleValue } from 'vue'
+
 export default defineComponent({
   name: 'App',
   components: { NavbarComponent, FooterComponent },
-  created () {
+  created() {
     document.documentElement.lang = this.$i18n.locale
+  },
+  computed: {
+    isNavbarSticky(): StyleValue {
+      const isFixed = ((this.$route.name as string) === "Explore playlist") ? "fixed" : "inherit"
+      return { position: `${isFixed}` }
+    },
+    isPaddingRequired(): StyleValue {
+      const marginTop = ((this.$route.name as string) === "Explore playlist") ? 64 : 0
+      return { 'padding-top': `${marginTop}px` }
+    }
   }
 })
 </script>
@@ -59,13 +70,5 @@ export default defineComponent({
 #main {
   background-color: var(--primary-color) !important;
   color: var(--text-color) !important;
-}
-
-.no-padding {
-  padding: 0 !important;
-}
-
-.not-fixed {
-  position: inherit !important;
 }
 </style>

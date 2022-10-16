@@ -52,7 +52,7 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
-  scrollBehavior () {
+  scrollBehavior() {
     // always scroll to top
     return { top: 0, behavior: 'smooth' }
   }
@@ -67,8 +67,6 @@ router.beforeEach(async function (to, from, next) {
 
     // Intercept and autolog user when code is received
   } else if (to.name === 'LoginView' && to.query.code) {
-    const code = to.query.code
-
     if (to.query.state !== authStore.stateAuthorizationCode) {
       console.error(
         'Possibly a CSRF, state received from Spotify ' +
@@ -76,8 +74,7 @@ router.beforeEach(async function (to, from, next) {
       )
       next({ name: 'LoginView' })
     }
-
-    authStore.temporaryToken = code
+    authStore.temporaryToken = to.query.code
 
     // Retrieving access token
     await api.spotify.auth.requestFirstAccessToken()
