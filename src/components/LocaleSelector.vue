@@ -49,10 +49,10 @@ export default defineComponent({
     updateLocale (event: Event) {
       // Recursively retrieve list-item as the event can occur in child nodes
       let node = (event.target as HTMLElement)
-      while (!node!.getAttribute('item-value')) {
+      while (!node.getAttribute('item-value')) {
         node = (node.parentNode as HTMLElement)
       }
-      const locale: string = (node.getAttribute('item-value') as string)
+      const locale = (node.getAttribute('item-value') as string)
       this.$i18n.locale = locale
       this.userStore.locale = locale
     }

@@ -19,7 +19,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, PropType } from 'vue'
 
 import { SpotifyPlaylist } from '@/api/spotify/types/entities'
 import { usePlaylistsStore } from '@/stores/playlists'
@@ -28,7 +28,8 @@ export default defineComponent({
   name: 'LoadMoreTracksPopup',
   props: {
     playlist: {
-      type: Object as () => SpotifyPlaylist
+      type: Object as PropType<SpotifyPlaylist>,
+      required: true
     },
     trackRequestLimit: Number
   },
@@ -42,7 +43,7 @@ export default defineComponent({
   methods: {
     async loadAllTracks () {
       this.notLoaded = false
-      await this.downloadPlaylistTracks(this.playlist!.id, this.playlist!.total)
+      await this.downloadPlaylistTracks(this.playlist.id, this.playlist.total)
       this.isLoaded = true
       this.$emit('allTracksLoaded')
     }

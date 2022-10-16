@@ -7,7 +7,8 @@
       <p class="rainbow-text">{{ loadingPercentage }}% - {{ loadingText }}</p>
     </div>
 
-    <v-btn id="get-to-new-playlist" class="rainbow-v-btn" v-if="newPlaylistId != ''" @click="displayNewPlaylistDetails">
+    <v-btn id="get-to-new-playlist" class="rainbow-v-btn" v-if="newPlaylistId !== ''"
+      @click="displayNewPlaylistDetails">
       {{ $t("playlist.next") }}
     </v-btn>
 
@@ -26,7 +27,10 @@ import { usePlaylistsStore } from '@/stores/playlists'
 export default defineComponent({
   name: 'DuplicatorPopup',
   props: {
-    playlistId: String
+    playlistId: {
+      type: String,
+      required: true
+    }
   },
   setup () {
     const playlistsStore = usePlaylistsStore()
@@ -40,7 +44,7 @@ export default defineComponent({
       this.loadingText = this.$t('playlist.new.create')
       this.loadingPercentage = 1
       const newPlaylistId = await this.playlistsStore.createPlaylist(
-        this.playlistId!,
+        this.playlistId,
         this.playlistsStore.selectedGenres,
         false,
         false
@@ -50,7 +54,7 @@ export default defineComponent({
       this.loadingPercentage = 33
       await this.playlistsStore.updatePlaylistCover(
         newPlaylistId,
-        this.playlistsStore.playlists[this.playlistId!].images[0].url
+        this.playlistsStore.playlists[this.playlistId].images[0].url
       )
 
       this.loadingText = this.$t('playlist.new.tracks')

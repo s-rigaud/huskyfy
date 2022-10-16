@@ -2,6 +2,7 @@
   "compilerOptions": {
     "target": "esnext",
     "module": "esnext",
+    "allowJs": false,
     "strict": true,
     "jsx": "preserve",
     "moduleResolution": "node",
@@ -11,7 +12,7 @@
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "useDefineForClassFields": true,
-    "noImplicitAny": true, // should be true
+    "noImplicitAny": true,
     "noImplicitThis": true,
     "sourceMap": true,
     "resolveJsonModule": true,

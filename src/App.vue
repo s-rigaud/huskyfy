@@ -2,18 +2,10 @@
   <!-- All the app encapsulated -->
   <v-app>
     <!-- Navbar -->
-    <NavbarComponent v-bind:class="{
-      'not-fixed': true,
-      'fixed':
-        $router.currentRoute.value.name === 'Explore playlist',
-    }" />
+    <NavbarComponent class='not-fixed' />
 
     <!-- Main view with routing -->
-    <v-main id="main" v-bind:class="{
-      'no-padding': true,
-      'huge-padding-top':
-        $router.currentRoute.value.name === 'Explore playlist',
-    }">
+    <v-main id="main" class="no-padding">
       <v-container id="container" fluid>
         <router-view />
       </v-container>
@@ -26,7 +18,7 @@
 
 <script lang="ts">
 import FooterComponent from '@/components/FooterComponent.vue'
-import NavbarComponent from '@/components/navbar/NavbarHeader.vue'
+import NavbarComponent from '@/components/NavbarHeader.vue'
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'App',
@@ -73,15 +65,7 @@ export default defineComponent({
   padding: 0 !important;
 }
 
-.huge-padding-top {
-  padding: 124px 0 0 0 !important;
-}
-
 .not-fixed {
   position: inherit !important;
-}
-
-.fixed {
-  position: fixed !important;
 }
 </style>

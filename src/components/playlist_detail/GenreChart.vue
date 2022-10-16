@@ -5,13 +5,14 @@
 
 <script lang="ts">
 import { Genre } from '@/model'
-import { defineComponent } from 'vue'
+import { defineComponent, PropType } from 'vue'
 
 export default defineComponent({
   name: 'GenreChart',
   props: {
     genres: {
-      type: Array as () => Genre[]
+      type: Array as PropType<Genre[]>,
+      required: true
     }
   },
   watch: {
@@ -25,13 +26,13 @@ export default defineComponent({
     return {
       lastGenreSelected: false,
       lastClickedWasSelection: false,
-      series: this.genres!.map((genre) => genre.value),
+      series: this.genres.map((genre) => genre.value),
       chartOptions: {
         chart: {
           width: 380,
           type: 'donut'
         },
-        labels: this.genres!.map((genre) => genre.cap_name),
+        labels: this.genres.map((genre) => genre.cap_name),
         dataLabels: {
           enabled: false
         },

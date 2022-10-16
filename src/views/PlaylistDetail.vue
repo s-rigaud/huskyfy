@@ -3,6 +3,33 @@
   <div id="playlist" v-if="playlists[playlistId] && playlists[playlistId].total > 0">
     <div id="content" style="display: flex">
 
+      <v-card @click="openPlaylistOnSpotify" v-if="playlistsStore.selectedPlaylistId" style="width: 100%">
+        <v-card-header>
+          <v-card-header-text>
+            <div id="playlist-title">
+              <v-img id="playlist-image"
+                v-bind:src="playlistsStore.playlists[playlistsStore.selectedPlaylistId].images[0].url"
+                :lazy-src="loadingCover" alt="Cover image" cover rel="preconnect" width="60">
+              </v-img>
+              <div id="dumb-title-container">
+                <h3 style="margin-right: 5px" class="text-truncate rainbow-text">
+                  {{ playlistsStore.playlists[playlistsStore.selectedPlaylistId].name }}
+                </h3>
+                <p v-bind="visibilityTooltip"> {{ getTextFromVisibility }} </p>
+                <p style="opacity: 0.8"> {{ $t("playlist.created-by") }} {{ usernameToDisplay }} </p>
+                <p>
+                  <span class="rainbow-text">%% Indie score : %% </span>
+                  <span :style="colorForPercentage">{{ indiePercentage }} %</span>
+                </p>
+              </div>
+            </div>
+          </v-card-header-text>
+        </v-card-header>
+        <v-card-text>
+          <p id="description" class="text-truncate"> {{ formattedDescription }} </p>
+        </v-card-text>
+      </v-card>
+
       <v-btn @click.stop="drawer = !drawer">%% Open actions %%</v-btn>
       <ActionDrawer :open="drawer" @onClose="drawer = false" />
 
@@ -92,8 +119,6 @@
         </v-expansion-panel>
       </v-expansion-panels>
 
-      <!---->
-
       <!-- Track list -->
       <section id="right-part" style="width: 100%">
         <h2>{{ generalTitle }}</h2>
@@ -142,7 +167,7 @@ import { usePlaylistsStore } from '@/stores/playlists'
 import { useUserStore } from '@/stores/user'
 import { capitalize } from '@/utils/functions'
 import { storeToRefs } from 'pinia'
-import { defineComponent } from 'vue'
+import { defineComponent, StyleValue } from 'vue'
 
 // It is used for typing slot props
 interface SlotProps {
@@ -155,7 +180,7 @@ export default defineComponent({
   props: {
     playlistId: {
       type: String,
-      default: ''
+      required: true
     }
   },
   components: {
@@ -213,7 +238,9 @@ export default defineComponent({
       topGenres: ([] as Genre[]),
       indiePercentage: 0,
 
-      drawer: false
+      drawer: false,
+
+      visibilityTooltip: null
     }
   },
   methods: {
@@ -235,7 +262,7 @@ export default defineComponent({
       this.indiePercentage = this.getIndiePercentage()
     },
     getIndiePercentage (): number {
-      return this.playlistsStore.getIndiePercentage(this.playlistId!)
+      return this.playlistsStore.getIndiePercentage(this.playlistId)
     },
     applyFilters () {
       const playlistTracks = this.playlists[this.playlistId].tracks
@@ -341,14 +368,56 @@ export default defineComponent({
       return filters.map(f => capitalize(f)).join(separator) || this.$t('track.all-tracks')
     },
     getArtistName () {
-      return (artist: SpotifyArtist) => {
+      return (artist: SpotifyArtist): string => {
         return artist.name
       }
     },
     getArtistCover () {
-      return (artist: SpotifyArtist) => {
+      return (artist: SpotifyArtist): string => {
         return artist.images[0].url
       }
+    },
+    colorForPercentage (): StyleValue {
+      let color: string
+      if (this.indiePercentage < 10) color = '#FF0D0D'
+      else if (this.indiePercentage < 25) color = '#FF4E11'
+      else if (this.indiePercentage < 50) color = '#FF8E15'
+      else if (this.indiePercentage < 65) color = '#FAB733'
+      else if (this.indiePercentage < 80) color = '#ACB334'
+      else color = '#69B34C'
+      return { color }
+    },
+    usernameToDisplay (): string {
+      const playlistCreator =
+        this.playlistsStore.playlists[this.playlistsStore.selectedPlaylistId]
+          .owner.display_name
+
+      return this.currentUserUsername === playlistCreator
+        ? this.$t('me')
+        : playlistCreator
+    },
+    getEmojiFromVisibility (): string {
+      const playlist =
+        this.playlistsStore.playlists[this.playlistsStore.selectedPlaylistId]
+
+      if (playlist.collaborative) return this.$t('_emojis.collaborative')
+      if (playlist.public) return this.$t('_emojis.public')
+      return this.$t('_emojis.private')
+    },
+    getTextFromVisibility (): string {
+      const playlist =
+        this.playlistsStore.playlists[this.playlistsStore.selectedPlaylistId]
+
+      if (playlist.collaborative) return this.$t('playlist.collaborative') + ' ' + this.$t('_emojis.collaborative')
+      if (playlist.public) return this.$t('playlist.public') + ' ' + this.$t('_emojis.public')
+      return this.$t('playlist.private') + ' ' + this.$t('_emojis.private')
+    },
+    loadingCover (): string {
+      return require('@/assets/default_cover.jpg')
+    },
+    formattedDescription (): string {
+      const playlist = this.playlistsStore.playlists[this.playlistsStore.selectedPlaylistId]
+      return playlist.description.replace(/(<([^>]+)>)/ig, '')
     }
   },
   watch: {
@@ -437,5 +506,13 @@ export default defineComponent({
 #open-spotify .v-btn__content img {
   margin: 0px 3px;
   width: 20px;
+}
+
+#playlist-title {
+  display: flex;
+}
+
+#dumb-title-container {
+  width: 70%;
 }
 </style>

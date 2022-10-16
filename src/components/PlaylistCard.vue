@@ -1,7 +1,7 @@
 <template>
   <!-- Playlist representation as a card -->
   <v-card flat @click="displayDetails" class="playlist-card">
-    <v-img rel="preconnect" :src="images![0].url" alt="Playlist cover" :lazy-src="loadingCover" height="400px" cover>
+    <v-img rel="preconnect" :src="images[0].url" alt="Playlist cover" :lazy-src="loadingCover" height="400px" cover>
     </v-img>
 
     <v-card-title>
@@ -21,7 +21,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, PropType } from 'vue'
 
 import { SpotifyImage } from '@/api/spotify/types/entities'
 
@@ -31,7 +31,8 @@ export default defineComponent({
     id: String,
     name: String,
     images: {
-      type: Array as () => SpotifyImage[]
+      type: Array as PropType<SpotifyImage[]>,
+      required: true
     },
     owner: String,
     public: Boolean,

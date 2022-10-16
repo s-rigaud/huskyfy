@@ -2,7 +2,7 @@
   <!-- Card to represent a track, many of them are stacks -->
   <v-card flat border rounded="0" @click="openTrackOnSpotify" class="track-card" :style="trackAnimationDelay">
     <div class="card-content">
-      <p style="margin: 5px">{{ trackIndex! + 1 }}</p>
+      <p style="margin: 5px">{{ trackIndex + 1 }}</p>
       <!-- Cover -->
       <v-avatar class="ma-3" size="80" rounded="0" style="min-width: 80px">
         <v-img rel="preconnect" v-bind:src="image" :lazy-src="loadingCover" alt="Cover image"></v-img>
@@ -34,7 +34,7 @@
             </v-slide-group-item>
           </v-slide-group>-->
 
-        <v-card-text v-if="genres!.length > 0">
+        <v-card-text v-if="genres.length > 0">
           <v-chip v-for="(genre, index) in genres" :key="genre" :text="genre.toUpperCase()" label size="small"
             class="genre-chip" :style="genreAnimationDelay(index)">
           </v-chip>
@@ -47,7 +47,7 @@
 
 <script lang="ts">
 import { SpotifyArtist } from '@/api/spotify/types/entities'
-import { defineComponent, StyleValue } from 'vue'
+import { defineComponent, PropType, StyleValue } from 'vue'
 
 export default defineComponent({
   name: 'TrackCard',
@@ -56,19 +56,27 @@ export default defineComponent({
     name: String,
     image: String,
     artists: {
-      type: Array as () => SpotifyArtist[]
+      type: Array as PropType<SpotifyArtist[]>,
+      required: true
     },
     genres: {
-      type: Array as () => string[]
+      type: Array as PropType<string[]>,
+      required: true
     },
     isIndie: Boolean,
-    trackURI: String,
-    trackIndex: Number
+    trackURI: {
+      type: String,
+      required: true
+    },
+    trackIndex: {
+      type: Number,
+      required: true
+    }
   },
   computed: {
     addComma () {
       return (artistName: string): string => {
-        if (this.artists![this.artists!.length - 1].name === artistName) {
+        if (this.artists[this.artists.length - 1].name === artistName) {
           return artistName
         }
         return `${artistName},`
@@ -79,7 +87,8 @@ export default defineComponent({
     },
     // Delay animation so cards appear one after another
     trackAnimationDelay (): StyleValue {
-      const duration = (this.trackIndex! < 20) ? `${200 * this.trackIndex!}ms` : '0ms'
+      // const duration = (this.trackIndex < 20) ? `${200 * this.trackIndex}ms` : '0ms'
+      const duration = `${200 * this.trackIndex}ms`
       return { 'animation-delay': duration }
     },
     genreAnimationDelay () {
@@ -90,7 +99,7 @@ export default defineComponent({
   },
   methods: {
     openTrackOnSpotify () {
-      window.location.href = this.trackURI!
+      window.location.href = this.trackURI
     }
   }
 })

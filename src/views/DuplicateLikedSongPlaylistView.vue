@@ -58,10 +58,10 @@ export default defineComponent({
       // 2. Create new playlist
       this.loadingPercentage = 25
       const newPlaylistId = await this.playlistsStore.createPlaylist(
-                this.playlistId!,
-                this.playlistsStore.selectedGenres,
-                true,
-                false
+        this.playlistId,
+        this.playlistsStore.selectedGenres,
+        true,
+        false
       )
 
       // 3. Update playlist cover

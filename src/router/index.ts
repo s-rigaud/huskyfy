@@ -103,7 +103,7 @@ router.beforeEach(async function (to, from, next) {
 
     // Default routing
   } else {
-    usePlaylistsStore().$patch({ selectedPlaylistId: null, filteredTracks: [], selectedGenres: [] })
+    usePlaylistsStore().$patch({ selectedPlaylistId: '', filteredTracks: [], selectedGenres: [] })
     next()
   }
 })
@@ -118,7 +118,7 @@ router.afterEach((to) => {
     }
   } else {
     const playlistStore = usePlaylistsStore()
-    const playlistName = playlistStore.playlists[playlistStore.selectedPlaylistId!].name
+    const playlistName = playlistStore.playlists[playlistStore.selectedPlaylistId].name
     document.title = `${playlistName} - Horus`
   }
 })

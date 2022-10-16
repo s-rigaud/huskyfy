@@ -19,17 +19,10 @@
     <v-btn @click="clearLocalStorage" variant="outlined" v-if="isDevEnv">
       Clear local storage
     </v-btn>
-
-    <!-- Second part which extend on the playlist detail -->
-    <template v-slot:extension>
-      <NavbarPlaylistSelected />
-    </template>
   </v-app-bar>
 </template>
 
 <script lang="ts">
-import LocaleSelector from '@/components/LocaleSelector.vue'
-import NavbarPlaylistSelected from '@/components/navbar/NavbarPlaylistSelected.vue'
 import { useAuthStore } from '@/stores/auth'
 import { usePlaylistsStore } from '@/stores/playlists'
 import { useUserStore } from '@/stores/user'
@@ -37,7 +30,6 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'NavbarHeader',
-  components: { LocaleSelector, NavbarPlaylistSelected },
   setup () {
     const userStore = useUserStore()
     const authStore = useAuthStore()
@@ -68,7 +60,7 @@ export default defineComponent({
     logout () {
       this.userStore.reset()
       this.authStore.reset()
-      this.playlistsStore.selectedPlaylistId = null
+      this.playlistsStore.selectedPlaylistId = ''
       this.$router.push({ name: 'LoginView' })
     }
   }

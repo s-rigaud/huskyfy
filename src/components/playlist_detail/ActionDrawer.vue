@@ -3,9 +3,9 @@
     image="https://cdn.vuetifyjs.com/images/backgrounds/bg-2.jpg">
     <v-list>
       <v-list-subheader>%% update playlist %%</v-list-subheader>
-      <!-- 1. Update playlist privacy -->
-      <div v-if="userOwnsPlaylist && !playlistsStore.playlists[playlistsStore.selectedPlaylistId!].collaborative">
-        <v-list-item v-if="playlistsStore.playlists[playlistsStore.selectedPlaylistId!].public"
+      <!-- 1.1 Update playlist privacy -->
+      <div v-if="userOwnsPlaylist && !playlistsStore.playlists[playlistsStore.selectedPlaylistId].collaborative">
+        <v-list-item v-if="playlistsStore.playlists[playlistsStore.selectedPlaylistId].public"
           @click="setPlaylistPrivate">
           <v-list-item-title>{{ $t("playlist.set-private") }} {{ $t("_emojis.private") }}</v-list-item-title>
         </v-list-item>
@@ -14,9 +14,8 @@
         </v-list-item>
       </div>
 
-      <!-- 2. Duplicate playlist -->
-      <v-tooltip location="bottom"
-        v-if="playlistsStore.playlists[playlistsStore.selectedPlaylistId!].tracks.length > 1">
+      <!-- 1.2 Duplicate playlist -->
+      <v-tooltip location="bottom" v-if="playlistsStore.playlists[playlistsStore.selectedPlaylistId].tracks.length > 1">
         <template v-slot:activator="{ props: visibilityTooltip }">
           <v-list-item v-bind="visibilityTooltip" @click="createNewPlaylist">
             <v-list-item-title>{{ $t("playlist.duplicate.button") }}</v-list-item-title>
@@ -25,14 +24,7 @@
         <span> {{ $t("playlist.duplicate.tooltip") }} </span>
       </v-tooltip>
 
-      <!-- 3. Export Image -->
-      <v-list-item @click="exportPreview"
-        v-if="playlistsStore.playlists[playlistsStore.selectedPlaylistId!].tracks.length > 3">
-        <!-- (At least 4 tracks to download image) -->
-        <v-list-item-title>{{ $t("playlist.export-preview") }}</v-list-item-title>
-      </v-list-item>
-
-      <!-- 4. Playlist deletion -->
+      <!-- 1.3 Playlist deletion -->
       <v-dialog v-model="isDeleteModalOpen">
         <template v-slot:activator="{ props }">
           <v-list-item v-bind="props">
@@ -43,7 +35,7 @@
           <v-card-title class="text-h5 rainbow-text font-weight-bold">
             {{ $t('playlist.delete.delete') }}
             '<span class="font-italic">
-              {{ playlistsStore.playlists[playlistsStore.selectedPlaylistId!].name }}
+              {{ playlistsStore.playlists[playlistsStore.selectedPlaylistId].name }}
             </span>'
           </v-card-title>
           <v-card-text class="rainbow-text">
@@ -64,21 +56,33 @@
       </v-dialog>
 
       <v-list-subheader> %% réordonner %% </v-list-subheader>
+      <!-- 2.1 Sort by genre -->
       <v-list-item @click="sortPlaylistTracksByGenres">
         <v-list-item-title>%% sort genre %%</v-list-item-title>
       </v-list-item>
-      <v-list-item @click="sortPlaylistTracksByArtistPopularity">
+      <!-- 2.2 Sort tracks from the ones with the artist with the most tracks to the least  -->
+      <v-list-item @click="sortPlaylistTracksByArtistTrackInPlaylist">
         <v-list-item-title>%% sort artist pop %%</v-list-item-title>
       </v-list-item>
+      <!-- 2.1 Sort by artist name -->
       <v-list-item @click="sortPlaylistTracksByArtistName">
         <v-list-item-title>%% sort artist name %%</v-list-item-title>
+      </v-list-item>
+
+      <!-- (At least 4 tracks to download image) -->
+      <v-list-subheader v-if="playlistsStore.playlists[playlistsStore.selectedPlaylistId].tracks.length > 3">
+        %% export image %%
+      </v-list-subheader>
+      <!-- 3.1 Export Image -->
+      <v-list-item @click="exportArtistPreview">
+        <v-list-item-title>{{ $t("playlist.export-preview") }}</v-list-item-title>
       </v-list-item>
 
     </v-list>
   </v-navigation-drawer>
 
   <DuplicatorPopup v-if="startDuplication"
-    :playlistId="playlistsStore.playlists[playlistsStore.selectedPlaylistId!].id" />
+    :playlistId="playlistsStore.playlists[playlistsStore.selectedPlaylistId].id" />
 </template>
 <script lang="ts">
 import DuplicatorPopup from '@/components/playlist_detail/DuplicatorPopup.vue'
@@ -127,33 +131,33 @@ export default defineComponent({
 
     async setPlaylistPrivate () {
       await this.playlistsStore.updatePlaylistPrivacy(
-        this.playlistsStore.selectedPlaylistId!,
+        this.playlistsStore.selectedPlaylistId,
         false
       )
     },
     async setPlaylistPublic () {
       await this.playlistsStore.updatePlaylistPrivacy(
-        this.playlistsStore.selectedPlaylistId!,
+        this.playlistsStore.selectedPlaylistId,
         true
       )
     },
     async sortPlaylistTracksByGenres () {
       await this.playlistsStore.sortPlaylistTracksByGenres(
-        this.playlistsStore.selectedPlaylistId!
+        this.playlistsStore.selectedPlaylistId
       )
     },
-    async sortPlaylistTracksByArtistPopularity () {
-      await this.playlistsStore.sortPlaylistTracksByArtistPopularity(
-        this.playlistsStore.selectedPlaylistId!
+    async sortPlaylistTracksByArtistTrackInPlaylist () {
+      await this.playlistsStore.sortPlaylistTracksByArtistTrackInPlaylist(
+        this.playlistsStore.selectedPlaylistId
       )
     },
     async sortPlaylistTracksByArtistName () {
       await this.playlistsStore.sortPlaylistTracksByArtistName(
-        this.playlistsStore.selectedPlaylistId!
+        this.playlistsStore.selectedPlaylistId
       )
     },
-    async exportPreview () {
-      makeAndDownloadImage(this.playlistsStore.selectedPlaylistId!)
+    async exportArtistPreview () {
+      makeAndDownloadImage(this.playlistsStore.selectedPlaylistId)
     },
     createNewPlaylist () {
       this.startDuplication = true
@@ -161,9 +165,9 @@ export default defineComponent({
     async unfollowPlaylist () {
       this.isDeleteModalOpen = false
       this.waitingForDeletion = true
-      const toDeletePlaylistId = this.playlistsStore.selectedPlaylistId!
+      const toDeletePlaylistId = this.playlistsStore.selectedPlaylistId
       await this.playlistsStore.unfollowPlaylist(toDeletePlaylistId)
-      this.playlistsStore.selectedPlaylistId = null
+      this.playlistsStore.selectedPlaylistId = ''
       this.waitingForDeletion = false
       this.$router.push({ name: 'Explore' })
     }
@@ -172,7 +176,7 @@ export default defineComponent({
     userOwnsPlaylist (): boolean {
       return (
         this.currentUserUsername ===
-        this.playlistsStore.playlists[this.playlistsStore.selectedPlaylistId!]
+        this.playlistsStore.playlists[this.playlistsStore.selectedPlaylistId]
           .owner.display_name
       )
     }
