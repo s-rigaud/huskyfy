@@ -60,7 +60,6 @@ export default defineComponent({
     logout () {
       this.userStore.reset()
       this.authStore.reset()
-      this.playlistsStore.selectedPlaylistId = ''
       this.$router.push({ name: 'LoginView' })
     }
   }

@@ -95,15 +95,8 @@ router.beforeEach(async function (to, from, next) {
       connected: true
     })
     next({ name: 'Explore' })
-
-    // Selecting selected playlist
-  } else if (to.name === 'Explore playlist') {
-    usePlaylistsStore().selectedPlaylistId = (to.params.playlistId as string)
-    next()
-
-    // Default routing
   } else {
-    usePlaylistsStore().$patch({ selectedPlaylistId: '', filteredTracks: [], selectedGenres: [] })
+    usePlaylistsStore().$patch({ filteredTracks: [] })
     next()
   }
 })
@@ -118,7 +111,9 @@ router.afterEach((to) => {
     }
   } else {
     const playlistStore = usePlaylistsStore()
-    const playlistName = playlistStore.playlists[playlistStore.selectedPlaylistId].name
+    console.error(to.params.playlistId)
+
+    const playlistName = playlistStore.playlists[(to.params.playlistId as string)].name
     document.title = `${playlistName} - Horus`
   }
 })

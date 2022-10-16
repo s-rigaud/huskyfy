@@ -50,7 +50,7 @@ export default defineComponent({
   methods: {
     async createNewPlaylist () {
       const myMusicPlaylist = this.playlistsStore.playlists[this.playlistId]
-      // 1. Download My music tracks
+      // 1. Download My Music tracks
       this.loadingPercentage = 5
       await this.playlistsStore.refreshMyMusicTotalTrack()
       await this.playlistsStore.downloadPlaylistTracks(this.playlistId, myMusicPlaylist.total)
@@ -59,7 +59,7 @@ export default defineComponent({
       this.loadingPercentage = 25
       const newPlaylistId = await this.playlistsStore.createPlaylist(
         this.playlistId,
-        this.playlistsStore.selectedGenres,
+        [],
         true,
         false
       )

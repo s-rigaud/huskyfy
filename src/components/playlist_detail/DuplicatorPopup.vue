@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, PropType } from 'vue'
 
 import { usePlaylistsStore } from '@/stores/playlists'
 
@@ -29,6 +29,10 @@ export default defineComponent({
   props: {
     playlistId: {
       type: String,
+      required: true
+    },
+    selectedGenres: {
+      type: Array as PropType<string[]>,
       required: true
     }
   },
@@ -45,7 +49,7 @@ export default defineComponent({
       this.loadingPercentage = 1
       const newPlaylistId = await this.playlistsStore.createPlaylist(
         this.playlistId,
-        this.playlistsStore.selectedGenres,
+        this.selectedGenres,
         false,
         false
       )

@@ -88,7 +88,7 @@ export default defineComponent({
     // Delay animation so cards appear one after another
     trackAnimationDelay (): StyleValue {
       // const duration = (this.trackIndex < 20) ? `${200 * this.trackIndex}ms` : '0ms'
-      const duration = `${200 * this.trackIndex}ms`
+      const duration = `${100 * this.trackIndex}ms`
       return { 'animation-delay': duration }
     },
     genreAnimationDelay () {
