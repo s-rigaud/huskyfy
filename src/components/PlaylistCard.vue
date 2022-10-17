@@ -16,7 +16,7 @@
       <p v-else-if="public">{{ $t("playlist.public") }} {{ $t("_emojis.public") }}</p>
       <p v-else> {{ $t("playlist.private") }} {{ $t("_emojis.private") }}</p>
     </v-card-subtitle>
-    <v-img rel="preconnect" width="30" :src="horus" alt="Horus Image" class="horus-img"></v-img>
+    <v-img rel="preconnect" width="30" :src="huskyfyCircle" alt="Huskyfy Image" class="huskyfy-img"></v-img>
   </v-card>
 </template>
 
@@ -42,8 +42,8 @@ export default defineComponent({
     loadingCover (): string {
       return require('@/assets/default_cover.jpg')
     },
-    horus (): string {
-      return require('@/assets/oeil-dhorus.png')
+    huskyfyCircle (): string {
+      return require('@/assets/large-logo-circle.png')
     }
   },
   methods: {
@@ -115,8 +115,8 @@ export default defineComponent({
   opacity: 0.2;
 }
 
-/* Horus symbol on cards */
-.horus-img {
+/* Huskyfy circle symbol on cards */
+.huskyfy-img {
   position: relative;
   opacity: 0;
   bottom: 25px;
@@ -124,7 +124,7 @@ export default defineComponent({
   transition: 0.5s opacity linear;
 }
 
-.playlist-card:hover .horus-img {
+.playlist-card:hover .huskyfy-img {
   opacity: 1;
 }
 

@@ -3,7 +3,7 @@
   <div id="about-content">
     <div id="text">
       <div style="display: inline-flex">
-        <v-img width="40" :src="horus" alt="Horus Image"></v-img>
+        <v-img width="60" :src="huskyfyCircle" alt="Huskyfy Image"></v-img>
         <h1 class="rainbow-text">{{ $t("about.description.title") }}</h1>
       </div>
       <p> {{ $t("about.description.content.part1") }} </p>
@@ -36,7 +36,7 @@
           {{ $t("about.creator.content.part2") }}
         </a>
         {{ $t("about.creator.content.part3") }}
-        <a href="mailto:horusproject.bugtracker@gmail.com?subject=Horus%20improvement%20request">
+        <a href="mailto:horusproject.bugtracker@gmail.com?subject=Huskyfy%20improvement%20request">
           {{ $t("about.creator.content.part4") }} 📧
         </a>
       </p>
@@ -61,8 +61,8 @@ export default defineComponent({
     githubImg (): string {
       return require('@/assets/github.png')
     },
-    horus (): string {
-      return require('@/assets/oeil-dhorus.png')
+    huskyfyCircle (): string {
+      return require('@/assets/large-logo-circle.png')
     },
     myMusicImage (): string {
       return require('@/assets/my-music.jpeg')

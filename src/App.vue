@@ -24,16 +24,16 @@ import { defineComponent, StyleValue } from 'vue'
 export default defineComponent({
   name: 'App',
   components: { NavbarComponent, FooterComponent },
-  created() {
+  created () {
     document.documentElement.lang = this.$i18n.locale
   },
   computed: {
-    isNavbarSticky(): StyleValue {
-      const isFixed = ((this.$route.name as string) === "Explore playlist") ? "fixed" : "inherit"
+    isNavbarSticky (): StyleValue {
+      const isFixed = ((this.$route.name as string) === 'Explore playlist') ? 'fixed' : 'inherit'
       return { position: `${isFixed}` }
     },
-    isPaddingRequired(): StyleValue {
-      const marginTop = ((this.$route.name as string) === "Explore playlist") ? 64 : 0
+    isPaddingRequired (): StyleValue {
+      const marginTop = ((this.$route.name as string) === 'Explore playlist') ? 64 : 0
       return { 'padding-top': `${marginTop}px` }
     }
   }

@@ -16,7 +16,7 @@
 	"about": {
 		"connection": {
 			"title": "Connexion et accès au compte Spotify  ",
-			"content": "Horus utilise la méthode sécurisée OAuth2 avec PKCE fournie par Spotify qui permet d'accéder à vos données Spotify en toute sécurité. Aucune donnée n'est stockée sur un serveur, vous êtes donc totalement en sécurité lorsque vous naviguez ou quittez le site sans vous déconnecter."
+			"content": "Huskyfy utilise la méthode sécurisée OAuth2 avec PKCE fournie par Spotify qui permet d'accéder à vos données Spotify en toute sécurité. Aucune donnée n'est stockée sur un serveur, vous êtes donc totalement en sécurité lorsque vous naviguez ou quittez le site sans vous déconnecter."
 		},
 		"creator": {
 			"title": "Créateur  ",
@@ -28,22 +28,22 @@
 			}
 		},
 		"description": {
-			"title": "Horus playlist manager",
+			"title": "Huskyfy playlist manager",
 			"content": {
-				"part1": "Horus est un site web qui vise à fournir de nouvelles fonctionnalités en manipulant des playlists Spotify. Actuellement, il n'est pas possible de créer des sous-playlists sur Spotify en filtrant par genres musicaux ou par artistes. Maintenant c'est possible avec Horus !",
-				"part2": "De plus, les artistes indépendants ne sont pas vraiment mis en avant sur la plateforme, c'est pourquoi Horus essaie de les valoriser"
+				"part1": "Huskyfy est un site web qui vise à fournir de nouvelles fonctionnalités en manipulant des playlists Spotify. Actuellement, il n'est pas possible de créer des sous-playlists sur Spotify en filtrant par genres musicaux ou par artistes. Maintenant c'est possible avec Huskyfy !",
+				"part2": "De plus, les artistes indépendants ne sont pas vraiment mis en avant sur la plateforme, c'est pourquoi Huskyfy essaie de les valoriser"
 			}
 		},
 		"expose-liked-songs": {
 			"title": "Rendre publique sa playlist Titres Likées",
 			"content": {
-				"part1": "C'est malheureusement impossible de rendre publique sa playlist de titres likés sur Spotify. Heureusement si vous cherchez à le faire vous pouvez utiliser Horus. Il vous suffit de dupliquer votre playlist, de rendre la nouvelle playlist publique puis de partager la nouvelle playlist avec tous vos amis",
+				"part1": "C'est malheureusement impossible de rendre publique sa playlist de titres likés sur Spotify. Heureusement si vous cherchez à le faire vous pouvez utiliser Huskyfy. Il vous suffit de dupliquer votre playlist, de rendre la nouvelle playlist publique puis de partager la nouvelle playlist avec tous vos amis",
 				"part2": "Cliquez ici pour vous rendre directement sur votre playlist de titres likées "
 			}
 		},
 		"process": {
 			"title": "Comment ça marche ?",
-			"content": "Horus utilise l'API de Spotify pour rassembler les genres et les données sur les artistes, le genre et les titres de vos playlists. L'application essaie ensuite de fournir une interface agréable pour vous permettre de filtrer et de créer facilement de nouvelles playlists à partir de celles déjà existantes."
+			"content": "Huskyfy utilise l'API de Spotify pour rassembler les genres et les données sur les artistes, le genre et les titres de vos playlists. L'application essaie ensuite de fournir une interface agréable pour vous permettre de filtrer et de créer facilement de nouvelles playlists à partir de celles déjà existantes."
 		}
 	},
 	"footer": {
@@ -77,7 +77,7 @@
 		"duplicate": {
 			"button": "Dupliquer la playlist ",
 			"copy-of": "Copie de ",
-			"created-by": "créée par Horus 𓂀",
+			"created-by": "créée par Huskyfy 🐺",
 			"tooltip": "Créer une nouvelle playlist avec tous les titres actuellement sélectionnés"
 		},
 		"export-preview": "Sauvegarder un aperçu 🖼️",

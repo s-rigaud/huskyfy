@@ -6,7 +6,7 @@
     </div>
 
     <div id="upper-part">
-      <v-img rel="preconnect" width="400" :src="logo" alt="Horus Image"></v-img>
+      <v-img rel="preconnect" width="400" :src="logo" alt="Huskyfy"></v-img>
     </div>
 
     <div id="hero">

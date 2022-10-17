@@ -52,7 +52,7 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
-  scrollBehavior() {
+  scrollBehavior () {
     // always scroll to top
     return { top: 0, behavior: 'smooth' }
   }
@@ -102,13 +102,13 @@ router.afterEach((to) => {
   const translationKey = to.path.split('/')[1]
   if (translationKey !== 'playlist') {
     if (VueI18n.t(`page-title.${translationKey}`) === `page-title.${translationKey}`) {
-      document.title = '404 - Horus'
+      document.title = '404 - Huskyfy'
     } else {
-      document.title = VueI18n.t(`page-title.${translationKey}`) + ' - Horus'
+      document.title = VueI18n.t(`page-title.${translationKey}`) + ' - Huskyfy'
     }
   } else {
     const playlistName = usePlaylistsStore().playlists[(to.params.playlistId as string)].name
-    document.title = `${playlistName} - Horus`
+    document.title = `${playlistName} - Huskyfy`
   }
 })
 

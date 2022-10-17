@@ -1,9 +1,9 @@
 <template>
   <!-- Navbar -->
-  <v-app-bar flat style="font-family: 'Righteous'" v-if="$router.currentRoute.value.path !== '/login'">
+  <v-app-bar flat style="font-family: 'Righteous'; height: 64px" v-if="$router.currentRoute.value.path !== '/login'">
     <!-- Left part -->
     <router-link to="/explore">
-      <v-img id="logo" :src="logo" alt="Horus logo"></v-img>
+      <v-img id="logo" :src="logo" alt="Huskyfy logo"></v-img>
     </router-link>
     <v-spacer></v-spacer>
 
@@ -46,7 +46,7 @@ export default defineComponent({
         : DEFAULT_PICTURE
     },
     logo (): string {
-      return require('@/assets/fiverr/basic.svg')
+      return require('@/assets/Huskyfy.png')
     },
     isDevEnv (): boolean {
       return process.env.NODE_ENV !== 'production'
@@ -105,43 +105,6 @@ header .v-toolbar__content {
 
 .v-toolbar__extension {
   height: fit-content !important;
-}
-
-.navbar-link-text {
-  text-decoration: none;
-  font-size: larger;
-  height: 64px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 0 10px;
-}
-
-.navbar-link-text:hover {
-  outline: 1px solid rgb(107, 107, 107);
-}
-
-.router-link-active.navbar-link-text {
-  box-shadow: 0 -3px 0 0 var(--text-color) inset;
-}
-
-.router-link-active.navbar-link-text p {
-  /* Rainbow text when selected */
-  background: linear-gradient(180deg, var(--text-color) 20%, var(--link-color) 51%, var(--text-color) 86%);
-  background-size: 100%;
-  background-repeat: repeat;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.navbar-link-text p {
-  background: linear-gradient(180deg, white 100%, transparent);
-  background-size: 100%;
-  background-repeat: repeat;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
 }
 
 @media (max-width: 600px) {
