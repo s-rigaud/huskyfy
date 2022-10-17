@@ -1,12 +1,17 @@
 import { SpotifyPlaylist } from '@/api/spotify/types/entities'
 import { usePlaylistsStore } from '@/stores/playlists'
-const LOGO: string = require('@/assets/fiverr/basic.svg')
+const LOGO: string = require('@/assets/Huskyfy.png')
 
-const makeAndDownloadImage = (playlistId: string) => {
+const makeAndDownloadImage = (playlistId: string, size: string | number, showTitle: boolean, showStats: boolean) => {
   const playlistsStore = usePlaylistsStore()
+  const playlist = playlistsStore.playlists[playlistId]
 
-  const top16Artists = playlistsStore.getTopArtists(playlistId, 16)
-  const artistImageUrls = top16Artists.map(res => res.artist.images[0].url)
+  if (typeof size === "string") {
+    size = parseInt(size.charAt(0))
+  }
+
+  const topArtists = playlistsStore.getTopArtists(playlistId, size ** 2)
+  const artistImageUrls = topArtists.map(res => res.artist.images[0].url)
 
   // Logo should also be loaded asynchronously
   artistImageUrls.unshift(LOGO)
@@ -25,8 +30,8 @@ const makeAndDownloadImage = (playlistId: string) => {
         imageLoadCounter++
 
         if (imageLoadCounter === images.length) {
-          const url = createCanvas(images, playlistId)
-          downloadImage(url, playlistsStore.playlists[playlistId])
+          const url = createCanvas(images, playlist, (size as number), showTitle, showStats)
+          downloadImage(url, playlist.name)
         }
       })
   )
@@ -34,22 +39,27 @@ const makeAndDownloadImage = (playlistId: string) => {
 
 const createCanvas = (
   images: HTMLImageElement[],
-  playlistId: string
+  playlist: SpotifyPlaylist,
+  gridSize: number,
+  showTitle: boolean,
+  showStats: boolean
 ): string => {
+  // Canvas is as followed
+  //
+  // Title
+  // X X (X X)
+  // X X (X X)
+  // (X X X X)
+  // (X X X X)
+  // Stats
+
   const canvas = document.createElement('canvas')
   const ctx = canvas.getContext('2d')!
 
   canvas.width = 400
-  canvas.height = 500
+  canvas.height = 400 + ((showTitle) ? 100 : 0) + ((showStats) ? 100 : 0)
 
-  let gridSize: number
-  if (images.length < 9) {
-    gridSize = 2
-  } else if (images.length < 12) {
-    gridSize = 3
-  } else {
-    gridSize = 4
-  }
+  const heightStart = (showTitle) ? 100 : 0
 
   ctx.fillStyle = '#000'
   ctx.fillRect(0, 0, canvas.width, canvas.height)
@@ -61,52 +71,63 @@ const createCanvas = (
       ctx.drawImage(
         images[imageIndex],
         (i * canvas.width / gridSize) + gridSize,
-        (j * 400 / gridSize) + gridSize,
+        heightStart + (j * 400 / gridSize) + gridSize,
         (1 / gridSize * canvas.width) - 2 * gridSize,
         (1 / gridSize * 400) - 2 * gridSize
       )
     }
   }
 
-  // Adding logo to canvas
-  const logo = images[0]
-  ctx.drawImage(logo, 0, 440, 200, 60)
-
-  addCanvasLegend(ctx, playlistId)
+  if (showTitle) {
+    addCanvasTitle(ctx, playlist)
+  }
+  if (showStats) {
+    // Adding logo to canvas
+    const logo = images[0]
+    ctx.drawImage(logo, 0, 440, 200, 60)
+    addCanvasLegend(ctx, playlist)
+  }
 
   return canvas.toDataURL('image/jpeg', 1)
 }
 
+const addCanvasTitle = (
+  ctx: CanvasRenderingContext2D,
+  playlist: SpotifyPlaylist
+) => {
+  ctx.font = '18px Arial'
+  ctx.fillStyle = '#F39200'
+  ctx.fillText(playlist.name, 10, 10)
+}
+
 const addCanvasLegend = (
   ctx: CanvasRenderingContext2D,
-  // Real type is Store<"playlists", PlaylistState, {}>
-  playlistId: string
+  playlist: SpotifyPlaylist
 ) => {
   const playlistsStore = usePlaylistsStore()
-  const playlist = playlistsStore.playlists[playlistId]
 
   // Logo already added
 
   // Add playlist name
   ctx.font = '18px Arial'
   ctx.fillStyle = '#F39200'
-  ctx.fillText(playlist.name, 10, 415)
+  ctx.fillText(playlist.name, 10, 515)
 
   // Adding INDIE %
   ctx.font = '13px Arial'
-  const percentage = playlistsStore.getIndiePercentage(playlistId)
+  const percentage = playlistsStore.getIndiePercentage(playlist.id)
   ctx.fillText(
     `Indie score : ${percentage} %`,
-    150, 450
+    150, 550
   )
 
   // Adding TOP Genres
   ctx.font = '13px Arial'
-  const top5Genres = playlistsStore.getTopGenres(playlistId, 5)
+  const top5Genres = playlistsStore.getTopGenres(playlist.id, 5)
   for (let i = 0; i < top5Genres.length; i++) {
     ctx.fillText(
       `${getEmojiForRank(i)} ${top5Genres[i].value}% ${top5Genres[i].name}`,
-      270, 435 + 14 * i
+      270, 535 + 14 * i
     )
   }
 }
@@ -120,10 +141,10 @@ const getEmojiForRank = (rank: number): string => {
 
 const downloadImage = (
   url: string,
-  playlist: SpotifyPlaylist
+  playlistName: string
 ) => {
   const a = document.createElement('a')
-  a.download = `${playlist.name}.jpg`
+  a.download = `${playlistName}.jpg`
   a.rel = 'noopener'
   a.target = '_blank'
 

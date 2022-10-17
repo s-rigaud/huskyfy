@@ -135,5 +135,13 @@
             "part2": "This is a 404 page"
         },
         "button": "Try to head back from where you come"
+    },
+    "drawer": {
+        "update-playlist": "Update playlist",
+        "reorder-playlist": "Reorder the playlist according to the",
+        "reorder-by-genre": "Most present genres",
+        "reorder-by-artist-pop": "Most present artists",
+        "reorder-by-artist-name": "Names of the artists",
+        "export-image": "Export an image"
     }
 }

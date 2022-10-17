@@ -2,7 +2,7 @@
   <v-navigation-drawer v-model="isOpen" temporary location="right"
     image="https://cdn.vuetifyjs.com/images/backgrounds/bg-2.jpg">
     <v-list>
-      <v-list-subheader>%% update playlist %%</v-list-subheader>
+      <v-list-subheader>{{ $t('drawer.update-playlist') }}</v-list-subheader>
       <!-- 1.1 Update playlist privacy -->
       <div v-if="userOwnsPlaylist && !playlistsStore.playlists[playlistId].collaborative">
         <v-list-item v-if="playlistsStore.playlists[playlistId].public" @click="setPlaylistPrivate">
@@ -45,37 +45,42 @@
             <v-btn color="error" plain @click="isDeleteModalOpen = false">
               {{ $t('playlist.delete.disagree') }}
             </v-btn>
-            <v-btn v-if="!waitingForDeletion" plain color="success" @click="unfollowPlaylist">
+            <v-btn :loading="!waitingForDeletion" plain color="success" @click="unfollowPlaylist">
               {{ $t('playlist.delete.agree') }}
             </v-btn>
-
-            <v-progress-circular v-else indeterminate color="red"></v-progress-circular>
           </v-card-actions>
         </v-card>
       </v-dialog>
 
-      <v-list-subheader> %% réordonner %% </v-list-subheader>
+      <v-list-subheader> {{ $t('drawer.reorder-playlist') }} </v-list-subheader>
       <!-- 2.1 Sort by genre -->
       <v-list-item @click="sortPlaylistTracksByGenres">
-        <v-list-item-title>%% sort genre %%</v-list-item-title>
+        <v-list-item-title>{{ $t('drawer.reorder-by-genre') }}</v-list-item-title>
       </v-list-item>
       <!-- 2.2 Sort tracks from the ones with the artist with the most tracks to the least  -->
       <v-list-item @click="sortPlaylistTracksByArtistTrackInPlaylist">
-        <v-list-item-title>%% sort artist pop %%</v-list-item-title>
+        <v-list-item-title>{{ $t('drawer.reorder-by-artist-pop') }}</v-list-item-title>
       </v-list-item>
       <!-- 2.1 Sort by artist name -->
       <v-list-item @click="sortPlaylistTracksByArtistName">
-        <v-list-item-title>%% sort artist name %%</v-list-item-title>
+        <v-list-item-title>{{ $t('drawer.reorder-by-artist-name') }}</v-list-item-title>
       </v-list-item>
 
       <!-- (At least 4 tracks to download image) -->
-      <v-list-subheader v-if="playlistsStore.playlists[playlistId].tracks.length > 3">
-        %% export image %%
-      </v-list-subheader>
-      <!-- 3.1 Export Image -->
-      <v-list-item @click="exportArtistPreview">
-        <v-list-item-title>{{ $t("playlist.export-preview") }}</v-list-item-title>
-      </v-list-item>
+      <div v-if="playlistsStore.playlists[playlistId].tracks.length > 3">
+        <v-list-subheader>
+          {{ $t('drawer.export-image') }}
+        </v-list-subheader>
+        <!-- 3.1 Export Image -->
+        <v-slider :ticks="{0: '2x2', 1: '3x3', 2: '4x4'}" :max="2" step="1" show-ticks="always" tick-size="4"
+          color="var(--text-color)" prepend-icon="mdi-arrange-send-to-back">
+        </v-slider>
+        <v-switch v-model="generateImageDisplayTitle" color="var(--link-color)" :label="$t('title ?')">
+        </v-switch>
+        <v-switch v-model="generateImageDisplayStats" color="var(--link-color)" :label="$t('stats ?')">
+        </v-switch>
+        <v-btn @click="exportArtistPreview" class="rainbow-v-btn">{{ $t("playlist.export-preview") }}</v-btn>
+      </div>
 
     </v-list>
   </v-navigation-drawer>
@@ -99,65 +104,74 @@ export default defineComponent({
       required: true
     }
   },
-  setup () {
+  setup() {
     const playlistsStore = usePlaylistsStore()
     const currentUserUsername = useUserStore().username
 
     return {
       playlistsStore,
-      currentUserUsername
+      currentUserUsername,
     }
   },
   watch: {
     // Have to use this to synchronise props as I can't use props as VModel
-    open (newValue: boolean) {
+    open(newValue: boolean) {
       this.isOpen = newValue
     },
-    isOpen (newValue: boolean) {
+    isOpen(newValue: boolean) {
       if (newValue === false) {
         this.$emit('onClose')
       }
     }
   },
-  data () {
+  data() {
     return {
       isOpen: false,
       isDeleteModalOpen: false,
-      waitingForDeletion: false
+      waitingForDeletion: false,
+
+      generateImageSize: "2x2",
+      generateImageDisplayTitle: true,
+      generateImageDisplayStats: false
     }
   },
   methods: {
-    async setPlaylistPrivate () {
+    async setPlaylistPrivate() {
       await this.playlistsStore.updatePlaylistPrivacy(
         this.playlistId,
         false
       )
     },
-    async setPlaylistPublic () {
+    async setPlaylistPublic() {
       await this.playlistsStore.updatePlaylistPrivacy(
         this.playlistId,
         true
       )
     },
-    async sortPlaylistTracksByGenres () {
+    async sortPlaylistTracksByGenres() {
       await this.playlistsStore.sortPlaylistTracksByGenres(
         this.playlistId
       )
     },
-    async sortPlaylistTracksByArtistTrackInPlaylist () {
+    async sortPlaylistTracksByArtistTrackInPlaylist() {
       await this.playlistsStore.sortPlaylistTracksByArtistTrackInPlaylist(
         this.playlistId
       )
     },
-    async sortPlaylistTracksByArtistName () {
+    async sortPlaylistTracksByArtistName() {
       await this.playlistsStore.sortPlaylistTracksByArtistName(
         this.playlistId
       )
     },
-    async exportArtistPreview () {
-      makeAndDownloadImage(this.playlistId)
+    async exportArtistPreview() {
+      makeAndDownloadImage(
+        this.playlistId,
+        this.generateImageSize,
+        this.generateImageDisplayTitle,
+        this.generateImageDisplayStats
+      )
     },
-    async unfollowPlaylist () {
+    async unfollowPlaylist() {
       this.isDeleteModalOpen = false
       this.waitingForDeletion = true
       const toDeletePlaylistId = this.playlistId
@@ -167,7 +181,7 @@ export default defineComponent({
     }
   },
   computed: {
-    userOwnsPlaylist (): boolean {
+    userOwnsPlaylist(): boolean {
       return (
         this.currentUserUsername ===
         this.playlistsStore.playlists[this.playlistId]

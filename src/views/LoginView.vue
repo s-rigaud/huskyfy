@@ -6,7 +6,7 @@
     </div>
 
     <div id="upper-part">
-      <v-img rel="preconnect" width="400" :src="logo" alt="Huskyfy"></v-img>
+      <v-img rel="preconnect" width="400" :src="textLogo" alt="Huskyfy"></v-img>
     </div>
 
     <div id="hero">
@@ -46,8 +46,8 @@ export default defineComponent({
   },
   components: { LocaleSelector },
   computed: {
-    logo (): string {
-      return require('@/assets/fiverr/basic.svg')
+    textLogo (): string {
+      return require('@/assets/Huskyfy.png')
     },
     boneImg (): string {
       return require('@/assets/small-bone.png')
