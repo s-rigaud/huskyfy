@@ -79,7 +79,6 @@
         },
         "export-preview": "Export playlist preview 🖼️",
         "fully-loaded": "All artists, tracks and genres have been retrieved",
-        "header": "Start browsing your playlists to gather some useful data on them, split them by genre and so much more",
         "load-more-button": "Load all tracks",
         "load-more-playlists": "Load more playlists",
         "load-more-warning": "Your playlist has more than {limit} tracks, do you want to load all of them ?",

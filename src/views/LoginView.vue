@@ -1,12 +1,8 @@
 <template>
   <!-- Login view with a large background and a simple button -->
   <div id="login">
-    <div id="locale-selector">
-      <LocaleSelector />
-    </div>
-
     <div id="upper-part">
-      <v-img rel="preconnect" width="400" :src="textLogo" alt="Huskyfy"></v-img>
+      <v-img id="logo" rel="preconnect" :src="textLogo" alt="Huskyfy"></v-img>
     </div>
 
     <div id="hero">
@@ -30,6 +26,10 @@
       </router-link>
     </div>
   </div>
+
+  <div id="locale-selector">
+    <LocaleSelector />
+  </div>
 </template>
 
 <script lang="ts">
@@ -40,21 +40,21 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'LoginView',
-  setup () {
+  setup() {
     const userStore = useUserStore()
     return { userStore }
   },
   components: { LocaleSelector },
   computed: {
-    textLogo (): string {
+    textLogo(): string {
       return require('@/assets/Huskyfy.png')
     },
-    boneImg (): string {
+    boneImg(): string {
       return require('@/assets/small-bone.png')
     }
   },
   methods: {
-    async accessOAuthPage () {
+    async accessOAuthPage() {
       window.location.href = await api.spotify.auth.getOAuthUrl()
     }
   }
@@ -85,6 +85,12 @@ export default defineComponent({
   flex-wrap: wrap;
   justify-content: flex-end;
   align-items: center;
+  width: min(100%, 400px);
+  margin-top: 15px;
+}
+
+#upper-part>#logo {
+  height: max(15%, 90px);
 }
 
 #lower-part {
@@ -101,7 +107,7 @@ export default defineComponent({
 
 #locale-selector {
   position: absolute;
-  top: 0%;
+  bottom: 0%;
   right: 0%;
   font-size: large;
 }
@@ -137,12 +143,11 @@ a {
 }
 
 #hero {
-  background-color: rgba(0, 0, 0, 0.5);
-  width: 80%;
-  height: 70%;
+  width: 95%;
   margin-top: 40px;
   border-radius: 15px;
   padding: 15px;
+  background-color: rgba(0, 0, 0, 0.7);
 }
 
 #functionalities {
@@ -153,26 +158,14 @@ a {
   display: inline-flex;
   align-items: flex-start;
   padding: 10px 0px;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
 }
 
 .functionality>h4 {
   margin-left: 5px;
 }
 
-@media (max-width: 992px) {
-  #locale-selector {
-    top: auto;
-    bottom: 0;
-  }
-
-  #title {
-    font-size: x-large;
-  }
-
-  #hero {
-    width: 95%;
-    background-color: rgba(0, 0, 0, 0.7);
-  }
-
+#title {
+  font-size: x-large;
 }
 </style>

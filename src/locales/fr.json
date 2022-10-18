@@ -82,7 +82,6 @@
 		},
 		"export-preview": "Sauvegarder un aperçu 🖼️",
 		"fully-loaded": "Tous les artistes, les titres et les genres ont pu être récupérés",
-		"header": "Parcourez votre bibliothèque Spotify pour créer de nouvelles playlists",
 		"load-more-button": "Charger tous les titres",
 		"load-more-playlists": "Charger plus de playlists",
 		"load-more-warning": "Votre playlist contient plus de {limit} titres, voulez-vous tous les charger ?",

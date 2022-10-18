@@ -73,7 +73,7 @@
         </v-list-subheader>
         <!-- 3.1 Export Image -->
         <v-slider :ticks="{0: '2x2', 1: '3x3', 2: '4x4'}" :max="2" step="1" show-ticks="always" tick-size="4"
-          color="var(--text-color)" prepend-icon="mdi-arrange-send-to-back">
+          color="var(--text-color)" prepend-icon="mdi-arrange-send-to-back" @touchstart.stop>
         </v-slider>
         <v-switch v-model="generateImageDisplayTitle" color="var(--link-color)" :label="$t('title ?')">
         </v-switch>

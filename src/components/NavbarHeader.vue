@@ -2,7 +2,7 @@
   <!-- Navbar -->
   <v-app-bar flat style="font-family: 'Righteous'; height: 64px" v-if="$router.currentRoute.value.path !== '/login'">
     <!-- Left part -->
-    <router-link to="/explore">
+    <router-link to="/explore" style="width: 100%">
       <v-img id="logo" :src="logo" alt="Huskyfy logo"></v-img>
     </router-link>
     <v-spacer></v-spacer>
@@ -30,7 +30,7 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'NavbarHeader',
-  setup () {
+  setup() {
     const userStore = useUserStore()
     const authStore = useAuthStore()
     const playlistsStore = usePlaylistsStore()
@@ -38,26 +38,26 @@ export default defineComponent({
     return { authStore, playlistsStore, userStore }
   },
   computed: {
-    profilePictureOrDefault (): string {
+    profilePictureOrDefault(): string {
       // eslint-disable-next-line
       const DEFAULT_PICTURE = require("@/assets/no-user.png");
       return this.userStore.profilePicture !== ''
         ? this.userStore.profilePicture
         : DEFAULT_PICTURE
     },
-    logo (): string {
+    logo(): string {
       return require('@/assets/Huskyfy.png')
     },
-    isDevEnv (): boolean {
+    isDevEnv(): boolean {
       return process.env.NODE_ENV !== 'production'
     }
   },
   methods: {
-    clearLocalStorage () {
+    clearLocalStorage() {
       localStorage.clear()
       this.logout()
     },
-    logout () {
+    logout() {
       this.userStore.reset()
       this.authStore.reset()
       this.$router.push({ name: 'LoginView' })
@@ -83,7 +83,7 @@ header .v-toolbar__content {
 }
 
 #logo {
-  width: 250px;
+  width: max(15%, 200px);
 }
 
 #user-info {
@@ -105,16 +105,5 @@ header .v-toolbar__content {
 
 .v-toolbar__extension {
   height: fit-content !important;
-}
-
-@media (max-width: 600px) {
-  #logo {
-    height: 50px;
-    width: 100px;
-  }
-
-  header {
-    padding: 2px !important;
-  }
 }
 </style>

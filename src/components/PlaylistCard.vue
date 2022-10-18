@@ -5,12 +5,9 @@
     </v-img>
 
     <v-card-title>
-      <p class="text-truncate rainbow-text"> {{ name }} </p>
+      <p class="text-truncate rainbow-text card-title"> {{ name }} </p>
     </v-card-title>
 
-    <v-card-subtitle class="pad-title-0">
-      <p>{{ $t("playlist.created-by") }} {{ owner }}</p>
-    </v-card-subtitle>
     <v-card-subtitle class="pad-title-0 visibility-status">
       <p v-if="collaborative">{{ $t("playlist.collaborative") }} {{ $t("_emojis.collaborative") }}</p>
       <p v-else-if="public">{{ $t("playlist.public") }} {{ $t("_emojis.public") }}</p>
@@ -39,15 +36,15 @@ export default defineComponent({
     collaborative: Boolean
   },
   computed: {
-    loadingCover (): string {
+    loadingCover(): string {
       return require('@/assets/default_cover.jpg')
     },
-    huskyfyCircle (): string {
+    huskyfyCircle(): string {
       return require('@/assets/large-logo-circle.png')
     }
   },
   methods: {
-    displayDetails () {
+    displayDetails() {
       this.$router.push({
         name: 'Explore playlist',
         params: { playlistId: this.id }
@@ -73,10 +70,10 @@ export default defineComponent({
 }
 
 .playlist-card {
-  width: 250px;
-  height: 250px;
+  width: max(150px, 45%);
+  height: 150px;
   background-color: initial;
-  margin: 0px 3px 85px 3px;
+  margin: 0px 3px 65px 3px;
   background-color: initial;
   padding: 10px;
   display: flex;
@@ -85,6 +82,10 @@ export default defineComponent({
   animation: playlist-append 500ms linear;
   animation-fill-mode: forwards;
   opacity: 0
+}
+
+.playlist-card .card-title {
+  font-size: large;
 }
 
 .playlist-card .v-img .v-img__img--cover {
@@ -97,7 +98,7 @@ export default defineComponent({
 }
 
 .playlist-card .v-card__overlay {
-  height: 322px;
+  height: 200px;
 }
 
 .playlist-card .v-card-title {
@@ -136,16 +137,5 @@ export default defineComponent({
   padding: 0;
   letter-spacing: 0;
   white-space: nowrap;
-}
-
-@media (max-width: 992px) {
-  .playlist-card {
-    width: 150px;
-    height: 150px;
-  }
-
-  .playlist-card .v-card__overlay {
-    height: 222px;
-  }
 }
 </style>

@@ -24,15 +24,15 @@ import { defineComponent, StyleValue } from 'vue'
 export default defineComponent({
   name: 'App',
   components: { NavbarComponent, FooterComponent },
-  created () {
+  created() {
     document.documentElement.lang = this.$i18n.locale
   },
   computed: {
-    isNavbarSticky (): StyleValue {
+    isNavbarSticky(): StyleValue {
       const isFixed = ((this.$route.name as string) === 'Explore playlist') ? 'fixed' : 'inherit'
       return { position: `${isFixed}` }
     },
-    isPaddingRequired (): StyleValue {
+    isPaddingRequired(): StyleValue {
       const marginTop = ((this.$route.name as string) === 'Explore playlist') ? 64 : 0
       return { 'padding-top': `${marginTop}px` }
     }
@@ -57,7 +57,7 @@ export default defineComponent({
   background-color: var(--secondary-color) !important;
   color: var(--text-color) !important;
   font-family: "Oswald" !important;
-  min-height: 100%;
+  height: 100%;
 
   display: flex;
   flex-direction: column;
