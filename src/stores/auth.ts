@@ -17,8 +17,8 @@ export const useAuthStore = defineStore('auth', {
     temporaryToken: useStorage('temporaryToken', ''),
     accessToken: useStorage('accessToken', ''),
     refreshToken: useStorage('refreshToken', ''),
-    codeVerifier: useStorage('authState', ''),
-    secretCodeChallenge: useStorage('authState', '')
+    codeVerifier: useStorage('codeVerifier', ''),
+    secretCodeChallenge: useStorage('secretCodeChallenge', '')
   } as AuthState),
   actions: {
     reset () {

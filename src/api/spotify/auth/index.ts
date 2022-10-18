@@ -1,11 +1,11 @@
 import { useAuthStore } from '@/stores/auth'
 import axios, { AxiosResponse } from 'axios'
-import { Base64 } from 'js-base64'
 import { SpotifyAuthResponse } from '../types/responses'
 
 const CLIENT_ID: string = process.env.VUE_APP_SPOTIFY_CLIENT_ID
 const CLIENT_SECRET: string = process.env.VUE_APP_SPOTIFY_CLIENT_SECRET
-const ENCODED_CREDENTIALS = Base64.encode(`${CLIENT_ID}:${CLIENT_SECRET}`)
+
+const ENCODED_CREDENTIALS = btoa(`${CLIENT_ID}:${CLIENT_SECRET}`)
 const REDIRECT_URL = `${process.env.VUE_APP_BASE_SERVER_URL}/login`
 const SCOPES = [
   // Read all tracks and playlists
@@ -47,12 +47,21 @@ const base64urlencode = (a: ArrayBuffer): string => {
 export default {
   // Return Spotify OAuth url
   // On this url, the user can accept terms and scope and a temporary token is returned
-  async getOAuthUrl (): Promise<string> {
+  async getOAuthUrl(): Promise<string> {
     const authStore = useAuthStore()
 
     const STATE_AUTHORIZATION_CODE = generateRandomString(15)
-    const CODE_VERIFIER = generateRandomString(128)
+
+    // 2bscelmwgoqewakfzyua7t4blfcsubfa27ej655g6w96dt8hmxpagbtw24dhiyj31if93fxowut2lxfjz8r4tmhexbf559pbjrugktzlxaggemosne1qly4okmys9r1t
+    // const CODE_VERIFIER = generateRandomString(128)
+
+    const CODE_VERIFIER = "2bscelmwgoqewakfzyua7t4blfcsubfa27ej655g6w96dt8hmxpagbtw24dhiyj31if93fxowut2lxfjz8r4tmhexbf559pbjrugktzlxaggemosne1qly4okmys9r1t"
+    alert("verifier " + CODE_VERIFIER);
+
+
+    // hZ48M0x2iw3b_ovtGyp9jdTeNNVzX-CrBQM5s0yGPF0
     const SECRET_CODE_CHALLENGE = base64urlencode(await sha256(CODE_VERIFIER))
+    alert("code challenge " + SECRET_CODE_CHALLENGE);
 
     authStore.$patch({
       stateAuthorizationCode: STATE_AUTHORIZATION_CODE,
@@ -75,7 +84,7 @@ export default {
   },
 
   // Request first access token from the previous temporary token received
-  async requestFirstAccessToken () {
+  async requestFirstAccessToken() {
     const authStore = useAuthStore()
     const data = [
       'grant_type=authorization_code',
@@ -104,7 +113,7 @@ export default {
   },
 
   // Refresh new access token
-  async requestNewAccessToken (): Promise<string | void> {
+  async requestNewAccessToken(): Promise<string | void> {
     console.log('trying to refresh token before retrying call')
 
     // The following should work but since I implemented PCKE, I'm not able to use the refresh token normally
