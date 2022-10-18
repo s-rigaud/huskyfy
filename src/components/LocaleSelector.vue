@@ -10,9 +10,8 @@
       <v-list-item class="locale-item" v-for="(locale, index) in sortedLocales" :key="index" :item-value="locale"
         @click="updateLocale">
         <v-list-item-avatar size="small">
-          <v-img :src="getIconForLocale(locale)" :alt="locale"></v-img>
+          <v-img width="50" :src="getIconForLocale(locale)" :alt="locale"></v-img>
         </v-list-item-avatar>
-        <v-list-item-title class="locale-text">{{ locale }}</v-list-item-title>
       </v-list-item>
     </v-list>
   </v-menu>
@@ -61,7 +60,6 @@ export default defineComponent({
 </script>
 <style scoped>
 #locale-list {
-  width: 80px;
   background-color: var(--text-color);
 }
 
@@ -80,6 +78,7 @@ export default defineComponent({
 }
 
 .select-btn {
-  padding: 15px;
+  padding: 6px;
+  height: 44px;
 }
 </style>

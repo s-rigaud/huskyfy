@@ -1,7 +1,7 @@
 <template>
   <!-- Playlist representation as a card -->
   <v-card flat @click="displayDetails" class="playlist-card">
-    <v-img rel="preconnect" :src="images[0].url" alt="Playlist cover" :lazy-src="loadingCover" height="400px" cover>
+    <v-img rel="preconnect" :src="images[0].url" alt="Playlist cover" :lazy-src="loadingCover" cover>
     </v-img>
 
     <v-card-title>
@@ -71,9 +71,9 @@ export default defineComponent({
 
 .playlist-card {
   width: max(150px, 45%);
-  height: 150px;
+  height: 210px;
   background-color: initial;
-  margin: 0px 3px 65px 3px;
+  margin: 0px 3px 15px 3px;
   background-color: initial;
   padding: 10px;
   display: flex;
@@ -88,6 +88,10 @@ export default defineComponent({
   font-size: large;
 }
 
+.playlist-card .v-img {
+  z-index: 1;
+}
+
 .playlist-card .v-img .v-img__img--cover {
   transition: filter 0.2s ease-in-out;
   filter: brightness(1);
@@ -98,7 +102,7 @@ export default defineComponent({
 }
 
 .playlist-card .v-card__overlay {
-  height: 200px;
+  height: 220px;
 }
 
 .playlist-card .v-card-title {

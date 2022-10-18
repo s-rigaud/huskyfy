@@ -35,8 +35,14 @@
           </v-slide-group>-->
 
         <v-card-text v-if="genres.length > 0">
-          <v-chip v-for="(genre, index) in genres" :key="genre" :text="genre.toUpperCase()" label size="small"
-            class="genre-chip" :style="genreAnimationDelay(index)">
+          <v-chip v-for="(genre, index) in genres.slice(0,3)" :key="genre" :text="genre.toUpperCase()" label
+            size="small" class="genre-chip" :style="genreAnimationDelay(index)">
+          </v-chip>
+          <v-chip v-if="genres.length > 3" label size="small" class="genre-chip" :style="genreAnimationDelay(3)">
+            ...
+            <v-tooltip activator="parent" location="bottom">
+              {{ genres.slice(3).map(g => g.toUpperCase()).join(', ') }}
+            </v-tooltip>
           </v-chip>
         </v-card-text>
         <v-card-subtitle v-else> {{ $t("track.no-genre") }}</v-card-subtitle>

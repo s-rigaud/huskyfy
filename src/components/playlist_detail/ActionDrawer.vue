@@ -118,7 +118,7 @@ export default defineComponent({
       required: true
     }
   },
-  setup() {
+  setup () {
     const playlistsStore = usePlaylistsStore()
     const currentUserUsername = useUserStore().username
 
@@ -129,16 +129,16 @@ export default defineComponent({
   },
   watch: {
     // Have to use this to synchronise props as I can't use props as VModel
-    open(newValue: boolean) {
+    open (newValue: boolean) {
       this.isOpen = newValue
     },
-    isOpen(newValue: boolean) {
+    isOpen (newValue: boolean) {
       if (newValue === false) {
         this.$emit('onClose')
       }
     }
   },
-  data() {
+  data () {
     return {
       isOpen: false,
       isDeleteModalOpen: false,
@@ -150,34 +150,34 @@ export default defineComponent({
     }
   },
   methods: {
-    async setPlaylistPrivate() {
+    async setPlaylistPrivate () {
       await this.playlistsStore.updatePlaylistPrivacy(
         this.playlistId,
         false
       )
     },
-    async setPlaylistPublic() {
+    async setPlaylistPublic () {
       await this.playlistsStore.updatePlaylistPrivacy(
         this.playlistId,
         true
       )
     },
-    async sortPlaylistTracksByGenres() {
+    async sortPlaylistTracksByGenres () {
       await this.playlistsStore.sortPlaylistTracksByGenres(
         this.playlistId
       )
     },
-    async sortPlaylistTracksByArtistTrackInPlaylist() {
+    async sortPlaylistTracksByArtistTrackInPlaylist () {
       await this.playlistsStore.sortPlaylistTracksByArtistTrackInPlaylist(
         this.playlistId
       )
     },
-    async sortPlaylistTracksByArtistName() {
+    async sortPlaylistTracksByArtistName () {
       await this.playlistsStore.sortPlaylistTracksByArtistName(
         this.playlistId
       )
     },
-    async exportArtistPreview() {
+    async exportArtistPreview () {
       makeAndDownloadImage(
         this.playlistId,
         ['2x2', '3x3', '4x4'][this.generateImageSize],
@@ -185,7 +185,7 @@ export default defineComponent({
         this.generateImageDisplayStats
       )
     },
-    async unfollowPlaylist() {
+    async unfollowPlaylist () {
       this.isDeleteModalOpen = false
       this.waitingForDeletion = true
       const toDeletePlaylistId = this.playlistId
@@ -195,7 +195,7 @@ export default defineComponent({
     }
   },
   computed: {
-    userOwnsPlaylist(): boolean {
+    userOwnsPlaylist (): boolean {
       return (
         this.currentUserUsername ===
         this.playlistsStore.playlists[this.playlistId]

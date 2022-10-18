@@ -110,6 +110,7 @@ export default defineComponent({
   bottom: 0%;
   right: 0%;
   font-size: large;
+  z-index: 1
 }
 
 #link-about {
@@ -118,7 +119,6 @@ export default defineComponent({
 
 #connect-button {
   font-size: larger;
-  padding: 20px;
   text-transform: none;
   letter-spacing: 0;
   color: black !important;
@@ -144,10 +144,14 @@ a {
 
 #hero {
   width: 95%;
-  margin-top: 40px;
+  margin-top: 20px;
   border-radius: 15px;
-  padding: 15px;
+  padding: 10px;
   background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 60%;
 }
 
 #functionalities {
@@ -167,5 +171,6 @@ a {
 
 #title {
   font-size: x-large;
+  margin: 0px;
 }
 </style>

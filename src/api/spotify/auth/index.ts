@@ -47,21 +47,12 @@ const base64urlencode = (a: ArrayBuffer): string => {
 export default {
   // Return Spotify OAuth url
   // On this url, the user can accept terms and scope and a temporary token is returned
-  async getOAuthUrl(): Promise<string> {
+  async getOAuthUrl (): Promise<string> {
     const authStore = useAuthStore()
 
     const STATE_AUTHORIZATION_CODE = generateRandomString(15)
-
-    // 2bscelmwgoqewakfzyua7t4blfcsubfa27ej655g6w96dt8hmxpagbtw24dhiyj31if93fxowut2lxfjz8r4tmhexbf559pbjrugktzlxaggemosne1qly4okmys9r1t
-    // const CODE_VERIFIER = generateRandomString(128)
-
-    const CODE_VERIFIER = "2bscelmwgoqewakfzyua7t4blfcsubfa27ej655g6w96dt8hmxpagbtw24dhiyj31if93fxowut2lxfjz8r4tmhexbf559pbjrugktzlxaggemosne1qly4okmys9r1t"
-    alert("verifier " + CODE_VERIFIER);
-
-
-    // hZ48M0x2iw3b_ovtGyp9jdTeNNVzX-CrBQM5s0yGPF0
+    const CODE_VERIFIER = '2bscelmwgoqewakfzyua7t4blfcsubfa27ej655g6w96dt8hmxpagbtw24dhiyj31if93fxowut2lxfjz8r4tmhexbf559pbjrugktzlxaggemosne1qly4okmys9r1t'
     const SECRET_CODE_CHALLENGE = base64urlencode(await sha256(CODE_VERIFIER))
-    alert("code challenge " + SECRET_CODE_CHALLENGE);
 
     authStore.$patch({
       stateAuthorizationCode: STATE_AUTHORIZATION_CODE,
@@ -84,7 +75,7 @@ export default {
   },
 
   // Request first access token from the previous temporary token received
-  async requestFirstAccessToken() {
+  async requestFirstAccessToken () {
     const authStore = useAuthStore()
     const data = [
       'grant_type=authorization_code',
@@ -113,28 +104,25 @@ export default {
   },
 
   // Refresh new access token
-  async requestNewAccessToken(): Promise<string | void> {
+  async requestNewAccessToken (): Promise<string | void> {
     console.log('trying to refresh token before retrying call')
 
-    // The following should work but since I implemented PCKE, I'm not able to use the refresh token normally
-    /*
-      const authStore = useAuthStore()
-      return await axios({
-        method: 'post',
-        url: 'https://accounts.spotify.com/api/token',
-        headers: {
-          Authorization: `Basic ${ENCODED_CREDENTIALS}`,
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        data: `grant_type=refresh_token&refresh_token=${authStore.refreshToken}`
-      }).then(function ({ data }: AxiosResponse<SpotifyAuthResponse, SpotifyAuthResponse>) {
-        return data.access_token
-      }).catch(function (err: Error) {
-        console.log('Error while fetching new access token', err)
-      })
-    */
+    const authStore = useAuthStore()
+    return await axios({
+      method: 'post',
+      url: 'https://accounts.spotify.com/api/token',
+      headers: {
+        Authorization: `Basic ${ENCODED_CREDENTIALS}`,
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      data: `grant_type=refresh_token&refresh_token=${authStore.refreshToken}`
+    }).then(function ({ data }: AxiosResponse<SpotifyAuthResponse, SpotifyAuthResponse>) {
+      return data.access_token
+    }).catch(function (err: Error) {
+      console.log('Error while fetching new access token', err)
+    })
 
     // Instead get a new fresh token
-    window.location.href = await this.getOAuthUrl()
+    // window.location.href = await this.getOAuthUrl()
   }
 }
