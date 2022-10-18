@@ -36,15 +36,15 @@ export default defineComponent({
     collaborative: Boolean
   },
   computed: {
-    loadingCover(): string {
+    loadingCover (): string {
       return require('@/assets/default_cover.jpg')
     },
-    huskyfyCircle(): string {
+    huskyfyCircle (): string {
       return require('@/assets/large-logo-circle.png')
     }
   },
   methods: {
-    displayDetails() {
+    displayDetails () {
       this.$router.push({
         name: 'Explore playlist',
         params: { playlistId: this.id }

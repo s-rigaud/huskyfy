@@ -2,7 +2,7 @@
   <v-navigation-drawer v-model="isOpen" temporary location="right"
     image="https://cdn.vuetifyjs.com/images/backgrounds/bg-2.jpg">
     <v-list>
-      <v-list-subheader>{{ $t('drawer.update-playlist') }}</v-list-subheader>
+      <v-list-subheader class="font-weight-bold">{{ $t('drawer.update-playlist') }}</v-list-subheader>
       <!-- 1.1 Update playlist privacy -->
       <div v-if="userOwnsPlaylist && !playlistsStore.playlists[playlistId].collaborative">
         <v-list-item v-if="playlistsStore.playlists[playlistId].public" @click="setPlaylistPrivate">
@@ -52,6 +52,8 @@
         </v-card>
       </v-dialog>
 
+      <v-divider></v-divider>
+
       <v-list-subheader> {{ $t('drawer.reorder-playlist') }} </v-list-subheader>
       <!-- 2.1 Sort by genre -->
       <v-list-item @click="sortPlaylistTracksByGenres">
@@ -66,6 +68,8 @@
         <v-list-item-title>{{ $t('drawer.reorder-by-artist-name') }}</v-list-item-title>
       </v-list-item>
 
+      <v-divider></v-divider>
+
       <!-- (At least 4 tracks to download image) -->
       <div v-if="playlistsStore.playlists[playlistId].tracks.length > 3">
         <v-list-subheader>
@@ -73,13 +77,23 @@
         </v-list-subheader>
         <!-- 3.1 Export Image -->
         <v-slider :ticks="{0: '2x2', 1: '3x3', 2: '4x4'}" :max="2" step="1" show-ticks="always" tick-size="4"
-          color="var(--text-color)" prepend-icon="mdi-arrange-send-to-back" @touchstart.stop>
+          color="var(--text-color)" prepend-icon="mdi-arrange-send-to-back" v-model="generateImageSize" @touchstart.stop
+          style="width: 90%; margin: 0 0 0 3px; height: 50px">
         </v-slider>
-        <v-switch v-model="generateImageDisplayTitle" color="var(--link-color)" :label="$t('title ?')">
+        <v-switch v-model="generateImageDisplayTitle" color="var(--link-color)" style="height: 40px; margin-left: 10px">
+          <template v-slot:label>
+            <p :class="(generateImageDisplayTitle)?'rainbow-text':''">{{ $t('drawer.image-display-title') }}</p>
+          </template>
         </v-switch>
-        <v-switch v-model="generateImageDisplayStats" color="var(--link-color)" :label="$t('stats ?')">
+        <v-switch v-model="generateImageDisplayStats" color="var(--link-color)" value="var(--link-color)"
+          style="height: 40px; margin-left: 10px">
+          <template v-slot:label>
+            <p :class="(generateImageDisplayStats)?'rainbow-text':''">{{ $t('drawer.image-display-stats') }}</p>
+          </template>
         </v-switch>
-        <v-btn @click="exportArtistPreview" class="rainbow-v-btn">{{ $t("playlist.export-preview") }}</v-btn>
+        <div style="display: flex; align-items: center; flex-direction: column;">
+          <v-btn @click="exportArtistPreview" class="rainbow-v-btn">{{ $t("playlist.export-preview") }}</v-btn>
+        </div>
       </div>
 
     </v-list>
@@ -110,7 +124,7 @@ export default defineComponent({
 
     return {
       playlistsStore,
-      currentUserUsername,
+      currentUserUsername
     }
   },
   watch: {
@@ -130,7 +144,7 @@ export default defineComponent({
       isDeleteModalOpen: false,
       waitingForDeletion: false,
 
-      generateImageSize: "2x2",
+      generateImageSize: 0,
       generateImageDisplayTitle: true,
       generateImageDisplayStats: false
     }
@@ -166,7 +180,7 @@ export default defineComponent({
     async exportArtistPreview() {
       makeAndDownloadImage(
         this.playlistId,
-        this.generateImageSize,
+        ['2x2', '3x3', '4x4'][this.generateImageSize],
         this.generateImageDisplayTitle,
         this.generateImageDisplayStats
       )

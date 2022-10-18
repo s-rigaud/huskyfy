@@ -6,9 +6,13 @@ const makeAndDownloadImage = (playlistId: string, size: string | number, showTit
   const playlistsStore = usePlaylistsStore()
   const playlist = playlistsStore.playlists[playlistId]
 
-  if (typeof size === "string") {
+  console.error(size)
+
+  if (typeof size === 'string') {
     size = parseInt(size.charAt(0))
   }
+
+  console.error(size)
 
   const topArtists = playlistsStore.getTopArtists(playlistId, size ** 2)
   const artistImageUrls = topArtists.map(res => res.artist.images[0].url)
@@ -56,10 +60,12 @@ const createCanvas = (
   const canvas = document.createElement('canvas')
   const ctx = canvas.getContext('2d')!
 
-  canvas.width = 400
-  canvas.height = 400 + ((showTitle) ? 100 : 0) + ((showStats) ? 100 : 0)
+  const TITLE_HEIGHT = 50
 
-  const heightStart = (showTitle) ? 100 : 0
+  canvas.width = 400
+  canvas.height = 400 + ((showTitle) ? TITLE_HEIGHT : 0) + ((showStats) ? 100 : 0)
+
+  const heightStart = (showTitle) ? TITLE_HEIGHT : 0
 
   ctx.fillStyle = '#000'
   ctx.fillRect(0, 0, canvas.width, canvas.height)
@@ -84,7 +90,7 @@ const createCanvas = (
   if (showStats) {
     // Adding logo to canvas
     const logo = images[0]
-    ctx.drawImage(logo, 0, 440, 200, 60)
+    ctx.drawImage(logo, 0, heightStart + 400 + 30, 200, 60)
     addCanvasLegend(ctx, playlist)
   }
 
