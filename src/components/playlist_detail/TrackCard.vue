@@ -190,7 +190,7 @@ export default defineComponent({
   margin: 0 5px 2px 0px;
   animation: genres-appear 2000ms linear;
   animation-fill-mode: forwards;
-  opacity: 0
+  opacity: 0;
 }
 
 .popularity-chip {
@@ -204,11 +204,11 @@ export default defineComponent({
 }
 
 .track-index {
-  margin: 5px
+  margin: 5px;
 }
 
 .track-image {
-  min-width: 80px
+  min-width: 80px;
 }
 
 .second-line {
@@ -217,6 +217,6 @@ export default defineComponent({
 
 .artist-name {
   display: inline-flex;
-  padding: 0 !important
+  padding: 0 !important;
 }
 </style>

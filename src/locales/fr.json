@@ -44,6 +44,10 @@
 		"process": {
 			"title": "Comment ça marche ?",
 			"content": "Huskyfy utilise l'API de Spotify pour rassembler les genres et les données sur les artistes, le genre et les titres de vos playlists. L'application essaie ensuite de fournir une interface agréable pour vous permettre de filtrer et de créer facilement de nouvelles playlists à partir de celles déjà existantes."
+		},
+		"copyright": {
+			"title": "Copyright",
+			"content": "Le logo d'Huskyfy et d'autre images proviennent du site "
 		}
 	},
 	"footer": {
@@ -74,7 +78,7 @@
 			"delete": "Supprimer ",
 			"disagree": "Non"
 		},
-        "indie-score-text": "Score indé",
+		"indie-score-text": "Score indé",
 		"duplicate": {
 			"button": "Dupliquer la playlist ",
 			"copy-of": "Copie de ",

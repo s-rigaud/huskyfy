@@ -44,6 +44,6 @@ h2 {
   margin: 10px 0px;
   padding: 0px 0px;
   font-size: xx-large;
-  display: block
+  display: block;
 }
 </style>

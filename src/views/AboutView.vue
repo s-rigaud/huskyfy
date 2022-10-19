@@ -3,21 +3,29 @@
   <div id="about-content">
     <div id="text">
       <div id="main-title">
-        <v-img width="60" :src="huskyfyCircle" alt="Huskyfy Image"></v-img>
+        <v-img id="main-title-image" width="60" :src="huskyfyCircle" alt="Huskyfy Image"></v-img>
         <h1 class="rainbow-text">{{ $t("about.description.title") }}</h1>
       </div>
       <p> {{ $t("about.description.content.part1") }} </p>
-      <p> {{ $t("about.description.content.part2") }}{{ $t("_emojis.indie") }} </p>
+      <p style="margin-bottom: 0"> {{ $t("about.description.content.part2") }} </p>
+      <v-chip id="indie-chip" :text="$t('track.indie')" color="green" label text-color="white" size="small">
+      </v-chip>
 
-      <h2 class="subtitle rainbow-text">{{ $t("about.connection.title") }}</h2>
-      <h2>🔒</h2>
+      <div class="subtitle">
+        <h2 class="rainbow-text">{{ $t("about.connection.title") }}</h2>
+        <h2>🔒</h2>
+      </div>
       <p>{{ $t("about.connection.content") }} </p>
 
-      <h2 class="subtitle rainbow-text">{{ $t("about.process.title") }}</h2>
+      <div class="subtitle">
+        <h2 class="rainbow-text">{{ $t("about.process.title") }}</h2>
+      </div>
       <p> {{ $t("about.process.content") }}</p>
 
-      <h2 class="subtitle rainbow-text">{{ $t("about.expose-liked-songs.title") }}</h2>
-      <h2>{{ $t("_emojis.public") }}</h2>
+      <div class="subtitle">
+        <h2 class="rainbow-text">{{ $t("about.expose-liked-songs.title") }}</h2>
+        <h2>{{ $t("_emojis.public") }}</h2>
+      </div>
       <p>
         {{ $t("about.expose-liked-songs.content.part1") }} {{ $t("_emojis.collaborative") }}
         <br />
@@ -27,9 +35,10 @@
         </a>
       </p>
 
-      <h2 class="subtitle rainbow-text">{{ $t("about.creator.title") }}</h2>
-      <h2>😃</h2>
-
+      <div class="subtitle">
+        <h2 class="rainbow-text">{{ $t("about.creator.title") }}</h2>
+        <h2>😃</h2>
+      </div>
       <p>
         {{ $t("about.creator.content.part1") }}
         <a href="https://github.com/s-rigaud" target="_blank" rel="noopener">
@@ -38,6 +47,18 @@
         {{ $t("about.creator.content.part3") }}
         <a href="mailto:horusproject.bugtracker@gmail.com?subject=Huskyfy%20improvement%20request">
           {{ $t("about.creator.content.part4") }} 📧
+        </a>
+      </p>
+
+
+      <div class="subtitle">
+        <h2 class="rainbow-text">{{ $t("about.copyright.title") }}</h2>
+      </div>
+      <p>
+        {{ $t("about.copyright.content") }}
+        <a href="https://www.flaticon.com/fr/icones-gratuites/husky-siberien" title="husky sibérien icônes"
+          target="_blank">
+          FlatIcon.com
         </a>
       </p>
     </div>
@@ -88,9 +109,20 @@ export default defineComponent({
 }
 
 #text {
-  margin: auto;
+  margin: 5%;
   max-width: 700px;
   text-align: justify;
+}
+
+#main-title {
+  width: 100%;
+  display: inline-flex;
+  justify-content: center;
+}
+
+#main-title-image {
+  max-width: 60px !important;
+  margin-right: 10px;
 }
 
 #exit-button {
@@ -110,12 +142,12 @@ export default defineComponent({
 }
 
 h1 {
-  font-size: xx-large;
+  font-size: x-large;
   background: -webkit-linear-gradient(var(--text-color), var(--link-color));
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  margin-right: 10px
+  margin-right: 10px;
 }
 
 h2 {
@@ -123,10 +155,8 @@ h2 {
 }
 
 .subtitle {
-  background: -webkit-linear-gradient(var(--text-color), var(--link-color));
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 p {
@@ -138,7 +168,7 @@ a {
   color: var(--link-color) !important;
 }
 
-#main-title {
-  display: inline-flex
+#indie-chip {
+  margin-bottom: 20px
 }
 </style>

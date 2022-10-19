@@ -68,7 +68,7 @@ export default defineComponent({
 <style>
 #app-bar {
   font-family: 'Righteous';
-  height: 64px
+  height: 64px;
 }
 
 #app-bar-logo {
@@ -76,7 +76,7 @@ export default defineComponent({
 }
 
 #profile-picture {
-  align-items: initial
+  align-items: initial;
 }
 
 header {
@@ -92,7 +92,7 @@ header .v-toolbar__content {
 }
 
 #profile-name {
-  margin-right: 10px
+  margin-right: 10px;
 }
 
 #logo {

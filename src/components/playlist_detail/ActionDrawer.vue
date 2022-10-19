@@ -209,12 +209,12 @@ export default defineComponent({
 #generate-image-size-slider {
   width: 90%;
   margin: 0 0 0 3px;
-  height: 50px
+  height: 50px;
 }
 
 .generate-image-switch {
   height: 40px;
-  margin-left: 10px
+  margin-left: 10px;
 }
 
 #generate-image-button {

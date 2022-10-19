@@ -81,7 +81,7 @@ export default defineComponent({
   color: var(--text-color) !important;
   animation: playlist-append 500ms linear;
   animation-fill-mode: forwards;
-  opacity: 0
+  opacity: 0;
 }
 
 .playlist-card .card-title {

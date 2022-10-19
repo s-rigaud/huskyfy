@@ -548,27 +548,28 @@ export default defineComponent({
 }
 
 #main-content {
-  display: flex
+  display: flex;
+  flex-direction: column;
 }
 
 #playlist-card {
-  width: 100%
+  width: 100%;
 }
 
 #playlist-name {
-  margin-right: 5px
+  margin-right: 5px;
 }
 
 #playlist-owner {
-  opacity: 0.8
+  opacity: 0.8;
 }
 
 #playlist-description {
-  padding: 5px 10px 10px 10px
+  padding: 5px 10px 10px 10px;
 }
 
 .filter-select {
-  text-transform: capitalize
+  text-transform: capitalize;
 }
 
 #filter-chips {
@@ -581,12 +582,12 @@ export default defineComponent({
 
 #main-section {
   width: 100%;
-  margin-top: 5px
+  margin-top: 5px;
 }
 
 #list-title {
   display: flex;
-  align-items: center
+  align-items: center;
 }
 
 #list-title-embedded {
