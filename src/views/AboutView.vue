@@ -2,7 +2,7 @@
   <!-- General page with info about the app -->
   <div id="about-content">
     <div id="text">
-      <div style="display: inline-flex">
+      <div id="main-title">
         <v-img width="60" :src="huskyfyCircle" alt="Huskyfy Image"></v-img>
         <h1 class="rainbow-text">{{ $t("about.description.title") }}</h1>
       </div>
@@ -58,21 +58,21 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'AboutView',
   computed: {
-    githubImg (): string {
+    githubImg(): string {
       return require('@/assets/github.png')
     },
-    huskyfyCircle (): string {
+    huskyfyCircle(): string {
       return require('@/assets/large-logo-circle.png')
     },
-    myMusicImage (): string {
+    myMusicImage(): string {
       return require('@/assets/my-music.jpeg')
     },
-    myMusicLink (): string {
+    myMusicLink(): string {
       return process.env.VUE_APP_BASE_SERVER_URL + '/playlist/my-music'
     }
   },
   methods: {
-    backToPreviousPage () {
+    backToPreviousPage() {
       this.$router.go(-1)
     }
   }
@@ -101,6 +101,7 @@ export default defineComponent({
   position: fixed;
   top: 70px;
   right: 10px;
+  display: none;
 }
 
 #my-song-img {
@@ -109,7 +110,7 @@ export default defineComponent({
 }
 
 h1 {
-  font-size: xxx-large;
+  font-size: xx-large;
   background: -webkit-linear-gradient(var(--text-color), var(--link-color));
   background-clip: text;
   -webkit-background-clip: text;
@@ -118,7 +119,7 @@ h1 {
 }
 
 h2 {
-  display: inline-block;
+  font-size: large;
 }
 
 .subtitle {
@@ -137,17 +138,7 @@ a {
   color: var(--link-color) !important;
 }
 
-@media (max-width: 992px) {
-  h1 {
-    font-size: xx-large;
-  }
-
-  h2 {
-    font-size: large;
-  }
-
-  #exit-button {
-    display: none;
-  }
+#main-title {
+  display: inline-flex
 }
 </style>

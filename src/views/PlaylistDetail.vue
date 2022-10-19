@@ -1,18 +1,18 @@
 <template>
   <!-- Description of all the playlist with all the tracks and filters -->
   <div id="playlist" v-if="playlists[playlistId] && playlists[playlistId].total > 0" v-scroll="onScroll">
-    <div id="content" style="display: flex">
-      <v-card v-if="playlistId" style="width: 100%">
+    <div id="main-content">
+      <v-card id="playlist-card" v-if="playlistId">
         <div id="playlist-title" @click="openPlaylistOnSpotify">
           <v-img id="playlist-image" v-bind:src="playlistsStore.playlists[playlistId].images[0].url"
             :lazy-src="loadingCover" alt="Cover image" cover rel="preconnect" width="60">
           </v-img>
           <div id="dumb-title-container">
-            <h3 style="margin-right: 5px" class="text-truncate rainbow-text">
+            <h3 id="playlist-name" class="text-truncate rainbow-text">
               {{ playlistsStore.playlists[playlistId].name }}
             </h3>
             <p v-bind="visibilityTooltip"> {{ getTextFromVisibility }} </p>
-            <p style="opacity: 0.8"> {{ $t("playlist.created-by") }} {{ usernameToDisplay }} </p>
+            <p id="playlist-owner"> {{ $t("playlist.created-by") }} {{ usernameToDisplay }} </p>
             <p v-if="allTracksLoaded">
               <span class="rainbow-text">{{ $t("playlist.indie-score-text") }} </span>
               <!-- Only if all tracks are loaded -->
@@ -20,7 +20,7 @@
             </p>
           </div>
         </div>
-        <v-card-text style="padding: 5px 10px 10px 10px">
+        <v-card-text id="playlist-description">
           <p id="description"> {{ formattedDescription }} </p>
         </v-card-text>
 
@@ -58,11 +58,11 @@
             <div id="filters">
               <v-select v-model="selectedGenres" :label="$t('track.filters.genres')" :items="getTopGenres()"
                 item-title="cap_name" item-value="name" variant="outlined" density="comfortable" multiple
-                style="text-transform: capitalize">
+                class="filter-select">
               </v-select>
 
               <v-select v-model="selectedArtists" :label="$t('track.filters.artists')" :items="getSortedArtists()"
-                item-title="name" variant="outlined" density="comfortable" multiple style="text-transform: capitalize">
+                item-title="name" variant="outlined" density="comfortable" multiple class="filter-select">
                 <template v-slot:selection="{ item, index }: SlotProps">
                   <v-chip v-if="index < 2">
                     <v-avatar>
@@ -83,8 +83,8 @@
                 {{ $t("playlist.reset-filters") }}
               </v-btn>
             </div>
-            <div id="filter-chips" style="width: 100%">
-              <div style="width: 100%">
+            <div id="filter-chips">
+              <div id="filter-chips-embedded">
                 <v-chip-group active-class="primary--text" column v-model="selectedPopularityVModel">
                   <v-chip :text="getTextForPopularity('Indie')" value="Indie"> </v-chip>
                   <v-chip :text="getTextForPopularity('Popular')" value="Popular"> </v-chip>
@@ -105,10 +105,10 @@
       </v-expansion-panels>
 
       <!-- Track list -->
-      <section style="width: 100%; margin-top: 5px">
+      <section id="main-section">
         <v-divider></v-divider>
-        <div id="list-title" style="display: flex; align-items: center">
-          <div style="width: 70%">
+        <div id="list-title">
+          <div id="list-title-embedded">
             <h2>{{ generalTitle }}</h2>
           </div>
           <v-divider class="mx-4" vertical></v-divider>
@@ -545,5 +545,51 @@ export default defineComponent({
 
 #spinner-block #waiting-spinner {
   width: 100% !important;
+}
+
+#main-content {
+  display: flex
+}
+
+#playlist-card {
+  width: 100%
+}
+
+#playlist-name {
+  margin-right: 5px
+}
+
+#playlist-owner {
+  opacity: 0.8
+}
+
+#playlist-description {
+  padding: 5px 10px 10px 10px
+}
+
+.filter-select {
+  text-transform: capitalize
+}
+
+#filter-chips {
+  width: 100%
+}
+
+#filter-chips-embedded {
+  width: 100%
+}
+
+#main-section {
+  width: 100%;
+  margin-top: 5px
+}
+
+#list-title {
+  display: flex;
+  align-items: center
+}
+
+#list-title-embedded {
+  width: 70%
 }
 </style>

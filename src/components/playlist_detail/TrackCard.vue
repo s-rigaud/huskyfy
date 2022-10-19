@@ -2,16 +2,16 @@
   <!-- Card to represent a track, many of them are stacks -->
   <v-list-item @click="openTrackOnSpotify" class="track-card" :style="trackAnimationDelay">
     <template v-slot:prepend>
-      <p style="margin: 5px">{{ trackIndex + 1 }}</p>
-      <v-avatar class="ma-3" size="90" rounded="0" style="min-width: 80px">
+      <p class="track-index">{{ trackIndex + 1 }}</p>
+      <v-avatar class="ma-3 track-image" size="90" rounded="0">
         <v-img rel="preconnect" v-bind:src="image" :lazy-src="loadingCover" alt="Cover image"></v-img>
       </v-avatar>
     </template>
 
     <v-list-item-title class="rainbow-text text-h6"> {{ name }} </v-list-item-title>
-    <div class="second-line" style="display: flex;">
-      <a v-for="artist in artists" class="artist-name" :key="artist.id" :href="artist.uri">
-        <v-card-subtitle style="display: inline-flex; padding: 0 !important">
+    <div class="second-line">
+      <a v-for="artist in artists" class="artist-names" :key="artist.id" :href="artist.uri">
+        <v-card-subtitle class="artist-name">
           {{ addComma(artist.name) }}
         </v-card-subtitle>
       </a>
@@ -179,7 +179,7 @@ export default defineComponent({
   margin: 5px !important;
 }
 
-.artist-name {
+.artist-names {
   margin-right: 5px;
   padding-bottom: 7px;
   text-decoration: none;
@@ -201,5 +201,22 @@ export default defineComponent({
 
 .text-h6 {
   font-family: "Oswald" !important;
+}
+
+.track-index {
+  margin: 5px
+}
+
+.track-image {
+  min-width: 80px
+}
+
+.second-line {
+  display: flex;
+}
+
+.artist-name {
+  display: inline-flex;
+  padding: 0 !important
 }
 </style>
