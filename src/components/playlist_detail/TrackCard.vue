@@ -1,31 +1,30 @@
 <template>
   <!-- Card to represent a track, many of them are stacks -->
-  <v-card flat border rounded="0" @click="openTrackOnSpotify" class="track-card" :style="trackAnimationDelay">
-    <div class="card-content">
+  <v-list-item @click="openTrackOnSpotify" class="track-card" :style="trackAnimationDelay">
+    <template v-slot:prepend>
       <p style="margin: 5px">{{ trackIndex + 1 }}</p>
-      <!-- Cover -->
-      <v-avatar class="ma-3" size="80" rounded="0" style="min-width: 80px">
+      <v-avatar class="ma-3" size="90" rounded="0" style="min-width: 80px">
         <v-img rel="preconnect" v-bind:src="image" :lazy-src="loadingCover" alt="Cover image"></v-img>
       </v-avatar>
+    </template>
 
-      <div>
-        <v-card-header>
-          <v-card-header-text>
-            <!-- All track info -->
-            <v-card-title class="rainbow-text text-h6"> {{ name }} </v-card-title>
-            <a v-for="artist in artists" class="artist-name" :key="artist.id" :href="artist.uri">
-              <v-card-subtitle style="display: inline-flex">{{ addComma(artist.name) }}</v-card-subtitle>
-            </a>
-            <v-chip v-if="isIndie" :text="$t('track.indie')" color="green" label text-color="white" size="small"
-              class="popularity-chip">
-            </v-chip>
-            <v-chip v-else :text="$t('track.popular')" color="cyan" label size="small" class="popularity-chip">
-            </v-chip>
-          </v-card-header-text>
-        </v-card-header>
+    <v-list-item-title class="rainbow-text text-h6"> {{ name }} </v-list-item-title>
+    <div class="second-line" style="display: flex;">
+      <a v-for="artist in artists" class="artist-name" :key="artist.id" :href="artist.uri">
+        <v-card-subtitle style="display: inline-flex; padding: 0 !important">
+          {{ addComma(artist.name) }}
+        </v-card-subtitle>
+      </a>
+      <v-chip v-if="isIndie" :text="$t('track.indie')" color="green" label text-color="white" size="small"
+        class="popularity-chip">
+      </v-chip>
+      <v-chip v-else :text="$t('track.popular')" color="cyan" label size="small" class="popularity-chip">
+      </v-chip>
+    </div>
 
-        <!-- TODO -->
-        <!-- Genre chips (Should be VSlideGroup but not yet implemented in Vuetify Beta 3.0.X)
+    <!-- All track info -->
+    <!-- TODO -->
+    <!-- Genre chips (Should be VSlideGroup but not yet implemented in Vuetify Beta 3.0.X)
           <v-slide-group show-arrows>
             <v-slide-group-item v-for="(genre, index) in genres" :key="genre">
               <v-chip :text="genre.toUpperCase()" label size="small" class="genre-chip"
@@ -34,21 +33,19 @@
             </v-slide-group-item>
           </v-slide-group>-->
 
-        <v-card-text v-if="genres.length > 0">
-          <v-chip v-for="(genre, index) in genres.slice(0,3)" :key="genre" :text="genre.toUpperCase()" label
-            size="small" class="genre-chip" :style="genreAnimationDelay(index)">
-          </v-chip>
-          <v-chip v-if="genres.length > 3" label size="small" class="genre-chip" :style="genreAnimationDelay(3)">
-            ...
-            <v-tooltip activator="parent" location="bottom">
-              {{ genres.slice(3).map(g => g.toUpperCase()).join(', ') }}
-            </v-tooltip>
-          </v-chip>
-        </v-card-text>
-        <v-card-subtitle v-else> {{ $t("track.no-genre") }}</v-card-subtitle>
-      </div>
-    </div>
-  </v-card>
+    <v-card-text v-if="genres.length > 0">
+      <v-chip v-for="(genre, index) in genres.slice(0,3)" :key="genre" :text="genre.toUpperCase()" label size="small"
+        class="genre-chip" :style="genreAnimationDelay(index)">
+      </v-chip>
+      <v-chip v-if="genres.length > 3 && !displayAllGenres" label size="small" text="..." class="genre-chip"
+        :style="genreAnimationDelay(3)" @click.stop="displayAllGenres = true">
+      </v-chip>
+      <v-chip v-if="displayAllGenres" v-for="(genre, index) in genres.slice(3)" :key="genre" :text="genre.toUpperCase()"
+        label size="small" class="genre-chip" :style="genreAnimationDelay(index)">
+      </v-chip>
+    </v-card-text>
+    <v-card-subtitle v-else> {{ $t("track.no-genre") }}</v-card-subtitle>
+  </v-list-item>
 </template>
 
 <script lang="ts">
@@ -79,8 +76,13 @@ export default defineComponent({
       required: true
     }
   },
+  data() {
+    return {
+      displayAllGenres: false
+    }
+  },
   computed: {
-    addComma () {
+    addComma() {
       return (artistName: string): string => {
         if (this.artists[this.artists.length - 1].name === artistName) {
           return artistName
@@ -88,22 +90,22 @@ export default defineComponent({
         return `${artistName},`
       }
     },
-    loadingCover (): string {
+    loadingCover(): string {
       return require('@/assets/default_cover.jpg')
     },
     // Delay animation so cards appear one after another
-    trackAnimationDelay (): StyleValue {
-      const duration = (this.trackIndex < 50) ? `${300 * this.trackIndex}ms` : '0ms'
-      return { 'animation-delay': duration }
+    trackAnimationDelay(): StyleValue {
+      const delay = (this.trackIndex < 30) ? `${300 * this.trackIndex}ms` : '0ms'
+      return { 'animation-delay': delay }
     },
-    genreAnimationDelay () {
+    genreAnimationDelay() {
       return (index: number): StyleValue => {
-        return { 'animation-delay': `${index * 500}ms` }
+        return { 'animation-delay': `${index * 400}ms` }
       }
     }
   },
   methods: {
-    openTrackOnSpotify () {
+    openTrackOnSpotify() {
       window.location.href = this.trackURI
     }
   }
@@ -141,7 +143,13 @@ export default defineComponent({
 .track-card {
   animation: track-append 200ms linear;
   animation-fill-mode: forwards;
-  opacity: 0
+  opacity: 0;
+  border-bottom: 1px grey solid;
+  padding: 0 !important;
+}
+
+.track-card:first-child {
+  border-top: 1px grey solid;
 }
 
 .card-content {
@@ -157,10 +165,6 @@ export default defineComponent({
 
 .v-card:hover {
   color: var(--link-color);
-}
-
-.v-card-header {
-  padding: 0;
 }
 
 .v-card-text {

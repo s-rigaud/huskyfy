@@ -52,7 +52,7 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
-  scrollBehavior () {
+  scrollBehavior() {
     // always scroll to top
     return { top: 0, behavior: 'smooth' }
   }
@@ -64,6 +64,10 @@ router.beforeEach(async function (to, from, next) {
   // Does not allow to visit other pages while not connected
   if (!authStore.accessToken && to.name !== 'LoginView' && to.name !== 'About') {
     next({ name: 'LoginView' })
+
+    // Redirect user to main page if already connected
+  } else if (authStore.accessToken && to.name === 'LoginView') {
+    next({ name: 'Explore' })
 
     // Intercept and autolog user when code is received
   } else if (to.name === 'LoginView' && to.query.code) {

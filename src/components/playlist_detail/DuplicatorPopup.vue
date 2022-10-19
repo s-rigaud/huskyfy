@@ -1,6 +1,6 @@
 <template>
   <!-- Layer on top to follow steps of playlist duplication -->
-  <v-snackbar v-model="snackbar" :model-value="true" shaped>
+  <v-snackbar v-model="snackbar" shaped>
     <div id="loading-create-new-playlist" v-if="loadingPercentage > 0">
       <v-progress-circular :model-value="loadingPercentage" color="var(--text-color)">
       </v-progress-circular>
@@ -13,7 +13,7 @@
     </v-btn>
 
     <template v-slot:actions>
-      <v-btn color="var(--text-color)" variant="text" @click="snackbar = false"> X </v-btn>
+      <v-btn color="red" variant="text" @click="snackbar = false"> X </v-btn>
     </template>
 
   </v-snackbar>
@@ -36,15 +36,15 @@ export default defineComponent({
       required: true
     }
   },
-  setup () {
+  setup() {
     const playlistsStore = usePlaylistsStore()
     return { playlistsStore }
   },
-  async created () {
+  async created() {
     await this.createNewPlaylist()
   },
   methods: {
-    async createNewPlaylist () {
+    async createNewPlaylist() {
       this.loadingText = this.$t('playlist.new.create')
       this.loadingPercentage = 1
       const newPlaylistId = await this.playlistsStore.createPlaylist(
@@ -72,11 +72,11 @@ export default defineComponent({
       this.loadingPercentage = 100
       this.newPlaylistId = newPlaylistId
     },
-    displayNewPlaylistDetails () {
+    displayNewPlaylistDetails() {
       window.location.href = `/playlist/${this.newPlaylistId}`
     }
   },
-  data () {
+  data() {
     return {
       loadingPercentage: 0,
       loadingText: '',
