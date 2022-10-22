@@ -3,7 +3,7 @@
   <div id="playlist" v-if="playlists[playlistId] && playlists[playlistId].total > 0" v-scroll="onScroll">
     <div id="main-content">
       <v-card id="playlist-card" v-if="playlistId">
-        <div id="playlist-title" @click="openPlaylistOnSpotify">
+        <div id="playlist-meta" @click="openPlaylistOnSpotify">
           <v-img id="playlist-image" v-bind:src="playlistsStore.playlists[playlistId].images[0].url"
             :lazy-src="loadingCover" alt="Cover image" cover rel="preconnect" width="60">
           </v-img>
@@ -12,7 +12,11 @@
               {{ playlistsStore.playlists[playlistId].name }}
             </h3>
             <p v-bind="visibilityTooltip"> {{ getTextFromVisibility }} </p>
-            <p id="playlist-owner"> {{ $t("playlist.created-by") }} {{ usernameToDisplay }} </p>
+            <p id="playlist-owner">
+              {{ $t("playlist.created-by") }}
+              <span id="playlist-owner-name" @click.stop="openPlaylistOwnerSpotifyProfile">{{ usernameToDisplay
+              }}</span>
+            </p>
             <p v-if="allTracksLoaded">
               <span class="rainbow-text">{{ $t("playlist.indie-score-text") }} </span>
               <!-- Only if all tracks are loaded -->
@@ -42,7 +46,7 @@
             </div>
           </v-expansion-panel-title>
           <v-expansion-panel-text>
-            <GenreChart :genres="topGenres" />
+            <GenreChart :genres="topGenres"/>
           </v-expansion-panel-text>
         </v-expansion-panel>
 
@@ -185,7 +189,7 @@ export default defineComponent({
     ActionDrawer,
     DuplicatorPopup
   },
-  setup() {
+  setup () {
     const playlistsStore = usePlaylistsStore()
 
     // Shorthand
@@ -202,7 +206,7 @@ export default defineComponent({
       filteredTracks
     }
   },
-  async mounted() {
+  async mounted () {
     const playlist = this.playlists[this.playlistId]
     this.TRACK_REQUEST_LIMIT = this.playlistsStore.MAX_TRACKS_LIMIT * 3
     if (playlist.id === 'my-music') {
@@ -211,7 +215,7 @@ export default defineComponent({
     await this.loadFirstTracks()
     this.filteredTracks = this.playlists[this.playlistId].tracks
   },
-  data() {
+  data () {
     return {
       TRACK_REQUEST_LIMIT: 150,
       NO_POPULARITY: 'No filter',
@@ -240,10 +244,10 @@ export default defineComponent({
     }
   },
   methods: {
-    onScroll() {
+    onScroll () {
       this.displayGoTopButton = (window.scrollY > 100)
     },
-    async loadFirstTracks() {
+    async loadFirstTracks () {
       // Only asking for the right number of tracks as we already know how many tracks are in the playlist
       const maxLimit = Math.min(
         this.TRACK_REQUEST_LIMIT, this.playlists[this.playlistId].total
@@ -256,14 +260,14 @@ export default defineComponent({
       this.indiePercentage = this.getIndiePercentage()
       this.resetFilters()
     },
-    refreshStats() {
+    refreshStats () {
       this.topGenres = this.getTopGenres()
       this.indiePercentage = this.getIndiePercentage()
     },
-    getIndiePercentage(): number {
+    getIndiePercentage (): number {
       return this.playlistsStore.getIndiePercentage(this.playlistId)
     },
-    applyFilters() {
+    applyFilters () {
       const playlistTracks = this.playlists[this.playlistId].tracks
       let filteredTracks = this.playlists[this.playlistId].tracks
 
@@ -314,22 +318,25 @@ export default defineComponent({
 
       this.filteredTracks = filteredTracks
     },
-    addTracksConserveUnicity(filteredTracks: SpotifyTrack[], validTracks: SpotifyTrack[]) {
+    addTracksConserveUnicity (filteredTracks: SpotifyTrack[], validTracks: SpotifyTrack[]) {
       const alreadyKnownTrackIds = filteredTracks.map(t => t.id)
       const tracksToAdd = validTracks.filter(t => !alreadyKnownTrackIds.includes(t.id))
       filteredTracks.push(...tracksToAdd)
     },
-    resetFilters() {
+    resetFilters () {
       this.selectedGenres = []
       this.selectedArtists = []
       this.selectedPopularity = this.NO_POPULARITY
       this.filteredTracks = this.playlists[this.playlistId].tracks
       this.scrollTop()
     },
-    openPlaylistOnSpotify() {
+    openPlaylistOnSpotify () {
       window.location.href = this.playlists[this.playlistId].uri
     },
-    getSortedArtists(): SpotifyArtist[] {
+    openPlaylistOwnerSpotifyProfile () {
+      window.location.href = this.playlists[this.playlistId].owner.uri
+    },
+    getSortedArtists (): SpotifyArtist[] {
       // Need to have a set of object in JS ...
       const alreadyAddedArtistNames: string[] = []
       const artistsToReturn: SpotifyArtist[] = []
@@ -344,10 +351,10 @@ export default defineComponent({
       }
       return artistsToReturn.sort((a1, a2) => a1.name.localeCompare(a2.name))
     },
-    scrollTop() {
+    scrollTop () {
       window.scrollTo({ top: 0, behavior: 'smooth' })
     },
-    getTextForPopularity(popularity: string): string {
+    getTextForPopularity (popularity: string): string {
       const allPopularities: { [popularity: string]: string } = {
         Indie: this.$t('track.filters.indie'),
         Popular: this.$t('track.filters.popular')
@@ -356,36 +363,36 @@ export default defineComponent({
       return allPopularities[popularity]
     },
     // Returns only top genres sorted by most to least popular
-    getTopGenres(): Genre[] {
+    getTopGenres (): Genre[] {
       return this.playlistsStore.getTopGenres(this.playlistId, 25)
     }
   },
   computed: {
-    allTracksLoaded(): boolean {
+    allTracksLoaded (): boolean {
       const playlist = this.playlistsStore.playlists[this.playlistId]
       return playlist.tracks.length === playlist.total
     },
-    spotifyLogo(): string {
+    spotifyLogo (): string {
       return require('@/assets/spotify.png')
     },
-    generalTitle(): string {
+    generalTitle (): string {
       const keyword = (this.isFilterExclusive) ? this.$t('track.filters.keyword.and') : this.$t('track.filters.keyword.or')
       const separator = ` ${keyword} `
       const popularityFilter = (this.selectedPopularity !== this.NO_POPULARITY) ? [this.selectedPopularity] : []
       const filters = popularityFilter.concat(this.selectedArtists).concat(this.selectedGenres)
       return `${filters.map(f => capitalize(f)).join(separator)}` || this.$t('track.all-tracks')
     },
-    getArtistName() {
+    getArtistName () {
       return (artist: { raw: SpotifyArtist }): string => {
         return artist.raw.name
       }
     },
-    getArtistCover() {
+    getArtistCover () {
       return (artist: { raw: SpotifyArtist }): string => {
         return artist.raw.images[0].url
       }
     },
-    colorForPercentage(): StyleValue {
+    colorForPercentage (): StyleValue {
       let color: string
       if (this.indiePercentage < 10) color = '#FF0D0D'
       else if (this.indiePercentage < 25) color = '#FF4E11'
@@ -395,7 +402,7 @@ export default defineComponent({
       else color = '#69B34C'
       return { color }
     },
-    usernameToDisplay(): string {
+    usernameToDisplay (): string {
       const playlistCreator =
         this.playlistsStore.playlists[this.playlistId]
           .owner.display_name
@@ -404,7 +411,7 @@ export default defineComponent({
         ? this.$t('me')
         : playlistCreator
     },
-    getEmojiFromVisibility(): string {
+    getEmojiFromVisibility (): string {
       const playlist =
         this.playlistsStore.playlists[this.playlistId]
 
@@ -412,38 +419,38 @@ export default defineComponent({
       if (playlist.public) return this.$t('_emojis.public')
       return this.$t('_emojis.private')
     },
-    getTextFromVisibility(): string {
+    getTextFromVisibility (): string {
       const playlist = this.playlistsStore.playlists[this.playlistId]
 
       if (playlist.collaborative) return this.$t('playlist.collaborative') + ' ' + this.$t('_emojis.collaborative')
       if (playlist.public) return this.$t('playlist.public') + ' ' + this.$t('_emojis.public')
       return this.$t('playlist.private') + ' ' + this.$t('_emojis.private')
     },
-    loadingCover(): string {
+    loadingCover (): string {
       return require('@/assets/default_cover.jpg')
     },
-    formattedDescription(): string {
+    formattedDescription (): string {
       const playlist = this.playlistsStore.playlists[this.playlistId]
       return playlist.description.replace(/(<([^>]+)>)/ig, '')
     },
-    toButtonOpacity(): StyleValue {
+    toButtonOpacity (): StyleValue {
       return { opacity: (this.displayGoTopButton) ? 100 : 0 }
     }
   },
   watch: {
-    isFilterExclusive() {
+    isFilterExclusive () {
       this.applyFilters()
     },
-    selectedPopularityVModel() {
+    selectedPopularityVModel () {
       this.selectedPopularity = this.selectedPopularityVModel || this.NO_POPULARITY
       this.applyFilters()
     },
-    selectedArtists(newValue: string[], oldValue: string[]) {
+    selectedArtists (newValue: string[], oldValue: string[]) {
       if (oldValue.length !== 0 || newValue.length !== 0) {
         this.applyFilters()
       }
     },
-    selectedGenres(newValue: string[], oldValue: string[]) {
+    selectedGenres (newValue: string[], oldValue: string[]) {
       if (oldValue.length !== 0 || newValue.length !== 0) {
         this.applyFilters()
       }
@@ -512,7 +519,7 @@ export default defineComponent({
   width: 20px;
 }
 
-#playlist-title {
+#playlist-meta {
   display: flex;
   padding: 10px 10px 0px 10px;
 }
@@ -526,7 +533,7 @@ export default defineComponent({
   position: fixed;
   right: 10px;
   bottom: 125px;
-  z-index: 1004;
+  z-index: 2000;
   transition: 0.2s all ease-out;
 }
 
@@ -562,6 +569,11 @@ export default defineComponent({
 
 #playlist-owner {
   opacity: 0.8;
+}
+
+#playlist-owner-name:hover {
+  cursor: pointer;
+  text-decoration: underline;
 }
 
 #playlist-description {

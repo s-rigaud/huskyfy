@@ -15,17 +15,20 @@
         <h2 class="rainbow-text">{{ $t("about.connection.title") }}</h2>
         <h2>🔒</h2>
       </div>
+      <v-divider></v-divider>
       <p>{{ $t("about.connection.content") }} </p>
 
       <div class="subtitle">
         <h2 class="rainbow-text">{{ $t("about.process.title") }}</h2>
       </div>
+      <v-divider></v-divider>
       <p> {{ $t("about.process.content") }}</p>
 
       <div class="subtitle">
         <h2 class="rainbow-text">{{ $t("about.expose-liked-songs.title") }}</h2>
         <h2>{{ $t("_emojis.public") }}</h2>
       </div>
+      <v-divider></v-divider>
       <p>
         {{ $t("about.expose-liked-songs.content.part1") }} {{ $t("_emojis.collaborative") }}
         <br />
@@ -39,6 +42,7 @@
         <h2 class="rainbow-text">{{ $t("about.creator.title") }}</h2>
         <h2>😃</h2>
       </div>
+      <v-divider></v-divider>
       <p>
         {{ $t("about.creator.content.part1") }}
         <a href="https://github.com/s-rigaud" target="_blank" rel="noopener">
@@ -50,10 +54,10 @@
         </a>
       </p>
 
-
       <div class="subtitle">
         <h2 class="rainbow-text">{{ $t("about.copyright.title") }}</h2>
       </div>
+      <v-divider></v-divider>
       <p>
         {{ $t("about.copyright.content") }}
         <a href="https://www.flaticon.com/fr/icones-gratuites/husky-siberien" title="husky sibérien icônes"
@@ -79,21 +83,21 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'AboutView',
   computed: {
-    githubImg(): string {
+    githubImg (): string {
       return require('@/assets/github.png')
     },
-    huskyfyCircle(): string {
+    huskyfyCircle (): string {
       return require('@/assets/large-logo-circle.png')
     },
-    myMusicImage(): string {
+    myMusicImage (): string {
       return require('@/assets/my-music.jpeg')
     },
-    myMusicLink(): string {
+    myMusicLink (): string {
       return process.env.VUE_APP_BASE_SERVER_URL + '/playlist/my-music'
     }
   },
   methods: {
-    backToPreviousPage() {
+    backToPreviousPage () {
       this.$router.go(-1)
     }
   }

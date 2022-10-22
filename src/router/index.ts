@@ -52,7 +52,7 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
-  scrollBehavior() {
+  scrollBehavior () {
     // always scroll to top
     return { top: 0, behavior: 'smooth' }
   }
@@ -61,16 +61,8 @@ const router = createRouter({
 router.beforeEach(async function (to, from, next) {
   const authStore = useAuthStore()
 
-  // Does not allow to visit other pages while not connected
-  if (!authStore.accessToken && to.name !== 'LoginView' && to.name !== 'About') {
-    next({ name: 'LoginView' })
-
-    // Redirect user to main page if already connected
-  } else if (authStore.accessToken && to.name === 'LoginView') {
-    next({ name: 'Explore' })
-
-    // Intercept and autolog user when code is received
-  } else if (to.name === 'LoginView' && to.query.code) {
+  // Intercept and autolog user when code is received
+  if (to.name === 'LoginView' && to.query.code) {
     if (to.query.state !== authStore.stateAuthorizationCode) {
       console.error(
         'Possibly a CSRF, state received from Spotify ' +
@@ -95,6 +87,14 @@ router.beforeEach(async function (to, from, next) {
       country: data.country,
       connected: true
     })
+    next({ name: 'Explore' })
+
+    // Does not allow to visit other pages while not connected
+  } else if (!authStore.accessToken && to.name !== 'LoginView' && to.name !== 'About') {
+    next({ name: 'LoginView' })
+
+    // Redirect user to main page if already connected
+  } else if (to.name === 'LoginView' && authStore.accessToken) {
     next({ name: 'Explore' })
   } else {
     usePlaylistsStore().$patch({ filteredTracks: [] })

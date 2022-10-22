@@ -107,7 +107,7 @@ export default {
   async requestNewAccessToken (): Promise<string | void> {
     console.log('trying to refresh token before retrying call')
 
-  /*  const authStore = useAuthStore()
+    /*  const authStore = useAuthStore()
     return await axios({
       method: 'post',
       url: 'https://accounts.spotify.com/api/token',
@@ -120,7 +120,7 @@ export default {
       return data.access_token
     }).catch(function (err: Error) {
       console.log('Error while fetching new access token', err)
-    })*/
+    }) */
 
     // Instead get a new fresh token
     window.location.href = await this.getOAuthUrl()

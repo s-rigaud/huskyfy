@@ -13,7 +13,8 @@ export default defineComponent({
     genres: {
       type: Array as PropType<Genre[]>,
       required: true
-    }
+    },
+    width: Number
   },
   watch: {
     genres (newValue: Genre[]) {

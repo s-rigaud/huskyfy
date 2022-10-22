@@ -37,12 +37,14 @@
       <v-chip v-for="(genre, index) in genres.slice(0,3)" :key="genre" :text="genre.toUpperCase()" label size="small"
         class="genre-chip" :style="genreAnimationDelay(index)">
       </v-chip>
-      <v-chip v-if="genres.length > 3 && !displayAllGenres" label size="small" text="..." class="genre-chip"
+      <v-chip v-if="genres.length > 3 && !displayAllGenres" label size="small" text="+" class="genre-chip"
         :style="genreAnimationDelay(3)" @click.stop="displayAllGenres = true">
       </v-chip>
-      <v-chip v-if="displayAllGenres" v-for="(genre, index) in genres.slice(3)" :key="genre" :text="genre.toUpperCase()"
-        label size="small" class="genre-chip" :style="genreAnimationDelay(index)">
-      </v-chip>
+      <div v-if="displayAllGenres">
+        <v-chip v-for="(genre, index) in genres.slice(3)" :key="genre" :text="genre.toUpperCase()" label size="small"
+          class="genre-chip" :style="genreAnimationDelay(index)">
+        </v-chip>
+      </div>
     </v-card-text>
     <v-card-subtitle v-else> {{ $t("track.no-genre") }}</v-card-subtitle>
   </v-list-item>
@@ -76,13 +78,13 @@ export default defineComponent({
       required: true
     }
   },
-  data() {
+  data () {
     return {
       displayAllGenres: false
     }
   },
   computed: {
-    addComma() {
+    addComma () {
       return (artistName: string): string => {
         if (this.artists[this.artists.length - 1].name === artistName) {
           return artistName
@@ -90,22 +92,22 @@ export default defineComponent({
         return `${artistName},`
       }
     },
-    loadingCover(): string {
+    loadingCover (): string {
       return require('@/assets/default_cover.jpg')
     },
     // Delay animation so cards appear one after another
-    trackAnimationDelay(): StyleValue {
-      const delay = (this.trackIndex < 30) ? `${300 * this.trackIndex}ms` : '0ms'
+    trackAnimationDelay (): StyleValue {
+      const delay = (this.trackIndex < 10) ? `${300 * this.trackIndex}ms` : '0ms'
       return { 'animation-delay': delay }
     },
-    genreAnimationDelay() {
+    genreAnimationDelay () {
       return (index: number): StyleValue => {
         return { 'animation-delay': `${index * 400}ms` }
       }
     }
   },
   methods: {
-    openTrackOnSpotify() {
+    openTrackOnSpotify () {
       window.location.href = this.trackURI
     }
   }

@@ -36,15 +36,15 @@ export default defineComponent({
       required: true
     }
   },
-  setup() {
+  setup () {
     const playlistsStore = usePlaylistsStore()
     return { playlistsStore }
   },
-  async created() {
+  async created () {
     await this.createNewPlaylist()
   },
   methods: {
-    async createNewPlaylist() {
+    async createNewPlaylist () {
       this.loadingText = this.$t('playlist.new.create')
       this.loadingPercentage = 1
       const newPlaylistId = await this.playlistsStore.createPlaylist(
@@ -72,11 +72,11 @@ export default defineComponent({
       this.loadingPercentage = 100
       this.newPlaylistId = newPlaylistId
     },
-    displayNewPlaylistDetails() {
+    displayNewPlaylistDetails () {
       window.location.href = `/playlist/${this.newPlaylistId}`
     }
   },
-  data() {
+  data () {
     return {
       loadingPercentage: 0,
       loadingText: '',
