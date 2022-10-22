@@ -36,9 +36,7 @@ export default defineComponent({
     profilePictureOrDefault (): string {
       // eslint-disable-next-line
       const DEFAULT_PICTURE = require("@/assets/no-user.png");
-      return this.userStore.profilePicture !== ''
-        ? this.userStore.profilePicture
-        : DEFAULT_PICTURE
+      return this.userStore.profilePicture || DEFAULT_PICTURE
     },
     logo (): string {
       return require('@/assets/Huskyfy.png')
@@ -49,6 +47,9 @@ export default defineComponent({
       this.userStore.reset()
       this.authStore.reset()
       this.$router.push({ name: 'LoginView' })
+    },
+    openPlaylistOwnerSpotifyProfile () {
+      window.location.href = this.userStore.uri
     }
   }
 })

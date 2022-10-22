@@ -1,6 +1,8 @@
 <template>
-  <h3>Top {{genres.length}} Genres</h3>
-  <apexchart type="donut" width="380" :options="chartOptions" :series="series"></apexchart>
+  <div id="chart-container" ref="container">
+    <h3>Top {{genres.length}} Genres</h3>
+    <apexchart type="donut" :width="width" :options="chartOptions" :series="series"></apexchart>
+  </div>
 </template>
 
 <script lang="ts">
@@ -13,8 +15,19 @@ export default defineComponent({
     genres: {
       type: Array as PropType<Genre[]>,
       required: true
-    },
-    width: Number
+    }
+  },
+  mounted () {
+    const observer = new ResizeObserver(entries => {
+      entries.forEach(entry => {
+        const cr = entry.contentRect
+        console.error('called')
+
+        this.width = (cr.width > 500) ? 500 : cr.width
+      })
+    })
+
+    observer.observe((this.$refs.container as HTMLDivElement))
   },
   watch: {
     genres (newValue: Genre[]) {
@@ -25,6 +38,10 @@ export default defineComponent({
   data () {
     // All data needed to customize graph UI and data
     return {
+      // random default value as observer overwrite this
+      width: window.innerWidth - 10,
+
+      // APEXCHART STYLING
       lastGenreSelected: false,
       lastClickedWasSelection: false,
       series: this.genres.map((genre) => genre.value),
@@ -37,16 +54,6 @@ export default defineComponent({
         dataLabels: {
           enabled: false
         },
-        responsive: [
-          {
-            breakpoint: 480,
-            options: {
-              chart: {
-                width: 200
-              }
-            }
-          }
-        ],
         legend: {
           position: 'bottom',
           onItemHover: {
@@ -58,3 +65,10 @@ export default defineComponent({
   }
 })
 </script>
+<style scoped>
+#chart-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+</style>

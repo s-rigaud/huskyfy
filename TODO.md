@@ -1,6 +1,14 @@
 # Functionalities
 
-# Fix other Github branch for reordering playlist
+* Fix other Github branch for reordering playlist
+
+* Fix export image, should be nice
+
+* Fix style for larger screens
+
+* Fix filtering tags
+
+* Add 's' for popular or indie artists
 
 ## Other
 

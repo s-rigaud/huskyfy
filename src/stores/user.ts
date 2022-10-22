@@ -8,6 +8,7 @@ export type UserState = {
   country: RemovableRef<string>;
   connected: RemovableRef<boolean>;
   locale: RemovableRef<string>;
+  uri: RemovableRef<string>;
 }
 
 // All infos about the user
@@ -18,7 +19,8 @@ export const useUserStore = defineStore('user', {
     profilePicture: useStorage('profilePicture', ''),
     country: useStorage('country', ''),
     connected: useStorage('connected', false),
-    locale: useStorage('locale', 'en')
+    locale: useStorage('locale', 'en'),
+    uri: useStorage('uri', '')
   } as UserState),
   actions: {
     reset () {
@@ -28,6 +30,7 @@ export const useUserStore = defineStore('user', {
       this.profilePicture = ''
       this.country = ''
       this.connected = false
+      this.uri = ''
       // Do not reset locale
     }
   }
