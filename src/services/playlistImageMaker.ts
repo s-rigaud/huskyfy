@@ -97,9 +97,17 @@ const addCanvasTitle = (
   ctx: CanvasRenderingContext2D,
   playlist: SpotifyPlaylist
 ) => {
-  ctx.font = '18px Arial'
+  let fontSize: number
+  const characterLength = playlist.name.length
+  if (characterLength < 10) fontSize = 40
+  else if (characterLength < 20) fontSize = 30
+  else if (characterLength < 30) fontSize = 20
+  else fontSize = 15
+
+  ctx.font = `bolder ${fontSize}px Arial`
   ctx.fillStyle = '#F39200'
-  ctx.fillText(playlist.name, 10, 10)
+  ctx.textAlign = "center";
+  ctx.fillText(playlist.name, 400 / 2, 40)
 }
 
 const addCanvasLegend = (

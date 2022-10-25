@@ -70,10 +70,10 @@
         "collaborative": "Collaborative playlist",
         "created-by": "Created by",
         "delete": {
-            "agree": "Yes 🗑️",
+            "agree": "Delete 🗑️",
             "confirm-message": "Do you really want to delete this playlist from your library ?",
             "delete": "Delete ",
-            "disagree": "No"
+            "disagree": "Cancel"
         },
         "indie-score-text": "Indie score",
         "duplicate": {
@@ -102,7 +102,7 @@
         "reset-filters": "Reset filters",
         "set-private": "Set private",
         "set-public": "Set public",
-        "unfollow": "Unfollow 🗑️",
+        "unfollow": "Delete 🗑️",
         "your-music": {
             "description": "Spotify playlist with all your favorite songs",
             "name": "Your music"

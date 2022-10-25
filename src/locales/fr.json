@@ -76,7 +76,7 @@
 			"agree": "Supprimer 🗑️",
 			"confirm-message": "Voulez vous vraiment supprimer cette playlist de votre bibliothèque ?",
 			"delete": "Supprimer ",
-			"disagree": "Non"
+			"disagree": "Retour"
 		},
 		"indie-score-text": "Score indé",
 		"duplicate": {
@@ -105,7 +105,7 @@
 		"reset-filters": "Réinitialiser les filtres",
 		"set-private": "Rendre privée",
 		"set-public": "Rendre publique",
-		"unfollow": "Supprimer de la bibliothèque 🗑️",
+		"unfollow": "Supprimer 🗑️",
 		"your-music": {
 			"description": "Playlist Spotify avec tous les titres likés",
 			"name": "Titres likés"

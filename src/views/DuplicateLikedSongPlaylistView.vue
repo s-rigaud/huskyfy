@@ -28,19 +28,19 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'DuplicateLikedSongPlaylistView',
-  setup() {
+  setup () {
     const playlistsStore = usePlaylistsStore()
     return { playlistsStore }
   },
   computed: {
-    myMusicImage(): string {
+    myMusicImage (): string {
       return require('@/assets/my-music.jpeg')
     },
-    playlistLink(): string {
+    playlistLink (): string {
       return `spotify:playlist:${this.newPlaylistId}`
     }
   },
-  data() {
+  data () {
     return {
       loadingPercentage: 0,
       newPlaylistId: '',
@@ -48,7 +48,7 @@ export default defineComponent({
     }
   },
   methods: {
-    async createNewPlaylist() {
+    async createNewPlaylist () {
       const myMusicPlaylist = this.playlistsStore.playlists[this.playlistId]
       // 1. Download My Music tracks
       this.loadingPercentage = 5
@@ -76,10 +76,10 @@ export default defineComponent({
       this.loadingPercentage = 100
       this.newPlaylistId = newPlaylistId
     },
-    displayNewPlaylistDetails() {
+    displayNewPlaylistDetails () {
       window.location.href = `/playlist/${this.newPlaylistId}`
     },
-    copyLinkToClipBoard() {
+    copyLinkToClipBoard () {
       navigator.clipboard.writeText(`https://open.spotify.com/playlist/${this.newPlaylistId}`)
     }
   }

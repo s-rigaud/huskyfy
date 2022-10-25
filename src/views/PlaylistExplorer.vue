@@ -9,8 +9,9 @@
       </v-progress-circular>
     </div>
 
-    <!-- TODO not really tested -->
-    <v-btn @click="loadMorePlaylists" v-if="Object.keys(playlistsStore.playlists).length < playlistTotal">
+    <!-- <= due to special MyMusic playlist -->
+    <v-btn v-if="Object.keys(playlistsStore.playlists).length <= playlistTotal" class="rainbow-v-btn"
+      @click="loadMorePlaylists">
       {{ $t("playlist.load-more-playlists") }}
     </v-btn>
   </div>

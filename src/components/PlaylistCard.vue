@@ -23,15 +23,15 @@ export default defineComponent({
       type: Array as PropType<SpotifyImage[]>,
       required: true
     },
-    owner: String,
+    owner: String
   },
   computed: {
-    loadingCover(): string {
+    loadingCover (): string {
       return require('@/assets/default_cover.jpg')
-    },
+    }
   },
   methods: {
-    displayDetails() {
+    displayDetails () {
       this.$router.push({
         name: 'Explore playlist',
         params: { playlistId: this.id }

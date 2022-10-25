@@ -199,11 +199,14 @@ export const usePlaylistsStore = defineStore('playlists', {
         }
       }
 
-      // Delete cached playlists deleted by user
-      const playlistRequestId = playlists.map(p => p.id)
-      for (const key in this.playlists) {
-        if (!playlistRequestId.includes(key)) {
-          delete this.playlists[key]
+      // When reloading for the first time
+      if (offset === this.MAX_PLAYLISTS_LIMIT) {
+        // Delete cached playlists deleted by user
+        const playlistRequestId = playlists.map(p => p.id)
+        for (const key in this.playlists) {
+          if (!playlistRequestId.includes(key)) {
+            delete this.playlists[key]
+          }
         }
       }
 

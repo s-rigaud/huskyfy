@@ -17,7 +17,6 @@
         <v-list-item-title>{{ $t("playlist.duplicate.button") }}</v-list-item-title>
       </v-list-item>
 
-
       <!-- 1.3 Playlist deletion -->
       <v-dialog v-model="isDeleteModalOpen">
         <template v-slot:activator="{ props }">
@@ -25,7 +24,7 @@
             <v-list-item-title>{{ $t("playlist.unfollow") }}</v-list-item-title>
           </v-list-item>
         </template>
-        <v-card>
+        <v-card id="deletion-dialog">
           <v-card-title class="text-h5 rainbow-text font-weight-bold">
             {{ $t('playlist.delete.delete') }}
             '<span class="font-italic">
@@ -37,10 +36,10 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="error" plain @click="isDeleteModalOpen = false">
+            <v-btn color="var(--text-color)" @click="isDeleteModalOpen = false">
               {{ $t('playlist.delete.disagree') }}
             </v-btn>
-            <v-btn :loading="waitingForDeletion" plain color="success" @click="unfollowPlaylist">
+            <v-btn :loading="waitingForDeletion" class="rainbow-v-btn font-weight-bold" @click="unfollowPlaylist">
               {{ $t('playlist.delete.agree') }}
             </v-btn>
           </v-card-actions>
@@ -113,7 +112,7 @@ export default defineComponent({
       required: true
     }
   },
-  setup() {
+  setup () {
     const playlistsStore = usePlaylistsStore()
     const currentUserUsername = useUserStore().username
 
@@ -124,16 +123,16 @@ export default defineComponent({
   },
   watch: {
     // Have to use this to synchronise props as I can't use props as VModel
-    open(newValue: boolean) {
+    open (newValue: boolean) {
       this.isOpen = newValue
     },
-    isOpen(newValue: boolean) {
+    isOpen (newValue: boolean) {
       if (newValue === false) {
         this.$emit('onClose')
       }
     }
   },
-  data() {
+  data () {
     return {
       isOpen: false,
       isDeleteModalOpen: false,
@@ -145,46 +144,46 @@ export default defineComponent({
     }
   },
   computed: {
-    userOwnsPlaylist(): boolean {
+    userOwnsPlaylist (): boolean {
       return (
         this.currentUserUsername ===
         this.playlistsStore.playlists[this.playlistId]
           .owner.display_name
       )
     },
-    starBackground(): string {
+    starBackground (): string {
       return require('@/assets/stars.jpg')
     }
   },
   methods: {
-    async setPlaylistPrivate() {
+    async setPlaylistPrivate () {
       await this.playlistsStore.updatePlaylistPrivacy(
         this.playlistId,
         false
       )
     },
-    async setPlaylistPublic() {
+    async setPlaylistPublic () {
       await this.playlistsStore.updatePlaylistPrivacy(
         this.playlistId,
         true
       )
     },
-    async sortPlaylistTracksByGenres() {
+    async sortPlaylistTracksByGenres () {
       await this.playlistsStore.sortPlaylistTracksByGenres(
         this.playlistId
       )
     },
-    async sortPlaylistTracksByArtistTrackInPlaylist() {
+    async sortPlaylistTracksByArtistTrackInPlaylist () {
       await this.playlistsStore.sortPlaylistTracksByArtistTrackInPlaylist(
         this.playlistId
       )
     },
-    async sortPlaylistTracksByArtistName() {
+    async sortPlaylistTracksByArtistName () {
       await this.playlistsStore.sortPlaylistTracksByArtistName(
         this.playlistId
       )
     },
-    async exportArtistPreview() {
+    async exportArtistPreview () {
       makeAndDownloadImage(
         this.playlistId,
         ['2x2', '3x3', '4x4'][this.generateImageSize],
@@ -192,7 +191,7 @@ export default defineComponent({
         this.generateImageDisplayStats
       )
     },
-    async unfollowPlaylist() {
+    async unfollowPlaylist () {
       this.isDeleteModalOpen = false
       this.waitingForDeletion = true
       const toDeletePlaylistId = this.playlistId
@@ -203,7 +202,7 @@ export default defineComponent({
   }
 })
 </script>
-<style scoped>
+<style>
 #drawer {
   z-index: 3000;
 }
@@ -225,7 +224,7 @@ export default defineComponent({
   flex-direction: column;
 }
 
-.v-list-subheader {
+#drawer .v-list-subheader {
   font-size: large;
 
   /* rainbow-text here required */
@@ -237,11 +236,20 @@ export default defineComponent({
   -webkit-text-fill-color: transparent;
 }
 
-.v-list-item {
+#drawer .v-list-item {
   text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
 }
 
-.v-navigation-drawer__img {
+#drawer .v-navigation-drawer__img {
   opacity: 0.7;
+}
+
+#drawer .v-label--clickable {
+  opacity: 1 !important;
+}
+
+#deletion-dialog {
+  max-width: fit-content;
+  margin: auto;
 }
 </style>
