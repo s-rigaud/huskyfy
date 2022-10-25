@@ -48,21 +48,23 @@
 
       <v-divider></v-divider>
 
-      <v-list-subheader> {{ $t('drawer.reorder-playlist') }} </v-list-subheader>
-      <!-- 2.1 Sort by genre -->
-      <v-list-item @click="sortPlaylistTracksByGenres">
-        <v-list-item-title>{{ $t('drawer.reorder-by-genre') }}</v-list-item-title>
-      </v-list-item>
-      <!-- 2.2 Sort tracks from the ones with the artist with the most tracks to the least  -->
-      <v-list-item @click="sortPlaylistTracksByArtistTrackInPlaylist">
-        <v-list-item-title>{{ $t('drawer.reorder-by-artist-pop') }}</v-list-item-title>
-      </v-list-item>
-      <!-- 2.1 Sort by artist name -->
-      <v-list-item @click="sortPlaylistTracksByArtistName">
-        <v-list-item-title>{{ $t('drawer.reorder-by-artist-name') }}</v-list-item-title>
-      </v-list-item>
+      <div v-if="userOwnsPlaylist">
+        <v-list-subheader> {{ $t('drawer.reorder-playlist') }} </v-list-subheader>
+        <!-- 2.1 Sort by genre -->
+        <v-list-item @click="sortPlaylistTracksByGenres">
+          <v-list-item-title>{{ $t('drawer.reorder-by-genre') }}</v-list-item-title>
+        </v-list-item>
+        <!-- 2.2 Sort tracks from the ones with the artist with the most tracks to the least  -->
+        <v-list-item @click="sortPlaylistTracksByArtistTrackInPlaylist">
+          <v-list-item-title>{{ $t('drawer.reorder-by-artist-pop') }}</v-list-item-title>
+        </v-list-item>
+        <!-- 2.1 Sort by artist name -->
+        <v-list-item @click="sortPlaylistTracksByArtistName">
+          <v-list-item-title>{{ $t('drawer.reorder-by-artist-name') }}</v-list-item-title>
+        </v-list-item>
 
-      <v-divider></v-divider>
+        <v-divider></v-divider>
+      </div>
 
       <!-- (At least 4 tracks to download image) -->
       <div v-if="playlistsStore.playlists[playlistId].tracks.length > 3">
@@ -70,7 +72,7 @@
           {{ $t('drawer.export-image') }}
         </v-list-subheader>
         <!-- 3.1 Export Image -->
-        <v-slider :ticks="{ 0: '2x2', 1: '3x3', 2: '4x4' }" :max="2" step="1" show-ticks="always" tick-size="4"
+        <v-slider v-if="maxTick > 0" :ticks="ticks" :max="maxTick" step="1" show-ticks="always" tick-size="4"
           color="var(--text-color)" prepend-icon="mdi-arrange-send-to-back" v-model="generateImageSize" @touchstart.stop
           id="generate-image-size-slider">
         </v-slider>
@@ -152,6 +154,21 @@ export default defineComponent({
     },
     starBackground(): string {
       return require('@/assets/stars.jpg')
+    },
+    ticks() {
+      const trackNumber = this.playlistsStore.playlists[this.playlistId].tracks.length
+      const ticks: any = {}
+      if (trackNumber >= 4) ticks[0] = '2x2'
+      if (trackNumber >= 9) ticks[1] = '3x3'
+      if (trackNumber >= 16) ticks[2] = '4x4'
+      return ticks
+    },
+    maxTick(): number {
+      const trackNumber = this.playlistsStore.playlists[this.playlistId].tracks.length
+      let max = 0
+      if (trackNumber >= 9) max = 1
+      if (trackNumber >= 16) max = 2
+      return max
     }
   },
   methods: {

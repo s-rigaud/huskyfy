@@ -128,7 +128,7 @@ const addCanvasLegend = (
   ctx.fillStyle = '#e67e2277'
   drawRoundRect(ctx, 5, yStart + 3, 150, 25, 10, true, false)
 
-  const popularText = `${VueI18n.tc('track.popular', 1)} ${100 - percentage}%`
+  const popularText = `${VueI18n.tc('track.popular', 2)} ${100 - percentage}%`
   ctx.font = `bolder ${13}px Arial`
   ctx.textAlign = 'start'
   const popularGradient = ctx.createLinearGradient(300, 40, 500, 40)
@@ -141,7 +141,7 @@ const addCanvasLegend = (
   ctx.fillStyle = '#27ae6077'
   drawRoundRect(ctx, 205, yStart + 3, 150, 25, 10, true, false)
 
-  const indieText = `${VueI18n.tc('track.indie', 1)} ${percentage}%`
+  const indieText = `${VueI18n.tc('track.indie', 2)} ${percentage}%`
   ctx.font = `bolder ${13}px Arial`
 
   const indieGradient = ctx.createLinearGradient(300, 40, 500, 40)
