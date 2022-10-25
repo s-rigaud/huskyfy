@@ -79,8 +79,7 @@
             <p :class="(generateImageDisplayTitle) ? 'rainbow-text' : ''">{{ $t('drawer.image-display-title') }}</p>
           </template>
         </v-switch>
-        <v-switch v-model="generateImageDisplayStats" color="var(--link-color)" value="var(--link-color)"
-          class="generate-image-switch">
+        <v-switch v-model="generateImageDisplayStats" color="var(--link-color)" class="generate-image-switch">
           <template v-slot:label>
             <p :class="(generateImageDisplayStats) ? 'rainbow-text' : ''">{{ $t('drawer.image-display-stats') }}</p>
           </template>
@@ -101,7 +100,7 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'ActionDrawer',
-  emits: ['onClose', 'duplicatePlaylist'],
+  emits: ['onClose', 'duplicatePlaylist', 'onSortEnd'],
   props: {
     open: {
       type: Boolean,
@@ -112,7 +111,7 @@ export default defineComponent({
       required: true
     }
   },
-  setup () {
+  setup() {
     const playlistsStore = usePlaylistsStore()
     const currentUserUsername = useUserStore().username
 
@@ -123,16 +122,16 @@ export default defineComponent({
   },
   watch: {
     // Have to use this to synchronise props as I can't use props as VModel
-    open (newValue: boolean) {
+    open(newValue: boolean) {
       this.isOpen = newValue
     },
-    isOpen (newValue: boolean) {
+    isOpen(newValue: boolean) {
       if (newValue === false) {
         this.$emit('onClose')
       }
     }
   },
-  data () {
+  data() {
     return {
       isOpen: false,
       isDeleteModalOpen: false,
@@ -140,50 +139,53 @@ export default defineComponent({
 
       generateImageSize: 0,
       generateImageDisplayTitle: true,
-      generateImageDisplayStats: false
+      generateImageDisplayStats: true
     }
   },
   computed: {
-    userOwnsPlaylist (): boolean {
+    userOwnsPlaylist(): boolean {
       return (
         this.currentUserUsername ===
         this.playlistsStore.playlists[this.playlistId]
           .owner.display_name
       )
     },
-    starBackground (): string {
+    starBackground(): string {
       return require('@/assets/stars.jpg')
     }
   },
   methods: {
-    async setPlaylistPrivate () {
+    async setPlaylistPrivate() {
       await this.playlistsStore.updatePlaylistPrivacy(
         this.playlistId,
         false
       )
     },
-    async setPlaylistPublic () {
+    async setPlaylistPublic() {
       await this.playlistsStore.updatePlaylistPrivacy(
         this.playlistId,
         true
       )
     },
-    async sortPlaylistTracksByGenres () {
+    async sortPlaylistTracksByGenres() {
       await this.playlistsStore.sortPlaylistTracksByGenres(
         this.playlistId
       )
+      this.$emit("onSortEnd")
     },
-    async sortPlaylistTracksByArtistTrackInPlaylist () {
+    async sortPlaylistTracksByArtistTrackInPlaylist() {
       await this.playlistsStore.sortPlaylistTracksByArtistTrackInPlaylist(
         this.playlistId
       )
+      this.$emit("onSortEnd")
     },
-    async sortPlaylistTracksByArtistName () {
+    async sortPlaylistTracksByArtistName() {
       await this.playlistsStore.sortPlaylistTracksByArtistName(
         this.playlistId
       )
+      this.$emit("onSortEnd")
     },
-    async exportArtistPreview () {
+    async exportArtistPreview() {
       makeAndDownloadImage(
         this.playlistId,
         ['2x2', '3x3', '4x4'][this.generateImageSize],
@@ -191,7 +193,7 @@ export default defineComponent({
         this.generateImageDisplayStats
       )
     },
-    async unfollowPlaylist () {
+    async unfollowPlaylist() {
       this.isDeleteModalOpen = false
       this.waitingForDeletion = true
       const toDeletePlaylistId = this.playlistId

@@ -41,8 +41,9 @@
         <v-icon>mdi-apple-keyboard-control</v-icon>
       </v-btn>
 
-      <ActionDrawer :open="drawer" :playlistId="playlistId" @onClose="drawer = false"
-        @duplicatePlaylist="() => { startDuplication = true; drawer = false }" />
+      <ActionDrawer :open="drawer" :playlistId="playlistId" @on-close="drawer = false"
+        @duplicate-playlist="() => { startDuplication = true; drawer = false }"
+        @on-sort-end="() => { resetFilters(); drawer = false }"/>
 
       <v-expansion-panels variant="accordion">
         <v-expansion-panel bg-color="var(--text-color)">
@@ -143,7 +144,7 @@
     <LoadMoreTracksPopup
       v-if="isHugePlaylist && playlists[playlistId].tracks.length < playlists[playlistId].total && !startDuplication"
       :playlist="playlists[playlistId]" :trackRequestLimit="TRACK_REQUEST_LIMIT"
-      @allTracksLoaded="() => { resetFilters(); refreshStats() }" />
+      @all-tracks-loaded="() => { resetFilters(); refreshStats() }" />
 
   </div>
   <!-- No tracks in the playlist -->

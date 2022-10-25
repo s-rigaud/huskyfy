@@ -1,6 +1,8 @@
 import { SpotifyPlaylist } from '@/api/spotify/types/entities'
+import VueI18n from '@/i18n'
 import { usePlaylistsStore } from '@/stores/playlists'
-const LOGO: string = require('@/assets/Huskyfy.png')
+import { capitalize } from '@/utils/functions'
+import drawRoundRect from './utils'
 
 const makeAndDownloadImage = (playlistId: string, size: string | number, showTitle: boolean, showStats: boolean) => {
   const playlistsStore = usePlaylistsStore()
@@ -14,7 +16,6 @@ const makeAndDownloadImage = (playlistId: string, size: string | number, showTit
   const artistImageUrls = topArtists.map(res => res.artist.images[0].url)
 
   // Logo should also be loaded asynchronously
-  artistImageUrls.unshift(LOGO)
   const images = artistImageUrls.map(src => {
     const image = new Image()
     image.crossOrigin = ''
@@ -69,7 +70,7 @@ const createCanvas = (
   // Adding pictures
   for (let i = 0; i < gridSize; i++) {
     for (let j = 0; j < gridSize; j++) {
-      const imageIndex = (i * gridSize + j) + 1
+      const imageIndex = i * gridSize + j
       ctx.drawImage(
         images[imageIndex],
         (i * canvas.width / gridSize) + gridSize,
@@ -84,10 +85,7 @@ const createCanvas = (
     addCanvasTitle(ctx, playlist)
   }
   if (showStats) {
-    // Adding logo to canvas
-    const logo = images[0]
-    ctx.drawImage(logo, 0, heightStart + 400 + 30, 200, 60)
-    addCanvasLegend(ctx, playlist)
+    addCanvasLegend(ctx, playlist, canvas.height - 100)
   }
 
   return canvas.toDataURL('image/jpeg', 1)
@@ -101,44 +99,77 @@ const addCanvasTitle = (
   const characterLength = playlist.name.length
   if (characterLength < 10) fontSize = 40
   else if (characterLength < 20) fontSize = 30
-  else if (characterLength < 30) fontSize = 20
+  else if (characterLength < 30) fontSize = 25
+  else if (characterLength < 40) fontSize = 20
   else fontSize = 15
 
   ctx.font = `bolder ${fontSize}px Arial`
-  ctx.fillStyle = '#F39200'
-  ctx.textAlign = "center";
-  ctx.fillText(playlist.name, 400 / 2, 40)
+  ctx.textAlign = 'center'
+
+  const txtWidth = ctx.measureText(playlist.name).width
+  const gradient = ctx.createLinearGradient(400 / 2, 40, txtWidth, 25)
+  gradient.addColorStop(0, '#F39200')
+  gradient.addColorStop(1, '#F9B621')
+  ctx.fillStyle = gradient
+
+  ctx.fillText(playlist.name, 400 / 2, 30 + fontSize / 3)
 }
 
 const addCanvasLegend = (
   ctx: CanvasRenderingContext2D,
-  playlist: SpotifyPlaylist
+  playlist: SpotifyPlaylist,
+  yStart: number
 ) => {
   const playlistsStore = usePlaylistsStore()
 
-  // Logo already added
-
-  // Add playlist name
-  ctx.font = '18px Arial'
-  ctx.fillStyle = '#F39200'
-  ctx.fillText(playlist.name, 10, 515)
-
-  // Adding INDIE %
-  ctx.font = '13px Arial'
+  // 1. INDIE PERCENTAGES
   const percentage = playlistsStore.getIndiePercentage(playlist.id)
-  ctx.fillText(
-    `Indie score : ${percentage} %`,
-    150, 550
-  )
+  // 1.1 Popular
+  ctx.fillStyle = '#e67e2277'
+  drawRoundRect(ctx, 5, yStart + 3, 150, 25, 10, true, false)
 
-  // Adding TOP Genres
+  const popularText = `${VueI18n.tc('track.popular', 1)} ${100 - percentage}%`
+  ctx.font = `bolder ${13}px Arial`
+  ctx.textAlign = 'start'
+  const popularGradient = ctx.createLinearGradient(300, 40, 500, 40)
+  popularGradient.addColorStop(0, '#e74c3c')
+  popularGradient.addColorStop(1, '#e67e22')
+  ctx.fillStyle = popularGradient
+  ctx.fillText(popularText, 10, yStart + 20)
+
+  // 1.2 Indie
+  ctx.fillStyle = '#27ae6077'
+  drawRoundRect(ctx, 205, yStart + 3, 150, 25, 10, true, false)
+
+  const indieText = `${VueI18n.tc('track.indie', 1)} ${percentage}%`
+  ctx.font = `bolder ${13}px Arial`
+
+  const indieGradient = ctx.createLinearGradient(300, 40, 500, 40)
+  indieGradient.addColorStop(0, '#2ecc71')
+  indieGradient.addColorStop(1, '#27ae60')
+  ctx.fillStyle = indieGradient
+  ctx.fillText(indieText, 205, yStart + 20)
+
+  // 2. Adding TOP Genres
+  // Genres
+  // 1 -----  2 -----
+  // 3 -----  4 -----
+  ctx.font = 'bolder 17px Arial'
+  ctx.fillStyle = '#F39200'
+  ctx.fillText('TOP 4 GENRES', 10, yStart + 45)
+
   ctx.font = '13px Arial'
-  const top5Genres = playlistsStore.getTopGenres(playlist.id, 5)
-  for (let i = 0; i < top5Genres.length; i++) {
-    ctx.fillText(
-      `${getEmojiForRank(i)} ${top5Genres[i].value}% ${top5Genres[i].name}`,
-      270, 535 + 14 * i
-    )
+  ctx.fillStyle = '#EEE'
+  const top4Genres = playlistsStore.getTopGenres(playlist.id, 4)
+  let index: number
+  for (let i = 0; i < 2; i++) {
+    for (let y = 0; y < 2; y++) {
+      index = i * 2 + y
+      ctx.font = 'bold 13px Arial'
+      ctx.fillText(`${getEmojiForRank(index)} ${top4Genres[i].value}%`, 10 + 200 * y, yStart + 65 + 20 * i)
+      ctx.font = '13px Arial'
+      ctx.fillText(capitalize(top4Genres[index].name), 10 + 200 * y + 55, yStart + 65 + 20 * i)
+    }
   }
 }
 

@@ -18,5 +18,6 @@ const i18n = createI18n<[MessageSchema], 'fr' | 'en'>({
   messages
 })
 const t = i18n.global.t
+const tc = i18n.global.tc
 
-export default { i18n, t }
+export default { i18n, t, tc }
