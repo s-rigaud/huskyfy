@@ -21,8 +21,6 @@ export default defineComponent({
     const observer = new ResizeObserver(entries => {
       entries.forEach(entry => {
         const cr = entry.contentRect
-        console.error('called')
-
         this.width = (cr.width > 500) ? 500 : cr.width
       })
     })

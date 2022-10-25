@@ -15,10 +15,11 @@
           {{ addComma(artist.name) }}
         </v-card-subtitle>
       </a>
-      <v-chip v-if="isIndie" :text="$t('track.indie')" color="green" label text-color="white" size="small"
-        class="popularity-chip">
+      <v-chip v-if="isIndie" :text="$tc('track.indie', artists.length)" color="green" label text-color="white"
+        size="small" class="popularity-chip">
       </v-chip>
-      <v-chip v-else :text="$t('track.popular')" color="cyan" label size="small" class="popularity-chip">
+      <v-chip v-else :text="$tc('track.popular', artists.length)" color="cyan" label size="small"
+        class="popularity-chip">
       </v-chip>
     </div>
 

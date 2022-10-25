@@ -1,26 +1,21 @@
 <template>
   <!-- Layer on top to follow steps of playlist duplication -->
-  <v-snackbar v-model="snackbar" shaped>
+  <v-snackbar v-model="snackbarVisible" :timeout="timeout" elevation="24">
     <div id="loading-create-new-playlist" v-if="loadingPercentage > 0">
       <v-progress-circular :model-value="loadingPercentage" color="var(--text-color)">
       </v-progress-circular>
       <p class="rainbow-text">{{ loadingPercentage }}% - {{ loadingText }}</p>
     </div>
 
-    <v-btn id="get-to-new-playlist" class="rainbow-v-btn" v-if="newPlaylistId !== ''"
+    <v-btn id="get-to-new-playlist" class="rainbow-v-btn" :loading="newPlaylistId === ''"
       @click="displayNewPlaylistDetails">
       {{ $t("playlist.next") }}
     </v-btn>
-
-    <template v-slot:actions>
-      <v-btn color="red" variant="text" @click="snackbar = false"> X </v-btn>
-    </template>
-
   </v-snackbar>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
+import { defineComponent } from 'vue'
 
 import { usePlaylistsStore } from '@/stores/playlists'
 
@@ -30,26 +25,29 @@ export default defineComponent({
     playlistId: {
       type: String,
       required: true
-    },
-    selectedGenres: {
-      type: Array as PropType<string[]>,
-      required: true
     }
   },
-  setup () {
+  setup() {
     const playlistsStore = usePlaylistsStore()
     return { playlistsStore }
   },
-  async created () {
+  async created() {
     await this.createNewPlaylist()
   },
+  computed: {
+    timeout(): number {
+      return this.loadingPercentage === 100 ? 10_000 : -1
+    }
+  },
   methods: {
-    async createNewPlaylist () {
+    async createNewPlaylist() {
       this.loadingText = this.$t('playlist.new.create')
       this.loadingPercentage = 1
+
       const newPlaylistId = await this.playlistsStore.createPlaylist(
         this.playlistId,
-        this.selectedGenres,
+        this.getNewPlaylistName(),
+        this.getNewPlaylistDescription(),
         false,
         false
       )
@@ -72,23 +70,42 @@ export default defineComponent({
       this.loadingPercentage = 100
       this.newPlaylistId = newPlaylistId
     },
-    displayNewPlaylistDetails () {
+    displayNewPlaylistDetails() {
       window.location.href = `/playlist/${this.newPlaylistId}`
+    },
+    getNewPlaylistName(): string {
+      const basePlaylist = this.playlistsStore.playlists[this.playlistId]
+      let newPlaylistName = `${this.$t('playlist.duplicate.copy-of')} ${basePlaylist.name}`
+      return newPlaylistName
+    },
+    getNewPlaylistDescription(): string {
+      const basePlaylist = this.playlistsStore.playlists[this.playlistId]
+      let newPlaylistDescription = `${this.$t('playlist.duplicate.copy-of')} "${basePlaylist.name}" • ${this.$t('playlist.duplicate.created-by')}`
+      return newPlaylistDescription
     }
   },
-  data () {
+  data() {
     return {
       loadingPercentage: 0,
       loadingText: '',
 
       newPlaylistId: '',
 
-      snackbar: true
+      snackbarVisible: true
+    }
+  },
+  watch: {
+    snackbarVisible(newValue: boolean) {
+      if (newValue === false) {
+        this.loadingPercentage = 0
+        this.loadingText = ''
+        this.newPlaylistId = ''
+      }
     }
   }
 })
 </script>
-<style scoped>
+<style>
 #loading-create-new-playlist {
   display: flex;
   flex-direction: row;
@@ -99,6 +116,7 @@ export default defineComponent({
 .v-snackbar__content {
   display: flex;
   flex-direction: column;
+  background-color: var(--primary-color);
 }
 
 .v-progress-circular__underlay {

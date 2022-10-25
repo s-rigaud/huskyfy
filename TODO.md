@@ -8,7 +8,7 @@
 
 * Fix filtering tags
 
-* Add 's' for popular or indie artists
+* Better highlight for indie score + tooltip
 
 ## Other
 

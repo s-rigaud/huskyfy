@@ -4,8 +4,7 @@
     <div id="playlists">
       <PlaylistCard v-for="playlist in playlistsStore.playlists" :key="playlist.id" :id="playlist.id"
         :name="formatName(playlist)" :images="playlist.images"
-        :owner="usernameToDisplay(playlist.owner['display_name'])" :public="playlist.public"
-        :collaborative="playlist.collaborative" />
+        :owner="usernameToDisplay(playlist.owner['display_name'])" />
       <v-progress-circular v-if="!playlistLoaded" :size="70" :width="7" color="var(--text-color)" indeterminate>
       </v-progress-circular>
     </div>

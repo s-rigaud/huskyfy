@@ -62,22 +62,23 @@ export default defineComponent({
 </script>
 <style scoped>
 #login {
-  text-align: center;
-  background: url("../../public/home-background.webp");
-  background-size: cover;
-  background-position: 50%;
   position: absolute;
   left: 0;
   right: 0;
   top: 0;
   bottom: 0;
-  z-index: 1;
   padding: 12px;
+
+  background: url("../../public/home-background.webp");
+  background-size: cover;
+  background-position: 50%;
+  z-index: 1;
 
   display: flex;
   flex-direction: column;
   align-content: center;
   align-items: center;
+  text-align: center;
 }
 
 #upper-part {
@@ -85,6 +86,7 @@ export default defineComponent({
   flex-wrap: wrap;
   justify-content: flex-end;
   align-items: center;
+
   width: min(100%, 400px);
   margin-top: 15px;
 }
@@ -122,6 +124,7 @@ export default defineComponent({
   text-transform: none;
   letter-spacing: 0;
   color: black !important;
+
   position: absolute;
   bottom: 10%;
 }
@@ -144,14 +147,16 @@ a {
 
 #hero {
   width: 95%;
+  min-height: 60%;
   margin-top: 20px;
-  border-radius: 15px;
   padding: 10px;
+
+  border-radius: 15px;
   background-color: rgba(0, 0, 0, 0.7);
+
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 60%;
 }
 
 #functionalities {
@@ -161,6 +166,7 @@ a {
 .functionality {
   display: inline-flex;
   align-items: flex-start;
+
   padding: 10px 0px;
   text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
 }

@@ -82,6 +82,7 @@
             "created-by": "created by Huskyfy 🐺",
             "tooltip": "Create a new playlist with currently selected tracks"
         },
+        "explanation-indie-score": "Number of tracks made by indie artists (@:_emojis.indie) / Number of tracks (@:_emojis.indie + @:_emojis.popular)",
         "export-preview": "Export playlist preview 🖼️",
         "fully-loaded": "All artists, tracks and genres have been retrieved",
         "load-more-button": "Load all tracks",
@@ -128,10 +129,10 @@
                 "or": "or"
             }
         },
-        "indie": "🌴 Indie artist",
+        "indie": "🌴 Indie artist | 🌴 Indie artists",
         "name": "tracks",
         "no-genre": "No genre provided",
-        "popular": "🔥 Popular artist"
+        "popular": "🔥 Popular artist | 🔥 Popular artists"
     },
     "404": {
         "title": {

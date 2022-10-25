@@ -8,7 +8,7 @@
     <v-spacer></v-spacer>
 
     <!-- Right part -->
-    <div id="user-info">
+    <div id="user-info" @click="openUserSpotifyProfile">
       <h3 id="profile-name" class="rainbow-text"> {{ userStore.username }} </h3>
       <v-avatar id="profile-picture">
         <v-img rel="preconnect" :src="userStore.profilePicture" alt="Profile picture"></v-img>
@@ -19,36 +19,33 @@
 
 <script lang="ts">
 import { useAuthStore } from '@/stores/auth'
-import { usePlaylistsStore } from '@/stores/playlists'
 import { useUserStore } from '@/stores/user'
 import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'NavbarHeader',
-  setup () {
+  setup() {
     const userStore = useUserStore()
     const authStore = useAuthStore()
-    const playlistsStore = usePlaylistsStore()
-
-    return { authStore, playlistsStore, userStore }
+    return { authStore, userStore }
   },
   computed: {
-    profilePictureOrDefault (): string {
+    profilePictureOrDefault(): string {
       // eslint-disable-next-line
       const DEFAULT_PICTURE = require("@/assets/no-user.png");
       return this.userStore.profilePicture || DEFAULT_PICTURE
     },
-    logo (): string {
+    logo(): string {
       return require('@/assets/Huskyfy.png')
     }
   },
   methods: {
-    logout () {
+    logout() {
       this.userStore.reset()
       this.authStore.reset()
       this.$router.push({ name: 'LoginView' })
     },
-    openPlaylistOwnerSpotifyProfile () {
+    openUserSpotifyProfile() {
       window.location.href = this.userStore.uri
     }
   }
@@ -58,10 +55,11 @@ export default defineComponent({
 #app-bar {
   font-family: 'Righteous';
   height: 64px;
+  cursor: default;
 }
 
 #app-bar-logo {
-  width: 100%
+  width: 250px
 }
 
 #profile-picture {

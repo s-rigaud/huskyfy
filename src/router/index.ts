@@ -78,9 +78,6 @@ router.beforeEach(async function (to, from, next) {
     // Getting user info
     const response = await api.spotify.users.getUserProfile()
     const data = response.data
-
-    console.error(data)
-
     const userPicture = (data.images.length > 0) ? data.images[0].url : require('@/assets/no-user.png')
     useUserStore().$patch({
       id: data.id,

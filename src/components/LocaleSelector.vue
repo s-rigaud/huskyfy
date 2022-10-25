@@ -9,9 +9,7 @@
     <v-list id="locale-list">
       <v-list-item class="locale-item" v-for="(locale, index) in sortedLocales" :key="index" :item-value="locale"
         @click="updateLocale">
-        <v-list-item-avatar size="small">
-          <v-img width="50" :src="getIconForLocale(locale)" :alt="locale"></v-img>
-        </v-list-item-avatar>
+        <v-img width="50" :src="getIconForLocale(locale)" :alt="locale"></v-img>
       </v-list-item>
     </v-list>
   </v-menu>

@@ -329,25 +329,11 @@ export const usePlaylistsStore = defineStore('playlists', {
       delete this.playlists[playlistId]
     },
     // Create new empty playlist
-    async createPlaylist (basePlaylistId: string, selectedGenres: string[], public_: boolean, collaborative: boolean): Promise<string> {
-      const translate = VueI18n.t
+    async createPlaylist (basePlaylistId: string, name: string, description: string, public_: boolean, collaborative: boolean): Promise<string> {
       const basePlaylist = this.playlists[basePlaylistId]
 
-      let newPlaylistName = `${translate('playlist.duplicate.copy-of')} ${basePlaylist.name}`
-      let newPlaylistDescription = ''
-      if (selectedGenres.length !== 0) {
-        newPlaylistName += ` • ${selectedGenres}`
-        newPlaylistDescription += `'${basePlaylist.name}' • ${selectedGenres} •`
-      } else {
-        newPlaylistDescription += `${translate('playlist.duplicate.copy-of')} "${basePlaylist.name}"`
-      }
-      newPlaylistDescription += ` ${translate('playlist.duplicate.created-by')}`
-
-      const name = newPlaylistName
-      const description = newPlaylistDescription
       // const public_ = basePlaylist.public && !basePlaylist.collaborative
       // const collaborative = basePlaylist.collaborative
-
       const response = await api.spotify.playlists.createPlaylist(
         name,
         description,

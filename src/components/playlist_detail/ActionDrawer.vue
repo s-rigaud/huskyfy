@@ -1,7 +1,7 @@
 <template>
   <v-navigation-drawer id="drawer" v-model="isOpen" temporary location="right" :image="starBackground">
     <v-list>
-      <v-list-subheader class="font-weight-bold">{{ $t('drawer.update-playlist') }}</v-list-subheader>
+      <v-list-subheader>{{ $t('drawer.update-playlist') }}</v-list-subheader>
       <!-- 1.1 Update playlist privacy -->
       <div v-if="userOwnsPlaylist && !playlistsStore.playlists[playlistId].collaborative">
         <v-list-item v-if="playlistsStore.playlists[playlistId].public" @click="setPlaylistPrivate">
@@ -13,14 +13,10 @@
       </div>
 
       <!-- 1.2 Duplicate playlist -->
-      <v-tooltip location="bottom" v-if="playlistsStore.playlists[playlistId].tracks.length > 1">
-        <template v-slot:activator="{ props: visibilityTooltip }">
-          <v-list-item v-bind="visibilityTooltip" @click="$emit('duplicatePlaylist')">
-            <v-list-item-title>{{ $t("playlist.duplicate.button") }}</v-list-item-title>
-          </v-list-item>
-        </template>
-        <span> {{ $t("playlist.duplicate.tooltip") }} </span>
-      </v-tooltip>
+      <v-list-item @click="$emit('duplicatePlaylist')">
+        <v-list-item-title>{{ $t("playlist.duplicate.button") }}</v-list-item-title>
+      </v-list-item>
+
 
       <!-- 1.3 Playlist deletion -->
       <v-dialog v-model="isDeleteModalOpen">
@@ -44,7 +40,7 @@
             <v-btn color="error" plain @click="isDeleteModalOpen = false">
               {{ $t('playlist.delete.disagree') }}
             </v-btn>
-            <v-btn :loading="!waitingForDeletion" plain color="success" @click="unfollowPlaylist">
+            <v-btn :loading="waitingForDeletion" plain color="success" @click="unfollowPlaylist">
               {{ $t('playlist.delete.agree') }}
             </v-btn>
           </v-card-actions>
@@ -75,19 +71,19 @@
           {{ $t('drawer.export-image') }}
         </v-list-subheader>
         <!-- 3.1 Export Image -->
-        <v-slider :ticks="{0: '2x2', 1: '3x3', 2: '4x4'}" :max="2" step="1" show-ticks="always" tick-size="4"
+        <v-slider :ticks="{ 0: '2x2', 1: '3x3', 2: '4x4' }" :max="2" step="1" show-ticks="always" tick-size="4"
           color="var(--text-color)" prepend-icon="mdi-arrange-send-to-back" v-model="generateImageSize" @touchstart.stop
           id="generate-image-size-slider">
         </v-slider>
         <v-switch v-model="generateImageDisplayTitle" color="var(--link-color)" class="generate-image-switch">
           <template v-slot:label>
-            <p :class="(generateImageDisplayTitle)?'rainbow-text':''">{{ $t('drawer.image-display-title') }}</p>
+            <p :class="(generateImageDisplayTitle) ? 'rainbow-text' : ''">{{ $t('drawer.image-display-title') }}</p>
           </template>
         </v-switch>
         <v-switch v-model="generateImageDisplayStats" color="var(--link-color)" value="var(--link-color)"
           class="generate-image-switch">
           <template v-slot:label>
-            <p :class="(generateImageDisplayStats)?'rainbow-text':''">{{ $t('drawer.image-display-stats') }}</p>
+            <p :class="(generateImageDisplayStats) ? 'rainbow-text' : ''">{{ $t('drawer.image-display-stats') }}</p>
           </template>
         </v-switch>
         <div id="generate-image-button">
@@ -117,7 +113,7 @@ export default defineComponent({
       required: true
     }
   },
-  setup () {
+  setup() {
     const playlistsStore = usePlaylistsStore()
     const currentUserUsername = useUserStore().username
 
@@ -128,16 +124,16 @@ export default defineComponent({
   },
   watch: {
     // Have to use this to synchronise props as I can't use props as VModel
-    open (newValue: boolean) {
+    open(newValue: boolean) {
       this.isOpen = newValue
     },
-    isOpen (newValue: boolean) {
+    isOpen(newValue: boolean) {
       if (newValue === false) {
         this.$emit('onClose')
       }
     }
   },
-  data () {
+  data() {
     return {
       isOpen: false,
       isDeleteModalOpen: false,
@@ -149,46 +145,46 @@ export default defineComponent({
     }
   },
   computed: {
-    userOwnsPlaylist (): boolean {
+    userOwnsPlaylist(): boolean {
       return (
         this.currentUserUsername ===
         this.playlistsStore.playlists[this.playlistId]
           .owner.display_name
       )
     },
-    starBackground (): string {
+    starBackground(): string {
       return require('@/assets/stars.jpg')
     }
   },
   methods: {
-    async setPlaylistPrivate () {
+    async setPlaylistPrivate() {
       await this.playlistsStore.updatePlaylistPrivacy(
         this.playlistId,
         false
       )
     },
-    async setPlaylistPublic () {
+    async setPlaylistPublic() {
       await this.playlistsStore.updatePlaylistPrivacy(
         this.playlistId,
         true
       )
     },
-    async sortPlaylistTracksByGenres () {
+    async sortPlaylistTracksByGenres() {
       await this.playlistsStore.sortPlaylistTracksByGenres(
         this.playlistId
       )
     },
-    async sortPlaylistTracksByArtistTrackInPlaylist () {
+    async sortPlaylistTracksByArtistTrackInPlaylist() {
       await this.playlistsStore.sortPlaylistTracksByArtistTrackInPlaylist(
         this.playlistId
       )
     },
-    async sortPlaylistTracksByArtistName () {
+    async sortPlaylistTracksByArtistName() {
       await this.playlistsStore.sortPlaylistTracksByArtistName(
         this.playlistId
       )
     },
-    async exportArtistPreview () {
+    async exportArtistPreview() {
       makeAndDownloadImage(
         this.playlistId,
         ['2x2', '3x3', '4x4'][this.generateImageSize],
@@ -196,7 +192,7 @@ export default defineComponent({
         this.generateImageDisplayStats
       )
     },
-    async unfollowPlaylist () {
+    async unfollowPlaylist() {
       this.isDeleteModalOpen = false
       this.waitingForDeletion = true
       const toDeletePlaylistId = this.playlistId
@@ -227,5 +223,25 @@ export default defineComponent({
   display: flex;
   align-items: center;
   flex-direction: column;
+}
+
+.v-list-subheader {
+  font-size: large;
+
+  /* rainbow-text here required */
+  background: linear-gradient(180deg, var(--text-color) 20%, var(--link-color) 51%, var(--text-color) 86%);
+  background-size: 100%;
+  background-repeat: repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.v-list-item {
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+}
+
+.v-navigation-drawer__img {
+  opacity: 0.7;
 }
 </style>

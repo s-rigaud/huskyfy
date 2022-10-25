@@ -3,17 +3,9 @@
   <v-card flat @click="displayDetails" class="playlist-card">
     <v-img rel="preconnect" :src="images[0].url" alt="Playlist cover" :lazy-src="loadingCover" cover>
     </v-img>
-
     <v-card-title>
       <p class="text-truncate rainbow-text card-title"> {{ name }} </p>
     </v-card-title>
-
-    <v-card-subtitle class="pad-title-0 visibility-status">
-      <p v-if="collaborative">{{ $t("playlist.collaborative") }} {{ $t("_emojis.collaborative") }}</p>
-      <p v-else-if="public">{{ $t("playlist.public") }} {{ $t("_emojis.public") }}</p>
-      <p v-else> {{ $t("playlist.private") }} {{ $t("_emojis.private") }}</p>
-    </v-card-subtitle>
-    <v-img rel="preconnect" width="30" :src="huskyfyCircle" alt="Huskyfy Image" class="huskyfy-img"></v-img>
   </v-card>
 </template>
 
@@ -32,19 +24,14 @@ export default defineComponent({
       required: true
     },
     owner: String,
-    public: Boolean,
-    collaborative: Boolean
   },
   computed: {
-    loadingCover (): string {
+    loadingCover(): string {
       return require('@/assets/default_cover.jpg')
     },
-    huskyfyCircle (): string {
-      return require('@/assets/large-logo-circle.png')
-    }
   },
   methods: {
-    displayDetails () {
+    displayDetails() {
       this.$router.push({
         name: 'Explore playlist',
         params: { playlistId: this.id }
@@ -71,17 +58,24 @@ export default defineComponent({
 
 .playlist-card {
   width: max(150px, 45%);
-  height: 210px;
-  background-color: initial;
+  height: auto;
   margin: 0px 3px 15px 3px;
+  padding: 10px 10px 0px 10px;
+
+  color: var(--text-color) !important;
   background-color: initial;
-  padding: 10px;
+
   display: flex;
   flex-direction: column;
-  color: var(--text-color) !important;
+
   animation: playlist-append 500ms linear;
   animation-fill-mode: forwards;
   opacity: 0;
+}
+
+.playlist-card .v-card-title {
+  line-height: normal;
+  padding: 5px 0px;
 }
 
 .playlist-card .card-title {
@@ -101,10 +95,6 @@ export default defineComponent({
   filter: brightness(0.8);
 }
 
-.playlist-card .v-card__overlay {
-  height: 220px;
-}
-
 .playlist-card .v-card-title {
   padding: 0;
   letter-spacing: 0;
@@ -120,26 +110,29 @@ export default defineComponent({
   opacity: 0.2;
 }
 
-/* Huskyfy circle symbol on cards */
-.huskyfy-img {
-  position: relative;
-  opacity: 0;
-  bottom: 25px;
-  left: 200px;
-  transition: 0.5s opacity linear;
+@media only screen and (min-width: 768px) {
+  .playlist-card {
+    width: 30%;
+  }
 }
 
-.playlist-card:hover .huskyfy-img {
-  opacity: 1;
+@media only screen and (min-width: 992px) {
+  .playlist-card {
+    width: 24%;
+  }
+
+  .playlist-card .v-card-title {
+    padding: 7px 0px;
+  }
 }
 
-.pad-title-0 {
-  padding: 0;
-}
+@media only screen and (min-width: 1200px) {
+  .playlist-card {
+    width: 16%;
+  }
 
-.visibility-status {
-  padding: 0;
-  letter-spacing: 0;
-  white-space: nowrap;
+  .playlist-card .v-card-title {
+    padding: 5px 0px;
+  }
 }
 </style>

@@ -6,13 +6,9 @@ const makeAndDownloadImage = (playlistId: string, size: string | number, showTit
   const playlistsStore = usePlaylistsStore()
   const playlist = playlistsStore.playlists[playlistId]
 
-  console.error(size)
-
   if (typeof size === 'string') {
     size = parseInt(size.charAt(0))
   }
-
-  console.error(size)
 
   const topArtists = playlistsStore.getTopArtists(playlistId, size ** 2)
   const artistImageUrls = topArtists.map(res => res.artist.images[0].url)

@@ -18,9 +18,13 @@
               }}</span>
             </p>
             <p v-if="allTracksLoaded">
-              <span class="rainbow-text">{{ $t("playlist.indie-score-text") }} </span>
+              <span class="rainbow-text">{{ $t("playlist.indie-score-text") }}</span>
               <!-- Only if all tracks are loaded -->
-              <span :style="colorForPercentage">{{ indiePercentage }} %</span>
+              <v-tooltip :text="$t('playlist.explanation-indie-score')">
+                <template v-slot:activator="{ props }">
+                  <span v-bind="props" :style="colorForPercentage">{{ ` ${indiePercentage}` }} %</span>
+                </template>
+              </v-tooltip>
             </p>
           </div>
         </div>
@@ -28,7 +32,9 @@
           <p id="description"> {{ formattedDescription }} </p>
         </v-card-text>
 
-        <v-icon id="burger-button" @click="drawer = !drawer" prepend-icon="mdi-menu">mdi-menu</v-icon>
+        <v-icon id="burger-button" @click="drawer = !drawer" prepend-icon="mdi-menu">
+          {{ drawer? "mdi-arrow-left-thick": "mdi-menu" }}
+        </v-icon>
       </v-card>
 
       <v-btn @click="scrollTop" id="scroll-top-button" class="rainbow-v-btn" icon :style="toButtonOpacity">
@@ -134,7 +140,8 @@
     </div>
 
     <!-- Load more tracks to lazy-load all of them -->
-    <LoadMoreTracksPopup v-if="isHugePlaylist && playlists[playlistId].tracks.length < playlists[playlistId].total"
+    <LoadMoreTracksPopup
+      v-if="isHugePlaylist && playlists[playlistId].tracks.length < playlists[playlistId].total && !startDuplication"
       :playlist="playlists[playlistId]" :trackRequestLimit="TRACK_REQUEST_LIMIT"
       @allTracksLoaded="() => {resetFilters(); refreshStats()}" />
 
@@ -148,8 +155,7 @@
     </v-btn>
   </div>
 
-  <DuplicatorPopup v-if="startDuplication" :playlistId="playlistsStore.playlists[playlistId].id"
-    :selectedGenres="selectedGenres" />
+  <DuplicatorPopup v-if="startDuplication" :playlistId="playlistsStore.playlists[playlistId].id" />
 </template>
 
 <script lang="ts">
@@ -432,7 +438,7 @@ export default defineComponent({
     },
     formattedDescription(): string {
       const playlist = this.playlistsStore.playlists[this.playlistId]
-      return playlist.description.replace(/(<([^>]+)>)/ig, '')
+      return playlist.description.replace(/(<([^>]+)>)/ig, '').replace(/&quot;/ig, '"')
     },
     toButtonOpacity(): StyleValue {
       return { opacity: (this.displayGoTopButton) ? 100 : 0 }
