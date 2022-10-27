@@ -4,6 +4,17 @@ import { usePlaylistsStore } from '@/stores/playlists'
 import { capitalize } from '@/utils/functions'
 import drawRoundRect from './utils'
 
+export const downloadImage = (url: string, playlistName: string) => {
+  const a = document.createElement('a')
+  a.download = `${playlistName}.jpg`
+  a.rel = 'noopener'
+  a.target = '_blank'
+
+  a.href = url
+  a.click()
+  a.remove()
+}
+
 export const makeImage = (
   playlistId: string,
   size: string | number,
@@ -85,7 +96,7 @@ const createCanvas = (
   ctx.fillRect(0, 0, canvas.width, canvas.height)
 
   if (showTitle) {
-    addCanvasTitle(ctx, playlist)
+    addCanvasTitle(ctx, playlist, gridSize)
   }
   addCanvasArtistImages(ctx, artistNames, images, gridSize, IMAGE_BLOCK_HEIGHT_START, ARTIST_NAME_HEIGHT)
   if (showStats) {
@@ -97,16 +108,19 @@ const createCanvas = (
 
 const addCanvasTitle = (
   ctx: CanvasRenderingContext2D,
-  playlist: SpotifyPlaylist
+  playlist: SpotifyPlaylist,
+  gridSize: number
 ) => {
   let fontSize: number
   const characterLength = playlist.name.length
-  if (characterLength < 10) fontSize = 40
-  else if (characterLength < 20) fontSize = 30
+  // TODO: Adjust and do some fine tunning
+  if (characterLength < 10) fontSize = 35
+  else if (characterLength < 20) fontSize = 25
   else if (characterLength < 30) fontSize = 25
   else if (characterLength < 40) fontSize = 20
   else fontSize = 15
 
+  // Main title : Playlist name
   ctx.font = `bolder ${fontSize}px Arial`
   ctx.textAlign = 'center'
 
@@ -116,7 +130,19 @@ const addCanvasTitle = (
   gradient.addColorStop(1, '#F9B621')
   ctx.fillStyle = gradient
 
-  ctx.fillText(playlist.name, 400 / 2, 30 + fontSize / 3)
+  ctx.fillText(playlist.name, 400 / 2, 25 + fontSize / 3)
+
+  // Subtitle : explanatory
+  ctx.font = `bolder 10px Arial`
+  ctx.textAlign = 'center'
+
+  const subtxtWidth = ctx.measureText(playlist.name).width
+  const subGradient = ctx.createLinearGradient(400 / 2, 40, txtWidth, 25)
+  subGradient.addColorStop(0, '#F39200')
+  subGradient.addColorStop(1, '#F9B621')
+  ctx.fillStyle = subGradient
+
+  ctx.fillText(`%% ${gridSize ** 2} most popular playlist artists %%`, 400 / 2, 40 + fontSize / 3)
 }
 
 const addCanvasArtistImages = (
@@ -160,34 +186,68 @@ const addCanvasLegend = (
   yStart: number
 ) => {
   const playlistsStore = usePlaylistsStore()
+  ctx.textAlign = 'start'
 
   // 1. INDIE PERCENTAGES
-  const percentage = playlistsStore.getIndiePercentage(playlist.id)
-  // 1.1 Popular
-  ctx.fillStyle = '#e67e2277'
-  drawRoundRect(ctx, 5, yStart + 3, 150, 25, 10, true, false)
+  const indiePercentage = playlistsStore.getIndiePercentage(playlist.id)
+  if (indiePercentage > 70) {
+    // Only indie percentage
+    ctx.fillStyle = '#fff'
+    drawRoundRect(ctx, 5, yStart + 3, 395, 25, 10, true, false)
+    ctx.fillStyle = '#27ae6077'
+    drawRoundRect(ctx, 5, yStart + 3, 390 * indiePercentage / 100, 25, 10, true, false)
 
-  const popularText = `${VueI18n.tc('track.popular', 2)} ${100 - percentage}%`
-  ctx.font = `bolder ${13}px Arial`
-  ctx.textAlign = 'start'
-  const popularGradient = ctx.createLinearGradient(300, 40, 500, 40)
-  popularGradient.addColorStop(0, '#e74c3c')
-  popularGradient.addColorStop(1, '#e67e22')
-  ctx.fillStyle = popularGradient
-  ctx.fillText(popularText, 10, yStart + 20)
+    const indieText = `${VueI18n.tc('track.indie', 2)} ${indiePercentage}%`
+    ctx.font = `bolder ${13}px Arial`
 
-  // 1.2 Indie
-  ctx.fillStyle = '#27ae6077'
-  drawRoundRect(ctx, 205, yStart + 3, 150, 25, 10, true, false)
+    const indieGradient = ctx.createLinearGradient(300, 40, 500, 40)
+    indieGradient.addColorStop(0, '#2ecc71')
+    indieGradient.addColorStop(1, '#27ae60')
+    ctx.fillStyle = indieGradient
+    ctx.fillText(indieText, 10, yStart + 20)
+  } else if (indiePercentage < 30) {
+    // Only popular percentage
+    ctx.fillStyle = '#fff'
+    drawRoundRect(ctx, 5, yStart + 3, 395, 25, 10, true, false)
+    ctx.fillStyle = '#e67e2277'
+    drawRoundRect(ctx, 5, yStart + 3, 390 * (100 - indiePercentage) / 100, 25, 10, true, false)
 
-  const indieText = `${VueI18n.tc('track.indie', 2)} ${percentage}%`
-  ctx.font = `bolder ${13}px Arial`
+    const popularText = `${VueI18n.tc('track.popular', 2)} ${100 - indiePercentage}%`
+    ctx.font = `bolder ${13}px Arial`
 
-  const indieGradient = ctx.createLinearGradient(300, 40, 500, 40)
-  indieGradient.addColorStop(0, '#2ecc71')
-  indieGradient.addColorStop(1, '#27ae60')
-  ctx.fillStyle = indieGradient
-  ctx.fillText(indieText, 210, yStart + 20)
+    const popularGradient = ctx.createLinearGradient(300, 40, 500, 40)
+    popularGradient.addColorStop(0, '#e74c3c')
+    popularGradient.addColorStop(1, '#e67e22')
+    ctx.fillStyle = popularGradient
+    ctx.fillText(popularText, 10, yStart + 20)
+  } else {
+    // Popular
+    ctx.fillStyle = '#e67e2277'
+    drawRoundRect(ctx, 5, yStart + 3, 390 * (100 - indiePercentage) / 100, 25, 10, true, false)
+
+    const popularText = `${VueI18n.tc('track.popular', 2)} ${100 - indiePercentage}%`
+    ctx.font = `bolder ${13}px Arial`
+    ctx.textAlign = 'start'
+    const popularGradient = ctx.createLinearGradient(300, 40, 500, 40)
+    popularGradient.addColorStop(0, '#e74c3c')
+    popularGradient.addColorStop(1, '#e67e22')
+    ctx.fillStyle = popularGradient
+    ctx.fillText(popularText, 10, yStart + 20)
+
+    // Indie
+    ctx.fillStyle = '#27ae6077'
+    drawRoundRect(ctx, 390 * (100 - indiePercentage) / 100 + 5, yStart + 3, 390 * indiePercentage / 100, 25, 10, true, false)
+
+    const indieText = `${VueI18n.tc('track.indie', 2)} ${indiePercentage}%`
+    ctx.font = `bolder ${13}px Arial`
+    ctx.textAlign = "end"
+
+    const indieGradient = ctx.createLinearGradient(300, 40, 500, 40)
+    indieGradient.addColorStop(0, '#2ecc71')
+    indieGradient.addColorStop(1, '#27ae60')
+    ctx.fillStyle = indieGradient
+    ctx.fillText(indieText, 385, yStart + 20)
+  }
 
   // 2. Adding TOP Genres
   // Genres
@@ -195,6 +255,7 @@ const addCanvasLegend = (
   // 3 -----  4 -----
   ctx.font = 'bolder 17px Arial'
   ctx.fillStyle = '#F39200'
+  ctx.textAlign = "start"
   ctx.fillText('TOP 4 GENRES', 10, yStart + 45)
 
   ctx.font = '13px Arial'
@@ -217,15 +278,4 @@ const getEmojiForRank = (rank: number): string => {
   if (rank === 1) return '🥈'
   if (rank === 2) return '🥉'
   return '🏅'
-}
-
-export const downloadImage = (url: string, playlistName: string) => {
-  const a = document.createElement('a')
-  a.download = `${playlistName}.jpg`
-  a.rel = 'noopener'
-  a.target = '_blank'
-
-  a.href = url
-  a.click()
-  a.remove()
 }

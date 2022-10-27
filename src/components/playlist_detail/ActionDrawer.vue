@@ -72,10 +72,8 @@
           {{ $t('drawer.export-image') }}
         </v-list-subheader>
         <!-- 3.1 Export Image -->
-        <v-slider v-if="maxTick > 0" :ticks="ticks" :max="maxTick" step="1" show-ticks="always" tick-size="4"
-          color="var(--text-color)" prepend-icon="mdi-arrange-send-to-back" v-model="generateImageSize" @touchstart.stop
-          id="generate-image-size-slider">
-        </v-slider>
+
+        <v-img id="live-image-preview" :src="imagePreview"></v-img>
         <v-switch v-model="generateImageDisplayTitle" color="var(--text-color)" class="generate-image-switch">
           <template v-slot:label>
             <p :class="(generateImageDisplayTitle) ? 'rainbow-text' : ''">{{ $t('drawer.image-display-title') }}</p>
@@ -86,8 +84,10 @@
             <p :class="(generateImageDisplayStats) ? 'rainbow-text' : ''">{{ $t('drawer.image-display-stats') }}</p>
           </template>
         </v-switch>
-
-        <v-img :src="imagePreview"></v-img>
+        <v-slider v-if="maxTick > 0" :ticks="ticks" :max="maxTick" step="1" show-ticks="always" tick-size="4"
+          color="var(--text-color)" prepend-icon="mdi-arrange-send-to-back" v-model="generateImageSize" @touchstart.stop
+          id="generate-image-size-slider">
+        </v-slider>
         <div id="generate-image-button">
           <v-btn @click="exportArtistPreview" class="rainbow-v-btn">{{ $t("playlist.export-preview") }}</v-btn>
         </div>
@@ -304,5 +304,9 @@ export default defineComponent({
 #deletion-dialog {
   max-width: fit-content;
   margin: auto;
+}
+
+#live-image-preview .v-responsive__sizer {
+  padding-bottom: 100% !important;
 }
 </style>
