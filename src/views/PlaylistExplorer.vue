@@ -10,7 +10,7 @@
     </div>
 
     <!-- <= due to special MyMusic playlist -->
-    <v-btn v-if="Object.keys(playlistsStore.playlists).length <= playlistTotal" class="rainbow-v-btn"
+    <v-btn v-if="Object.keys(playlistsStore.playlists).length <= playlistTotal && playlistLoaded" class="rainbow-v-btn"
       @click="loadMorePlaylists">
       {{ $t("playlist.load-more-playlists") }}
     </v-btn>

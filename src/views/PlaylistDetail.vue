@@ -11,7 +11,7 @@
             <h3 id="playlist-name" class="text-truncate rainbow-text">
               {{ playlistsStore.playlists[playlistId].name }}
             </h3>
-            <p v-bind="visibilityTooltip"> {{ getTextFromVisibility }} </p>
+            <p> {{ getTextFromVisibility }} </p>
             <p id="playlist-owner">
               {{ $t("playlist.created-by") }}
               <span id="playlist-owner-name" @click.stop="openPlaylistOwnerSpotifyProfile">{{ usernameToDisplay
@@ -20,9 +20,12 @@
             <p v-if="allTracksLoaded">
               <span class="rainbow-text">{{ $t("playlist.indie-score-text") }}</span>
               <!-- Only if all tracks are loaded -->
+              <span :style="colorForPercentage">{{ ` ${indiePercentage}` }} %</span>
               <v-tooltip :text="$t('playlist.explanation-indie-score')">
                 <template v-slot:activator="{ props }">
-                  <span v-bind="props" :style="colorForPercentage">{{ ` ${indiePercentage}` }} %</span>
+                  <span id="help-indie-percentage" v-bind="props">
+                    <v-icon size="x-small" color="var(--primary-color)">mdi-help</v-icon>
+                  </span>
                 </template>
               </v-tooltip>
             </p>
@@ -245,7 +248,6 @@ export default defineComponent({
       indiePercentage: 0,
 
       drawer: false,
-      visibilityTooltip: null,
 
       startDuplication: false,
       displayGoTopButton: false,
@@ -618,5 +620,17 @@ export default defineComponent({
 
 .v-expansion-panel-text__wrapper {
   padding: 10px 0px;
+}
+
+#help-indie-percentage {
+  width: fit-content;
+  height: 23px;
+  border-radius: 5px;
+  background-color: #555;
+  margin-left: 5px;
+}
+
+#help-indie-percentage .v-icon {
+  padding-bottom: 5px;
 }
 </style>
