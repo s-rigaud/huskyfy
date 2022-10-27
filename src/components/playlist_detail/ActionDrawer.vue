@@ -76,16 +76,18 @@
           color="var(--text-color)" prepend-icon="mdi-arrange-send-to-back" v-model="generateImageSize" @touchstart.stop
           id="generate-image-size-slider">
         </v-slider>
-        <v-switch v-model="generateImageDisplayTitle" color="var(--link-color)" class="generate-image-switch">
+        <v-switch v-model="generateImageDisplayTitle" color="var(--text-color)" class="generate-image-switch">
           <template v-slot:label>
             <p :class="(generateImageDisplayTitle) ? 'rainbow-text' : ''">{{ $t('drawer.image-display-title') }}</p>
           </template>
         </v-switch>
-        <v-switch v-model="generateImageDisplayStats" color="var(--link-color)" class="generate-image-switch">
+        <v-switch v-model="generateImageDisplayStats" color="var(--text-color)" class="generate-image-switch">
           <template v-slot:label>
             <p :class="(generateImageDisplayStats) ? 'rainbow-text' : ''">{{ $t('drawer.image-display-stats') }}</p>
           </template>
         </v-switch>
+
+        <v-img :src="imagePreview"></v-img>
         <div id="generate-image-button">
           <v-btn @click="exportArtistPreview" class="rainbow-v-btn">{{ $t("playlist.export-preview") }}</v-btn>
         </div>
@@ -95,7 +97,8 @@
   </v-navigation-drawer>
 </template>
 <script lang="ts">
-import makeAndDownloadImage from '@/services/playlistImageMaker'
+import { downloadImage, makeImage } from '@/services/playlistImageMaker'
+
 import { usePlaylistsStore } from '@/stores/playlists'
 import { useUserStore } from '@/stores/user'
 import { defineComponent } from 'vue'
@@ -122,6 +125,9 @@ export default defineComponent({
       currentUserUsername
     }
   },
+  mounted() {
+    this.updateImagePreview()
+  },
   watch: {
     // Have to use this to synchronise props as I can't use props as VModel
     open(newValue: boolean) {
@@ -131,7 +137,11 @@ export default defineComponent({
       if (newValue === false) {
         this.$emit('onClose')
       }
-    }
+    },
+
+    generateImageSize() { this.updateImagePreview() },
+    generateImageDisplayTitle() { this.updateImagePreview() },
+    generateImageDisplayStats() { this.updateImagePreview() },
   },
   data() {
     return {
@@ -141,7 +151,9 @@ export default defineComponent({
 
       generateImageSize: 0,
       generateImageDisplayTitle: true,
-      generateImageDisplayStats: true
+      generateImageDisplayStats: true,
+
+      imagePreview: ''
     }
   },
   computed: {
@@ -155,7 +167,7 @@ export default defineComponent({
     starBackground(): string {
       return require('@/assets/stars.jpg')
     },
-    ticks() {
+    ticks(): { 0?: '2x2', 1?: '3x3', 2?: '4x4' } {
       const trackNumber = this.playlistsStore.playlists[this.playlistId].tracks.length
       const ticks: any = {}
       if (trackNumber >= 4) ticks[0] = '2x2'
@@ -163,15 +175,26 @@ export default defineComponent({
       if (trackNumber >= 16) ticks[2] = '4x4'
       return ticks
     },
-    maxTick(): number {
+    maxTick(): 0 | 1 | 2 {
       const trackNumber = this.playlistsStore.playlists[this.playlistId].tracks.length
-      let max = 0
+      let max: 0 | 1 | 2 = 0
       if (trackNumber >= 9) max = 1
       if (trackNumber >= 16) max = 2
       return max
     }
   },
   methods: {
+    updateImagePreview() {
+      makeImage(
+        this.playlistId,
+        ['2x2', '3x3', '4x4'][this.generateImageSize],
+        this.generateImageDisplayTitle,
+        this.generateImageDisplayStats,
+        (dataUrl: string) => {
+          this.imagePreview = dataUrl
+        }
+      )
+    },
     async setPlaylistPrivate() {
       await this.playlistsStore.updatePlaylistPrivacy(
         this.playlistId,
@@ -188,26 +211,31 @@ export default defineComponent({
       await this.playlistsStore.sortPlaylistTracksByGenres(
         this.playlistId
       )
-      this.$emit("onSortEnd")
+      this.$emit('onSortEnd')
     },
     async sortPlaylistTracksByArtistTrackInPlaylist() {
       await this.playlistsStore.sortPlaylistTracksByArtistTrackInPlaylist(
         this.playlistId
       )
-      this.$emit("onSortEnd")
+      this.$emit('onSortEnd')
     },
     async sortPlaylistTracksByArtistName() {
       await this.playlistsStore.sortPlaylistTracksByArtistName(
         this.playlistId
       )
-      this.$emit("onSortEnd")
+      this.$emit('onSortEnd')
     },
     async exportArtistPreview() {
-      makeAndDownloadImage(
+      makeImage(
         this.playlistId,
         ['2x2', '3x3', '4x4'][this.generateImageSize],
         this.generateImageDisplayTitle,
-        this.generateImageDisplayStats
+        this.generateImageDisplayStats,
+        (dataUrl: string) => {
+          downloadImage(
+            dataUrl,
+            this.playlistsStore.playlists[this.playlistId].name)
+        }
       )
     },
     async unfollowPlaylist() {
@@ -223,18 +251,24 @@ export default defineComponent({
 </script>
 <style>
 #drawer {
-  z-index: 3000;
+  z-index: 3000 !important;
 }
 
-#generate-image-size-slider {
+#drawer .v-slider__container {
   width: 90%;
-  margin: 0 0 0 3px;
-  height: 50px;
 }
 
-.generate-image-switch {
-  height: 40px;
+#drawer .generate-image-switch {
+  height: 30px;
   margin-left: 10px;
+}
+
+#drawer .generate-image-switch .v-switch {
+  height: 30px;
+}
+
+#drawer .generate-image-switch .v-selection-control {
+  height: 30px !important;
 }
 
 #generate-image-button {

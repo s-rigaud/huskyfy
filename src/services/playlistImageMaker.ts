@@ -4,7 +4,13 @@ import { usePlaylistsStore } from '@/stores/playlists'
 import { capitalize } from '@/utils/functions'
 import drawRoundRect from './utils'
 
-const makeAndDownloadImage = (playlistId: string, size: string | number, showTitle: boolean, showStats: boolean) => {
+export const makeImage = (
+  playlistId: string,
+  size: string | number,
+  showTitle: boolean,
+  showStats: boolean,
+  callback: Function
+): string | void => {
   const playlistsStore = usePlaylistsStore()
   const playlist = playlistsStore.playlists[playlistId]
 
@@ -13,6 +19,7 @@ const makeAndDownloadImage = (playlistId: string, size: string | number, showTit
   }
 
   const topArtists = playlistsStore.getTopArtists(playlistId, size ** 2)
+  const artistNames = topArtists.map(res => res.artist.name)
   const artistImageUrls = topArtists.map(res => res.artist.images[0].url)
 
   // Logo should also be loaded asynchronously
@@ -31,14 +38,17 @@ const makeAndDownloadImage = (playlistId: string, size: string | number, showTit
         imageLoadCounter++
 
         if (imageLoadCounter === images.length) {
-          const url = createCanvas(images, playlist, (size as number), showTitle, showStats)
-          downloadImage(url, playlist.name)
+          const dataUrl = createCanvas(artistNames, images, playlist, (size as number), showTitle, showStats)
+          // Had to use callback as HtmlImageElement.onload is asynchronous and can't be awaited
+          callback(dataUrl)
         }
-      })
+      }
+    )
   )
 }
 
 const createCanvas = (
+  artistNames: string[],
   images: HTMLImageElement[],
   playlist: SpotifyPlaylist,
   gridSize: number,
@@ -47,45 +57,39 @@ const createCanvas = (
 ): string => {
   // Canvas is as followed
   //
-  // Title
+  // ( Title )
   // X X (X X)
   // X X (X X)
   // (X X X X)
   // (X X X X)
-  // Stats
-
-  const canvas = document.createElement('canvas')
-  const ctx = canvas.getContext('2d')!
+  // ( Stats )
 
   const TITLE_HEIGHT = 50
 
+  const ARTIST_NAME_HEIGHT = 20
+  const IMAGE_BLOCK_HEIGHT_START = (showTitle) ? TITLE_HEIGHT : 0
+  const IMAGE_BLOCK_HEIGHT = gridSize * ((400 / gridSize) + ARTIST_NAME_HEIGHT)
+
+  const STATS_HEIGHT = 100
+
+  const canvas = document.createElement('canvas')
   canvas.width = 400
-  canvas.height = 400 + ((showTitle) ? TITLE_HEIGHT : 0) + ((showStats) ? 100 : 0)
+  canvas.height = (
+    IMAGE_BLOCK_HEIGHT +
+    ((showTitle) ? TITLE_HEIGHT : 0) +
+    ((showStats) ? STATS_HEIGHT : 0)
+  )
 
-  const heightStart = (showTitle) ? TITLE_HEIGHT : 0
-
+  const ctx = canvas.getContext('2d')!
   ctx.fillStyle = '#000'
   ctx.fillRect(0, 0, canvas.width, canvas.height)
-
-  // Adding pictures
-  for (let i = 0; i < gridSize; i++) {
-    for (let j = 0; j < gridSize; j++) {
-      const imageIndex = i * gridSize + j
-      ctx.drawImage(
-        images[imageIndex],
-        (i * canvas.width / gridSize) + gridSize,
-        heightStart + (j * 400 / gridSize) + gridSize,
-        (1 / gridSize * canvas.width) - 2 * gridSize,
-        (1 / gridSize * 400) - 2 * gridSize
-      )
-    }
-  }
 
   if (showTitle) {
     addCanvasTitle(ctx, playlist)
   }
+  addCanvasArtistImages(ctx, artistNames, images, gridSize, IMAGE_BLOCK_HEIGHT_START, ARTIST_NAME_HEIGHT)
   if (showStats) {
-    addCanvasLegend(ctx, playlist, canvas.height - 100)
+    addCanvasLegend(ctx, playlist, IMAGE_BLOCK_HEIGHT_START + IMAGE_BLOCK_HEIGHT)
   }
 
   return canvas.toDataURL('image/jpeg', 1)
@@ -113,6 +117,41 @@ const addCanvasTitle = (
   ctx.fillStyle = gradient
 
   ctx.fillText(playlist.name, 400 / 2, 30 + fontSize / 3)
+}
+
+const addCanvasArtistImages = (
+  ctx: CanvasRenderingContext2D,
+  artistNames: string[],
+  images: HTMLImageElement[],
+  gridSize: number,
+  heightStart: number,
+  artistNameHeight: number
+) => {
+  const imageWidthAndHeight = (400 / gridSize) - 2 * gridSize
+
+  ctx.font = '15px Arial'
+  ctx.textAlign = 'center'
+  ctx.fillStyle = '#F9B621'
+
+  for (let i = 0; i < gridSize; i++) {
+    for (let j = 0; j < gridSize; j++) {
+      const index = i * gridSize + j
+
+      ctx.drawImage(
+        images[index],
+        (j * 400 / gridSize) + gridSize,
+        heightStart + (i * 400 / gridSize) + gridSize + artistNameHeight * i,
+        imageWidthAndHeight,
+        imageWidthAndHeight
+      )
+      ctx.fillText(
+        artistNames[index],
+        (j * 400 / gridSize) + imageWidthAndHeight / 2 + gridSize,
+        heightStart + (i * 400 / gridSize) + artistNameHeight * i + imageWidthAndHeight + artistNameHeight,
+        imageWidthAndHeight
+      )
+    }
+  }
 }
 
 const addCanvasLegend = (
@@ -148,7 +187,7 @@ const addCanvasLegend = (
   indieGradient.addColorStop(0, '#2ecc71')
   indieGradient.addColorStop(1, '#27ae60')
   ctx.fillStyle = indieGradient
-  ctx.fillText(indieText, 205, yStart + 20)
+  ctx.fillText(indieText, 210, yStart + 20)
 
   // 2. Adding TOP Genres
   // Genres
@@ -180,10 +219,7 @@ const getEmojiForRank = (rank: number): string => {
   return '🏅'
 }
 
-const downloadImage = (
-  url: string,
-  playlistName: string
-) => {
+export const downloadImage = (url: string, playlistName: string) => {
   const a = document.createElement('a')
   a.download = `${playlistName}.jpg`
   a.rel = 'noopener'
@@ -193,5 +229,3 @@ const downloadImage = (
   a.click()
   a.remove()
 }
-
-export default makeAndDownloadImage
