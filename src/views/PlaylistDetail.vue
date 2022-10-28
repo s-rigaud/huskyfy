@@ -77,14 +77,15 @@
                 </v-select>
 
                 <v-select v-model="selectedArtists" :label="$t('track.filters.artists')" :items="getSortedArtists()"
-                  item-title="name" variant="outlined" density="comfortable" multiple class="filter-select">
+                  item-title="name" variant="outlined" density="comfortable" multiple class="filter-select"
+                  return-object>
                   <template v-slot:selection="{ item, index }: SlotProps">
                     <v-chip v-if="index < 2">
                       <v-avatar>
-                        <v-img rel="preconnect" width="20" :src="getArtistCover(item)" alt="Spotify artist cover">
+                        <v-img rel="preconnect" width="20" :src="item.raw.images[0].url" alt="Spotify artist cover">
                         </v-img>
                       </v-avatar>
-                      <span>{{ getArtistName(item) }}</span>
+                      <span>{{ item.raw.name }}</span>
                     </v-chip>
                     <span v-if="index === 2" class="text-grey text-caption align-self-center">
                       (+{{ selectedArtists.length - 2 }} others)
@@ -102,26 +103,29 @@
               </div>
 
               <div id="filters-and-reset">
-                <v-chip v-if="selectedPopularity !== NO_POPULARITY" :text="getTextForPopularity(selectedPopularity)">
+                <v-chip v-if="selectedPopularity !== NO_POPULARITY" :text="getTextForPopularity(selectedPopularity)"
+                  closable @click:close="selectedPopularity === NO_POPULARITY">
                 </v-chip>
 
                 <div v-if="selectedGenres.length > 0">
                   <v-chip v-for="genre in selectedGenres" :key="genre" :text="genre.toUpperCase()" closable
-                    @click:close="true">
+                    color="orange" @click:close="selectedGenres = selectedGenres.filter(g => g !== genre)">
                   </v-chip>
                 </div>
 
                 <div v-if="selectedArtists.length > 0">
-                  <v-chip v-for="artist in selectedArtists" :key="artist" closable @click:close="true">
+                  <v-chip v-for="artist in selectedArtists" :key="artist.name" closable color="yellow"
+                    @click:close="selectedArtists = selectedArtists.filter(a => a.id != artist.id)">
                     <v-avatar left>
-                      <v-img :src="getImageForArtistName(artist)"></v-img>
+                      <v-img :src="artist.images[0].url"></v-img>
                     </v-avatar>
-                    {{artist}}
+                    {{ artist.name }}
                   </v-chip>
                 </div>
 
-                <v-btn @click="resetFilters" v-if="selectedGenres.length !== 0 || selectedPopularity != NO_POPULARITY"
-                  class="rainbow-v-btn" closable @click:close="true">
+                <v-btn @click="resetFilters"
+                  v-if="selectedGenres.length !== 0 || selectedGenres.length !== 0 || selectedPopularity != NO_POPULARITY"
+                  class="rainbow-v-btn">
                   {{ $t("playlist.reset-filters") }}
                 </v-btn>
               </div>
@@ -247,7 +251,7 @@ export default defineComponent({
 
       // NO_POPULARITY
       selectedPopularity: 'No filter',
-      selectedArtists: ([] as string[]),
+      selectedArtists: ([] as SpotifyArtist[]),
       selectedGenres: ([] as string[]),
 
       isFilterExclusive: false,
@@ -316,15 +320,15 @@ export default defineComponent({
       }
 
       // Filter over artists
-      const artists = this.selectedArtists
-      if (artists.length > 0) {
+      const artistIds = this.selectedArtists.map((a) => a.id)
+      if (artistIds.length > 0) {
         if (this.isFilterExclusive) {
           filteredTracks = filteredTracks.filter(
-            (t) => artists.every((artist) => t.artists.map(a => a.name).includes(artist))
+            (t) => artistIds.every((artistId) => t.artists.map(a => a.id).includes(artistId))
           )
         } else {
           const validArtistTracks = playlistTracks.filter(
-            (t) => artists.some((artist) => t.artists.map(a => a.name).includes(artist))
+            (t) => artistIds.some((artistId) => t.artists.map(a => a.id).includes(artistId))
           )
           this.addTracksConserveUnicity(filteredTracks, validArtistTracks)
         }
@@ -387,9 +391,6 @@ export default defineComponent({
     // Returns only top genres sorted by most to least popular
     getTopGenres(): Genre[] {
       return this.playlistsStore.getTopGenres(this.playlistId, 25)
-    },
-    getImageForArtistName(artistName: string): string {
-      return "https://cdn.vuetifyjs.com/images/john.png"
     }
   },
   computed: {
@@ -404,18 +405,8 @@ export default defineComponent({
       const keyword = (this.isFilterExclusive) ? this.$t('track.filters.keyword.and') : this.$t('track.filters.keyword.or')
       const separator = ` ${keyword} `
       const popularityFilter = (this.selectedPopularity !== this.NO_POPULARITY) ? [this.selectedPopularity] : []
-      const filters = popularityFilter.concat(this.selectedArtists).concat(this.selectedGenres)
+      const filters = popularityFilter.concat(this.selectedArtists.map(a => a.name)).concat(this.selectedGenres)
       return `${filters.map(f => capitalize(f)).join(separator)}` || this.$t('track.all-tracks')
-    },
-    getArtistName() {
-      return (artist: { raw: SpotifyArtist }): string => {
-        return artist.raw.name
-      }
-    },
-    getArtistCover() {
-      return (artist: { raw: SpotifyArtist }): string => {
-        return artist.raw.images[0].url
-      }
     },
     colorForPercentage(): StyleValue {
       let color: string
@@ -469,7 +460,7 @@ export default defineComponent({
     selectedPopularity() {
       this.applyFilters()
     },
-    selectedArtists(newValue: string[], oldValue: string[]) {
+    selectedArtists(newValue: SpotifyArtist[], oldValue: SpotifyArtist[]) {
       if (oldValue.length !== 0 || newValue.length !== 0) {
         this.applyFilters()
       }
