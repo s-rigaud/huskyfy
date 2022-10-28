@@ -153,5 +153,8 @@
 		"export-image": "Exporter un récap 🖼️",
 		"image-display-title": "Afficher le titre",
 		"image-display-stats": "Afficher les stats"
+	},
+	"generating-picture": {
+		"subtitle": "{count} artistes les plus présents dans la playlist"
 	}
 }
