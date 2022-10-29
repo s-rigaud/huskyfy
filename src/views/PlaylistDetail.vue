@@ -4,10 +4,12 @@
     <div id="main-content">
       <v-card id="playlist-card" v-if="playlistId">
         <div id="playlist-meta" @click.self="openPlaylistOnSpotify">
-          <v-img id="playlist-image" v-bind:src="playlistsStore.playlists[playlistId].images[0].url"
-            :lazy-src="loadingCover" alt="Cover image" cover rel="preconnect" width="60">
-          </v-img>
-          <div id="dumb-title-container">
+          <div id="playlist-image">
+            <v-img v-bind:src="playlistsStore.playlists[playlistId].images[0].url" :lazy-src="loadingCover"
+              alt="Cover image" cover rel="preconnect" width="90">
+            </v-img>
+          </div>
+          <div id="title-container">
             <h3 id="playlist-name" class="text-truncate rainbow-text">
               {{ playlistsStore.playlists[playlistId].name }}
             </h3>
@@ -98,13 +100,14 @@
                   class="filter-select">
                 </v-select>
 
-                <v-switch v-model="isFilterExclusive" :label="$t('track.exclusive-filter')" color="var(--text-color)">
+                <v-switch v-model="isFilterExclusive" v-if="areSomeFiltersActive" :label="$t('track.exclusive-filter')"
+                  color="var(--text-color)">
                 </v-switch>
               </div>
 
               <div id="filters-and-reset">
                 <v-chip v-if="selectedPopularity !== NO_POPULARITY" :text="getTextForPopularity(selectedPopularity)"
-                  closable @click:close="selectedPopularity === NO_POPULARITY">
+                  closable @click:close="selectedPopularity = NO_POPULARITY">
                 </v-chip>
 
                 <div v-if="selectedGenres.length > 0">
@@ -123,11 +126,15 @@
                   </v-chip>
                 </div>
 
-                <v-btn @click="resetFilters"
-                  v-if="selectedGenres.length !== 0 || selectedGenres.length !== 0 || selectedPopularity != NO_POPULARITY"
-                  class="rainbow-v-btn">
-                  {{ $t("playlist.reset-filters") }}
-                </v-btn>
+                <div id="reset-filter">
+                  <v-btn size="small" @click="startDuplication = true"
+                    v-if="playlistsStore.filteredTracks.length > 0 && areSomeFiltersActive" class="rainbow-v-btn">
+                    {{ $t("%% create new playlist with filtered tracks %%") }}
+                  </v-btn>
+                  <v-btn size="small" @click="resetFilters" v-if="areSomeFiltersActive" class="rainbow-v-btn">
+                    {{ $t("playlist.reset-filters") }}
+                  </v-btn>
+                </div>
               </div>
             </div>
           </v-expansion-panel-text>
@@ -144,6 +151,7 @@
           <v-divider class="mx-4" vertical></v-divider>
           <h4> {{ filteredTracks.length }} {{ $t('track.name') }}</h4>
         </div>
+        <v-divider></v-divider>
 
         <v-list id="tracks" v-if="filteredTracks.length >= 1 || playlistLoaded">
           <TrackCard v-for="(track, index) in filteredTracks" :key="track.id" :id="track.id" :name="track.name"
@@ -175,7 +183,8 @@
     </v-btn>
   </div>
 
-  <DuplicatorPopup v-if="startDuplication" :playlistId="playlistsStore.playlists[playlistId].id" />
+  <DuplicatorPopup v-if="startDuplication" :playlistId="playlistsStore.playlists[playlistId].id"
+    :new-tracks="playlistsStore.filteredTracks" />
 </template>
 
 <script lang="ts">
@@ -254,7 +263,7 @@ export default defineComponent({
       selectedArtists: ([] as SpotifyArtist[]),
       selectedGenres: ([] as string[]),
 
-      isFilterExclusive: false,
+      isFilterExclusive: true,
       playlistLoaded: false,
 
       // For child components
@@ -354,7 +363,6 @@ export default defineComponent({
       this.selectedArtists = []
       this.selectedPopularity = this.NO_POPULARITY
       this.filteredTracks = this.playlists[this.playlistId].tracks
-      this.scrollTop()
     },
     openPlaylistOnSpotify() {
       window.location.href = this.playlists[this.playlistId].uri
@@ -451,6 +459,13 @@ export default defineComponent({
     },
     toButtonOpacity(): StyleValue {
       return { opacity: (this.displayGoTopButton) ? 100 : 0 }
+    },
+    areSomeFiltersActive(): boolean {
+      return (
+        this.selectedGenres.length !== 0 ||
+        this.selectedArtists.length !== 0 ||
+        this.selectedPopularity !== this.NO_POPULARITY
+      )
     }
   },
   watch: {
@@ -530,11 +545,6 @@ export default defineComponent({
   padding: 10px 10px 0px 10px;
 }
 
-#dumb-title-container {
-  padding: 10px;
-  width: 70%;
-}
-
 #scroll-top-button {
   position: fixed;
   right: 10px;
@@ -553,21 +563,37 @@ export default defineComponent({
 }
 
 #spinner-block {
-  height: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
 }
 
 #spinner-block #waiting-spinner {
   width: 100% !important;
 }
 
+.v-progress-circular>svg {
+  width: fit-content !important;
+}
+
 #main-content {
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
 #playlist-card {
   width: 100%;
   cursor: pointer;
+}
+
+#playlist-image {
+  margin: 5px 5px 5px -5px;
+}
+
+#title-container {
+  max-width: calc(100% - 110px);
 }
 
 #playlist-name {
@@ -618,24 +644,37 @@ export default defineComponent({
 }
 
 #help-indie-percentage {
-  width: fit-content;
+  min-width: fit-content;
   height: 23px;
   border-radius: 5px;
   background-color: #555;
   margin-left: 5px;
+  padding: 0;
 }
 
 #help-indie-percentage .v-icon {
-  padding-bottom: 5px;
+  padding: 8px 9px;
+}
+
+#help-indie-percentage .v-btn--size-default {
+  min-width: fit-content;
+}
+
+#reset-filter {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+#filters {
+  display: flex;
+  flex-direction: column;
 }
 
 @media only screen and (min-width: 768px) {
-  #filters {
-    width: 100%;
+  #selectors {
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
   }
 }
 </style>

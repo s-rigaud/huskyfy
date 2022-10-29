@@ -15,15 +15,20 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, PropType } from 'vue'
 
 import { usePlaylistsStore } from '@/stores/playlists'
+import { SpotifyTrack } from '@/api/spotify/types/entities'
 
 export default defineComponent({
   name: 'DuplicatorPopup',
   props: {
     playlistId: {
       type: String,
+      required: true
+    },
+    newTracks: {
+      type: Array as PropType<SpotifyTrack[]>,
       required: true
     }
   },
@@ -63,7 +68,7 @@ export default defineComponent({
       this.loadingPercentage = 66
       await this.playlistsStore.addTracksToPlaylist(
         newPlaylistId,
-        this.playlistsStore.filteredTracks
+        this.newTracks
       )
 
       this.loadingText = this.$t('playlist.new.done')

@@ -4,10 +4,9 @@
 
 * Fix style for larger screens
 
-* Fix filtering tags
+* Better filtering tags
 
-* Better highlight for indie score + tooltip
-
+* Update image when after "load more tracks" event end
 ## Other
 
 * https://frontendchecklist.io/

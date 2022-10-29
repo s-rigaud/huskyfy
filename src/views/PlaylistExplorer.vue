@@ -3,8 +3,7 @@
   <div id="full-page">
     <div id="playlists">
       <PlaylistCard v-for="playlist in playlistsStore.playlists" :key="playlist.id" :id="playlist.id"
-        :name="formatName(playlist)" :images="playlist.images"
-        :owner="usernameToDisplay(playlist.owner['display_name'])" />
+        :name="formatName(playlist)" :images="playlist.images" />
       <v-progress-circular v-if="!playlistLoaded" :size="70" :width="7" color="var(--text-color)" indeterminate>
       </v-progress-circular>
     </div>
@@ -21,26 +20,16 @@
 import { SpotifyPlaylist } from '@/api/spotify/types/entities'
 import PlaylistCard from '@/components/PlaylistCard.vue'
 import { usePlaylistsStore } from '@/stores/playlists'
-import { useUserStore } from '@/stores/user'
 import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'PlaylistExplorer',
   components: { PlaylistCard },
   setup () {
-    const userStore = useUserStore()
     const playlistsStore = usePlaylistsStore()
-    const currentUserUsername = userStore.username
-    return { currentUserUsername, playlistsStore }
+    return { playlistsStore }
   },
   computed: {
-    usernameToDisplay () {
-      return (ownerUsername: string): string => {
-        return this.currentUserUsername === ownerUsername
-          ? this.$t('me')
-          : ownerUsername
-      }
-    },
     formatName () {
       return (playlist: SpotifyPlaylist): string => {
         return playlist.id === 'my-music'

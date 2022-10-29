@@ -142,7 +142,7 @@ const addCanvasTitle = (
   subGradient.addColorStop(1, '#F9B621')
   ctx.fillStyle = subGradient
 
-  ctx.fillText(VueI18n.t("generating-picture.subtitle", {count: gridSize ** 2}), 400 / 2, 40 + fontSize / 3)
+  ctx.fillText(VueI18n.t('generating-picture.subtitle', { count: gridSize ** 2 }), 400 / 2, 40 + fontSize / 3)
 }
 
 const addCanvasArtistImages = (

@@ -85,7 +85,7 @@
 			"created-by": "créée par Huskyfy 🐺",
 			"tooltip": "Créer une nouvelle playlist avec tous les titres actuellement sélectionnés"
 		},
-		"explanation-indie-score": "Nombre de titres faits par des indépendants (@:_emojis.indie) / Nombre de titres (@:_emojis.indie + @:_emojis.popular)",
+		"explanation-indie-score": "% de titres faits par des artistes avec moins de 500 000 auditeurs mensuels",
 		"export-preview": "Sauvegarder un aperçu 🖼️",
 		"fully-loaded": "Tous les artistes, les titres et les genres ont pu être récupérés",
 		"load-more-button": "Charger tous les titres",

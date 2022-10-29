@@ -26,7 +26,7 @@
 
 * Tester pas de requêtes multiples pour la même ressource
 
-* Tester refresh si snapshot_id change pour es playlists
+* Tester refresh si snapshot_id change pour les playlists
 
 * Tester l'aspect responsive (Widescreen, laptop, mobile)
 

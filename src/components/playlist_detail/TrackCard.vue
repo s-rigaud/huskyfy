@@ -11,7 +11,7 @@
     <v-list-item-title class="rainbow-text text-h6"> {{ name }} </v-list-item-title>
     <div class="second-line">
       <a v-for="artist in artists" class="artist-names" :key="artist.id" :href="artist.uri">
-        <v-card-subtitle class="artist-name">
+        <v-card-subtitle class="artist-name text-truncate">
           {{ addComma(artist.name) }}
         </v-card-subtitle>
       </a>
@@ -35,15 +35,15 @@
           </v-slide-group>-->
 
     <v-card-text v-if="genres.length > 0">
-      <v-chip v-for="(genre, index) in genres.slice(0, 3)" :key="genre" :text="genre.toUpperCase()" label size="small"
-        class="genre-chip" :style="genreAnimationDelay(index)">
+      <v-chip v-for="(genre, index) in genres.slice(0, MAXIMUM_GENRE_DISPLAYED)" :key="genre"
+        :text="genre.toUpperCase()" label size="small" class="genre-chip" :style="genreAnimationDelay(index)">
       </v-chip>
-      <v-chip v-if="genres.length > 3 && !displayAllGenres" label size="small" text="+" class="genre-chip"
-        :style="genreAnimationDelay(3)" @click.stop="displayAllGenres = true">
+      <v-chip v-if="genres.length > MAXIMUM_GENRE_DISPLAYED && !displayAllGenres" label size="small" text="+"
+        class="genre-chip" :style="genreAnimationDelay(MAXIMUM_GENRE_DISPLAYED)" @click.stop="displayAllGenres = true">
       </v-chip>
       <div v-if="displayAllGenres">
-        <v-chip v-for="(genre, index) in genres.slice(3)" :key="genre" :text="genre.toUpperCase()" label size="small"
-          class="genre-chip" :style="genreAnimationDelay(index)">
+        <v-chip v-for="(genre, index) in genres.slice(MAXIMUM_GENRE_DISPLAYED)" :key="genre" :text="genre.toUpperCase()"
+          label size="small" class="genre-chip" :style="genreAnimationDelay(index)">
         </v-chip>
       </div>
     </v-card-text>
@@ -79,13 +79,14 @@ export default defineComponent({
       required: true
     }
   },
-  data () {
+  data() {
     return {
-      displayAllGenres: false
+      displayAllGenres: false,
+      MAXIMUM_GENRE_DISPLAYED: 2
     }
   },
   computed: {
-    addComma () {
+    addComma() {
       return (artistName: string): string => {
         if (this.artists[this.artists.length - 1].name === artistName) {
           return artistName
@@ -93,22 +94,22 @@ export default defineComponent({
         return `${artistName},`
       }
     },
-    loadingCover (): string {
+    loadingCover(): string {
       return require('@/assets/default_cover.jpg')
     },
     // Delay animation so cards appear one after another
-    trackAnimationDelay (): StyleValue {
+    trackAnimationDelay(): StyleValue {
       const delay = (this.trackIndex < 10) ? `${300 * this.trackIndex}ms` : '0ms'
       return { 'animation-delay': delay }
     },
-    genreAnimationDelay () {
+    genreAnimationDelay() {
       return (index: number): StyleValue => {
         return { 'animation-delay': `${index * 400}ms` }
       }
     }
   },
   methods: {
-    openTrackOnSpotify () {
+    openTrackOnSpotify() {
       window.location.href = this.trackURI
     }
   }
@@ -151,10 +152,6 @@ export default defineComponent({
   padding: 0 !important;
 }
 
-.track-card:first-child {
-  border-top: 1px grey solid;
-}
-
 .card-content {
   display: flex !important;
   align-items: center;
@@ -187,6 +184,12 @@ export default defineComponent({
   padding-bottom: 7px;
   text-decoration: none;
   color: var(--link-color);
+  max-width: 100%;
+  padding: 0 !important;
+}
+
+.artist-name {
+  padding: 0 !important;
 }
 
 .genre-chip {
@@ -217,10 +220,6 @@ export default defineComponent({
 .second-line {
   display: flex;
   flex-wrap: wrap;
-}
-
-.artist-name {
-  display: inline-flex;
-  padding: 0 !important;
+  align-items: center;
 }
 </style>

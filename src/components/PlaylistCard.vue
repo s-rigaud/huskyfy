@@ -22,8 +22,7 @@ export default defineComponent({
     images: {
       type: Array as PropType<SpotifyImage[]>,
       required: true
-    },
-    owner: String
+    }
   },
   computed: {
     loadingCover (): string {
