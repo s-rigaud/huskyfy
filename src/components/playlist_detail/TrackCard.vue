@@ -79,14 +79,14 @@ export default defineComponent({
       required: true
     }
   },
-  data () {
+  data() {
     return {
       displayAllGenres: false,
       MAXIMUM_GENRE_DISPLAYED: 2
     }
   },
   computed: {
-    addComma () {
+    addComma() {
       return (artistName: string): string => {
         if (this.artists[this.artists.length - 1].name === artistName) {
           return artistName
@@ -94,22 +94,22 @@ export default defineComponent({
         return `${artistName},`
       }
     },
-    loadingCover (): string {
+    loadingCover(): string {
       return require('@/assets/default_cover.jpg')
     },
     // Delay animation so cards appear one after another
-    trackAnimationDelay (): StyleValue {
+    trackAnimationDelay(): StyleValue {
       const delay = (this.trackIndex < 10) ? `${300 * this.trackIndex}ms` : '0ms'
       return { 'animation-delay': delay }
     },
-    genreAnimationDelay () {
+    genreAnimationDelay() {
       return (index: number): StyleValue => {
         return { 'animation-delay': `${index * 400}ms` }
       }
     }
   },
   methods: {
-    openTrackOnSpotify () {
+    openTrackOnSpotify() {
       window.location.href = this.trackURI
     }
   }
@@ -169,6 +169,9 @@ export default defineComponent({
 
 .v-card-text {
   padding: 0;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
 
 .v-img {
@@ -212,6 +215,7 @@ export default defineComponent({
 .text-h6 {
   font-family: "Oswald" !important;
   cursor: pointer;
+  text-decoration: underline;
 }
 
 .track-index {

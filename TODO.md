@@ -1,6 +1,6 @@
-# Functionalities
+# TODO
 
-[?] Fix other Github branch for reordering playlist
+[ ] Fix other Github branch for reordering playlist
 
 [ ] Fix style for larger screens (only head of PlaylistDetail left)
 
@@ -11,6 +11,8 @@
 [X] Update image when after "load more tracks" event end
 
 [X] Deploy to new url (+ update links on Github and index.html)
+
+[ ] Add ref to exact playlist to avoid calling playlistsStore.playlist[this.playlistId] each time
 
 1. [ ] Check frontend playlist
 2. [ ] Read Spotify design recommendation

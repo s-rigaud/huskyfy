@@ -11,7 +11,7 @@
 
 ## Functionalities
 
-Huskyfy offers different functionalities to tune and play with your Spotify playlists, you can :
+Huskyfy website offers different functionalities to tune and play with your Spotify playlists, you can :
 
 * browse your playlists 🗃
 

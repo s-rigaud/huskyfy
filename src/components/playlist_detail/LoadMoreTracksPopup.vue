@@ -36,14 +36,14 @@ export default defineComponent({
     trackRequestLimit: Number
   },
   emits: ['allTracksLoaded'],
-  setup () {
+  setup() {
     const playlistsStore = usePlaylistsStore()
     const { downloadPlaylistTracks } = playlistsStore
 
     return { downloadPlaylistTracks, playlistsStore }
   },
   computed: {
-    color (): string {
+    color(): string {
       return (this.isLoaded) ? 'green' : 'black'
     },
     timeout (): number {
@@ -51,7 +51,7 @@ export default defineComponent({
     }
   },
   methods: {
-    async loadAllTracks () {
+    async loadAllTracks() {
       this.waitingForResponse = true
       await this.downloadPlaylistTracks(this.playlist.id, this.playlist.total)
       this.waitingForResponse = false
@@ -59,7 +59,7 @@ export default defineComponent({
       this.$emit('allTracksLoaded')
     }
   },
-  data () {
+  data() {
     return {
       ALWAYS_TRUE: true,
       isLoaded: false,
