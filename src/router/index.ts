@@ -6,7 +6,6 @@ import { usePlaylistsStore } from '@/stores/playlists'
 import { useUserStore } from '@/stores/user'
 
 import AboutView from '@/views/AboutView.vue'
-import DuplicateLikedSongPlaylistView from '@/views/DuplicateLikedSongPlaylistView.vue'
 import LoginView from '@/views/LoginView.vue'
 import NotFound404 from '@/views/NotFound404.vue'
 import PlaylistDetail from '@/views/PlaylistDetail.vue'
@@ -25,11 +24,6 @@ const routes = [
     path: '/explore',
     name: 'Explore',
     component: PlaylistExplorer
-  },
-  {
-    path: '/duplicate-my-music',
-    name: 'Duplicate',
-    component: DuplicateLikedSongPlaylistView
   },
   {
     path: '/playlist/:playlistId',
