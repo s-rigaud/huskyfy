@@ -50,7 +50,7 @@
           {{ $t("about.creator.content.part2") }}
         </a>
         {{ $t("about.creator.content.part3") }}
-        <a href="mailto:horusproject.bugtracker@gmail.com?subject=Huskyfy%20improvement%20request">
+        <a href="mailto:huskyfy.bugtracker@gmail.com?subject=Huskyfy%20improvement%20request">
           {{ $t("about.creator.content.part4") }} 📧
         </a>
       </p>
@@ -86,21 +86,21 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'AboutView',
   computed: {
-    githubImg(): string {
+    githubImg (): string {
       return require('@/assets/github.png')
     },
-    huskyfyCircle(): string {
+    huskyfyCircle (): string {
       return require('@/assets/large-logo-circle.png')
     },
-    myMusicImage(): string {
+    myMusicImage (): string {
       return require('@/assets/my-music.jpeg')
     },
-    myMusicLink(): string {
+    myMusicLink (): string {
       return process.env.VUE_APP_BASE_SERVER_URL + '/playlist/my-music'
     }
   },
   methods: {
-    backToPreviousPage() {
+    backToPreviousPage () {
       this.$router.go(-1)
     }
   }

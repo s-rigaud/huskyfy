@@ -7,6 +7,7 @@
 ![Apexchart version](https://img.shields.io/badge/apexchart-3.36-red.svg)
 ![Axios version](https://img.shields.io/badge/axios-1.1-purple.svg)
 [![Front‑End_Checklist followed](https://img.shields.io/badge/Front‑End_Checklist-followed-brightgreen.svg)](https://github.com/thedaviddias/Front-End-Checklist/)
+![Netlify Status](https://api.netlify.com/api/v1/badges/ca42d8a5-b247-4dd3-9840-65c5750da906/deploy-status)
 
 ## Functionalities
 

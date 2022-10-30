@@ -16,7 +16,7 @@ export default defineComponent({
       required: true
     }
   },
-  mounted() {
+  mounted () {
     const observer = new ResizeObserver(entries => {
       entries.forEach(entry => {
         const cr = entry.contentRect
@@ -27,12 +27,12 @@ export default defineComponent({
     observer.observe((this.$refs.container as HTMLDivElement))
   },
   watch: {
-    genres(newValue: Genre[]) {
+    genres (newValue: Genre[]) {
       this.series = newValue.map((genre) => genre.value)
       this.chartOptions.labels = newValue.map((genre) => genre.cap_name)
     }
   },
-  data() {
+  data () {
     // All data needed to customize graph UI and data
     return {
       // random default value as observer overwrite this
@@ -50,7 +50,7 @@ export default defineComponent({
         labels: this.genres.map((genre) => genre.cap_name),
         dataLabels: {
           enabled: true,
-          formatter(_: number, opts: { w: { globals: { initialSeries: number[] } }, seriesIndex: number }): string[] {
+          formatter (_: number, opts: { w: { globals: { initialSeries: number[] } }, seriesIndex: number }): string[] {
             const number = opts.w.globals.initialSeries[opts.seriesIndex]
             return [number + '']
           }
