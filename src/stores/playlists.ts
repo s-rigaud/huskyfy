@@ -35,12 +35,11 @@ const DEFAULT_MY_MUSIC_PLAYLIST: SimplifiedSpotifyPlaylist = {
   uri: 'spotify:collection:tracks'
 }
 
+export const MAX_TRACKS_LIMIT = 50
+const MAX_PLAYLISTS_LIMIT = 50
+
 export type PlaylistState = {
   playlists: RemovableRef<{ [key: string]: SpotifyPlaylist }>;
-  MAX_TRACKS_LIMIT: RemovableRef<number>;
-  MAX_PLAYLISTS_LIMIT: RemovableRef<number>;
-
-  filteredTracks: RemovableRef<SpotifyTrack[]>;
 }
 
 type TupleArtistCount = {
@@ -53,11 +52,7 @@ type ArtistCount = {
 
 export const usePlaylistsStore = defineStore('playlists', {
   state: () => ({
-    playlists: useStorage('playlists', {}),
-    MAX_TRACKS_LIMIT: useStorage('MAX_TRACKS_LIMIT', 50),
-    MAX_PLAYLISTS_LIMIT: useStorage('MAX_PLAYLISTS_LIMIT', 50),
-
-    filteredTracks: useStorage('filteredTracks', [])
+    playlists: useStorage('playlists', {})
   } as PlaylistState),
   getters: {
     getTopArtists: (state) => {
@@ -154,17 +149,16 @@ export const usePlaylistsStore = defineStore('playlists', {
     reset () {
       // Manually update state as local storage and states are linked now
       this.playlists = {}
-      this.filteredTracks = []
     },
     // Retrieve playlists for user
     async getUserPlaylists (offset: number) {
       const userStore = useUserStore()
 
       const response = await api.spotify.playlists.getUserPlaylists(
-        this.MAX_PLAYLISTS_LIMIT,
+        MAX_PLAYLISTS_LIMIT,
         offset
       )
-      offset += this.MAX_PLAYLISTS_LIMIT
+      offset += MAX_PLAYLISTS_LIMIT
       const playlists = response.data.items
       playlists.unshift(this.getLikedSongPlaylist(userStore.username))
 
@@ -200,7 +194,7 @@ export const usePlaylistsStore = defineStore('playlists', {
       }
 
       // When reloading for the first time
-      if (offset === this.MAX_PLAYLISTS_LIMIT) {
+      if (offset === MAX_PLAYLISTS_LIMIT) {
         // Delete cached playlists deleted by user
         const playlistRequestId = playlists.map(p => p.id)
         for (const key in this.playlists) {
@@ -245,20 +239,19 @@ export const usePlaylistsStore = defineStore('playlists', {
       }
 
       const newTracks: SpotifyTrackMetadata[] = []
-      for (const requestOffset of range(offset, limit, this.MAX_TRACKS_LIMIT)) {
+      for (const requestOffset of range(offset, limit, MAX_TRACKS_LIMIT)) {
         const response = await this.retrieveTracks(playlistId, requestOffset)
         // Filter deleted track appearing in API
         response.data.items = response.data.items.filter(
-          i => i.track != null &&
-            i.track.type === 'track' &&
-            !i.is_local
+          i => (i.track !== null && i.track.type === 'track' && !i.is_local)
         )
         // Save track infos
         newTracks.push(...response.data.items)
         this.playlists[playlistId] = {
           ...response.data,
           ...this.playlists[playlistId],
-          offset: this.playlists[playlistId].offset! + this.MAX_TRACKS_LIMIT,
+          // eslint-disable-next-line
+          offset: this.playlists[playlistId].offset! + MAX_TRACKS_LIMIT,
           total: response.data.total
         }
       }
@@ -291,13 +284,17 @@ export const usePlaylistsStore = defineStore('playlists', {
         const trackGenres: Set<string> = new Set()
         for (let i = 0; i < artists.length; i++) {
           const artist = artists[i]
+
+          // eslint-disable-next-line
           artistMap.get(artist.id)!.genres.map(t => trackGenres.add(t))
+          // eslint-disable-next-line
           const followerCount = artistMap.get(artist.id)!.followers
           if (followerCount > 500_000) {
             allArtistIndie = false
           }
 
           // Update track artist as we retrieve more info in the specific artist call
+          // eslint-disable-next-line
           item.track.artists[i] = spotifyArtistInfos.find(a => a.id === artists[i].id)!
         }
         this.playlists[playlistId].tracks.push({
@@ -312,13 +309,13 @@ export const usePlaylistsStore = defineStore('playlists', {
     async retrieveTracks (playlistId: string, offset: number) {
       if (playlistId === 'my-music') {
         return await api.spotify.playlists.getUserSavedTracks(
-          this.MAX_TRACKS_LIMIT,
+          MAX_TRACKS_LIMIT,
           offset
         )
       } else {
         return await api.spotify.playlists.getPlaylistTracks(
           playlistId,
-          this.MAX_TRACKS_LIMIT,
+          MAX_TRACKS_LIMIT,
           offset
         )
       }

@@ -24,12 +24,9 @@ export interface SpotifyGetDetailedPlaylistResponse {
 
 // Spotify API Response for /tracks
 export interface SpotifyTrackResponse {
-    href: string;
     items: SpotifyTrackMetadata[];
     limit: number;
-    next?: string;
     offset: number;
-    previous?: string;
     total: number;
 }
 

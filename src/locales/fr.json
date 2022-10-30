@@ -31,7 +31,7 @@
 			"title": "Huskyfy playlist manager",
 			"content": {
 				"part1": "Huskyfy est un site web qui vise à fournir de nouvelles fonctionnalités en manipulant des playlists Spotify. Actuellement, il n'est pas possible de créer des sous-playlists sur Spotify en filtrant par genres musicaux ou par artistes. Maintenant c'est possible avec Huskyfy !",
-				"part2": "De plus, les artistes indépendants ne sont pas vraiment mis en avant sur la plateforme, c'est pourquoi Huskyfy essaie de les valoriser"
+				"part2": "De plus, les artistes indépendants ne sont pas vraiment mis en avant sur la plateforme, c'est pourquoi Huskyfy essaie de les valoriser."
 			}
 		},
 		"expose-liked-songs": {
@@ -60,7 +60,11 @@
 		"functionality1": "Découvrez les genres musicaux que vous écoutez le plus souvent",
 		"functionality2": "Dupliquer et partager votre playlist facilement",
 		"functionality3": "Partagez vos chansons préférées avec tous vos amis",
-		"functionality4": "Filtrez et analysez votre playlist en fonction de la popularité des artistes ou des genres musicaux"
+		"functionality4": "Filtrez et analysez votre playlist en fonction de la popularité des artistes ou des genres musicaux",
+        "functionality5": "",
+        "functionality6": "",
+        "functionality7": "",
+        "functionality8": ""
 	},
 	"me": "moi",
 	"navbar": {
@@ -83,7 +87,8 @@
 			"button": "Dupliquer la playlist ",
 			"copy-of": "Copie de ",
 			"created-by": "créée par Huskyfy 🐺",
-			"tooltip": "Créer une nouvelle playlist avec tous les titres actuellement sélectionnés"
+			"tooltip": "Créer une nouvelle playlist avec tous les titres actuellement sélectionnés",
+			"only-with-filter": "Créer une nouvelle playlist avec les titres sélectionnés"
 		},
 		"explanation-indie-score": "% de titres faits par des artistes avec moins de 500 000 auditeurs mensuels",
 		"export-preview": "Sauvegarder un aperçu 🖼️",
@@ -116,8 +121,10 @@
 		}
 	},
 	"track": {
+		"_generic-name": "titre",
 		"all-tracks": "Tous les titres",
-		"exclusive-filter": "Rendre la sélection exclusive",
+		"exclusive-filter": "Tous les filtres doivent apparaître sur le titre",
+		"inclusive-filter": "Au moins un des filtres doit apparaître sur le titre",
 		"filters": {
 			"title": "Filtres",
 			"artists": "Artistes",

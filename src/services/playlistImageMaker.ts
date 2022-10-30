@@ -20,7 +20,7 @@ export const makeImage = (
   size: string | number,
   showTitle: boolean,
   showStats: boolean,
-  callback: Function
+  callback: { (dataUrl: string): void; }
 ): string | void => {
   const playlistsStore = usePlaylistsStore()
   const playlist = playlistsStore.playlists[playlistId]
@@ -91,6 +91,7 @@ const createCanvas = (
     ((showStats) ? STATS_HEIGHT : 0)
   )
 
+  // eslint-disable-next-line
   const ctx = canvas.getContext('2d')!
   ctx.fillStyle = '#000'
   ctx.fillRect(0, 0, canvas.width, canvas.height)

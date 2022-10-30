@@ -1,14 +1,14 @@
 <template>
   <!-- Card to represent a track, many of them are stacks -->
-  <v-list-item @click="openTrackOnSpotify" class="track-card" :style="trackAnimationDelay">
+  <v-list-item class="track-card" :style="trackAnimationDelay">
     <template v-slot:prepend>
       <p class="track-index">{{ trackIndex + 1 }}</p>
-      <v-avatar class="ma-3 track-image" size="90" rounded="0">
+      <v-avatar class="ma-3 track-image" size="90" rounded="0" @click="openTrackOnSpotify">
         <v-img rel="preconnect" v-bind:src="image" :lazy-src="loadingCover" alt="Cover image"></v-img>
       </v-avatar>
     </template>
 
-    <v-list-item-title class="rainbow-text text-h6"> {{ name }} </v-list-item-title>
+    <v-list-item-title class="rainbow-text text-h6" @click="openTrackOnSpotify"> {{ name }} </v-list-item-title>
     <div class="second-line">
       <a v-for="artist in artists" class="artist-names" :key="artist.id" :href="artist.uri">
         <v-card-subtitle class="artist-name text-truncate">
@@ -192,6 +192,10 @@ export default defineComponent({
   padding: 0 !important;
 }
 
+.artist-name:hover {
+  text-decoration: underline;
+}
+
 .genre-chip {
   margin: 0 5px 2px 0px;
   animation: genres-appear 2000ms linear;
@@ -207,6 +211,7 @@ export default defineComponent({
 
 .text-h6 {
   font-family: "Oswald" !important;
+  cursor: pointer;
 }
 
 .track-index {
@@ -215,6 +220,7 @@ export default defineComponent({
 
 .track-image {
   min-width: 80px;
+  cursor: pointer;
 }
 
 .second-line {

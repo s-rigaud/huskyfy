@@ -12,7 +12,7 @@
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'View404',
+  name: 'NotFound404',
   computed: {
   },
   methods: {

@@ -59,7 +59,8 @@ export default defineComponent({
 }
 
 #app-bar-logo {
-  width: 250px
+  width: 250px;
+  margin-left: 10px;
 }
 
 #profile-picture {

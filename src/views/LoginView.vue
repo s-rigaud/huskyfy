@@ -8,17 +8,18 @@
     <div id="hero">
       <h1 id="title" class="rainbow-text">{{ $t("login.header") }}</h1>
       <div id="functionalities">
-        <div v-for="n of [1,2,3,4]" :key="n" class="functionality">
-          <v-img :src="boneImg" alt="small-bone" width="24"></v-img>
+        <div v-for="n of maxNumberOfFunctionalities" :key="n" class="functionality">
+          <v-img :src="boneImg" alt="small-bone" width="24" style="max-width: 24px"></v-img>
           <h4>{{ $t(`login.functionality${n}`) }}</h4>
         </div>
       </div>
     </div>
 
     <div id="lower-part">
-      <v-btn id="connect-button" @click="accessOAuthPage" v-if="!userStore.connected" rounded class="rainbow-v-btn">
+      <v-btn id="connect-button" @click="accessOAuthPage" v-if="!userStore.connected" rounded class="rainbow-v-btn"
+        size="large">
         {{ $t("login.connect") }}
-        <v-icon right light> mdi-account-circle </v-icon>
+        <v-icon right light style="padding-top: 5px;"> mdi-account-circle </v-icon>
       </v-btn>
 
       <router-link to="/about" id="link-about">
@@ -36,25 +37,32 @@
 import api from '@/api'
 import LocaleSelector from '@/components/LocaleSelector.vue'
 import { useUserStore } from '@/stores/user'
+import { range } from '@/utils/functions'
 import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'LoginView',
-  setup () {
+  setup() {
     const userStore = useUserStore()
     return { userStore }
   },
   components: { LocaleSelector },
   computed: {
-    textLogo (): string {
+    textLogo(): string {
       return require('@/assets/Huskyfy.png')
     },
-    boneImg (): string {
+    boneImg(): string {
       return require('@/assets/small-bone.png')
+    },
+    maxNumberOfFunctionalities(): number[] {
+      console.error(window.innerHeight);
+
+      const length = (window.innerHeight > 700) ? 8 : 4
+      return range(1, length + 1)
     }
   },
   methods: {
-    async accessOAuthPage () {
+    async accessOAuthPage() {
       window.location.href = await api.spotify.auth.getOAuthUrl()
     }
   }
@@ -95,6 +103,55 @@ export default defineComponent({
   height: max(15%, 90px);
 }
 
+.mdi {
+  margin-left: 3px;
+}
+
+#hero {
+  width: min(95%, 800px);
+  min-height: 60%;
+  margin-top: 20px;
+  padding: 15px;
+
+  border-radius: 15px;
+  background-color: rgba(0, 0, 0, 0.7);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+#functionalities {
+  width: fit-content;
+  margin: auto;
+
+  display: flex;
+  flex-direction: column;
+
+  text-align: left;
+}
+
+.functionality {
+  display: inline-flex;
+  align-items: flex-start;
+
+  padding: 10px 0px;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+}
+
+.functionality>h4 {
+  margin-left: 5px;
+}
+
+.functionality .v-img {
+  max-width: 24px;
+}
+
+#title {
+  font-size: x-large;
+  margin: 0px;
+}
+
 #lower-part {
   display: flex;
   flex-direction: column;
@@ -103,7 +160,7 @@ export default defineComponent({
 
 #lower-part>a {
   position: absolute;
-  bottom: 5%;
+  bottom: 3%;
   font-size: large;
 }
 
@@ -126,7 +183,7 @@ export default defineComponent({
   color: black !important;
 
   position: absolute;
-  bottom: 10%;
+  bottom: 8%;
 }
 
 #connect-button:hover {
@@ -139,44 +196,5 @@ export default defineComponent({
 
 a {
   background: rgba(0, 0, 0, 0.3);
-}
-
-.mdi {
-  margin-left: 3px;
-}
-
-#hero {
-  width: 95%;
-  min-height: 60%;
-  margin-top: 20px;
-  padding: 10px;
-
-  border-radius: 15px;
-  background-color: rgba(0, 0, 0, 0.7);
-
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-#functionalities {
-  text-align: left;
-}
-
-.functionality {
-  display: inline-flex;
-  align-items: flex-start;
-
-  padding: 10px 0px;
-  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
-}
-
-.functionality>h4 {
-  margin-left: 5px;
-}
-
-#title {
-  font-size: x-large;
-  margin: 0px;
 }
 </style>

@@ -10,6 +10,7 @@ const request = axios.create({
 request.interceptors.request.use(function (config) {
   const authStore = useAuthStore()
   if (authStore.accessToken) {
+    // eslint-disable-next-line
     config.headers!.Authorization = `Bearer ${authStore.accessToken}`
   }
   return config
@@ -17,6 +18,7 @@ request.interceptors.request.use(function (config) {
 
 request.interceptors.response.use(response => {
   // Log every request
+  // console.info(response)
   return response
 }, async (error) => {
   const { status } = error.response
@@ -25,7 +27,7 @@ request.interceptors.response.use(response => {
   // Handle access token refresh for 401
   if (error.response && status === 401) {
     const accessToken = await api.spotify.auth.requestNewAccessToken()
-    if (accessToken!) {
+    if (accessToken) {
       const authStore = useAuthStore()
       authStore.accessToken = accessToken
 

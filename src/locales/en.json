@@ -31,7 +31,7 @@
             "title": "Huskyfy playlist manager",
             "content": {
                 "part1": "Huskyfy is a small web project that aims to provide new functionalities when manipulating Spotify playlists. Right now, it is not possible to create sub-playlists on Spotify filtering by track genres or artists.",
-                "part2": "Moreover, indie artists are not really promoted on the platform so Huskyfy try to highlight their work"
+                "part2": "Moreover, indie artists are not really promoted on the platform so Huskyfy try to highlight their work."
             }
         },
         "expose-liked-songs": {
@@ -60,7 +60,11 @@
         "functionality1": "Find out which music genres you are mostly listening to",
         "functionality2": "Duplicate and share your playlist easily",
         "functionality3": "Share your liked songs with all your friends",
-        "functionality4": "Filter and analyse your playlist by artist popularity or music genres"
+        "functionality4": "Filter and analyse your playlist by artist popularity or music genres",
+        "functionality5": "",
+        "functionality6": "",
+        "functionality7": "",
+        "functionality8": ""
     },
     "me": "me",
     "navbar": {
@@ -80,7 +84,8 @@
             "button": "Duplicate the playlist ",
             "copy-of": "Copy of",
             "created-by": "created by Huskyfy 🐺",
-            "tooltip": "Create a new playlist with currently selected tracks"
+            "tooltip": "Create a new playlist with currently selected tracks",
+            "only-with-filter": "Create a new playlist only with filtered tracks"
         },
         "explanation-indie-score": "% of tracks from artists with less than 500,000 monthly listeners",
         "export-preview": "Export playlist preview 🖼️",
@@ -113,8 +118,10 @@
         }
     },
     "track": {
+        "_generic-name": "track",
         "all-tracks": "All playlist tracks",
-        "exclusive-filter": "Make selected filters exclusive",
+        "exclusive-filter": "All the tags should be present on track",
+        "inclusive-filter": "At least one of the tags should be present on track",
         "filters": {
             "title": "Filters",
             "artists": "Artists",

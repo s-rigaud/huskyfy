@@ -1,6 +1,6 @@
 <template>
   <div id="chart-container" ref="container">
-    <h3>Top {{genres.length}} Genres</h3>
+    <h3>Top {{ genres.length }} Genres</h3>
     <apexchart type="donut" :width="width" :options="chartOptions" :series="series"></apexchart>
   </div>
 </template>
@@ -8,7 +8,6 @@
 <script lang="ts">
 import { Genre } from '@/model'
 import { defineComponent, PropType } from 'vue'
-
 export default defineComponent({
   name: 'GenreChart',
   props: {
@@ -17,7 +16,7 @@ export default defineComponent({
       required: true
     }
   },
-  mounted () {
+  mounted() {
     const observer = new ResizeObserver(entries => {
       entries.forEach(entry => {
         const cr = entry.contentRect
@@ -28,12 +27,12 @@ export default defineComponent({
     observer.observe((this.$refs.container as HTMLDivElement))
   },
   watch: {
-    genres (newValue: Genre[]) {
+    genres(newValue: Genre[]) {
       this.series = newValue.map((genre) => genre.value)
       this.chartOptions.labels = newValue.map((genre) => genre.cap_name)
     }
   },
-  data () {
+  data() {
     // All data needed to customize graph UI and data
     return {
       // random default value as observer overwrite this
@@ -50,12 +49,42 @@ export default defineComponent({
         },
         labels: this.genres.map((genre) => genre.cap_name),
         dataLabels: {
-          enabled: false
+          enabled: true,
+          formatter(_: number, opts: { w: { globals: { initialSeries: number[] } }, seriesIndex: number }): string[] {
+            const number = opts.w.globals.initialSeries[opts.seriesIndex]
+            return [number + '']
+          }
         },
+
         legend: {
           position: 'bottom',
           onItemHover: {
             highlightDataSeries: true
+          },
+          onItemClick: {
+            toggleDataSeries: false
+          },
+          labels: {
+            colors: ['#fff']
+          },
+          fontSize: '13px'
+        },
+        colors: [
+          // German palette https://flatuicolors.com/palette/de
+          '#fc5c65', '#eb3b5a',
+          '#fd9644', '#fa8231',
+          '#fed330', '#f7b731',
+          '#26de81', '#20bf6b',
+          '#2bcbba', '#0fb9b1',
+          '#45aaf2', '#2d98da',
+          '#4b7bec', '#3867d6',
+          '#a55eea', '#8854d0',
+          '#d1d8e0', '#a5b1c2',
+          '#778ca3', '#4b6584'
+        ],
+        plotOptions: {
+          pie: {
+            expandOnClick: false
           }
         }
       }

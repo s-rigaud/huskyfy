@@ -6,8 +6,9 @@
         <v-img id="main-title-image" width="60" :src="huskyfyCircle" alt="Huskyfy Image"></v-img>
         <h1 class="rainbow-text">{{ $t("about.description.title") }}</h1>
       </div>
-      <p> {{ $t("about.description.content.part1") }} </p>
-      <p style="margin-bottom: 0"> {{ $t("about.description.content.part2") }} </p>
+      <p style="margin-bottom: 0">
+        {{ $t("about.description.content.part1") + ' ' + $t("about.description.content.part2") }}
+      </p>
       <v-chip id="indie-chip" :text="$t('track.indie')" color="green" label text-color="white" size="small">
       </v-chip>
 
@@ -65,11 +66,13 @@
           FlatIcon.com
         </a>
       </p>
-    </div>
 
-    <a href="https://github.com/s-rigaud" target="_blank" rel="noopener">
-      <v-img width="70" :src="githubImg" alt="Github Image"></v-img>
-    </a>
+      <div id="github-icon">
+        <a href="https://github.com/s-rigaud" target="_blank" rel="noopener">
+          <v-img width="70" :src="githubImg" alt="Github Image"></v-img>
+        </a>
+      </div>
+    </div>
   </div>
 
   <v-btn id="exit-button" @click="backToPreviousPage" class="rainbow-v-btn">
@@ -83,21 +86,21 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'AboutView',
   computed: {
-    githubImg (): string {
+    githubImg(): string {
       return require('@/assets/github.png')
     },
-    huskyfyCircle (): string {
+    huskyfyCircle(): string {
       return require('@/assets/large-logo-circle.png')
     },
-    myMusicImage (): string {
+    myMusicImage(): string {
       return require('@/assets/my-music.jpeg')
     },
-    myMusicLink (): string {
+    myMusicLink(): string {
       return process.env.VUE_APP_BASE_SERVER_URL + '/playlist/my-music'
     }
   },
   methods: {
-    backToPreviousPage () {
+    backToPreviousPage() {
       this.$router.go(-1)
     }
   }
@@ -113,15 +116,16 @@ export default defineComponent({
 }
 
 #text {
-  margin: 5%;
+  margin: 20px;
   max-width: 700px;
   text-align: justify;
 }
 
 #main-title {
   width: 100%;
-  display: inline-flex;
-  justify-content: center;
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
 #main-title-image {
@@ -146,12 +150,7 @@ export default defineComponent({
 }
 
 h1 {
-  font-size: x-large;
-  background: -webkit-linear-gradient(var(--text-color), var(--link-color));
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin-right: 10px;
+  font-size: 25px;
 }
 
 h2 {
@@ -164,7 +163,7 @@ h2 {
 }
 
 p {
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 
 a {
@@ -173,6 +172,24 @@ a {
 }
 
 #indie-chip {
-  margin-bottom: 20px
+  margin-bottom: 20px;
+}
+
+#github-icon .v-img {
+  margin: auto;
+}
+
+@media only screen and (min-width: 768px) {
+  h1 {
+    font-size: 40px;
+  }
+
+  h2 {
+    font-size: 30px;
+  }
+
+  p {
+    font-size: 15px;
+  }
 }
 </style>

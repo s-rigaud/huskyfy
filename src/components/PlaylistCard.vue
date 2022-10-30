@@ -106,7 +106,7 @@ export default defineComponent({
 }
 
 .playlist-card:hover .v-card__overlay {
-  opacity: 0.2;
+  opacity: 0.3;
 }
 
 @media only screen and (min-width: 768px) {

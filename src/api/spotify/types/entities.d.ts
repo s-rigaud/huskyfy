@@ -108,29 +108,13 @@ export interface SpotifyAlbum {
 export interface SpotifyTrack {
     album: SpotifyAlbum;
     artists: SpotifyArtist[];
-    // eslint-disable-next-line
-    available_markets: string[];
-    // eslint-disable-next-line
-    disc_number: number;
-    // eslint-disable-next-line
-    duration_ms: number;
-    episode: boolean;
-    explicit: boolean;
-    // eslint-disable-next-line
-    external_ids: SpotifyExternalIds;
-    // eslint-disable-next-line
-    external_urls: SpotifyExternalUrls;
-    href: string;
     id: string;
     // eslint-disable-next-line
     is_local: boolean;
     name: string;
-    popularity: number;
     // eslint-disable-next-line
     preview_url: string;
     track: boolean;
-    // eslint-disable-next-line
-    track_number: number;
     type: string;
     uri: string;
     isIndie: boolean;
@@ -140,17 +124,8 @@ export interface SpotifyTrack {
 // Spotify API Track embedded with metadata
 export interface SpotifyTrackMetadata {
     // eslint-disable-next-line
-    added_at: Date;
-    // eslint-disable-next-line
-    added_by: SpotifyAddedBy;
-    // eslint-disable-next-line
     is_local: boolean;
-    // eslint-disable-next-line
-    primary_color?: any;
     track: SpotifyTrack;
-    // eslint-disable-next-line
-    video_thumbnail: SpotifyVideoThumbnail;
-    total?: number;
 }
 
 interface SimplifiedSpotifyTracks {

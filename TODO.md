@@ -1,14 +1,11 @@
 # Functionalities
 
-* Fix other Github branch for reordering playlist
+[ ] Fix other Github branch for reordering playlist
 
-* Fix style for larger screens
+[ ] Fix style for larger screens
 
-* Better filtering tags
+[ ] Better style for filtering tags
 
-* Update image when after "load more tracks" event end
-## Other
+[X] Update image when after "load more tracks" event end
 
-* https://frontendchecklist.io/
-
-* Current SEO --> 16 on Google.com for 'horus playlist spotify'
+[ ] Add functionalities (fr + en) for Login Page

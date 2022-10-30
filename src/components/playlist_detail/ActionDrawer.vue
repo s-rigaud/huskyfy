@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer id="drawer" v-model="isOpen" temporary location="right" :image="starBackground">
+  <v-navigation-drawer id="drawer" v-model="isOpen" temporary location="right" :image="starBackground" elevation="20">
     <v-list>
       <v-list-subheader>{{ $t('drawer.update-playlist') }}</v-list-subheader>
       <!-- 1.1 Update playlist privacy -->
@@ -120,9 +120,10 @@ export default defineComponent({
     playlistId: {
       type: String,
       required: true
-    }
+    },
+    filteredTrackLength: Number
   },
-  setup () {
+  setup() {
     const playlistsStore = usePlaylistsStore()
     const currentUserUsername = useUserStore().username
 
@@ -133,21 +134,21 @@ export default defineComponent({
   },
   watch: {
     // Have to use this to synchronise props as I can't use props as VModel
-    open (newValue: boolean) {
+    open(newValue: boolean) {
       this.isOpen = newValue
       this.updateImagePreview()
     },
-    isOpen (newValue: boolean) {
+    isOpen(newValue: boolean) {
       if (newValue === false) {
         this.$emit('onClose')
       }
     },
 
-    generateImageSize () { this.updateImagePreview() },
-    generateImageDisplayTitle () { this.updateImagePreview() },
-    generateImageDisplayStats () { this.updateImagePreview() }
+    generateImageSize() { this.updateImagePreview() },
+    generateImageDisplayTitle() { this.updateImagePreview() },
+    generateImageDisplayStats() { this.updateImagePreview() }
   },
-  data () {
+  data() {
     return {
       isOpen: false,
       isDeleteModalOpen: false,
@@ -161,28 +162,28 @@ export default defineComponent({
     }
   },
   computed: {
-    loadingCover (): string {
+    loadingCover(): string {
       return require('@/assets/loading-image-preview.jpg')
     },
-    userOwnsPlaylist (): boolean {
+    userOwnsPlaylist(): boolean {
       return (
         this.currentUserUsername ===
         this.playlistsStore.playlists[this.playlistId]
           .owner.display_name
       )
     },
-    starBackground (): string {
+    starBackground(): string {
       return require('@/assets/stars.jpg')
     },
-    ticks (): { 0?: '2x2', 1?: '3x3', 2?: '4x4' } {
+    ticks() {
       const trackNumber = this.playlistsStore.playlists[this.playlistId].tracks.length
-      const ticks: any = {}
+      const ticks: { 0?: '2x2', 1?: '3x3', 2?: '4x4' } = {}
       if (trackNumber >= 4) ticks[0] = '2x2'
       if (trackNumber >= 9) ticks[1] = '3x3'
       if (trackNumber >= 16) ticks[2] = '4x4'
       return ticks
     },
-    maxTick (): 0 | 1 | 2 {
+    maxTick(): 0 | 1 | 2 {
       const trackNumber = this.playlistsStore.playlists[this.playlistId].tracks.length
       let max: 0 | 1 | 2 = 0
       if (trackNumber >= 9) max = 1
@@ -191,7 +192,7 @@ export default defineComponent({
     }
   },
   methods: {
-    updateImagePreview () {
+    updateImagePreview() {
       makeImage(
         this.playlistId,
         ['2x2', '3x3', '4x4'][this.generateImageSize],
@@ -202,37 +203,37 @@ export default defineComponent({
         }
       )
     },
-    async setPlaylistPrivate () {
+    async setPlaylistPrivate() {
       await this.playlistsStore.updatePlaylistPrivacy(
         this.playlistId,
         false
       )
     },
-    async setPlaylistPublic () {
+    async setPlaylistPublic() {
       await this.playlistsStore.updatePlaylistPrivacy(
         this.playlistId,
         true
       )
     },
-    async sortPlaylistTracksByGenres () {
+    async sortPlaylistTracksByGenres() {
       await this.playlistsStore.sortPlaylistTracksByGenres(
         this.playlistId
       )
       this.$emit('onSortEnd')
     },
-    async sortPlaylistTracksByArtistTrackInPlaylist () {
+    async sortPlaylistTracksByArtistTrackInPlaylist() {
       await this.playlistsStore.sortPlaylistTracksByArtistTrackInPlaylist(
         this.playlistId
       )
       this.$emit('onSortEnd')
     },
-    async sortPlaylistTracksByArtistName () {
+    async sortPlaylistTracksByArtistName() {
       await this.playlistsStore.sortPlaylistTracksByArtistName(
         this.playlistId
       )
       this.$emit('onSortEnd')
     },
-    async exportArtistPreview () {
+    async exportArtistPreview() {
       makeImage(
         this.playlistId,
         ['2x2', '3x3', '4x4'][this.generateImageSize],
@@ -245,7 +246,7 @@ export default defineComponent({
         }
       )
     },
-    async unfollowPlaylist () {
+    async unfollowPlaylist() {
       this.isDeleteModalOpen = false
       this.waitingForDeletion = true
       const toDeletePlaylistId = this.playlistId
@@ -259,6 +260,7 @@ export default defineComponent({
 <style>
 #drawer {
   z-index: 3000 !important;
+  min-width: 30%;
 }
 
 #drawer .v-slider__container {

@@ -8,9 +8,9 @@ import { useUserStore } from '@/stores/user'
 import AboutView from '@/views/AboutView.vue'
 import DuplicateLikedSongPlaylistView from '@/views/DuplicateLikedSongPlaylistView.vue'
 import LoginView from '@/views/LoginView.vue'
+import NotFound404 from '@/views/NotFound404.vue'
 import PlaylistDetail from '@/views/PlaylistDetail.vue'
 import PlaylistExplorer from '@/views/PlaylistExplorer.vue'
-import View404 from '@/views/View404.vue'
 
 import { createRouter, createWebHistory } from 'vue-router'
 
@@ -45,7 +45,7 @@ const routes = [
   {
     path: '/:pathMatch(.*)*',
     name: '404',
-    component: View404
+    component: NotFound404
   }
 ]
 
@@ -97,7 +97,6 @@ router.beforeEach(async function (to, from, next) {
   } else if (to.name === 'LoginView' && authStore.accessToken) {
     next({ name: 'Explore' })
   } else {
-    usePlaylistsStore().$patch({ filteredTracks: [] })
     next()
   }
 })
