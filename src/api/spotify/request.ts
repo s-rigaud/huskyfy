@@ -36,7 +36,18 @@ request.interceptors.response.use(response => {
     }
   }
 
+  if (
+    status === 403
+    && error.response.data === "User not registered in the Developer Dashboard"
+  ) {
+    alert(
+      "Sorry Huskyfy is in beta now and it's not open for everyone. " +
+      "If you want access to the website send a mail to huskyfy.bugtracker@gmail.com"
+    )
+  }
+
   console.log('Exception while trying to handle error')
+
   return Promise.reject(error)
 })
 

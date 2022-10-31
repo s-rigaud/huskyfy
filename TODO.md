@@ -14,6 +14,8 @@
 
 [ ] Add ref to exact playlist to avoid calling playlistsStore.playlist[this.playlistId] each time
 
+[ ] Move Spotify credentials to .env
+
 1. [ ] Check frontend playlist
 2. [ ] Read Spotify design recommendation
 3. [ ] Set project as public and make a first release

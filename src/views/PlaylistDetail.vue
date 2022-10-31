@@ -1,17 +1,17 @@
 <template>
   <!-- Description of all the playlist with all the tracks and filters -->
-  <div id="playlist" v-if="playlists[playlistId] && playlists[playlistId].total > 0" v-scroll="onScroll">
+  <div id="playlist" v-if="playlist && playlist.total > 0" v-scroll="onScroll">
     <div id="main-content">
       <v-card id="playlist-card" v-if="playlistId">
         <div id="playlist-meta">
           <div id="playlist-image" @click.self="openPlaylistOnSpotify">
-            <v-img v-bind:src="playlistsStore.playlists[playlistId].images[0].url" :lazy-src="loadingCover"
-              alt="Cover image" cover rel="preconnect" width="90">
+            <v-img v-bind:src="playlist.images[0].url" :lazy-src="loadingCover" alt="Cover image" cover rel="preconnect"
+              width="90">
             </v-img>
           </div>
           <div id="title-container">
             <h3 id="playlist-name" class="text-truncate rainbow-text" @click.self="openPlaylistOnSpotify">
-              {{ playlistsStore.playlists[playlistId].name }}
+              {{ playlist.name }}
             </h3>
             <p> {{ getTextFromVisibility }} </p>
             <p id="playlist-owner">
@@ -76,8 +76,8 @@
 
                 <div id="artist-filter">
                   <v-select v-model="selectedArtists" :label="$t('track.filters.artists')" :items="getSortedArtists()"
-                    item-title="name" variant="outlined" density="comfortable" multiple class="filter-select"
-                    return-object :menu-props="{ 'max-height': '250px' }">
+                    item-title="name" variant="outlined" density="compact" multiple class="filter-select" return-object
+                    :menu-props="{ 'max-height': '250px' }">
                     <template v-slot:selection="{ item, index }: SlotProps">
                       <v-chip v-if="index < 2">
                         <v-avatar>
@@ -94,7 +94,7 @@
                 </div>
 
                 <v-select v-model="selectedPopularity" :label="$t('track.filters.popularity')"
-                  :items="[NO_POPULARITY, 'Popular', 'Indie']" variant="outlined" density="comfortable"
+                  :items="[NO_POPULARITY, 'Popular', 'Indie']" variant="outlined" density="compact"
                   class="filter-select">
                 </v-select>
               </div>
@@ -170,9 +170,8 @@
     </div>
 
     <!-- Load more tracks to lazy-load all of them -->
-    <LoadMoreTracksPopup
-      v-if="isHugePlaylist && playlists[playlistId].tracks.length < playlists[playlistId].total && !startDuplication"
-      :playlist="playlists[playlistId]" :trackRequestLimit="TRACK_REQUEST_LIMIT"
+    <LoadMoreTracksPopup v-if="isHugePlaylist && playlist.tracks.length < playlist.total && !startDuplication"
+      :playlist="playlist" :trackRequestLimit="TRACK_REQUEST_LIMIT"
       @all-tracks-loaded="() => { resetFilters(); refreshStats() }" />
   </div>
 
@@ -185,8 +184,7 @@
     </v-btn>
   </div>
 
-  <DuplicatorPopup v-if="startDuplication" :playlistId="playlistsStore.playlists[playlistId].id"
-    :new-tracks="filteredTracks" />
+  <DuplicatorPopup v-if="startDuplication" :playlistId="playlist.id" :new-tracks="filteredTracks" />
 </template>
 
 <script lang="ts">
@@ -203,7 +201,7 @@ import { MAX_TRACKS_LIMIT, usePlaylistsStore } from '@/stores/playlists'
 import { useUserStore } from '@/stores/user'
 import { capitalize } from '@/utils/functions'
 import { storeToRefs } from 'pinia'
-import { defineComponent, StyleValue } from 'vue'
+import { defineComponent, StyleValue, toRef } from 'vue'
 
 // It is used for typing slot props
 // eslint-disable-next-line
@@ -227,45 +225,42 @@ export default defineComponent({
     ActionDrawer,
     DuplicatorPopup
   },
-  setup() {
+  setup(props) {
     const playlistsStore = usePlaylistsStore()
 
     // Shorthand
     const { playlists } = storeToRefs(playlistsStore)
-    const { downloadPlaylistTracks } = playlistsStore
+    const playlist = toRef(playlists.value, props.playlistId)
 
+    const { downloadPlaylistTracks } = playlistsStore
     const currentUserUsername = useUserStore().username
 
     return {
       playlistsStore,
-      playlists,
+      playlist,
       downloadPlaylistTracks,
       currentUserUsername
     }
   },
   async mounted() {
-    const playlist = this.playlists[this.playlistId]
     this.TRACK_REQUEST_LIMIT = MAX_TRACKS_LIMIT * 3
-    if (playlist.id === 'my-music') {
+    if (this.playlist.id === 'my-music') {
       await this.playlistsStore.refreshMyMusicTotalTrack()
     }
     await this.loadFirstTracks()
-    this.filteredTracks = this.playlists[this.playlistId].tracks
+    this.filteredTracks = this.playlist.tracks
   },
   data() {
     return {
       TRACK_REQUEST_LIMIT: 150,
+
       NO_POPULARITY: 'No filter',
-
-      isHugePlaylist: false,
-
-      // NO_POPULARITY
       selectedPopularity: 'No filter',
       selectedArtists: ([] as SpotifyArtist[]),
       selectedGenres: ([] as string[]),
-
       isFilterExclusive: true,
 
+      isHugePlaylist: false,
       playlistLoaded: false,
 
       // For child components
@@ -275,9 +270,10 @@ export default defineComponent({
       drawer: false,
 
       startDuplication: false,
+
       displayGoTopButton: false,
 
-      openPanels: [],
+      openPanels: ([] as number[]),
       filteredTracks: ([] as SpotifyTrack[])
     }
   },
@@ -287,12 +283,9 @@ export default defineComponent({
     },
     async loadFirstTracks() {
       // Only asking for the right number of tracks as we already know how many tracks are in the playlist
-      const maxLimit = Math.min(
-        this.TRACK_REQUEST_LIMIT, this.playlists[this.playlistId].total
-      )
+      const maxLimit = Math.min(this.TRACK_REQUEST_LIMIT, this.playlist.total)
       await this.downloadPlaylistTracks(this.playlistId, maxLimit)
-      this.isHugePlaylist =
-        this.playlists[this.playlistId].total > this.TRACK_REQUEST_LIMIT
+      this.isHugePlaylist = this.playlist.total > this.TRACK_REQUEST_LIMIT
       this.playlistLoaded = true
       this.topGenres = this.getTopGenres()
       this.indiePercentage = this.getIndiePercentage()
@@ -314,8 +307,8 @@ export default defineComponent({
         return this.resetFilters()
       }
 
-      const playlistTracks = this.playlists[this.playlistId].tracks
-      let newFilteredTracks = this.playlists[this.playlistId].tracks
+      const playlistTracks = this.playlist.tracks
+      let newFilteredTracks = this.playlist.tracks
 
       // Filter over genres
       const genres = this.selectedGenres
@@ -365,20 +358,20 @@ export default defineComponent({
       this.selectedGenres = []
       this.selectedArtists = []
       this.selectedPopularity = this.NO_POPULARITY
-      this.filteredTracks = this.playlists[this.playlistId].tracks
+      this.filteredTracks = this.playlist.tracks
     },
     openPlaylistOnSpotify() {
-      window.location.href = this.playlists[this.playlistId].uri
+      window.location.href = this.playlist.uri
     },
     openPlaylistOwnerSpotifyProfile() {
-      window.location.href = this.playlists[this.playlistId].owner.uri
+      window.location.href = this.playlist.owner.uri
     },
     getSortedArtists(): SpotifyArtist[] {
       // Need to have a set of object in JS ...
       const alreadyAddedArtistNames: string[] = []
       const artistsToReturn: SpotifyArtist[] = []
 
-      for (const track of this.playlists[this.playlistId].tracks) {
+      for (const track of this.playlist.tracks) {
         for (const artist of track.artists) {
           if (!alreadyAddedArtistNames.includes(artist.name)) {
             artistsToReturn.push(artist)
@@ -406,8 +399,7 @@ export default defineComponent({
   },
   computed: {
     allTracksLoaded(): boolean {
-      const playlist = this.playlists[this.playlistId]
-      return playlist.tracks.length === playlist.total
+      return this.playlist.tracks.length === this.playlist.total
     },
     spotifyLogo(): string {
       return require('@/assets/spotify.png')
@@ -430,30 +422,27 @@ export default defineComponent({
       return { color }
     },
     usernameToDisplay(): string {
-      const playlistCreator = this.playlists[this.playlistId].owner.display_name
+      const playlistCreator = this.playlist.owner.display_name
 
       return this.currentUserUsername === playlistCreator ? this.$t('me') : playlistCreator
     },
     getEmojiFromVisibility(): string {
-      const playlist = this.playlists[this.playlistId]
-
-      if (playlist.collaborative) return this.$t('_emojis.collaborative')
-      if (playlist.public) return this.$t('_emojis.public')
+      if (this.playlist.collaborative) return this.$t('_emojis.collaborative')
+      if (this.playlist.public) return this.$t('_emojis.public')
       return this.$t('_emojis.private')
     },
     getTextFromVisibility(): string {
-      const playlist = this.playlists[this.playlistId]
-
-      if (playlist.collaborative) return this.$t('playlist.collaborative') + ' ' + this.$t('_emojis.collaborative')
-      if (playlist.public) return this.$t('playlist.public') + ' ' + this.$t('_emojis.public')
+      if (this.playlist.collaborative) {
+        return this.$t('playlist.collaborative') + ' ' + this.$t('_emojis.collaborative')
+      }
+      if (this.playlist.public) return this.$t('playlist.public') + ' ' + this.$t('_emojis.public')
       return this.$t('playlist.private') + ' ' + this.$t('_emojis.private')
     },
     loadingCover(): string {
       return require('@/assets/default_cover.jpg')
     },
     formattedDescription(): string {
-      const playlist = this.playlists[this.playlistId]
-      return playlist.description.replace(/(<([^>]+)>)/ig, '').replace(/&quot;/ig, '"')
+      return this.playlist.description.replace(/(<([^>]+)>)/ig, '').replace(/&quot;/ig, '"')
     },
     toButtonOpacity(): StyleValue {
       return { opacity: (this.displayGoTopButton) ? 100 : 0 }
@@ -693,11 +682,11 @@ export default defineComponent({
 }
 
 #artist-filter .v-input {
-  max-height: 48px;
+  max-height: 40px;
 }
 
 #artist-filter .v-input__control {
-  max-height: 48px;
+  max-height: 40px;
 }
 
 #percentage-row {

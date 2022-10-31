@@ -122,7 +122,7 @@ const addCanvasTitle = (
   else fontSize = 15
 
   // Main title : Playlist name
-  ctx.font = `bolder ${fontSize}px Arial`
+  ctx.font = `bolder ${fontSize}px Oswald`
   ctx.textAlign = 'center'
 
   const txtWidth = ctx.measureText(playlistName).width
@@ -156,7 +156,7 @@ const addCanvasArtistImages = (
 ) => {
   const imageWidthAndHeight = (400 / gridSize) - 2 * gridSize
 
-  ctx.font = '15px Arial'
+  ctx.font = '15px Oswald'
   ctx.textAlign = 'center'
   ctx.fillStyle = '#F9B621'
 
@@ -200,12 +200,9 @@ const addCanvasLegend = (
 
     const indieText = `${VueI18n.tc('track.indie', 2)} ${indiePercentage}%`
     ctx.font = `bolder ${13}px Arial`
-
-    const indieGradient = ctx.createLinearGradient(300, 40, 500, 40)
-    indieGradient.addColorStop(0, '#2ecc71')
-    indieGradient.addColorStop(1, '#27ae60')
-    ctx.fillStyle = indieGradient
+    ctx.fillStyle = '#27ae60'
     ctx.fillText(indieText, 10, yStart + 20)
+
   } else if (indiePercentage < 30) {
     // Only popular percentage
     ctx.fillStyle = '#fff'
@@ -215,12 +212,9 @@ const addCanvasLegend = (
 
     const popularText = `${VueI18n.tc('track.popular', 2)} ${100 - indiePercentage}%`
     ctx.font = `bolder ${13}px Arial`
-
-    const popularGradient = ctx.createLinearGradient(300, 40, 500, 40)
-    popularGradient.addColorStop(0, '#e74c3c')
-    popularGradient.addColorStop(1, '#e67e22')
-    ctx.fillStyle = popularGradient
+    ctx.fillStyle = '#e67e22'
     ctx.fillText(popularText, 10, yStart + 20)
+
   } else {
     ctx.fillStyle = '#fff'
     ctx.strokeStyle = '#000'
@@ -234,14 +228,10 @@ const addCanvasLegend = (
       { tr: 0, br: 0, tl: 10, bl: 10 },
       true, true
     )
-
     const popularText = `${VueI18n.tc('track.popular', 2)} ${100 - indiePercentage}%`
-    ctx.font = `bolder ${13}px Arial`
+    ctx.font = `bolder ${13}px Righteous`
     ctx.textAlign = 'start'
-    const popularGradient = ctx.createLinearGradient(300, 40, 500, 40)
-    popularGradient.addColorStop(0, '#e74c3c')
-    popularGradient.addColorStop(1, '#e67e22')
-    ctx.fillStyle = popularGradient
+    ctx.fillStyle = '#e67e22'
     ctx.fillText(popularText, 10, yStart + 20)
 
     // Indie
@@ -253,15 +243,10 @@ const addCanvasLegend = (
       true,
       true
     )
-
     const indieText = `${VueI18n.tc('track.indie', 2)} ${indiePercentage}%`
-    ctx.font = `bolder ${13}px Arial`
+    ctx.font = `bolder ${13}px Righteous`
     ctx.textAlign = 'end'
-
-    const indieGradient = ctx.createLinearGradient(300, 40, 500, 40)
-    indieGradient.addColorStop(0, '#2ecc71')
-    indieGradient.addColorStop(1, '#27ae60')
-    ctx.fillStyle = indieGradient
+    ctx.fillStyle = '#27ae60'
     ctx.fillText(indieText, 385, yStart + 20)
   }
 
@@ -269,10 +254,10 @@ const addCanvasLegend = (
   // Genres
   // 1 -----  2 -----
   // 3 -----  4 -----
-  ctx.font = 'bolder 17px Arial'
+  ctx.font = 'bolder 17px Oswald'
   ctx.fillStyle = '#F39200'
   ctx.textAlign = 'start'
-  ctx.fillText('TOP 4 GENRES', 10, yStart + 45)
+  ctx.fillText('TOP 4 GENRES', 10, yStart + 47)
 
   ctx.font = '13px Arial'
   ctx.fillStyle = '#EEE'
@@ -281,9 +266,9 @@ const addCanvasLegend = (
   for (let i = 0; i < 2; i++) {
     for (let y = 0; y < 2; y++) {
       index = i * 2 + y
-      ctx.font = 'bold 13px Arial'
+      ctx.font = 'bold 13px Righteous'
       ctx.fillText(`${getEmojiForRank(index)} ${top4Genres[i].value}%`, 10 + 200 * y, yStart + 65 + 20 * i)
-      ctx.font = '13px Arial'
+      ctx.font = '13px Righteous'
       ctx.fillText(capitalize(top4Genres[index].name), 10 + 200 * y + 55, yStart + 65 + 20 * i)
     }
   }
