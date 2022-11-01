@@ -13,6 +13,9 @@
 ![Axios version](https://img.shields.io/badge/axios-1.1-purple.svg)
 [![Front‑End_Checklist followed](https://img.shields.io/badge/Front‑End_Checklist-followed-brightgreen.svg)](https://github.com/thedaviddias/Front-End-Checklist/)
 ![Netlify Status](https://api.netlify.com/api/v1/badges/ca42d8a5-b247-4dd3-9840-65c5750da906/deploy-status)
+![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=s-rigaud_huskyfy&metric=vulnerabilities)
+![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=s-rigaud_huskyfy&metric=code_smells)
+![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=s-rigaud_huskyfy&metric=security_rating)
 
 ## Functionalities ⚡
 

@@ -27,7 +27,6 @@ section {
   height: 100%;
   width: 100%;
   display: flex;
-  display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
   align-content: center;

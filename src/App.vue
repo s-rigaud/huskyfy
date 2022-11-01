@@ -31,13 +31,13 @@ export default defineComponent({
 </script>
 <style scoped>
 @font-face {
-  font-family: "Righteous";
+  font-family: "Righteous", Helvetica, Sans-serif;
   src: local("Righteous"), url(../public/Righteous-j7av.ttf) format("truetype");
   font-display: swap;
 }
 
 @font-face {
-  font-family: "Oswald";
+  font-family: "Oswald", Helvetica, Sans-serif;
   src: local("Oswald"), url(../public/Oswald-Medium.ttf) format("truetype");
   font-display: swap;
 }
@@ -46,7 +46,7 @@ export default defineComponent({
   padding: 5px;
   background-color: var(--secondary-color) !important;
   color: var(--text-color) !important;
-  font-family: "Oswald" !important;
+  font-family: "Oswald", Helvetica, Sans-serif !important;
   height: 100%;
 
   display: flex;

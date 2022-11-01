@@ -62,7 +62,7 @@
       <p>
         {{ $t("about.copyright.content") }}
         <a href="https://www.flaticon.com/fr/icones-gratuites/husky-siberien" title="husky sibérien icônes"
-          target="_blank">
+          target="_blank" rel="noopener">
           FlatIcon.com
         </a>
       </p>
@@ -86,21 +86,21 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'AboutView',
   computed: {
-    githubImg (): string {
+    githubImg(): string {
       return require('@/assets/github.png')
     },
-    huskyfyCircle (): string {
+    huskyfyCircle(): string {
       return require('@/assets/large-logo-circle.png')
     },
-    myMusicImage (): string {
+    myMusicImage(): string {
       return require('@/assets/my-music.jpeg')
     },
-    myMusicLink (): string {
+    myMusicLink(): string {
       return process.env.VUE_APP_BASE_SERVER_URL + '/playlist/my-music'
     }
   },
   methods: {
-    backToPreviousPage () {
+    backToPreviousPage() {
       this.$router.go(-1)
     }
   }

@@ -286,7 +286,7 @@ export const usePlaylistsStore = defineStore('playlists', {
           const artist = artists[i]
 
           // eslint-disable-next-line
-          artistMap.get(artist.id)!.genres.map(t => trackGenres.add(t))
+          artistMap.get(artist.id)!.genres.forEach(t => trackGenres.add(t))
           // eslint-disable-next-line
           const followerCount = artistMap.get(artist.id)!.followers
           if (followerCount > 500_000) {

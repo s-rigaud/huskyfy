@@ -32,20 +32,20 @@ export default defineComponent({
       required: true
     }
   },
-  setup() {
+  setup () {
     const playlistsStore = usePlaylistsStore()
     return { playlistsStore }
   },
-  async created() {
+  async created () {
     await this.createNewPlaylist()
   },
   computed: {
-    timeout(): number {
+    timeout (): number {
       return this.loadingPercentage === 100 ? 10_000 : -1
     }
   },
   methods: {
-    async createNewPlaylist() {
+    async createNewPlaylist () {
       this.loadingText = this.$t('playlist.new.create')
       this.loadingPercentage = 1
 
@@ -75,21 +75,21 @@ export default defineComponent({
       this.loadingPercentage = 100
       this.newPlaylistId = newPlaylistId
     },
-    displayNewPlaylistDetails() {
+    displayNewPlaylistDetails () {
       window.location.href = `/playlist/${this.newPlaylistId}`
     },
-    getNewPlaylistName(): string {
+    getNewPlaylistName (): string {
       const basePlaylist = this.playlistsStore.playlists[this.playlistId]
       const newPlaylistName = `${this.$t('playlist.duplicate.copy-of')} ${basePlaylist.name}`
       return newPlaylistName
     },
-    getNewPlaylistDescription(): string {
+    getNewPlaylistDescription (): string {
       const basePlaylist = this.playlistsStore.playlists[this.playlistId]
       const newPlaylistDescription = `${this.$t('playlist.duplicate.copy-of')} "${basePlaylist.name}" • ${this.$t('playlist.duplicate.created-by')}`
       return newPlaylistDescription
     }
   },
-  data() {
+  data () {
     return {
       loadingPercentage: 0,
       loadingText: '',
@@ -100,7 +100,7 @@ export default defineComponent({
     }
   },
   watch: {
-    snackbarVisible(newValue: boolean) {
+    snackbarVisible (newValue: boolean) {
       if (newValue === false) {
         this.loadingPercentage = 0
         this.loadingText = ''

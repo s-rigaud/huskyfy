@@ -202,7 +202,6 @@ const addCanvasLegend = (
     ctx.font = `bolder ${13}px Arial`
     ctx.fillStyle = '#27ae60'
     ctx.fillText(indieText, 10, yStart + 20)
-
   } else if (indiePercentage < 30) {
     // Only popular percentage
     ctx.fillStyle = '#fff'
@@ -214,7 +213,6 @@ const addCanvasLegend = (
     ctx.font = `bolder ${13}px Arial`
     ctx.fillStyle = '#e67e22'
     ctx.fillText(popularText, 10, yStart + 20)
-
   } else {
     ctx.fillStyle = '#fff'
     ctx.strokeStyle = '#000'

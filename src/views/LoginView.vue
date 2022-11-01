@@ -42,25 +42,25 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'LoginView',
-  setup() {
+  setup () {
     const userStore = useUserStore()
     return { userStore }
   },
   components: { LocaleSelector },
   computed: {
-    textLogo(): string {
+    textLogo (): string {
       return require('@/assets/Huskyfy.png')
     },
-    boneImg(): string {
+    boneImg (): string {
       return require('@/assets/small-bone.png')
     },
-    maxNumberOfFunctionalities(): number[] {
+    maxNumberOfFunctionalities (): number[] {
       const length = (window.innerHeight > 700) ? 8 : 4
       return range(1, length + 1)
     }
   },
   methods: {
-    async accessOAuthPage() {
+    async accessOAuthPage () {
       window.location.href = await api.spotify.auth.getOAuthUrl()
     }
   }

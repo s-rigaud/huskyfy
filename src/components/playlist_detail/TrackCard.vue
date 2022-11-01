@@ -184,7 +184,6 @@ export default defineComponent({
 
 .artist-names {
   margin-right: 5px;
-  padding-bottom: 7px;
   text-decoration: none;
   color: var(--link-color);
   max-width: 100%;
@@ -207,13 +206,13 @@ export default defineComponent({
 }
 
 .popularity-chip {
-  font-family: "Righteous" !important;
+  font-family: "Righteous", Helvetica, Sans-serif !important;
   opacity: 1 !important;
   margin-bottom: 5px;
 }
 
 .text-h6 {
-  font-family: "Oswald" !important;
+  font-family: "Oswald", Helvetica, Sans-serif !important;
   cursor: pointer;
   text-decoration: underline;
 }

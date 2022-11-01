@@ -24,28 +24,28 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'NavbarHeader',
-  setup () {
+  setup() {
     const userStore = useUserStore()
     const authStore = useAuthStore()
     return { authStore, userStore }
   },
   computed: {
-    profilePictureOrDefault (): string {
+    profilePictureOrDefault(): string {
       // eslint-disable-next-line
       const DEFAULT_PICTURE = require("@/assets/no-user.png")
       return this.userStore.profilePicture || DEFAULT_PICTURE
     },
-    logo (): string {
+    logo(): string {
       return require('@/assets/Huskyfy.png')
     }
   },
   methods: {
-    logout () {
+    logout() {
       this.userStore.reset()
       this.authStore.reset()
       this.$router.push({ name: 'LoginView' })
     },
-    openUserSpotifyProfile () {
+    openUserSpotifyProfile() {
       window.location.href = this.userStore.uri
     }
   }
@@ -53,7 +53,7 @@ export default defineComponent({
 </script>
 <style>
 #app-bar {
-  font-family: 'Righteous';
+  font-family: 'Righteous', Helvetica, Sans-serif;
   height: 64px;
   cursor: default;
 }
@@ -96,12 +96,9 @@ header .v-toolbar__content {
 
 #logout-button {
   background-color: var(--primary-color);
-}
-
-#logout-button {
   position: absolute;
   top: 12px;
-  font-family: "Oswald";
+  font-family: "Oswald", Helvetica, Sans-serif;
 }
 
 .v-toolbar__extension {
