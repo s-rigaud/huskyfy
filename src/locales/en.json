@@ -56,15 +56,13 @@
     "login": {
         "about": "Learn more about this website",
         "connect": "Log in with Spotify",
-        "header": "Discover new functionalities with your Spotify playlists",
+        "header": "Interact with Spotify playlists smoothly",
         "functionality1": "Find out which music genres you are mostly listening to",
-        "functionality2": "Duplicate and share your playlist easily",
+        "functionality2": "Duplicate and share your playlists easily",
         "functionality3": "Share your liked songs with all your friends",
         "functionality4": "Filter and analyse your playlist by artist popularity or music genres",
-        "functionality5": "",
-        "functionality6": "",
-        "functionality7": "",
-        "functionality8": ""
+        "functionality5": "Sort playlist tracks according to most popular genres or artists in the playlist",
+        "functionality6": "Save image recaps about all the informations of your playlists"
     },
     "me": "me",
     "navbar": {

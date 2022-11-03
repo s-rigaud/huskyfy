@@ -31,13 +31,13 @@ export default defineComponent({
 </script>
 <style scoped>
 @font-face {
-  font-family: "Righteous", Helvetica, Sans-serif;
+  font-family: "Righteous";
   src: local("Righteous"), url(../public/Righteous-j7av.ttf) format("truetype");
   font-display: swap;
 }
 
 @font-face {
-  font-family: "Oswald", Helvetica, Sans-serif;
+  font-family: "Oswald";
   src: local("Oswald"), url(../public/Oswald-Medium.ttf) format("truetype");
   font-display: swap;
 }

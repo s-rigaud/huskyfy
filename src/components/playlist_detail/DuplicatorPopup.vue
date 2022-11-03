@@ -1,6 +1,6 @@
 <template>
   <!-- Layer on top to follow steps of playlist duplication -->
-  <v-snackbar v-model="snackbarVisible" :timeout="timeout" elevation="24">
+  <v-snackbar v-model="snackbarVisible" :timeout="timeout" elevation="24" color="var(--primary-color)">
     <div id="loading-create-new-playlist" v-if="loadingPercentage > 0">
       <v-progress-circular :model-value="loadingPercentage" color="var(--text-color)">
       </v-progress-circular>
@@ -29,6 +29,10 @@ export default defineComponent({
     },
     newTracks: {
       type: Array as PropType<SpotifyTrack[]>,
+      required: true
+    },
+    selectedGenres: {
+      type: Array as PropType<string[]>,
       required: true
     }
   },
@@ -80,12 +84,28 @@ export default defineComponent({
     },
     getNewPlaylistName (): string {
       const basePlaylist = this.playlistsStore.playlists[this.playlistId]
-      const newPlaylistName = `${this.$t('playlist.duplicate.copy-of')} ${basePlaylist.name}`
+      let newPlaylistName: string
+      if (this.selectedGenres.length > 0) {
+        newPlaylistName = `${basePlaylist.name} [${this.selectedGenres.join(', ')}]`
+      } else {
+        newPlaylistName = `${this.$t('playlist.duplicate.copy-of')} ${basePlaylist.name}`
+      }
       return newPlaylistName
     },
     getNewPlaylistDescription (): string {
       const basePlaylist = this.playlistsStore.playlists[this.playlistId]
-      const newPlaylistDescription = `${this.$t('playlist.duplicate.copy-of')} "${basePlaylist.name}" • ${this.$t('playlist.duplicate.created-by')}`
+      let newPlaylistDescription: string
+      let genreString = ''
+      if (this.selectedGenres.length > 0) {
+        genreString = `[${this.selectedGenres.join(', ')}]`
+      }
+      newPlaylistDescription = [
+        this.$t('playlist.duplicate.copy-of'),
+        basePlaylist.name,
+        genreString,
+        '•',
+        this.$t('playlist.duplicate.created-by')
+      ].join(' ')
       return newPlaylistDescription
     }
   },
@@ -112,16 +132,11 @@ export default defineComponent({
 </script>
 <style>
 #loading-create-new-playlist {
+  margin-bottom: 10px;
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-}
-
-#loading-create-new-playlist .v-snackbar__content {
-  display: flex;
-  flex-direction: column;
-  background-color: var(--primary-color);
 }
 
 .v-progress-circular__underlay {

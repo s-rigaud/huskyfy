@@ -24,28 +24,28 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'NavbarHeader',
-  setup() {
+  setup () {
     const userStore = useUserStore()
     const authStore = useAuthStore()
     return { authStore, userStore }
   },
   computed: {
-    profilePictureOrDefault(): string {
+    profilePictureOrDefault (): string {
       // eslint-disable-next-line
       const DEFAULT_PICTURE = require("@/assets/no-user.png")
       return this.userStore.profilePicture || DEFAULT_PICTURE
     },
-    logo(): string {
+    logo (): string {
       return require('@/assets/Huskyfy.png')
     }
   },
   methods: {
-    logout() {
+    logout () {
       this.userStore.reset()
       this.authStore.reset()
       this.$router.push({ name: 'LoginView' })
     },
-    openUserSpotifyProfile() {
+    openUserSpotifyProfile () {
       window.location.href = this.userStore.uri
     }
   }

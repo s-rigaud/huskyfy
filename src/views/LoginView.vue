@@ -55,7 +55,7 @@ export default defineComponent({
       return require('@/assets/small-bone.png')
     },
     maxNumberOfFunctionalities (): number[] {
-      const length = (window.innerHeight > 700) ? 8 : 4
+      const length = (window.innerWidth > 700) ? 6 : 4
       return range(1, length + 1)
     }
   },
@@ -93,7 +93,7 @@ export default defineComponent({
   justify-content: flex-end;
   align-items: center;
 
-  width: min(100%, 400px);
+  width: min(100%, 650px);
   margin-top: 15px;
 }
 
@@ -130,10 +130,12 @@ export default defineComponent({
 }
 
 .functionality {
+  padding: 10px 0px;
+
   display: inline-flex;
   align-items: flex-start;
 
-  padding: 10px 0px;
+  font-size: 15px;
   text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
 }
 
@@ -146,7 +148,7 @@ export default defineComponent({
 }
 
 #title {
-  font-size: x-large;
+  font-size: 30px;
   margin: 0px;
 }
 
@@ -166,7 +168,6 @@ export default defineComponent({
   position: absolute;
   bottom: 0%;
   right: 0%;
-  font-size: large;
   z-index: 1;
 }
 

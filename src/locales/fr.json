@@ -61,10 +61,8 @@
 		"functionality2": "Dupliquer et partager votre playlist facilement",
 		"functionality3": "Partagez vos chansons préférées avec tous vos amis",
 		"functionality4": "Filtrez et analysez votre playlist en fonction de la popularité des artistes ou des genres musicaux",
-        "functionality5": "",
-        "functionality6": "",
-        "functionality7": "",
-        "functionality8": ""
+		"functionality5": "Trier vos playlists en fonction des genres ou des artistes les plus populaires",
+		"functionality6": "Enregistrer des images contenant toutes les informations de vos playlists"
 	},
 	"me": "moi",
 	"navbar": {
@@ -80,12 +78,12 @@
 			"agree": "Supprimer 🗑️",
 			"confirm-message": "Voulez vous vraiment supprimer cette playlist de votre bibliothèque ?",
 			"delete": "Supprimer ",
-			"disagree": "Retour"
+			"disagree": "Annuler"
 		},
 		"indie-score-text": "Score indé",
 		"duplicate": {
 			"button": "Dupliquer la playlist ",
-			"copy-of": "Copie de ",
+			"copy-of": "Copie de",
 			"created-by": "créée par Huskyfy 🐺",
 			"tooltip": "Créer une nouvelle playlist avec tous les titres actuellement sélectionnés",
 			"only-with-filter": "Créer une nouvelle playlist avec les titres sélectionnés"

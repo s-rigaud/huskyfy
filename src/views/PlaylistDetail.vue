@@ -184,7 +184,8 @@
     </v-btn>
   </div>
 
-  <DuplicatorPopup v-if="startDuplication" :playlistId="playlist.id" :new-tracks="filteredTracks" />
+  <DuplicatorPopup v-if="startDuplication" :playlistId="playlist.id" :new-tracks="filteredTracks"
+    :selected-genres="selectedGenres" />
 </template>
 
 <script lang="ts">
@@ -394,7 +395,8 @@ export default defineComponent({
     },
     // Returns only top genres sorted by most to least popular
     getTopGenres (): Genre[] {
-      return this.playlistsStore.getTopGenres(this.playlistId, 25)
+      const limit = (window.innerWidth > 500) ? 25 : 10
+      return this.playlistsStore.getTopGenres(this.playlistId, limit)
     }
   },
   computed: {

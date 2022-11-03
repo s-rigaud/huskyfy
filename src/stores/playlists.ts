@@ -345,7 +345,9 @@ export const usePlaylistsStore = defineStore('playlists', {
         ...playlist,
         total: 0,
         tracks: [],
-        images: basePlaylist.images
+        images: basePlaylist.images,
+        // There is currently a bug in the Spotify API when description is sometimes null for returns
+        description
       }
       return playlist.id
     },

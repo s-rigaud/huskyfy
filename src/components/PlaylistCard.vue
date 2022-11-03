@@ -25,12 +25,12 @@ export default defineComponent({
     }
   },
   computed: {
-    loadingCover(): string {
+    loadingCover (): string {
       return require('@/assets/default_cover.jpg')
     }
   },
   methods: {
-    displayDetails() {
+    displayDetails () {
       this.$router.push({
         name: 'Explore playlist',
         params: { playlistId: this.id }
@@ -72,6 +72,10 @@ export default defineComponent({
   opacity: 0;
 }
 
+.playlist-card:hover {
+  outline: 1px var(--text-color) solid;
+}
+
 .playlist-card .card-title {
   font-size: large;
 }
@@ -103,6 +107,7 @@ export default defineComponent({
 
 .playlist-card:hover .v-card__overlay {
   opacity: 0.3;
+  border: 2px var(--text-color) solid;
 }
 
 @media only screen and (min-width: 768px) {

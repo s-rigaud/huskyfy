@@ -27,9 +27,9 @@
         <v-card id="deletion-dialog">
           <v-card-title class="text-h5 rainbow-text font-weight-bold">
             {{ $t('playlist.delete.delete') }}
-            '<span class="font-italic">
+            <span class="font-italic">
               {{ playlistsStore.playlists[playlistId].name }}
-            </span>'
+            </span>
           </v-card-title>
           <v-card-text class="rainbow-text">
             {{ $t('playlist.delete.confirm-message') }}
@@ -179,19 +179,15 @@ export default defineComponent({
       return require('@/assets/stars.jpg')
     },
     ticks () {
-      const trackNumber = this.playlistsStore.playlists[this.playlistId].tracks.length
+      const trackNumber = this.playlistsStore.getTopArtists(this.playlistId).length
       const ticks: { 0?: '2x2', 1?: '3x3', 2?: '4x4' } = {}
       if (trackNumber >= 4) ticks[0] = '2x2'
       if (trackNumber >= 9) ticks[1] = '3x3'
       if (trackNumber >= 16) ticks[2] = '4x4'
       return ticks
     },
-    maxTick (): 0 | 1 | 2 {
-      const trackNumber = this.playlistsStore.playlists[this.playlistId].tracks.length
-      let max: 0 | 1 | 2 = 0
-      if (trackNumber >= 9) max = 1
-      if (trackNumber >= 16) max = 2
-      return max
+    maxTick (): number {
+      return Object.keys(this.ticks).length - 1
     }
   },
   methods: {
@@ -320,5 +316,9 @@ export default defineComponent({
 
 #live-image-preview {
   margin: 0px 5px;
+}
+
+#drawer .v-list-item:hover>.v-list-item__overlay {
+  opacity: calc(0.2 * var(--v-theme-overlay-multiplier));
 }
 </style>

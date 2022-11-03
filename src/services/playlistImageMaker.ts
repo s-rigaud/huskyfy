@@ -74,7 +74,6 @@ const createCanvas = (
   // (X X X X)
   // (X X X X)
   // ( Stats )
-
   const TITLE_HEIGHT = 50
 
   const ARTIST_NAME_HEIGHT = 20
@@ -136,14 +135,10 @@ const addCanvasTitle = (
   // Subtitle : explanatory
   ctx.font = 'bolder 10px Arial'
   ctx.textAlign = 'center'
+  ctx.fillStyle = '#F9B621'
 
-  const subtextWidth = ctx.measureText(playlistName).width
-  const subGradient = ctx.createLinearGradient(400 / 2, 40, subtextWidth, 25)
-  subGradient.addColorStop(0, '#F39200')
-  subGradient.addColorStop(1, '#F9B621')
-  ctx.fillStyle = subGradient
-
-  ctx.fillText(VueI18n.t('generating-picture.subtitle', { count: gridSize ** 2 }), 400 / 2, 40 + fontSize / 3)
+  const subText = VueI18n.t('generating-picture.subtitle', { count: gridSize ** 2 })
+  ctx.fillText(subText, 400 / 2, 35 + fontSize / 3)
 }
 
 const addCanvasArtistImages = (
@@ -189,51 +184,63 @@ const addCanvasLegend = (
   const playlistsStore = usePlaylistsStore()
   ctx.textAlign = 'start'
 
+  const INDIE_BACKGROUND_COLOR = '#27ae6077'
+  const INDIE_TEXT_COLOR = '#27ae60'
+  const POPULAR_BACKGROUND_COLOR = '#e67e2277'
+  const POPULAR_TEXT_COLOR = '#e67e22'
+
+  VueI18n.i18n.global.locale = 'fr'
+
   // 1. INDIE PERCENTAGES
-  const indiePercentage = playlistsStore.getIndiePercentage(playlistId)
-  if (indiePercentage > 70) {
+  const indiePercentage = 65// playlistsStore.getIndiePercentage(playlistId)
+  if (indiePercentage > 65) {
     // Only indie percentage
     ctx.fillStyle = '#fff'
     drawRoundRect(ctx, 5, yStart + 3, 395, 25, 10, true, false)
-    ctx.fillStyle = '#27ae6077'
-    drawRoundRect(ctx, 5, yStart + 3, 390 * indiePercentage / 100, 25, 10, true, false)
+    ctx.fillStyle = INDIE_BACKGROUND_COLOR
+    drawRoundRect(ctx, 5, yStart + 3, 395 * indiePercentage / 100, 25, 10, true, false)
 
     const indieText = `${VueI18n.tc('track.indie', 2)} ${indiePercentage}%`
-    ctx.font = `bolder ${13}px Arial`
-    ctx.fillStyle = '#27ae60'
+    ctx.font = 'bolder 13px Arial'
+    ctx.fillStyle = INDIE_TEXT_COLOR
     ctx.fillText(indieText, 10, yStart + 20)
-  } else if (indiePercentage < 30) {
+  } else if (indiePercentage < 35) {
     // Only popular percentage
     ctx.fillStyle = '#fff'
     drawRoundRect(ctx, 5, yStart + 3, 395, 25, 10, true, false)
-    ctx.fillStyle = '#e67e2277'
-    drawRoundRect(ctx, 5, yStart + 3, 390 * (100 - indiePercentage) / 100, 25, 10, true, false)
+    ctx.fillStyle = POPULAR_BACKGROUND_COLOR
+    drawRoundRect(ctx, 5, yStart + 3, 395 * (100 - indiePercentage) / 100, 25, 10, true, false)
 
     const popularText = `${VueI18n.tc('track.popular', 2)} ${100 - indiePercentage}%`
-    ctx.font = `bolder ${13}px Arial`
-    ctx.fillStyle = '#e67e22'
+    ctx.font = 'bolder 13px Arial'
+    ctx.fillStyle = POPULAR_TEXT_COLOR
     ctx.fillText(popularText, 10, yStart + 20)
   } else {
+    const getMostCommonPopularityTextSize = (popularity: 'indie' | 'popular'): 10 | 11 | 12 => {
+      if (popularity === 'indie') return 12
+      else return (indiePercentage < 50) ? 12 : 10
+    }
     ctx.fillStyle = '#fff'
     ctx.strokeStyle = '#000'
     drawRoundRect(ctx, 5, yStart + 3, 390, 25, 10, true, false)
 
     // Popular
-    ctx.fillStyle = '#e67e2277'
+    ctx.fillStyle = POPULAR_BACKGROUND_COLOR
     drawRoundRect(ctx, 5, yStart + 3,
-      395 * (100 - indiePercentage) / 100,
+      (395 * (100 - indiePercentage) / 100) - 3,
       25,
       { tr: 0, br: 0, tl: 10, bl: 10 },
       true, true
     )
     const popularText = `${VueI18n.tc('track.popular', 2)} ${100 - indiePercentage}%`
-    ctx.font = `bolder ${13}px Righteous`
+    ctx.font = `bolder ${getMostCommonPopularityTextSize('popular')}px Righteous`
     ctx.textAlign = 'start'
-    ctx.fillStyle = '#e67e22'
+    ctx.fillStyle = POPULAR_TEXT_COLOR
     ctx.fillText(popularText, 10, yStart + 20)
 
     // Indie
-    ctx.fillStyle = '#27ae6077'
+    ctx.fillStyle = INDIE_BACKGROUND_COLOR
+    ctx.strokeStyle = '#000'
     drawRoundRect(ctx, 390 * (100 - indiePercentage) / 100 + 5, yStart + 3,
       390 * indiePercentage / 100,
       25,
@@ -242,10 +249,10 @@ const addCanvasLegend = (
       true
     )
     const indieText = `${VueI18n.tc('track.indie', 2)} ${indiePercentage}%`
-    ctx.font = `bolder ${13}px Righteous`
+    ctx.font = `bolder ${getMostCommonPopularityTextSize('indie')}px Righteous`
     ctx.textAlign = 'end'
-    ctx.fillStyle = '#27ae60'
-    ctx.fillText(indieText, 385, yStart + 20)
+    ctx.fillStyle = INDIE_TEXT_COLOR
+    ctx.fillText(indieText, 388, yStart + 20)
   }
 
   // 2. Adding TOP Genres
