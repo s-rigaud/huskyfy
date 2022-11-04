@@ -104,4 +104,9 @@ header .v-toolbar__content {
 .v-toolbar__extension {
   height: fit-content !important;
 }
+
+.v-tooltip .v-overlay__content {
+  background-color: var(--primary-color);
+  color: lightslategrey;
+}
 </style>

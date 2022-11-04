@@ -94,11 +94,8 @@ export default defineComponent({
   align-items: center;
 
   width: min(100%, 650px);
-  margin-top: 15px;
-}
-
-#upper-part>#logo {
   height: max(15%, 90px);
+  margin-top: 15px;
 }
 
 .mdi {

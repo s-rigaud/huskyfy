@@ -300,11 +300,7 @@ export default defineComponent({
       return this.playlistsStore.getIndiePercentage(this.playlistId)
     },
     applyFilters () {
-      if (
-        this.selectedGenres.length === 0 &&
-        this.selectedArtists.length === 0 &&
-        this.selectedPopularity === this.NO_POPULARITY
-      ) {
+      if (this.numberOfActiveFilters === 0) {
         return this.resetFilters()
       }
 
@@ -641,7 +637,7 @@ export default defineComponent({
   min-width: fit-content;
   height: 23px;
   border-radius: 5px;
-  background-color: #555;
+  background-color: #a15c3c;
   margin-left: 5px;
   padding: 0;
 }

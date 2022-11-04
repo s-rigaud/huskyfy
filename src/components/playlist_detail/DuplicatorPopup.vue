@@ -94,19 +94,17 @@ export default defineComponent({
     },
     getNewPlaylistDescription (): string {
       const basePlaylist = this.playlistsStore.playlists[this.playlistId]
-      let newPlaylistDescription: string
       let genreString = ''
       if (this.selectedGenres.length > 0) {
         genreString = `[${this.selectedGenres.join(', ')}]`
       }
-      newPlaylistDescription = [
+      return [
         this.$t('playlist.duplicate.copy-of'),
         basePlaylist.name,
         genreString,
         '•',
         this.$t('playlist.duplicate.created-by')
       ].join(' ')
-      return newPlaylistDescription
     }
   },
   data () {
