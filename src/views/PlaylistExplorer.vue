@@ -8,8 +8,7 @@
       </v-progress-circular>
     </div>
 
-    <!-- <= due to special MyMusic playlist -->
-    <v-btn v-if="Object.keys(playlistsStore.playlists).length <= playlistTotal && playlistLoaded" class="rainbow-v-btn"
+    <v-btn v-if="Object.keys(playlistsStore.playlists).length < playlistTotal && playlistLoaded" class="rainbow-v-btn"
       @click="loadMorePlaylists">
       {{ $t("playlist.load-more-playlists") }}
     </v-btn>
@@ -25,12 +24,12 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'PlaylistExplorer',
   components: { PlaylistCard },
-  setup () {
+  setup() {
     const playlistsStore = usePlaylistsStore()
     return { playlistsStore }
   },
   computed: {
-    formatName () {
+    formatName() {
       return (playlist: SpotifyPlaylist): string => {
         return playlist.id === 'my-music'
           ? this.$t('playlist.your-music.name')
@@ -38,18 +37,18 @@ export default defineComponent({
       }
     }
   },
-  async created () {
+  async created() {
     await this.loadMorePlaylists()
     this.playlistLoaded = true
   },
   methods: {
-    async loadMorePlaylists () {
+    async loadMorePlaylists() {
       const response = await this.playlistsStore.getUserPlaylists(this.offset)
       this.playlistTotal = response.total
       this.offset = response.offset
     }
   },
-  data () {
+  data() {
     return {
       playlistTotal: 0,
       offset: 0,

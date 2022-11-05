@@ -90,6 +90,7 @@ router.beforeEach(async function (to, from, next) {
     // Redirect user to main page if already connected
   } else if (to.name === 'LoginView' && authStore.accessToken) {
     next({ name: 'Explore' })
+
   } else {
     next()
   }

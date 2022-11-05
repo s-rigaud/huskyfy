@@ -1,3 +1,5 @@
+// Some models have been simplified as Spotify API
+// allows to exclude and filter some fields when querying
 interface SpotifyExternalUrls {
     spotify: string;
 }
@@ -31,35 +33,14 @@ interface SpotifyOwner {
     uri: string;
 }
 
-interface SpotifyVideoThumbnail {
-    url?: string;
-}
-
-interface SpotifyAddedBy {
-    // eslint-disable-next-line
-    external_urls: SpotifyExternalUrls;
-    href: string;
-    id: string;
-    type: string;
-    uri: string;
-}
-
-interface SpotifyExternalIds {
-    isrc: string;
-}
 
 // Artist Model
 export interface SpotifyArtist {
-    // eslint-disable-next-line
-    external_urls: SpotifyExternalUrls;
     followers: SpotifyFollowers;
     genres: string[];
-    href: string;
     id: string;
     images: SpotifyImage[];
     name: string;
-    popularity: number;
-    type: string;
     uri: string;
 }
 
@@ -83,25 +64,7 @@ export interface SpotifyProfile {
 
 // Album Model
 export interface SpotifyAlbum {
-    // eslint-disable-next-line
-    album_type: string;
-    artists: SpotifyArtist[];
-    // eslint-disable-next-line
-    available_markets: string[];
-    // eslint-disable-next-line
-    external_urls: SpotifyExternalUrls;
-    href: string;
-    id: string;
     images: SpotifyImage[];
-    name: string;
-    // eslint-disable-next-line
-    release_date: string;
-    // eslint-disable-next-line
-    release_date_precision: string;
-    // eslint-disable-next-line
-    total_tracks: number;
-    type: string;
-    uri: string;
 }
 
 // Track Model

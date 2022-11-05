@@ -95,13 +95,9 @@ const createCanvas = (
   ctx.fillStyle = '#000'
   ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-  if (showTitle) {
-    addCanvasTitle(ctx, playlist.name, gridSize)
-  }
+  showTitle && addCanvasTitle(ctx, playlist.name, gridSize)
   addCanvasArtistImages(ctx, artistNames, images, gridSize, IMAGE_BLOCK_HEIGHT_START, ARTIST_NAME_HEIGHT)
-  if (showStats) {
-    addCanvasLegend(ctx, playlist.id, IMAGE_BLOCK_HEIGHT_START + IMAGE_BLOCK_HEIGHT)
-  }
+  showStats && addCanvasLegend(ctx, playlist.id, IMAGE_BLOCK_HEIGHT_START + IMAGE_BLOCK_HEIGHT)
 
   return canvas.toDataURL('image/jpeg', 1)
 }
@@ -188,8 +184,6 @@ const addCanvasLegend = (
   const INDIE_TEXT_COLOR = '#27ae60'
   const POPULAR_BACKGROUND_COLOR = '#e67e2277'
   const POPULAR_TEXT_COLOR = '#e67e22'
-
-  VueI18n.i18n.global.locale = 'fr'
 
   // 1. INDIE PERCENTAGES
   const indiePercentage = 65// playlistsStore.getIndiePercentage(playlistId)

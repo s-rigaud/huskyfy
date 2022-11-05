@@ -198,7 +198,7 @@ import TrackCard from '@/components/playlist_detail/TrackCard.vue'
 import { SpotifyArtist, SpotifyTrack } from '@/api/spotify/types/entities'
 
 import { Genre } from '@/model'
-import { MAX_TRACKS_LIMIT, usePlaylistsStore } from '@/stores/playlists'
+import { usePlaylistsStore, API_TRACK_LIMIT } from '@/stores/playlists'
 import { useUserStore } from '@/stores/user'
 import { capitalize } from '@/utils/functions'
 import { storeToRefs } from 'pinia'
@@ -226,7 +226,7 @@ export default defineComponent({
     ActionDrawer,
     DuplicatorPopup
   },
-  setup (props) {
+  setup(props) {
     const playlistsStore = usePlaylistsStore()
 
     // Shorthand
@@ -243,15 +243,15 @@ export default defineComponent({
       currentUserUsername
     }
   },
-  async mounted () {
-    this.TRACK_REQUEST_LIMIT = MAX_TRACKS_LIMIT * 3
+  async mounted() {
+    this.TRACK_REQUEST_LIMIT = API_TRACK_LIMIT * 3
     if (this.playlist.id === 'my-music') {
       await this.playlistsStore.refreshMyMusicTotalTrack()
     }
     await this.loadFirstTracks()
     this.filteredTracks = this.playlist.tracks
   },
-  data () {
+  data() {
     return {
       TRACK_REQUEST_LIMIT: 150,
 
@@ -279,10 +279,10 @@ export default defineComponent({
     }
   },
   methods: {
-    onScroll () {
+    onScroll() {
       this.displayGoTopButton = (window.scrollY > 100)
     },
-    async loadFirstTracks () {
+    async loadFirstTracks() {
       // Only asking for the right number of tracks as we already know how many tracks are in the playlist
       const maxLimit = Math.min(this.TRACK_REQUEST_LIMIT, this.playlist.total)
       await this.downloadPlaylistTracks(this.playlistId, maxLimit)
@@ -292,14 +292,14 @@ export default defineComponent({
       this.indiePercentage = this.getIndiePercentage()
       this.resetFilters()
     },
-    refreshStats () {
+    refreshStats() {
       this.topGenres = this.getTopGenres()
       this.indiePercentage = this.getIndiePercentage()
     },
-    getIndiePercentage (): number {
+    getIndiePercentage(): number {
       return this.playlistsStore.getIndiePercentage(this.playlistId)
     },
-    applyFilters () {
+    applyFilters() {
       if (this.numberOfActiveFilters === 0) {
         return this.resetFilters()
       }
@@ -346,24 +346,24 @@ export default defineComponent({
 
       this.filteredTracks = newFilteredTracks
     },
-    addTracksConserveUnicity (filteredTracks: SpotifyTrack[], validTracks: SpotifyTrack[]) {
+    addTracksConserveUnicity(filteredTracks: SpotifyTrack[], validTracks: SpotifyTrack[]) {
       const alreadyKnownTrackIds = filteredTracks.map(t => t.id)
       const tracksToAdd = validTracks.filter(t => !alreadyKnownTrackIds.includes(t.id))
       filteredTracks.push(...tracksToAdd)
     },
-    resetFilters () {
+    resetFilters() {
       this.selectedGenres = []
       this.selectedArtists = []
       this.selectedPopularity = this.NO_POPULARITY
       this.filteredTracks = this.playlist.tracks
     },
-    openPlaylistOnSpotify () {
+    openPlaylistOnSpotify() {
       window.location.href = this.playlist.uri
     },
-    openPlaylistOwnerSpotifyProfile () {
+    openPlaylistOwnerSpotifyProfile() {
       window.location.href = this.playlist.owner.uri
     },
-    getSortedArtists (): SpotifyArtist[] {
+    getSortedArtists(): SpotifyArtist[] {
       // Need to have a set of object in JS ...
       const alreadyAddedArtistNames: string[] = []
       const artistsToReturn: SpotifyArtist[] = []
@@ -378,10 +378,10 @@ export default defineComponent({
       }
       return artistsToReturn.sort((a1, a2) => a1.name.localeCompare(a2.name))
     },
-    scrollTop () {
+    scrollTop() {
       window.scrollTo({ top: 0, behavior: 'smooth' })
     },
-    getTextForPopularity (popularity: string): string {
+    getTextForPopularity(popularity: string): string {
       const allPopularities: { [popularity: string]: string } = {
         Indie: this.$t('track.filters.indie'),
         Popular: this.$t('track.filters.popular')
@@ -390,26 +390,26 @@ export default defineComponent({
       return allPopularities[popularity]
     },
     // Returns only top genres sorted by most to least popular
-    getTopGenres (): Genre[] {
+    getTopGenres(): Genre[] {
       const limit = (window.innerWidth > 500) ? 25 : 10
       return this.playlistsStore.getTopGenres(this.playlistId, limit)
     }
   },
   computed: {
-    allTracksLoaded (): boolean {
+    allTracksLoaded(): boolean {
       return this.playlist.tracks.length === this.playlist.total
     },
-    spotifyLogo (): string {
+    spotifyLogo(): string {
       return require('@/assets/spotify.png')
     },
-    generalTitle (): string {
+    generalTitle(): string {
       const keyword = (this.isFilterExclusive) ? this.$t('track.filters.keyword.and') : this.$t('track.filters.keyword.or')
       const separator = ` ${keyword} `
       const popularityFilter = (this.selectedPopularity !== this.NO_POPULARITY) ? [this.selectedPopularity] : []
       const filters = popularityFilter.concat(this.selectedArtists.map(a => a.name)).concat(this.selectedGenres)
       return `${filters.map(f => capitalize(f)).join(separator)}` || this.$t('track.all-tracks')
     },
-    colorForPercentage (): StyleValue {
+    colorForPercentage(): StyleValue {
       let color: string
       if (this.indiePercentage < 10) color = '#FF0D0D'
       else if (this.indiePercentage < 25) color = '#FF4E11'
@@ -419,33 +419,33 @@ export default defineComponent({
       else color = '#69B34C'
       return { color }
     },
-    usernameToDisplay (): string {
+    usernameToDisplay(): string {
       const playlistCreator = this.playlist.owner.display_name
 
       return this.currentUserUsername === playlistCreator ? this.$t('me') : playlistCreator
     },
-    getEmojiFromVisibility (): string {
+    getEmojiFromVisibility(): string {
       if (this.playlist.collaborative) return this.$t('_emojis.collaborative')
       if (this.playlist.public) return this.$t('_emojis.public')
       return this.$t('_emojis.private')
     },
-    getTextFromVisibility (): string {
+    getTextFromVisibility(): string {
       if (this.playlist.collaborative) {
         return this.$t('playlist.collaborative') + ' ' + this.$t('_emojis.collaborative')
       }
       if (this.playlist.public) return this.$t('playlist.public') + ' ' + this.$t('_emojis.public')
       return this.$t('playlist.private') + ' ' + this.$t('_emojis.private')
     },
-    loadingCover (): string {
+    loadingCover(): string {
       return require('@/assets/default_cover.jpg')
     },
-    formattedDescription (): string {
+    formattedDescription(): string {
       return this.playlist.description.replace(/(<([^>]+)>)/ig, '').replace(/&quot;/ig, '"')
     },
-    toButtonOpacity (): StyleValue {
+    toButtonOpacity(): StyleValue {
       return { opacity: (this.displayGoTopButton) ? 100 : 0 }
     },
-    numberOfActiveFilters (): number {
+    numberOfActiveFilters(): number {
       return (
         this.selectedGenres.length +
         this.selectedArtists.length +
@@ -454,18 +454,18 @@ export default defineComponent({
     }
   },
   watch: {
-    isFilterExclusive () {
+    isFilterExclusive() {
       this.applyFilters()
     },
-    selectedPopularity () {
+    selectedPopularity() {
       this.applyFilters()
     },
-    selectedArtists (newValue: SpotifyArtist[], oldValue: SpotifyArtist[]) {
+    selectedArtists(newValue: SpotifyArtist[], oldValue: SpotifyArtist[]) {
       if (oldValue.length !== 0 || newValue.length !== 0) {
         this.applyFilters()
       }
     },
-    selectedGenres (newValue: string[], oldValue: string[]) {
+    selectedGenres(newValue: string[], oldValue: string[]) {
       if (oldValue.length !== 0 || newValue.length !== 0) {
         this.applyFilters()
       }
