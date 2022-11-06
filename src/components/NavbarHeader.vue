@@ -2,7 +2,7 @@
   <!-- Navbar -->
   <v-app-bar id="app-bar" flat v-if="$router.currentRoute.value.path !== '/login'">
     <!-- Left part -->
-    <router-link id="app-bar-logo" to="/explore">
+    <router-link id="logo-link" to="/explore">
       <v-img id="logo" src="@/assets/Huskyfy.png" alt="Huskyfy logo"></v-img>
     </router-link>
     <v-spacer></v-spacer>
@@ -18,7 +18,6 @@
 </template>
 
 <script lang="ts">
-import { useAuthStore } from '@/stores/auth'
 import { useUserStore } from '@/stores/user'
 import { defineComponent } from 'vue'
 
@@ -26,8 +25,7 @@ export default defineComponent({
   name: 'NavbarHeader',
   setup () {
     const userStore = useUserStore()
-    const authStore = useAuthStore()
-    return { authStore, userStore }
+    return { userStore }
   },
   computed: {
     profilePictureOrDefault (): string {
@@ -37,11 +35,6 @@ export default defineComponent({
     }
   },
   methods: {
-    logout () {
-      this.userStore.reset()
-      this.authStore.reset()
-      this.$router.push({ name: 'LoginView' })
-    },
     openUserSpotifyProfile () {
       window.location.href = this.userStore.uri
     }
@@ -50,34 +43,23 @@ export default defineComponent({
 </script>
 <style>
 #app-bar {
-  font-family: 'Righteous', Helvetica, Sans-serif;
-  height: 64px;
-  cursor: default;
-}
-
-#app-bar-logo {
-  width: 250px;
-  margin-left: 10px;
-}
-
-#profile-picture {
-  align-items: initial;
-}
-
-header {
-  background-color: var(--primary-color) !important;
-  color: var(--text-color) !important;
-  letter-spacing: 1px !important;
   padding: 0 !important;
+  height: 64px;
+
+  font-family: 'Righteous', Helvetica, Sans-serif;
+  cursor: default;
+  color: var(--text-color) !important;
+  background-color: var(--primary-color) !important;
 }
 
-header .v-toolbar__content {
+#app-bar .v-toolbar__content {
   padding: 0 !important;
   height: 100% !important;
 }
 
-#profile-name {
-  margin-right: 10px;
+#logo-link {
+  width: 250px;
+  margin-left: 10px;
 }
 
 #logo {
@@ -91,19 +73,12 @@ header .v-toolbar__content {
   cursor: pointer;
 }
 
-#logout-button {
-  background-color: var(--primary-color);
-  position: absolute;
-  top: 12px;
-  font-family: "Oswald", Helvetica, Sans-serif;
+#profile-name {
+  margin-right: 10px;
+  letter-spacing: 1px !important;
 }
 
-.v-toolbar__extension {
-  height: fit-content !important;
-}
-
-.v-tooltip .v-overlay__content {
-  background-color: var(--primary-color);
-  color: lightslategrey;
+#profile-picture {
+  align-items: initial;
 }
 </style>

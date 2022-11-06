@@ -1,12 +1,12 @@
 <template>
   <!-- Description of all the playlist with all the tracks and filters -->
-  <div id="playlist" v-if="playlist && playlist.total > 0" v-scroll="onScroll">
+  <div id="playlist-detail" v-if="playlist && playlist.total > 0" v-scroll="onScroll">
     <div id="main-content">
       <v-card id="playlist-card" v-if="playlistId">
         <div id="playlist-meta">
           <div id="playlist-image" @click.self="openPlaylistOnSpotify">
-            <v-img v-bind:src="playlist.images[0].url" lazy-src='@/assets/default_cover.jpg' alt="Cover image" cover rel="preconnect"
-              width="90">
+            <v-img v-bind:src="playlist.images[0].url" lazy-src='@/assets/default_cover.jpg' alt="Cover image" cover
+              rel="preconnect" width="90">
             </v-img>
           </div>
           <div id="title-container">
@@ -16,8 +16,9 @@
             <p> {{ getTextFromVisibility }} </p>
             <p id="playlist-owner">
               {{ $t("playlist.created-by") }}
-              <span id="playlist-owner-name" @click.stop="openPlaylistOwnerSpotifyProfile">{{ usernameToDisplay
-              }}</span>
+              <span id="playlist-owner-name" @click.stop="openPlaylistOwnerSpotifyProfile">
+                {{ usernameToDisplay }}
+              </span>
             </p>
             <p v-if="allTracksLoaded" id="percentage-row">
               <span class="rainbow-text">{{ $t("playlist.indie-score-text") }}</span>
@@ -468,7 +469,8 @@ export default defineComponent({
 })
 </script>
 <style>
-#playlist {
+/* Generic containers */
+#playlist-detail {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
@@ -476,24 +478,10 @@ export default defineComponent({
   height: 100%;
 }
 
-#charts {
+#main-content {
   display: flex;
   flex-direction: column;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  align-items: center;
-}
-
-#tracks {
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
-  align-items: stretch;
-  align-content: center;
-  padding: 0;
-  margin-top: 2px;
 }
 
 #no-tracks {
@@ -502,9 +490,10 @@ export default defineComponent({
   margin: auto;
 }
 
+/* no-tracks part */
 #open-spotify {
-  background-color: var(--primary-color) !important;
   color: var(--text-color) !important;
+  background-color: var(--primary-color) !important;
   letter-spacing: 0px;
 }
 
@@ -519,55 +508,14 @@ export default defineComponent({
   width: 20px;
 }
 
+/* playlist-card */
+#playlist-card {
+  width: 100%;
+}
+
 #playlist-meta {
   display: flex;
   padding: 10px 10px 0px 10px;
-}
-
-#scroll-top-button {
-  position: fixed;
-  right: 10px;
-  bottom: 125px;
-  z-index: 2000;
-  transition: 0.2s all ease-out;
-}
-
-#burger-button {
-  position: absolute;
-  top: 10px;
-  right: 5px;
-  border: 1px var(--text-color) solid;
-  border-radius: 5px;
-  padding: 15px;
-}
-
-.mdi-menu:hover:before {
-  content: "\F006D"
-}
-
-#spinner-block {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  height: 100%;
-}
-
-#spinner-block #waiting-spinner {
-  width: 100% !important;
-}
-
-.v-progress-circular>svg {
-  width: fit-content !important;
-}
-
-#main-content {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
-
-#playlist-card {
-  width: 100%;
 }
 
 #playlist-image {
@@ -597,36 +545,6 @@ export default defineComponent({
   padding: 5px 10px 10px 10px;
 }
 
-.filter-select {
-  text-transform: capitalize;
-}
-
-#filter-chips {
-  width: 100%
-}
-
-#filter-chips-embedded {
-  width: 100%
-}
-
-#main-section {
-  width: 100%;
-  margin-top: 5px;
-}
-
-#list-title {
-  display: flex;
-  align-items: center;
-}
-
-#list-title-embedded {
-  width: 70%
-}
-
-.v-expansion-panel-text__wrapper {
-  padding: 10px 0px;
-}
-
 #help-indie-percentage {
   min-width: fit-content;
   height: 23px;
@@ -644,15 +562,28 @@ export default defineComponent({
   min-width: fit-content;
 }
 
+/* Filters */
+#filters {
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-select {
+  text-transform: capitalize;
+}
+
+#filter-chips {
+  width: 100%
+}
+
+#filter-chips-embedded {
+  width: 100%
+}
+
 #reset-filter {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-}
-
-#filters {
-  display: flex;
-  flex-direction: column;
 }
 
 #filters-and-reset .v-switch .v-switch__thumb {
@@ -681,9 +612,79 @@ export default defineComponent({
   max-height: 40px;
 }
 
+/* Main section and track display */
+#main-section {
+  width: 100%;
+  margin-top: 5px;
+}
+
+#list-title {
+  display: flex;
+  align-items: center;
+}
+
+#list-title-embedded {
+  width: 70%
+}
+
+#tracks {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-items: stretch;
+  align-content: center;
+  padding: 0;
+  margin-top: 2px;
+}
+
+.v-expansion-panel-text__wrapper {
+  padding: 10px 0px;
+}
+
 #percentage-row {
   display: flex;
   flex-direction: row;
+}
+
+/* Button to scroll top */
+#scroll-top-button {
+  position: fixed;
+  right: 10px;
+  bottom: 125px;
+  z-index: 2000;
+  transition: 0.2s all ease-out;
+}
+
+/* Button to display vertical sidebar */
+#burger-button {
+  position: absolute;
+  top: 10px;
+  right: 5px;
+  border: 1px var(--text-color) solid;
+  border-radius: 5px;
+  padding: 15px;
+}
+
+.mdi-menu:hover:before {
+  content: "\F006D"
+}
+
+/* Main generic spinner while loading*/
+#spinner-block {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+}
+
+#spinner-block #waiting-spinner {
+  width: 100% !important;
+}
+
+.v-progress-circular>svg {
+  width: fit-content !important;
 }
 
 @media only screen and (min-width: 768px) {

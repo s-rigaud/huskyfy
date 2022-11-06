@@ -26,6 +26,7 @@ export default defineComponent({
 section {
   height: 100%;
   width: 100%;
+
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
@@ -42,6 +43,7 @@ h2 {
 .title-404 {
   margin: 10px 0px;
   padding: 0px 0px;
+
   font-size: xx-large;
   display: block;
 }

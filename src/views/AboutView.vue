@@ -122,6 +122,36 @@ export default defineComponent({
 #main-title-image {
   max-width: 60px !important;
   margin-right: 10px;
+
+  animation-name: rotate-slowly;
+  animation-duration: 4s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-out;
+  animation-play-state: paused;
+  cursor: pointer;
+}
+
+#main-title-image:hover {
+  animation-play-state: running;
+
+}
+
+@keyframes rotate-slowly {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  20% {
+    transform: rotate(90deg);
+  }
+
+  60% {
+    transform: rotate(-90deg);
+  }
+
+  100% {
+    transform: rotate(0deg);
+  }
 }
 
 #exit-button {
@@ -144,13 +174,13 @@ h1 {
   font-size: 25px;
 }
 
-h2 {
-  font-size: large;
-}
-
 .subtitle {
   display: flex;
   flex-wrap: wrap;
+}
+
+.subtitle h2 {
+  font-size: large;
 }
 
 p {
@@ -160,6 +190,10 @@ p {
 a {
   text-decoration: none;
   color: var(--link-color) !important;
+}
+
+a:hover {
+  text-decoration: underline;
 }
 
 #indie-chip {
@@ -175,7 +209,7 @@ a {
     font-size: 40px;
   }
 
-  h2 {
+  .subtitle h2 {
     font-size: 30px;
   }
 

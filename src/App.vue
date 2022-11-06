@@ -43,11 +43,12 @@ export default defineComponent({
 }
 
 #container {
-  padding: 5px;
-  background-color: var(--secondary-color) !important;
-  color: var(--text-color) !important;
-  font-family: "Oswald", Helvetica, Sans-serif !important;
   height: 100%;
+  padding: 5px;
+
+  color: var(--text-color) !important;
+  background-color: var(--secondary-color) !important;
+  font-family: "Oswald", Helvetica, Sans-serif !important;
 
   display: flex;
   flex-direction: column;
@@ -58,9 +59,10 @@ export default defineComponent({
 }
 
 #main {
-  background-color: var(--primary-color) !important;
-  color: var(--text-color) !important;
   /* Footer height */
   height: calc(100% - 108px);
+
+  background-color: var(--primary-color) !important;
+  color: var(--text-color) !important;
 }
 </style>

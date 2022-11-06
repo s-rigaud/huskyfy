@@ -68,17 +68,15 @@ export default defineComponent({
 }
 
 #playlists {
+  max-width: 100%;
+
+  margin-top: 10px;
+
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   align-content: stretch;
   justify-content: space-evenly;
   align-items: stretch;
-  max-width: 100%;
-  margin-top: 10px;
-}
-
-h1 {
-  font-size: large;
 }
 </style>
