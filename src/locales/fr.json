@@ -150,12 +150,12 @@
 		"button": "Revenir à la page précédente"
 	},
 	"drawer": {
-		"update-playlist": "Mettre à jour la playlist 🔄",
-		"reorder-playlist": "Réordonner la playlist en fonction 🔀",
+		"update-playlist": "Mettre à jour la playlist",
+		"reorder-playlist": "Réordonner la playlist en fonction",
 		"reorder-by-genre": "Des genres",
 		"reorder-by-artist-pop": "Des artistes les plus présents",
 		"reorder-by-artist-name": "Des noms d'artistes",
-		"export-image": "Exporter un récap 🖼️",
+		"export-image": "Exporter un récap",
 		"image-display-title": "Afficher le titre",
 		"image-display-stats": "Afficher les stats"
 	},

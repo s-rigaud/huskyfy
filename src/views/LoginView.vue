@@ -150,6 +150,8 @@ export default defineComponent({
 }
 
 #lower-part>a {
+  width: max-content;
+
   position: absolute;
   bottom: 3%;
   font-size: large;

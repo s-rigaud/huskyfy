@@ -8,9 +8,11 @@
 
 [X] Google analytics
 
-[ ] A sitemap.xml exists and was submitted to Google Search Console.
+[X] A sitemap.xml exists and was submitted to Google Search Console.
 
 [ ] Fix style on my phone
+
+[ ] Add image on Navbar with scrolling animation (Vuetify)
 
 [X] Add functionalities (fr + en) for Login Page
 

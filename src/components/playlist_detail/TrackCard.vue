@@ -216,7 +216,6 @@ export default defineComponent({
 
   font-family: "Oswald", Helvetica, Sans-serif !important;
   cursor: pointer;
-  text-decoration: underline;
 }
 
 .track-index {

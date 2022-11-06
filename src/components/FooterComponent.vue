@@ -3,10 +3,10 @@
   <v-footer id="footer" v-if="userStore.connected">
     <v-row justify="center" no-gutters>
       <router-link to="/explore">
-        <v-btn> Home </v-btn>
+        <v-btn variant="text"> Home </v-btn>
       </router-link>
       <router-link to="/about">
-        <v-btn> About </v-btn>
+        <v-btn variant="text"> About </v-btn>
       </router-link>
 
       <!-- Created with ♥ -->

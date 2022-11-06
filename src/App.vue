@@ -60,5 +60,7 @@ export default defineComponent({
 #main {
   background-color: var(--primary-color) !important;
   color: var(--text-color) !important;
+  /* Footer height */
+  height: calc(100% - 108px);
 }
 </style>

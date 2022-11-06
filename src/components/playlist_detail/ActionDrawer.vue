@@ -1,6 +1,5 @@
 <template>
-  <v-navigation-drawer id="drawer" v-model="isOpen" temporary location="right" image='@/assets/stars.jpg'
-    elevation="20">
+  <v-navigation-drawer id="drawer" v-model="isOpen" temporary location="right" :image='starImage' elevation="20">
     <v-list>
       <v-list-subheader>{{ $t('drawer.update-playlist') }}</v-list-subheader>
       <!-- 1.1 Update playlist privacy -->
@@ -50,7 +49,7 @@
       <v-divider></v-divider>
 
       <div v-if="userOwnsPlaylist">
-        <v-list-subheader> {{ $t('drawer.reorder-playlist') }} </v-list-subheader>
+        <v-list-subheader> {{ $t('drawer.reorder-playlist') }}</v-list-subheader>
         <!-- 2.1 Sort by genre -->
         <v-list-item @click="sortPlaylistTracksByGenres">
           <v-list-item-title>{{ $t('drawer.reorder-by-genre') }}</v-list-item-title>
@@ -69,9 +68,7 @@
 
       <!-- (At least 4 tracks to download image) -->
       <div v-if="playlistsStore.playlists[playlistId].tracks.length > 3">
-        <v-list-subheader>
-          {{ $t('drawer.export-image') }}
-        </v-list-subheader>
+        <v-list-subheader> {{ $t('drawer.export-image') }}</v-list-subheader>
         <!-- 3.1 Export Image -->
 
         <v-img id="live-image-preview" :src="imagePreview" lazy-src='@/assets/loading-image-preview.jpg'>
@@ -162,6 +159,9 @@ export default defineComponent({
     }
   },
   computed: {
+    starImage (): string {
+      return require('@/assets/stars.jpg')
+    },
     userOwnsPlaylist (): boolean {
       return (
         this.currentUserUsername ===
