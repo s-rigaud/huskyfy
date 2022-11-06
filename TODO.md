@@ -6,11 +6,9 @@
 
 [ ] Better style for filtering tags
 
-[ ] Google analytics
+[X] Google analytics
 
 [ ] A sitemap.xml exists and was submitted to Google Search Console.
-
-[ ] Reduce JS bundle size by importing only used components from Vuetify -> app (1.67 MiB)
 
 [ ] Fix style on my phone
 
@@ -22,7 +20,7 @@
 
 [X] Add ref to exact playlist to avoid calling playlistsStore.playlist[this.playlistId] each time
 
-1. [ ] Check frontend playlist
+1. [X] Check frontend playlist
 2. [X] Read Spotify design recommendation
 3. [X] Set project as public and make a first release
-4. [X] Ask Spotify to be officially open
+4. [ ] Ask Spotify to be officially open

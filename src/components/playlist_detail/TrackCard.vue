@@ -1,5 +1,6 @@
 <template>
   <!-- Card to represent a track, many of them are stacks -->
+  <!-- TODO add skeleton loader when Vuetify 3.1 will be out -->
   <v-list-item class="track-card" :style="trackAnimationDelay">
     <template v-slot:prepend>
       <p class="track-index">{{ trackIndex + 1 }}</p>
