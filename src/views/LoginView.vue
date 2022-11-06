@@ -2,14 +2,14 @@
   <!-- Login view with a large background and a simple button -->
   <div id="login">
     <div id="upper-part">
-      <v-img id="logo" rel="preconnect" :src="textLogo" alt="Huskyfy"></v-img>
+      <v-img id="logo" rel="preconnect" src='@/assets/Huskyfy.png' alt="Huskyfy"></v-img>
     </div>
 
     <div id="hero">
       <h1 id="title" class="rainbow-text">{{ $t("login.header") }}</h1>
       <div id="functionalities">
         <div v-for="n of maxNumberOfFunctionalities" :key="n" class="functionality">
-          <v-img :src="boneImg" alt="small-bone" width="24" style="max-width: 24px"></v-img>
+          <v-img src='@/assets/small-bone.png' alt="small-bone" width="24" style="max-width: 24px"></v-img>
           <h4>{{ $t(`login.functionality${n}`) }}</h4>
         </div>
       </div>
@@ -48,12 +48,6 @@ export default defineComponent({
   },
   components: { LocaleSelector },
   computed: {
-    textLogo (): string {
-      return require('@/assets/Huskyfy.png')
-    },
-    boneImg (): string {
-      return require('@/assets/small-bone.png')
-    },
     maxNumberOfFunctionalities (): number[] {
       const length = (window.innerWidth > 700) ? 6 : 4
       return range(1, length + 1)

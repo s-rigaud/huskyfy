@@ -33,7 +33,6 @@ interface SpotifyOwner {
     uri: string;
 }
 
-
 // Artist Model
 export interface SpotifyArtist {
     followers: SpotifyFollowers;

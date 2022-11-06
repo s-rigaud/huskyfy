@@ -3,7 +3,7 @@
   <v-app-bar id="app-bar" flat v-if="$router.currentRoute.value.path !== '/login'">
     <!-- Left part -->
     <router-link id="app-bar-logo" to="/explore">
-      <v-img id="logo" :src="logo" alt="Huskyfy logo"></v-img>
+      <v-img id="logo" src="@/assets/Huskyfy.png" alt="Huskyfy logo"></v-img>
     </router-link>
     <v-spacer></v-spacer>
 
@@ -34,9 +34,6 @@ export default defineComponent({
       // eslint-disable-next-line
       const DEFAULT_PICTURE = require("@/assets/no-user.png")
       return this.userStore.profilePicture || DEFAULT_PICTURE
-    },
-    logo (): string {
-      return require('@/assets/Huskyfy.png')
     }
   },
   methods: {

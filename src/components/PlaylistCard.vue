@@ -1,7 +1,7 @@
 <template>
   <!-- Playlist representation as a card -->
   <v-card flat @click="displayDetails" class="playlist-card">
-    <v-img rel="preconnect" :src="images[0].url" alt="Playlist cover" :lazy-src="loadingCover" cover>
+    <v-img rel="preconnect" :src="images[0].url" alt="Playlist cover" lazy-src='@/assets/default_cover.jpg' cover>
     </v-img>
     <v-card-title>
       <p class="text-truncate rainbow-text card-title"> {{ name }} </p>
@@ -22,11 +22,6 @@ export default defineComponent({
     images: {
       type: Array as PropType<SpotifyImage[]>,
       required: true
-    }
-  },
-  computed: {
-    loadingCover (): string {
-      return require('@/assets/default_cover.jpg')
     }
   },
   methods: {

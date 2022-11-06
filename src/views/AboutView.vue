@@ -3,7 +3,7 @@
   <div id="about-content">
     <div id="text">
       <div id="main-title">
-        <v-img id="main-title-image" width="60" :src="huskyfyCircle" alt="Huskyfy Image"></v-img>
+        <v-img id="main-title-image" width="60" src='@/assets/large-logo-circle.png' alt="Huskyfy Image"></v-img>
         <h1 class="rainbow-text">{{ $t("about.description.title") }}</h1>
       </div>
       <p style="margin-bottom: 0">
@@ -35,7 +35,7 @@
         <br />
         <a :href="myMusicLink">
           {{ $t("about.expose-liked-songs.content.part2") }}
-          <v-img id="my-song-img" width="20" :src="myMusicImage" alt="My Music playlist"></v-img>
+          <v-img id="my-song-img" width="20" src='@/assets/my-music.jpeg' alt="My Music playlist"></v-img>
         </a>
       </p>
 
@@ -69,7 +69,7 @@
 
       <div id="github-icon">
         <a href="https://github.com/s-rigaud" target="_blank" rel="noopener">
-          <v-img width="70" :src="githubImg" alt="Github Image"></v-img>
+          <v-img width="70" src='@/assets/github.png' alt="Github Image"></v-img>
         </a>
       </div>
     </div>
@@ -86,15 +86,6 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'AboutView',
   computed: {
-    githubImg (): string {
-      return require('@/assets/github.png')
-    },
-    huskyfyCircle (): string {
-      return require('@/assets/large-logo-circle.png')
-    },
-    myMusicImage (): string {
-      return require('@/assets/my-music.jpeg')
-    },
     myMusicLink (): string {
       return process.env.VUE_APP_BASE_SERVER_URL + '/playlist/my-music'
     }

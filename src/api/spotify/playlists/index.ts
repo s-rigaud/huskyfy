@@ -27,7 +27,7 @@ const getPictureContentFromURL = (url: string, uploadCallback: Callback) => {
 
 export default {
   // Retrieve playlists from the current logged user
-  getUserPlaylists(limit: number, offset: number): Promise<AxiosResponse<SpotifyGetPlaylistResponse, SpotifyGetPlaylistResponse>> {
+  getUserPlaylists (limit: number, offset: number): Promise<AxiosResponse<SpotifyGetPlaylistResponse, SpotifyGetPlaylistResponse>> {
     return request.get('me/playlists', {
       params: {
         limit,
@@ -36,7 +36,7 @@ export default {
     })
   },
   // Return tracks for a playlist
-  getPlaylistTracks(playlistId: string, limit: number, offset: number): Promise<AxiosResponse<SpotifyTrackResponse, SpotifyTrackResponse>> {
+  getPlaylistTracks (playlistId: string, limit: number, offset: number): Promise<AxiosResponse<SpotifyTrackResponse, SpotifyTrackResponse>> {
     return request.get(`playlists/${playlistId}/tracks`, {
       params: {
         limit,
@@ -46,7 +46,7 @@ export default {
     })
   },
   // Return tracks from the special "Your music" playlist
-  async getUserSavedTracks(limit: number, offset: number): Promise<AxiosResponse<SpotifyTrackResponse, SpotifyTrackResponse>> {
+  async getUserSavedTracks (limit: number, offset: number): Promise<AxiosResponse<SpotifyTrackResponse, SpotifyTrackResponse>> {
     return await request.get('me/tracks', {
       params: {
         limit,
@@ -55,7 +55,7 @@ export default {
     })
   },
   // Create new empty playlist
-  async createPlaylist(name: string, description: string, public_: boolean, collaborative: boolean): Promise<AxiosResponse<SimplifiedSpotifyPlaylist, SimplifiedSpotifyPlaylist>> {
+  async createPlaylist (name: string, description: string, public_: boolean, collaborative: boolean): Promise<AxiosResponse<SimplifiedSpotifyPlaylist, SimplifiedSpotifyPlaylist>> {
     const userStore = useUserStore()
     const userId = userStore.id
 
@@ -67,7 +67,7 @@ export default {
     })
   },
   // Add new cover to a playlist
-  updatePlaylistCover(playlistId: string, coverUrl: string) {
+  updatePlaylistCover (playlistId: string, coverUrl: string) {
     const callback: Callback = (base64cover: string) => {
       const bytesNoMetadata = base64cover.split(',')[1]
       request.put(`playlists/${playlistId}/images`, bytesNoMetadata, {
@@ -77,12 +77,12 @@ export default {
     getPictureContentFromURL(coverUrl, callback)
   },
   // Unfollow a specific playlist
-  unfollowPlaylist(playlistId: string) {
+  unfollowPlaylist (playlistId: string) {
     return request.delete(`playlists/${playlistId}/followers`)
   },
   // Add multiple tracks to an existing playlist
   // LIMIT is 100 tracks
-  async addTracksToPlaylist(playlistId: string, trackIds: string[]): Promise<string> {
+  async addTracksToPlaylist (playlistId: string, trackIds: string[]): Promise<string> {
     let data = null
     for (const trackBucket of chunkArray(trackIds, 100)) {
       data = await request.post(`/playlists/${playlistId}/tracks`, {
@@ -92,10 +92,10 @@ export default {
     return data?.data.snapshot_id
   },
   // Update playlist privacy, the playlist is either public or private
-  updatePlaylistPrivacy(playlistId: string, isPublic: boolean) {
+  updatePlaylistPrivacy (playlistId: string, isPublic: boolean) {
     return request.put(`/playlists/${playlistId}`, { public: isPublic })
   },
-  async deleteTracks(playlistId: string, playlistTracks: SpotifyTrack[]) {
+  async deleteTracks (playlistId: string, playlistTracks: SpotifyTrack[]) {
     // LIMIT is 100 tracks
     const formattedTracks = []
     for (const track of playlistTracks) {

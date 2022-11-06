@@ -1,5 +1,6 @@
 <template>
-  <v-navigation-drawer id="drawer" v-model="isOpen" temporary location="right" :image="starBackground" elevation="20">
+  <v-navigation-drawer id="drawer" v-model="isOpen" temporary location="right" image='@/assets/stars.jpg'
+    elevation="20">
     <v-list>
       <v-list-subheader>{{ $t('drawer.update-playlist') }}</v-list-subheader>
       <!-- 1.1 Update playlist privacy -->
@@ -73,7 +74,7 @@
         </v-list-subheader>
         <!-- 3.1 Export Image -->
 
-        <v-img id="live-image-preview" :src="imagePreview" :lazy-src="loadingCover">
+        <v-img id="live-image-preview" :src="imagePreview" lazy-src='@/assets/loading-image-preview.jpg'>
           <template v-slot:placeholder>
             <div class="d-flex align-center justify-center fill-height">
               <v-progress-circular indeterminate color="var(--text-color)"></v-progress-circular>
@@ -143,7 +144,6 @@ export default defineComponent({
         this.$emit('onClose')
       }
     },
-
     generateImageSize () { this.updateImagePreview() },
     generateImageDisplayTitle () { this.updateImagePreview() },
     generateImageDisplayStats () { this.updateImagePreview() }
@@ -162,9 +162,6 @@ export default defineComponent({
     }
   },
   computed: {
-    loadingCover (): string {
-      return require('@/assets/loading-image-preview.jpg')
-    },
     userOwnsPlaylist (): boolean {
       return (
         this.currentUserUsername ===
@@ -174,9 +171,6 @@ export default defineComponent({
     },
     spotifyOwnsPlaylist (): boolean {
       return this.playlistsStore.playlists[this.playlistId].owner.id === 'spotify'
-    },
-    starBackground (): string {
-      return require('@/assets/stars.jpg')
     },
     ticks () {
       const trackNumber = this.playlistsStore.getTopArtists(this.playlistId).length

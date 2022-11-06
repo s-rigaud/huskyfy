@@ -4,7 +4,7 @@
     <template v-slot:prepend>
       <p class="track-index">{{ trackIndex + 1 }}</p>
       <v-avatar class="ma-3 track-image" size="90" rounded="0" @click="openTrackOnSpotify">
-        <v-img rel="preconnect" v-bind:src="image" :lazy-src="loadingCover" alt="Cover image"></v-img>
+        <v-img rel="preconnect" v-bind:src="image" lazy-src='@/assets/default_cover.jpg' alt="Cover image"></v-img>
       </v-avatar>
     </template>
 
@@ -93,9 +93,6 @@ export default defineComponent({
         }
         return `${artistName},`
       }
-    },
-    loadingCover (): string {
-      return require('@/assets/default_cover.jpg')
     },
     // Delay animation so cards appear one after another
     trackAnimationDelay (): StyleValue {
