@@ -146,6 +146,13 @@ export const usePlaylistsStore = defineStore('playlists', {
       // Manually update state as local storage and states are linked now
       this.playlists = {}
     },
+    softReset () {
+      // Delete every track already saved. Mainly useful to ensure max capacity of localStorage
+      const playlistIds = Object.keys(this.playlists)
+      for (const playlistId of playlistIds) {
+        this.playlists[playlistId].tracks = []
+      }
+    },
     // Retrieve playlists for user
     async getUserPlaylists (offset: number) {
       const userStore = useUserStore()
@@ -345,6 +352,17 @@ export const usePlaylistsStore = defineStore('playlists', {
         // There is currently a bug in the Spotify API when description is sometimes null for returns
         description
       }
+
+      // Sort playlists so new playlist is just after the MyMusic in the playlist order
+      this.playlists = Object.keys(this.playlists).splice(1, 0, playlist.id).reduce(
+        (accumulator: Record<string, SpotifyPlaylist>, key: string) => {
+          accumulator[key] = this.playlists[key]
+
+          return accumulator
+        },
+        {}
+      )
+
       return playlist.id
     },
     async addTracksToPlaylist (newPlaylistId: string, tracks: SpotifyTrack[]) {
@@ -376,7 +394,7 @@ export const usePlaylistsStore = defineStore('playlists', {
     },
     async sortPlaylistTracksByGenres (playlistId: string) {
       // 1. Save a copy of tracks
-      // ALL tracks LOADED ?!?
+      // TODO ALL tracks LOADED ?!?
       let tracks = this.playlists[playlistId].tracks.slice()
       const genres = this.getTopGenres(playlistId)
 
@@ -396,7 +414,7 @@ export const usePlaylistsStore = defineStore('playlists', {
     },
     async sortPlaylistTracksByArtistTrackInPlaylist (playlistId: string) {
       // 1. Save tracks
-      // WHAT IF NOT ALL tracks LOADED ?!?
+      // TODO WHAT IF NOT ALL tracks LOADED ?!?
       let tracks = this.playlists[playlistId].tracks
       const artists = this.getTopArtists(playlistId)
 
@@ -417,7 +435,7 @@ export const usePlaylistsStore = defineStore('playlists', {
     },
     async sortPlaylistTracksByArtistName (playlistId: string) {
       // 1. Save tracks
-      // WHAT IF NOT ALL tracks LOADED ?!?
+      // TODO WHAT IF NOT ALL tracks LOADED ?!?
       let tracks = this.playlists[playlistId].tracks
       const artistNames = this.getArtistsByName(playlistId)
 

@@ -21,7 +21,6 @@ export default defineComponent({
       entries.forEach(entry => {
         const cr = entry.contentRect
         this.width = (cr.width > 500) ? 500 : cr.width
-        this.chartOptions.dataLabels.enabled = (cr.width > 500)
       })
     })
 

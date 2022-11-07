@@ -48,7 +48,7 @@
         @on-sort-end="() => { resetFilters(); drawer = false }" />
 
       <v-expansion-panels v-model="openPanels" variant="accordion">
-        <v-expansion-panel bg-color="var(--text-color)">
+        <v-expansion-panel>
           <v-expansion-panel-title color="var(--text-color)">
             <div class="d-flex justify-start">
               Stats
@@ -471,17 +471,19 @@ export default defineComponent({
 <style>
 /* Generic containers */
 #playlist-detail {
+  width: 100%;
+  height: 100%;
+
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  width: 100%;
-  height: 100%;
 }
 
 #main-content {
+  width: 100%;
+
   display: flex;
   flex-direction: column;
-  width: 100%;
 }
 
 #no-tracks {
@@ -511,6 +513,7 @@ export default defineComponent({
 /* playlist-card */
 #playlist-card {
   width: 100%;
+  background-image: url("@/assets/stars.jpg");
 }
 
 #playlist-meta {
@@ -616,6 +619,9 @@ export default defineComponent({
 #main-section {
   width: 100%;
   margin-top: 5px;
+
+  background-image: url("@/assets/stars.jpg");
+  background-repeat: initial;
 }
 
 #list-title {
@@ -628,15 +634,16 @@ export default defineComponent({
 }
 
 #tracks {
-  width: 100%;
+  width: fit-content;
+  padding: 0;
+  margin: auto;
+
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
   justify-content: space-evenly;
   align-items: stretch;
   align-content: center;
-  padding: 0;
-  margin-top: 2px;
 }
 
 .v-expansion-panel-text__wrapper {
@@ -653,18 +660,20 @@ export default defineComponent({
   position: fixed;
   right: 10px;
   bottom: 125px;
-  z-index: 2000;
+  z-index: 3;
   transition: 0.2s all ease-out;
 }
 
 /* Button to display vertical sidebar */
 #burger-button {
+  padding: 15px;
+
   position: absolute;
   top: 10px;
   right: 5px;
+
   border: 1px var(--text-color) solid;
   border-radius: 5px;
-  padding: 15px;
 }
 
 .mdi-menu:hover:before {
@@ -673,10 +682,11 @@ export default defineComponent({
 
 /* Main generic spinner while loading*/
 #spinner-block {
+  height: 100%;
+
   display: flex;
   flex-direction: column;
   justify-content: center;
-  height: 100%;
 }
 
 #spinner-block #waiting-spinner {
@@ -694,10 +704,11 @@ export default defineComponent({
   }
 
   #scroll-top-button {
-    right: 20px;
-    bottom: 20px;
     width: 60px;
     height: 60px;
+
+    right: 20px;
+    bottom: 20px;
   }
 
   #scroll-top-button .v-btn--size-default {

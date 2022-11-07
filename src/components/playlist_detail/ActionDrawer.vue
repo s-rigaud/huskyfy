@@ -27,7 +27,7 @@
         <v-card id="deletion-dialog">
           <v-card-title class="text-h5 rainbow-text font-weight-bold">
             {{ $t('playlist.delete.delete') }}
-            <span class="font-italic">
+            <span class="font-italic white-text">
               {{ playlistsStore.playlists[playlistId].name }}
             </span>
           </v-card-title>
@@ -252,7 +252,6 @@ export default defineComponent({
 </script>
 <style>
 #drawer {
-  z-index: 3000 !important;
   min-width: 30%;
 }
 
@@ -304,7 +303,7 @@ export default defineComponent({
 }
 
 #deletion-dialog {
-  max-width: fit-content;
+  max-width: 100%;
   margin: auto;
 }
 
@@ -314,5 +313,10 @@ export default defineComponent({
 
 #drawer .v-list-item:hover>.v-list-item__overlay {
   opacity: calc(0.2 * var(--v-theme-overlay-multiplier));
+}
+
+.white-text {
+  /* like rainbow-text but only white */
+  -webkit-text-fill-color: lightgray;
 }
 </style>
