@@ -1,5 +1,5 @@
 import api from '@/api'
-import VueI18n from '@/i18n'
+import { t } from '@/i18n'
 
 import { useAuthStore } from '@/stores/auth'
 import { usePlaylistsStore } from '@/stores/playlists'
@@ -98,10 +98,10 @@ router.beforeEach(async function (to, from, next) {
 router.afterEach((to) => {
   const translationKey = to.path.split('/')[1]
   if (translationKey !== 'playlist') {
-    if (VueI18n.t(`page-title.${translationKey}`) === `page-title.${translationKey}`) {
+    if (t(`page-title.${translationKey}`) === `page-title.${translationKey}`) {
       document.title = '404 - Huskyfy'
     } else {
-      document.title = VueI18n.t(`page-title.${translationKey}`) + ' - Huskyfy'
+      document.title = t(`page-title.${translationKey}`) + ' - Huskyfy'
     }
   } else {
     const playlistName = usePlaylistsStore().playlists[(to.params.playlistId as string)].name

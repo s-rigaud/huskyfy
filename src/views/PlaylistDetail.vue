@@ -23,11 +23,13 @@
             <p v-if="allTracksLoaded" id="percentage-row">
               <span class="rainbow-text">{{ $t("playlist.indie-score-text") }}</span>
               <!-- Only if all tracks are loaded -->
-              <span :style="colorForPercentage" style="margin: 0px 5px;">{{ ` ${indiePercentage}` }} %</span>
-              <v-tooltip :text="$t('playlist.explanation-indie-score')">
+              <span :style="colorForPercentage" style="margin: 0px 5px;" class="black-highlight">
+                {{ ` ${indiePercentage}` }} %
+              </span>
+              <v-tooltip :text="$t('playlist.explanation-indie-score')" id="indie-tooltip">
                 <template v-slot:activator="{ props }">
                   <v-btn id="help-indie-percentage" v-bind="props">
-                    <v-icon size="x-small" color="var(--primary-color)">mdi-help</v-icon>
+                    <v-icon size="x-small">mdi-help</v-icon>
                   </v-btn>
                 </template>
               </v-tooltip>
@@ -142,18 +144,17 @@
 
       <!-- Track list -->
       <section id="main-section">
-        <v-divider></v-divider>
         <div id="list-title">
           <div id="list-title-embedded">
             <h2>{{ generalTitle }}</h2>
           </div>
-          <v-divider class="mx-4" vertical></v-divider>
+          <v-divider class="mx-4" vertical thickness="0.5" color="grey"></v-divider>
           <h4> {{ filteredTracks.length }} {{ $t('track.name') }}</h4>
         </div>
-        <v-divider></v-divider>
+        <v-divider thickness="0.5" color="grey"></v-divider>
 
         <v-list id="tracks" v-if="filteredTracks.length >= 1 || playlistLoaded">
-          <TrackCard v-for="(track, index) in filteredTracks" :key="track.id" :id="track.id" :name="track.name"
+          <TrackItem v-for="(track, index) in filteredTracks" :key="track.id" :id="track.id" :name="track.name"
             :image="track.album.images[0].url" :artists="track.artists" :genres="track.genres" :isIndie="track.isIndie"
             :trackURI="track.uri" :trackIndex="index" />
         </v-list>
@@ -194,7 +195,7 @@ import ActionDrawer from '@/components/playlist_detail/ActionDrawer.vue'
 import DuplicatorPopup from '@/components/playlist_detail/DuplicatorPopup.vue'
 import GenreChart from '@/components/playlist_detail/GenreChart.vue'
 import LoadMoreTracksPopup from '@/components/playlist_detail/LoadMoreTracksPopup.vue'
-import TrackCard from '@/components/playlist_detail/TrackCard.vue'
+import TrackItem from '@/components/playlist_detail/TrackItem.vue'
 
 import { SpotifyArtist, SpotifyTrack } from '@/api/spotify/types/entities'
 
@@ -205,7 +206,7 @@ import { capitalize } from '@/utils/functions'
 import { storeToRefs } from 'pinia'
 import { defineComponent, StyleValue, toRef } from 'vue'
 
-// It is used for typing slot props
+// It is used for typing Vuetify select slot props
 // eslint-disable-next-line
 interface SlotProps {
   item: { raw: SpotifyArtist }
@@ -223,7 +224,7 @@ export default defineComponent({
   components: {
     LoadMoreTracksPopup,
     GenreChart,
-    TrackCard,
+    TrackItem,
     ActionDrawer,
     DuplicatorPopup
   },
@@ -420,7 +421,7 @@ export default defineComponent({
     usernameToDisplay (): string {
       const playlistCreator = this.playlist.owner.display_name
 
-      return this.currentUserUsername === playlistCreator ? this.$t('me') : playlistCreator
+      return this.currentUserUsername === playlistCreator ? this.$t('playlist.you') : playlistCreator
     },
     getEmojiFromVisibility (): string {
       if (this.playlist.collaborative) return this.$t('_emojis.collaborative')
@@ -477,10 +478,14 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
+
+  background-image: url("@/assets/stars.jpg");
+  background-repeat: repeat;
 }
 
 #main-content {
   width: 100%;
+  margin: 0px auto;
 
   display: flex;
   flex-direction: column;
@@ -513,7 +518,8 @@ export default defineComponent({
 /* playlist-card */
 #playlist-card {
   width: 100%;
-  background-image: url("@/assets/stars.jpg");
+  margin-bottom: 5px;
+  border: 2px var(--text-color) solid;
 }
 
 #playlist-meta {
@@ -551,18 +557,36 @@ export default defineComponent({
 #help-indie-percentage {
   min-width: fit-content;
   height: 23px;
-  border-radius: 5px;
-  background-color: #a15c3c;
   margin-left: 5px;
   padding: 0;
+
+  border: 2px var(--text-color) solid;
+  border-radius: 5px;
+  background-color: var(--primary-color);
+}
+
+#help-indie-percentage:hover {
+  background-color: var(--text-color);
+  border-color: var(--primary-color);
 }
 
 #help-indie-percentage .v-icon {
   padding: 8px 9px;
+  color: var(--text-color);
+}
+
+#help-indie-percentage:hover .v-icon {
+  color: var(--primary-color);
 }
 
 #help-indie-percentage .v-btn--size-default {
   min-width: fit-content;
+}
+
+#indie-tooltip .v-overlay__content {
+  background-color: var(--primary-color);
+  color: var(--text-color);
+  border: var(--text-color) 2px solid;
 }
 
 /* Filters */
@@ -620,21 +644,25 @@ export default defineComponent({
   width: 100%;
   margin-top: 5px;
 
-  background-image: url("@/assets/stars.jpg");
-  background-repeat: initial;
+  border: 2px var(--text-color) solid;
+  border-radius: 5px;
 }
 
 #list-title {
   display: flex;
   align-items: center;
+
+  background-color: black;
+  border-radius: 5px;
 }
 
 #list-title-embedded {
-  width: 70%
+  width: 70%;
+  padding-left: 5px;
 }
 
 #tracks {
-  width: fit-content;
+  /* width: fit-content; */
   padding: 0;
   margin: auto;
 
@@ -674,6 +702,7 @@ export default defineComponent({
 
   border: 1px var(--text-color) solid;
   border-radius: 5px;
+  background-color: black;
 }
 
 .mdi-menu:hover:before {
@@ -713,6 +742,10 @@ export default defineComponent({
 
   #scroll-top-button .v-btn--size-default {
     font-size: 27px;
+  }
+
+  #main-content {
+    width: 80%;
   }
 }
 </style>

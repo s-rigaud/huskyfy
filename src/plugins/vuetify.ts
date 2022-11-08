@@ -6,12 +6,12 @@ import { createVuetify } from 'vuetify'
 import 'vuetify/styles'
 
 // Translations
-import VueI18n from '../i18n'
+import { t } from '../i18n'
 
 export default createVuetify(
   {
     lang: {
-      t: (key: string, ...params: string[]): string => VueI18n.t(key, params)
+      t: (key: string, ...params: string[]): string => t(key, params)
     },
     theme: {
       defaultTheme: 'dark'

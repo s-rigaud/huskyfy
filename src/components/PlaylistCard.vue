@@ -69,7 +69,7 @@ export default defineComponent({
 }
 
 .playlist-card:hover {
-  outline: 1px var(--text-color) solid;
+  outline: 1px white solid;
 }
 
 .playlist-card .card-title {
@@ -98,12 +98,12 @@ export default defineComponent({
 
 .playlist-card .v-card__overlay {
   opacity: 0.1;
+  background-color: gray;
   transition: 0.5s opacity ease;
 }
 
 .playlist-card:hover .v-card__overlay {
   opacity: 0.3;
-  border: 2px var(--text-color) solid;
 }
 
 @media only screen and (min-width: 768px) {

@@ -1,6 +1,6 @@
 import api from '@/api'
 import { SimplifiedSpotifyPlaylist, SpotifyArtist, SpotifyPlaylist, SpotifyTrack, SpotifyTrackMetadata } from '@/api/spotify/types/entities'
-import VueI18n from '@/i18n'
+import { t } from '@/i18n'
 import { Genre } from '@/model'
 import { useUserStore } from '@/stores/user'
 import { capitalize, range } from '@/utils/functions'
@@ -16,7 +16,7 @@ const DEFAULT_MY_MUSIC_PLAYLIST: SimplifiedSpotifyPlaylist = {
       url: require('@/assets/my-music.jpeg')
     }
   ],
-  name: VueI18n.t('playlist.your-music.name'),
+  name: t('playlist.your-music.name'),
   owner: {
     display_name: '',
     external_urls: { spotify: '' },

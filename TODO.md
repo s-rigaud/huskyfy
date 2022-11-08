@@ -6,8 +6,6 @@
 
 [ ] Better style for filtering tags
 
-[ ] Fix z-index Deletion popup
-
 1. [X] Check frontend playlist
 2. [X] Read Spotify design recommendation
 3. [X] Set project as public and make a first release

@@ -64,11 +64,11 @@
         "functionality5": "Sort playlist tracks according to most popular genres or artists in the playlist",
         "functionality6": "Save image recaps about all the informations of your playlists"
     },
-    "me": "me",
     "navbar": {
         "logout": "Sign out"
     },
     "playlist": {
+        "you": "you",
         "collaborative": "Collaborative playlist",
         "created-by": "Created by",
         "delete": {

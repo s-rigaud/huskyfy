@@ -1,5 +1,5 @@
 import { SpotifyPlaylist } from '@/api/spotify/types/entities'
-import VueI18n from '@/i18n'
+import { t, tc } from '@/i18n'
 import { usePlaylistsStore } from '@/stores/playlists'
 import { capitalize } from '@/utils/functions'
 import drawRoundRect from './utils'
@@ -133,7 +133,7 @@ const addCanvasTitle = (
   ctx.textAlign = 'center'
   ctx.fillStyle = '#F9B621'
 
-  const subText = VueI18n.t('generating-picture.subtitle', { count: gridSize ** 2 })
+  const subText = t('generating-picture.subtitle', { count: gridSize ** 2 })
   ctx.fillText(subText, 400 / 2, 35 + fontSize / 3)
 }
 
@@ -194,7 +194,7 @@ const addCanvasLegend = (
     ctx.fillStyle = INDIE_BACKGROUND_COLOR
     drawRoundRect(ctx, 5, yStart + 3, 395 * indiePercentage / 100, 25, 10, true, false)
 
-    const indieText = `${VueI18n.tc('track.indie', 2)} ${indiePercentage}%`
+    const indieText = `${tc('track.indie', 2)} ${indiePercentage}%`
     ctx.font = 'bolder 13px Arial'
     ctx.fillStyle = INDIE_TEXT_COLOR
     ctx.fillText(indieText, 10, yStart + 20)
@@ -205,7 +205,7 @@ const addCanvasLegend = (
     ctx.fillStyle = POPULAR_BACKGROUND_COLOR
     drawRoundRect(ctx, 5, yStart + 3, 395 * (100 - indiePercentage) / 100, 25, 10, true, false)
 
-    const popularText = `${VueI18n.tc('track.popular', 2)} ${100 - indiePercentage}%`
+    const popularText = `${tc('track.popular', 2)} ${100 - indiePercentage}%`
     ctx.font = 'bolder 13px Arial'
     ctx.fillStyle = POPULAR_TEXT_COLOR
     ctx.fillText(popularText, 10, yStart + 20)
@@ -226,7 +226,7 @@ const addCanvasLegend = (
       { tr: 0, br: 0, tl: 10, bl: 10 },
       true, true
     )
-    const popularText = `${VueI18n.tc('track.popular', 2)} ${100 - indiePercentage}%`
+    const popularText = `${tc('track.popular', 2)} ${100 - indiePercentage}%`
     ctx.font = `bolder ${getMostCommonPopularityTextSize('popular')}px Righteous`
     ctx.textAlign = 'start'
     ctx.fillStyle = POPULAR_TEXT_COLOR
@@ -242,7 +242,7 @@ const addCanvasLegend = (
       true,
       true
     )
-    const indieText = `${VueI18n.tc('track.indie', 2)} ${indiePercentage}%`
+    const indieText = `${tc('track.indie', 2)} ${indiePercentage}%`
     ctx.font = `bolder ${getMostCommonPopularityTextSize('indie')}px Righteous`
     ctx.textAlign = 'end'
     ctx.fillStyle = INDIE_TEXT_COLOR

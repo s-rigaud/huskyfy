@@ -64,7 +64,6 @@
 		"functionality5": "Trier vos playlists en fonction des genres ou des artistes les plus populaires",
 		"functionality6": "Enregistrer des images contenant toutes les informations de vos playlists"
 	},
-	"me": "moi",
 	"navbar": {
 		"logout": "Déconnexion"
 	},
@@ -72,6 +71,7 @@
 		"404": "Page non trouvée"
 	},
 	"playlist": {
+		"you": "vous",
 		"collaborative": "Playlist collaborative",
 		"created-by": "Créée par",
 		"delete": {

@@ -44,7 +44,7 @@ export default defineComponent({
 
 #container {
   height: 100%;
-  padding: 5px;
+  padding: 0px;
 
   color: var(--text-color) !important;
   background-color: var(--secondary-color) !important;

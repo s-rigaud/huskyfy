@@ -4,12 +4,12 @@ import { createPinia } from 'pinia'
 import { createApp } from 'vue'
 import VueApexCharts from 'vue3-apexcharts'
 import App from './App.vue'
-import VueI18n from './i18n'
+import { i18n } from './i18n'
 
 createApp(App)
   .use(router)
   .use(createPinia())
   .use(vuetify)
-  .use(VueI18n.i18n)
+  .use(i18n)
   .use(VueApexCharts)
   .mount('#app')

@@ -1,21 +1,22 @@
 <template>
-  <!-- Card to represent a track, many of them are stacks -->
+  <!-- Item to represent a track, many of them are stacked -->
   <!-- TODO add skeleton loader when Vuetify 3.1 will be out -->
-  <v-list-item class="track-card" :style="trackAnimationDelay">
+  <v-list-item class="track-item" :style="trackAnimationDelay" link @click="openTrackOnSpotify">
     <template v-slot:prepend>
       <p class="track-index">{{ trackIndex + 1 }}</p>
-      <v-avatar class="ma-3 track-image" size="90" rounded="0" @click="openTrackOnSpotify">
+      <v-avatar class="ma-3 track-image" size="90" rounded="0">
         <v-img rel="preconnect" v-bind:src="image" lazy-src='@/assets/default_cover.jpg' alt="Cover image"></v-img>
       </v-avatar>
     </template>
 
-    <v-list-item-title class="rainbow-text text-h6" @click="openTrackOnSpotify"> {{ name }} </v-list-item-title>
+    <v-list-item-title class="rainbow-text text-h6"> {{ name }} </v-list-item-title>
     <div class="second-line">
-      <a v-for="artist in artists" class="artist-names" :key="artist.id" :href="artist.uri">
-        <v-card-subtitle class="artist-name text-truncate">
-          {{ addComma(artist.name) }}
-        </v-card-subtitle>
-      </a>
+      <div v-for="(artist, index) in artists" class="artist-names" :key="artist.id"
+        @click.stop="openArtistOnSpotify(artist)">
+        <v-list-item-subtitle class="artist-name text-truncate">
+          {{ addCommaDivider(artist.name, index) }}
+        </v-list-item-subtitle>
+      </div>
       <v-chip v-if="isIndie" :text="$tc('track.indie', artists.length)" color="green" label text-color="white"
         size="small" class="popularity-chip">
       </v-chip>
@@ -24,31 +25,23 @@
       </v-chip>
     </div>
 
-    <!-- All track info -->
     <!-- TODO -->
-    <!-- Genre chips (Should be VSlideGroup but not yet implemented in Vuetify Beta 3.0.X)
-          <v-slide-group show-arrows>
-            <v-slide-group-item v-for="(genre, index) in genres" :key="genre">
-              <v-chip :text="genre.toUpperCase()" label size="small" class="genre-chip"
-                :style="genreAnimationDelay(index)">
-              </v-chip>
-            </v-slide-group-item>
-          </v-slide-group>-->
-
-    <v-card-text v-if="genres.length > 0">
+    <!-- Genre chips (Should be VSlideGroup but not yet implemented until Vuetify 3.1) -->
+    <div v-if="genres.length > 0" class="chips">
       <v-chip v-for="(genre, index) in genres.slice(0, MAXIMUM_GENRE_DISPLAYED)" :key="genre"
-        :text="genre.toUpperCase()" label size="small" class="genre-chip" :style="genreAnimationDelay(index)">
+        :text="genre.toUpperCase()" label size="small" class="genre-chip" :style="getGenreAnimationDelay(index)">
       </v-chip>
       <v-chip v-if="genres.length > MAXIMUM_GENRE_DISPLAYED && !displayAllGenres" label size="small" text="+"
-        class="genre-chip" :style="genreAnimationDelay(MAXIMUM_GENRE_DISPLAYED)" @click.stop="displayAllGenres = true">
+        class="genre-chip" :style="getGenreAnimationDelay(MAXIMUM_GENRE_DISPLAYED)"
+        @click.stop="displayAllGenres = true">
       </v-chip>
       <div v-if="displayAllGenres">
         <v-chip v-for="(genre, index) in genres.slice(MAXIMUM_GENRE_DISPLAYED)" :key="genre" :text="genre.toUpperCase()"
-          label size="small" class="genre-chip" :style="genreAnimationDelay(index)">
+          label size="small" class="genre-chip" :style="getGenreAnimationDelay(index)">
         </v-chip>
       </div>
-    </v-card-text>
-    <v-card-subtitle v-else> {{ $t("track.no-genre") }}</v-card-subtitle>
+    </div>
+    <v-list-item-subtitle v-else> {{ $t("track.no-genre") }}</v-list-item-subtitle>
   </v-list-item>
 </template>
 
@@ -57,7 +50,7 @@ import { SpotifyArtist } from '@/api/spotify/types/entities'
 import { defineComponent, PropType, StyleValue } from 'vue'
 
 export default defineComponent({
-  name: 'TrackCard',
+  name: 'TrackItem',
   props: {
     id: String,
     name: String,
@@ -86,30 +79,29 @@ export default defineComponent({
       MAXIMUM_GENRE_DISPLAYED: 2
     }
   },
+  mounted () {
+    this.MAXIMUM_GENRE_DISPLAYED = window.innerWidth > 500 ? 4 : 2
+  },
   computed: {
-    addComma () {
-      return (artistName: string): string => {
-        if (this.artists[this.artists.length - 1].name === artistName) {
-          return artistName
-        }
-        return `${artistName},`
-      }
-    },
-    // Delay animation so cards appear one after another
+    // Delay animation so items appear one after another
     trackAnimationDelay (): StyleValue {
       const limit = (window.innerWidth > 500) ? 20 : 10
       const delay = (this.trackIndex < limit) ? `${300 * this.trackIndex}ms` : '0ms'
       return { 'animation-delay': delay }
-    },
-    genreAnimationDelay () {
-      return (index: number): StyleValue => {
-        return { 'animation-delay': `${index * 400}ms` }
-      }
     }
   },
   methods: {
+    addCommaDivider (artistName: string, index: number): string {
+      return (index === this.artists.length - 1) ? artistName : `${artistName},`
+    },
+    getGenreAnimationDelay (index: number): StyleValue {
+      return { 'animation-delay': `${index * 400}ms` }
+    },
     openTrackOnSpotify () {
       window.location.href = this.trackURI
+    },
+    openArtistOnSpotify (artist: SpotifyArtist) {
+      window.location.href = artist.uri
     }
   }
 })
@@ -143,34 +135,19 @@ export default defineComponent({
   }
 }
 
-.track-card {
-  animation: track-append 200ms linear;
-  animation-fill-mode: forwards;
+.track-item {
+  width: 100%;
+  padding: 0 !important;
+
   opacity: 0;
   border-bottom: 1px grey solid;
-  padding: 0 !important;
+
+  animation: track-append 200ms linear;
+  animation-fill-mode: forwards;
 }
 
-.card-content {
-  display: flex !important;
-  align-items: center;
-}
-
-.v-card {
-  width: 100%;
-  color: var(--text-color);
-  background-color: var(--primary-color);
-}
-
-.v-card:hover {
-  color: var(--link-color);
-}
-
-.v-card-text {
-  padding: 0;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+.track-item:hover {
+  opacity: 1.1;
 }
 
 .v-img {
@@ -191,6 +168,7 @@ export default defineComponent({
 
 .artist-name {
   padding: 0 !important;
+  opacity: 0.8;
 }
 
 .artist-name:hover {
@@ -207,7 +185,6 @@ export default defineComponent({
 .popularity-chip {
   font-family: "Righteous", Helvetica, Sans-serif !important;
   opacity: 1 !important;
-  margin-bottom: 5px;
 }
 
 .text-h6 {
@@ -228,8 +205,15 @@ export default defineComponent({
 }
 
 .second-line {
+  margin: 5px 0px;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+}
+
+.chips {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
 </style>

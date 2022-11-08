@@ -3,8 +3,8 @@
     <v-list>
       <v-list-subheader>{{ $t('drawer.update-playlist') }}</v-list-subheader>
       <!-- 1.1 Update playlist privacy -->
-      <div v-if="(userOwnsPlaylist || spotifyOwnsPlaylist) && !playlistsStore.playlists[playlistId].collaborative">
-        <v-list-item v-if="playlistsStore.playlists[playlistId].public" @click="setPlaylistPrivate">
+      <div v-if="(userOwnsPlaylist || spotifyOwnsPlaylist) && !playlist.collaborative">
+        <v-list-item v-if="playlist.public" @click="setPlaylistPrivate">
           <v-list-item-title>{{ $t("playlist.set-private") }} {{ $t("_emojis.private") }}</v-list-item-title>
         </v-list-item>
         <v-list-item v-else @click="setPlaylistPublic">
@@ -27,9 +27,7 @@
         <v-card id="deletion-dialog">
           <v-card-title class="text-h5 rainbow-text font-weight-bold">
             {{ $t('playlist.delete.delete') }}
-            <span class="font-italic white-text">
-              {{ playlistsStore.playlists[playlistId].name }}
-            </span>
+            <span class="font-italic white-text"> {{ playlist.name }} </span>
           </v-card-title>
           <v-card-text class="rainbow-text">
             {{ $t('playlist.delete.confirm-message') }}
@@ -62,14 +60,14 @@
         <v-list-item @click="sortPlaylistTracksByArtistName">
           <v-list-item-title>{{ $t('drawer.reorder-by-artist-name') }}</v-list-item-title>
         </v-list-item>
-
-        <v-divider></v-divider>
       </div>
 
+      <v-divider></v-divider>
+
       <!-- (At least 4 tracks to download image) -->
-      <div v-if="playlistsStore.playlists[playlistId].tracks.length > 3">
+      <div v-if="playlist.tracks.length > 3">
+        <!-- 3. Export Image -->
         <v-list-subheader> {{ $t('drawer.export-image') }}</v-list-subheader>
-        <!-- 3.1 Export Image -->
 
         <v-img id="live-image-preview" :src="imagePreview" lazy-src='@/assets/loading-image-preview.jpg'>
           <template v-slot:placeholder>
@@ -78,20 +76,22 @@
             </div>
           </template>
         </v-img>
-        <v-switch v-model="generateImageDisplayTitle" color="var(--text-color)" class="generate-image-switch">
-          <template v-slot:label>
-            <p :class="(generateImageDisplayTitle) ? 'rainbow-text' : ''">{{ $t('drawer.image-display-title') }}</p>
-          </template>
-        </v-switch>
-        <v-switch v-model="generateImageDisplayStats" color="var(--text-color)" class="generate-image-switch">
-          <template v-slot:label>
-            <p :class="(generateImageDisplayStats) ? 'rainbow-text' : ''">{{ $t('drawer.image-display-stats') }}</p>
-          </template>
-        </v-switch>
         <v-slider v-if="maxTick > 0" :ticks="ticks" :max="maxTick" step="1" show-ticks="always" tick-size="4"
           color="var(--text-color)" prepend-icon="mdi-arrange-send-to-back" v-model="generateImageSize" @touchstart.stop
           id="generate-image-size-slider">
         </v-slider>
+        <div id="sliders">
+          <v-switch v-model="generateImageDisplayTitle" color="var(--text-color)" class="generate-image-switch">
+            <template v-slot:label>
+              <p :class="(generateImageDisplayTitle) ? 'rainbow-text' : ''">{{ $t('drawer.image-display-title') }}</p>
+            </template>
+          </v-switch>
+          <v-switch v-model="generateImageDisplayStats" color="var(--text-color)" class="generate-image-switch">
+            <template v-slot:label>
+              <p :class="(generateImageDisplayStats) ? 'rainbow-text' : ''">{{ $t('drawer.image-display-stats') }}</p>
+            </template>
+          </v-switch>
+        </div>
         <div id="generate-image-button">
           <v-btn @click="exportArtistPreview" class="rainbow-v-btn">{{ $t("playlist.export-preview") }}</v-btn>
         </div>
@@ -105,7 +105,8 @@ import { downloadImage, makeImage } from '@/services/playlistImageMaker'
 
 import { usePlaylistsStore } from '@/stores/playlists'
 import { useUserStore } from '@/stores/user'
-import { defineComponent } from 'vue'
+import { storeToRefs } from 'pinia'
+import { defineComponent, toRef } from 'vue'
 
 export default defineComponent({
   name: 'ActionDrawer',
@@ -121,12 +122,17 @@ export default defineComponent({
     },
     filteredTrackLength: Number
   },
-  setup () {
+  setup (props) {
     const playlistsStore = usePlaylistsStore()
     const currentUserUsername = useUserStore().username
 
+    // Shorthand
+    const { playlists } = storeToRefs(playlistsStore)
+    const playlist = toRef(playlists.value, props.playlistId)
+
     return {
       playlistsStore,
+      playlist,
       currentUserUsername
     }
   },
@@ -163,16 +169,12 @@ export default defineComponent({
       return require('@/assets/stars.jpg')
     },
     userOwnsPlaylist (): boolean {
-      return (
-        this.currentUserUsername ===
-        this.playlistsStore.playlists[this.playlistId]
-          .owner.display_name
-      )
+      return this.currentUserUsername === this.playlist.owner.display_name
     },
     spotifyOwnsPlaylist (): boolean {
-      return this.playlistsStore.playlists[this.playlistId].owner.id === 'spotify'
+      return this.playlist.owner.id === 'spotify'
     },
-    ticks () {
+    ticks (): { 0?: '2x2', 1?: '3x3', 2?: '4x4' } {
       const trackNumber = this.playlistsStore.getTopArtists(this.playlistId).length
       const ticks: { 0?: '2x2', 1?: '3x3', 2?: '4x4' } = {}
       if (trackNumber >= 4) ticks[0] = '2x2'
@@ -191,9 +193,7 @@ export default defineComponent({
         ['2x2', '3x3', '4x4'][this.generateImageSize],
         this.generateImageDisplayTitle,
         this.generateImageDisplayStats,
-        (dataUrl: string) => {
-          this.imagePreview = dataUrl
-        }
+        (dataUrl: string) => { this.imagePreview = dataUrl }
       )
     },
     async setPlaylistPrivate () {
@@ -232,11 +232,7 @@ export default defineComponent({
         ['2x2', '3x3', '4x4'][this.generateImageSize],
         this.generateImageDisplayTitle,
         this.generateImageDisplayStats,
-        (dataUrl: string) => {
-          downloadImage(
-            dataUrl,
-            this.playlistsStore.playlists[this.playlistId].name)
-        }
+        (dataUrl: string) => { downloadImage(dataUrl, this.playlist.name) }
       )
     },
     async unfollowPlaylist () {
@@ -280,14 +276,8 @@ export default defineComponent({
 
 #drawer .v-list-subheader {
   font-size: large;
-
-  /* rainbow-text here required */
-  background: linear-gradient(180deg, var(--text-color) 20%, var(--link-color) 51%, var(--text-color) 86%);
-  background-size: 100%;
-  background-repeat: repeat;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--text-color);
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
 }
 
 #drawer .v-list-item {
