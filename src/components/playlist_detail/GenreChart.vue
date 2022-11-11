@@ -8,6 +8,7 @@
 <script lang="ts">
 import { Genre } from '@/model'
 import { defineComponent, PropType } from 'vue'
+
 export default defineComponent({
   name: 'GenreChart',
   props: {
@@ -16,7 +17,7 @@ export default defineComponent({
       required: true
     }
   },
-  mounted () {
+  mounted() {
     const observer = new ResizeObserver(entries => {
       entries.forEach(entry => {
         const cr = entry.contentRect
@@ -27,30 +28,31 @@ export default defineComponent({
     observer.observe((this.$refs.container as HTMLDivElement))
   },
   watch: {
-    genres (newValue: Genre[]) {
+    genres(newValue: Genre[]) {
       this.series = newValue.map((genre) => genre.value)
       this.chartOptions.labels = newValue.map((genre) => genre.cap_name)
     }
   },
-  data () {
+  data() {
     // All data needed to customize graph UI and data
     return {
       // random default value as observer overwrite this
       width: window.innerWidth - 10,
 
       // APEXCHART STYLING
-      lastGenreSelected: false,
-      lastClickedWasSelection: false,
       series: this.genres.map((genre) => genre.value),
+
       chartOptions: {
         chart: {
           width: 380,
           type: 'donut'
         },
         labels: this.genres.map((genre) => genre.cap_name),
+
+        // Names on the graph parts
         dataLabels: {
           enabled: true,
-          formatter (_: number, opts: { w: { globals: { initialSeries: number[] } }, seriesIndex: number }): string[] {
+          formatter(_: number, opts: { w: { globals: { initialSeries: number[] } }, seriesIndex: number }): string[] {
             const number = opts.w.globals.initialSeries[opts.seriesIndex]
             return [number + '']
           }
