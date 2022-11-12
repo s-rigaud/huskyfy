@@ -86,10 +86,10 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'AboutView',
   methods: {
-    openMyMusicOnSpotify() {
+    openMyMusicOnSpotify () {
       window.location.href = process.env.VUE_APP_BASE_SERVER_URL + '/playlist/my-music'
     },
-    backToPreviousPage() {
+    backToPreviousPage () {
       this.$router.go(-1)
     }
   }

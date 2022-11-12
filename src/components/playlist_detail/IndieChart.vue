@@ -1,39 +1,65 @@
 <template>
-  <apexchart type="radialBar" :options="chartOptions" :series="series"></apexchart>
+  <div id="genre-chart-container">
+    <apexchart type="radialBar" :options="chartOptions" :series="series" height="200"></apexchart>
+    <p id="genre-chart-subtitle"> {{ $t("playlist.indie-score-text") }}</p>
+  </div>
 </template>
+
+<style>
+#genre-chart-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#genre-chart-container .vue-apexcharts {
+  min-height: 75px !important;
+}
+
+#genre-chart-container .apexcharts-canvas {
+  height: 50px !important;
+}
+
+#genre-chart-subtitle {
+  color: var(--text-color)
+}
+</style>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { ApexOptions } from 'apexcharts';
+import { ApexOptions } from 'apexcharts'
 
 export default defineComponent({
   name: 'IndieChart',
   props: {
-    indiePercentage: Number,
+    indiePercentage: Number
   },
   watch: {
-    indiePercentage(newValue: number) {
+    indiePercentage (newValue: number) {
       this.series = [newValue]
     }
   },
-  data() {
+  data () {
     // All data needed to customize graph UI and data
     return {
       series: [this.indiePercentage],
       chartOptions: ({
         chart: {
           type: 'radialBar',
+          height: 350,
           offsetY: -20,
           sparkline: {
             enabled: true
           }
         },
+        colors: ['#F39200'],
+        labels: [this.$t('Indie sco%%')],
         plotOptions: {
           radialBar: {
             startAngle: -90,
             endAngle: 90,
             track: {
-              background: "#e7e7e7",
+              background: '#e7e7e7',
               strokeWidth: '97%',
               margin: 5, // margin is in pixels
               dropShadow: {
@@ -41,7 +67,7 @@ export default defineComponent({
                 top: 2,
                 left: 0,
                 color: '#999',
-                opacity: 1,
+                opacity: 0.6,
                 blur: 2
               }
             },
@@ -50,8 +76,10 @@ export default defineComponent({
                 show: false
               },
               value: {
-                offsetY: -2,
-                fontSize: '22px'
+                offsetY: 0,
+                color: '#F39200',
+                fontSize: '36px',
+                show: true
               }
             }
           }
@@ -70,9 +98,9 @@ export default defineComponent({
             opacityFrom: 1,
             opacityTo: 1,
             stops: [0, 50, 53, 91]
-          },
-        },
-      } as ApexOptions),
+          }
+        }
+      } as ApexOptions)
     }
   }
 })

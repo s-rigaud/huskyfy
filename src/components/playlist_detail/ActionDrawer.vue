@@ -248,7 +248,7 @@ export default defineComponent({
 </script>
 <style>
 #drawer {
-  min-width: 30%;
+  min-width: max(25%, 300px);
 }
 
 #drawer .v-slider__container {

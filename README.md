@@ -14,8 +14,6 @@
 
 ## Stack
 
-Vue3 x Vuetify3 x Pinia x Typescript
-
 ![Vue 3](https://img.shields.io/badge/Vue-3.2-brightgreen.svg)
 ![Vuetity 3](https://img.shields.io/badge/Vuetify-3-AEDDFF.svg)
 ![Pinia 2](https://img.shields.io/badge/Pinia-2.0-yellow.svg)
