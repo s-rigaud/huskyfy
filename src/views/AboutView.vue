@@ -33,10 +33,10 @@
       <p>
         {{ $t("about.expose-liked-songs.content.part1") }} {{ $t("_emojis.collaborative") }}
         <br />
-        <a :href="myMusicLink">
+        <span @click="openMyMusicOnSpotify">
           {{ $t("about.expose-liked-songs.content.part2") }}
           <v-img id="my-song-img" width="20" src='@/assets/my-music.jpeg' alt="My Music playlist"></v-img>
-        </a>
+        </span>
       </p>
 
       <div class="subtitle">
@@ -85,13 +85,11 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'AboutView',
-  computed: {
-    myMusicLink (): string {
-      return process.env.VUE_APP_BASE_SERVER_URL + '/playlist/my-music'
-    }
-  },
   methods: {
-    backToPreviousPage () {
+    openMyMusicOnSpotify() {
+      window.location.href = process.env.VUE_APP_BASE_SERVER_URL + '/playlist/my-music'
+    },
+    backToPreviousPage() {
       this.$router.go(-1)
     }
   }

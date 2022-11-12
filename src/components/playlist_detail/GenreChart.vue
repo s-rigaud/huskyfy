@@ -7,6 +7,7 @@
 
 <script lang="ts">
 import { Genre } from '@/model'
+import { ApexOptions } from 'apexcharts'
 import { defineComponent, PropType } from 'vue'
 
 export default defineComponent({
@@ -42,7 +43,7 @@ export default defineComponent({
       // APEXCHART STYLING
       series: this.genres.map((genre) => genre.value),
 
-      chartOptions: {
+      chartOptions: ({
         chart: {
           width: 380,
           type: 'donut'
@@ -52,9 +53,9 @@ export default defineComponent({
         // Names on the graph parts
         dataLabels: {
           enabled: true,
-          formatter(_: number, opts: { w: { globals: { initialSeries: number[] } }, seriesIndex: number }): string[] {
+          formatter(_: string | number | number[], opts?: any): string | number {
             const number = opts.w.globals.initialSeries[opts.seriesIndex]
-            return [number + '']
+            return number
           }
         },
 
@@ -89,7 +90,7 @@ export default defineComponent({
             expandOnClick: false
           }
         }
-      }
+      } as ApexOptions)
     }
   }
 })
