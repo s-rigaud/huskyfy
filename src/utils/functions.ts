@@ -19,3 +19,12 @@ export const range = (start: number, stop: number, step = 1): number[] => {
 export const capitalize = (string: string): string => {
   return string.charAt(0).toUpperCase() + string.slice(1)
 }
+
+export const getDefaultMap = <T extends string, D>(defaultValue: D): Record<T, D> => {
+  return new Proxy(
+    ({} as Record<T, D>),
+    {
+      get: (target: Record<T, D>, name: T) => (name in target ? target[name] : defaultValue)
+    }
+  )
+}

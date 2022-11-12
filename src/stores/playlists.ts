@@ -3,7 +3,7 @@ import { SimplifiedSpotifyPlaylist, SpotifyArtist, SpotifyPlaylist, SpotifyTrack
 import { t } from '@/i18n'
 import { Genre } from '@/model'
 import { useUserStore } from '@/stores/user'
-import { capitalize, range } from '@/utils/functions'
+import { capitalize, getDefaultMap, range } from '@/utils/functions'
 import { RemovableRef, useStorage } from '@vueuse/core'
 import { defineStore } from 'pinia'
 
@@ -46,9 +46,6 @@ type TupleArtistCount = {
   artist: SpotifyArtist
   count: number
 }
-type ArtistCount = {
-  [artistName: string]: TupleArtistCount
-}
 
 export const usePlaylistsStore = defineStore('playlists', {
   state: () => ({
@@ -57,53 +54,52 @@ export const usePlaylistsStore = defineStore('playlists', {
   getters: {
     getTopArtists: (state) => {
       return (playlistId: string, n?: number): TupleArtistCount[] => {
-        const artistCount: ArtistCount = {}
+        const artistCount: Record<string, TupleArtistCount> = {}
+        const ARTIST_UNIQUE_FIELD = 'id'
+
         for (const track of state.playlists[playlistId].tracks) {
           for (const artist of track.artists) {
-            const artistsDictKey = artist.name
-            if (artistCount[artistsDictKey]) {
-              artistCount[artistsDictKey].count += 1
+            const artistKey = artist[ARTIST_UNIQUE_FIELD]
+            if (artistCount[artistKey]) {
+              artistCount[artistKey].count += 1
             } else {
-              artistCount[artistsDictKey] = { artist, count: 1 }
+              artistCount[artistKey] = { artist, count: 1 }
             }
           }
         }
 
         // Use mapping object to sort result in DESC order and returns the top n
-        let sortedArtists = Object.keys(artistCount).map((label) => [
+        let sortedArtists = (Object.keys(artistCount).map((label) => [
           label,
           artistCount[label]
-        ]).sort((a, b) => {
-          return (b[1] as TupleArtistCount).count - (a[1] as TupleArtistCount).count
+        ]) as [string, TupleArtistCount][])
+
+        sortedArtists.sort((a, b) => {
+          return b[1].count - a[1].count
         })
 
         if (n) {
           sortedArtists = sortedArtists.slice(0, n)
         }
-        return sortedArtists.map(a => (a[1] as TupleArtistCount))
+        return sortedArtists.map(a => a[1])
       }
     },
     getTopGenres: (state) => {
       return (playlistId: string, n?: number): Genre[] => {
-        const genreCounter: Record<string, number> = new Proxy(
-          {},
-          {
-            get: (target: Record<string, number>, name: string) => (name in target ? target[name] : 0)
-          }
-        )
+        const genreCounter = getDefaultMap(0)
         for (const track of state.playlists[playlistId].tracks) {
           for (const genre of track.genres) {
             genreCounter[genre] += 1
           }
         }
-        let genreMapping = Object.keys(genreCounter).map((label) => [
+        let genreMapping: [string, number][] = Object.keys(genreCounter).map((label) => [
           label,
           genreCounter[label]
         ])
 
         // DESC sort
         genreMapping.sort((a, b) => {
-          return (b[1] as number) - (a[1] as number)
+          return b[1] - a[1]
         })
 
         if (n) {
@@ -112,9 +108,9 @@ export const usePlaylistsStore = defineStore('playlists', {
 
         // Sampling & formatting
         return genreMapping.map((genre) => ({
-          name: (genre[0] as string),
-          value: (genre[1] as number),
-          cap_name: capitalize((genre[0] as string))
+          name: genre[0],
+          value: genre[1],
+          cap_name: capitalize(genre[0])
         }))
       }
     },
