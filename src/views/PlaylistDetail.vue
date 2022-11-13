@@ -37,15 +37,23 @@
               </p>
             </div>
           </div>
-          <IndieChart v-if="allTracksLoaded" :indie-percentage="indiePercentage" class="playlist-meta-middle" />
-          <div v-if="allTracksLoaded" id="playlist-meta-right">
+          <v-tooltip :text="$t('playlist.explanation-indie-score')" id="indie-tooltip" location="bottom">
+            <template v-slot:activator="{ props }">
+              <IndieChart v-bind="props" :indie-percentage="indiePercentage" class="playlist-meta-middle" />
+            </template>
+          </v-tooltip>
+          <div id="playlist-meta-right">
             <p>
               <span class="rainbow-text">{{ $t('playlist.duration') }}</span>
-              {{ playlistsStore.getPlaylistFullLength(playlistId) }}
+              <span v-if="allTracksLoaded" class="playlist-metric">
+                {{ playlistsStore.getPlaylistFullLength(playlistId) }}
+              </span>
             </p>
             <p>
               <span class="rainbow-text">{{ $t('playlist.total-track-number') }}</span>
-              {{ playlist.tracks.length }}
+              <span v-if="allTracksLoaded" class="playlist-metric">
+                {{ playlist.tracks.length }}
+              </span>
             </p>
           </div>
         </div>
@@ -241,6 +249,15 @@ interface SlotProps {
   index: number
 }
 
+const NO_POPULARITY = 'No filter'
+const Popularity = ({
+  Indie: 'Indie',
+  Popular: 'Popular',
+  NO_POPULARITY
+} as const)
+// eslint-disable-next-line
+type Popularity = typeof Popularity[keyof typeof Popularity]
+
 export default defineComponent({
   name: 'PlaylistDetail',
   props: {
@@ -286,8 +303,8 @@ export default defineComponent({
     return {
       TRACK_REQUEST_LIMIT: 150,
 
-      NO_POPULARITY: 'No filter',
-      selectedPopularity: 'No filter',
+      NO_POPULARITY: (NO_POPULARITY as Popularity),
+      selectedPopularity: (NO_POPULARITY as Popularity),
       selectedArtists: ([] as SpotifyArtist[]),
       selectedGenres: ([] as string[]),
       isFilterExclusive: true,
@@ -369,14 +386,14 @@ export default defineComponent({
 
       // Filter over popularity
       const popularity = this.selectedPopularity
-      if (popularity !== this.NO_POPULARITY) {
+      if (popularity !== NO_POPULARITY) {
         if (this.isFilterExclusive) {
           newFilteredTracks = newFilteredTracks.filter(
-            (t) => t.isIndie === (popularity === 'Indie')
+            (t) => t.isIndie === (popularity === Popularity.Indie)
           )
         } else {
           const validArtistTracks = playlistTracks.filter(
-            (t) => t.isIndie === (popularity === 'Indie')
+            (t) => t.isIndie === (popularity === Popularity.Indie)
           )
           this.addTracksConserveUnicity(newFilteredTracks, validArtistTracks)
         }
@@ -392,7 +409,7 @@ export default defineComponent({
     resetFilters () {
       this.selectedGenres = []
       this.selectedArtists = []
-      this.selectedPopularity = this.NO_POPULARITY
+      this.selectedPopularity = NO_POPULARITY
       this.filteredTracks = this.playlist.tracks
     },
     openPlaylistOnSpotify () {
@@ -419,12 +436,12 @@ export default defineComponent({
     scrollTop () {
       window.scrollTo({ top: 0, behavior: 'smooth' })
     },
-    getTextForPopularity (popularity: string): string {
-      const allPopularities: { [popularity: string]: string } = {
+    getTextForPopularity (popularity: Popularity): string {
+      const allPopularities: Record<Popularity, string> = {
         Indie: this.$t('track.filters.indie'),
-        Popular: this.$t('track.filters.popular')
+        Popular: this.$t('track.filters.popular'),
+        'No filter': this.$t('track.filters.no-filter')
       }
-      allPopularities[this.NO_POPULARITY] = this.$t('track.filters.no-filter')
       return allPopularities[popularity]
     },
     // Returns only top genres sorted by most to least popular
@@ -433,8 +450,8 @@ export default defineComponent({
       return this.playlistsStore.getTopGenres(this.playlistId, limit)
     },
     getColorForPopularity (popularity: string): string {
-      if (popularity === 'Indie') return 'green'
-      if (popularity === 'Popular') return 'red'
+      if (popularity === Popularity.Indie) return 'green'
+      if (popularity === Popularity.Popular) return 'red'
       return '#ddd'
     }
   },
@@ -445,7 +462,7 @@ export default defineComponent({
     generalTitle (): string {
       const keyword = (this.isFilterExclusive) ? this.$t('track.filters.keyword.and') : this.$t('track.filters.keyword.or')
       const separator = ` ${keyword} `
-      const popularityFilter = (this.selectedPopularity !== this.NO_POPULARITY) ? [this.selectedPopularity] : []
+      const popularityFilter: string[] = (this.selectedPopularity !== NO_POPULARITY) ? [this.selectedPopularity] : []
       const filters = popularityFilter.concat(this.selectedGenres).concat(this.selectedArtists.map(a => a.name))
       return `${filters.map(f => capitalize(f)).join(separator)}` || this.$t('track.all-tracks')
     },
@@ -461,7 +478,6 @@ export default defineComponent({
     },
     usernameToDisplay (): string {
       const playlistCreator = this.playlist.owner.display_name
-
       return this.currentUserUsername === playlistCreator ? this.$t('playlist.you') : playlistCreator
     },
     getEmojiFromVisibility (): string {
@@ -486,7 +502,7 @@ export default defineComponent({
       return (
         this.selectedGenres.length +
         this.selectedArtists.length +
-        ((this.selectedPopularity !== this.NO_POPULARITY) ? 1 : 0)
+        +(this.selectedPopularity !== NO_POPULARITY)
       )
     }
   },
@@ -580,6 +596,10 @@ export default defineComponent({
   display: none !important;
 }
 
+.playlist-meta-middle {
+  cursor: pointer;
+}
+
 #playlist-meta-right {
   display: none;
 
@@ -617,6 +637,10 @@ export default defineComponent({
 
 #playlist-description {
   padding: 5px 10px 10px 10px;
+}
+
+.playlist-metric {
+  margin-left: 5px;
 }
 
 #help-indie-percentage {
@@ -686,6 +710,11 @@ export default defineComponent({
 
 #filtering-chips>div>span {
   margin: 1px 1px;
+}
+
+#filters-and-reset .v-switch {
+  margin-left: 10px;
+  width: fit-content;
 }
 
 #filters-and-reset .v-switch .v-switch__thumb {

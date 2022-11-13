@@ -65,7 +65,8 @@ export default defineComponent({
   },
   data () {
     return {
-      ALWAYS_TRUE: true,
+      ALWAYS_TRUE: (true as const),
+
       isLoaded: false,
       waitingForResponse: false
     }

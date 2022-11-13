@@ -1,10 +1,11 @@
 # TODO
 
-[ ] TS: Fix other Github branch for reordering playlist
+- [ ] 🚧: Fix other Github branch for reordering playlist
+- [ ] 🚧: Fix duplication process launched by filters
+- [ ] 🎨: Better style for filtering tags
+- [ ] 🎨: Give each genre a color and use it in both TrackCard and filtering chips
+- [ ] 🔖: Factorise genres returned by Spotify
 
-[ ] UI: Fix style for larger screens (only head of PlaylistDetail left)
-
-[ ] UI: Better style for filtering tags
 
 1. [X] Check frontend playlist
 2. [X] Read Spotify design recommendation

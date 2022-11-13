@@ -61,33 +61,29 @@ export default defineComponent({
   },
   methods: {
     getAverageColor (color1: string, color2: string, percentage: number): string {
-      const rgbColor1 = (color1.replace('#', '').match(/.{1,2}/g) as RegExpMatchArray).map(hex => parseInt(hex, 16))
-      const rgbColor2 = (color2.replace('#', '').match(/.{1,2}/g) as RegExpMatchArray).map(hex => parseInt(hex, 16))
+      const hexToRGB = (color: string): number[] => {
+        return (color.replace('#', '').match(/.{1,2}/g) as RegExpMatchArray).map(hex => parseInt(hex, 16))
+      }
+      const rgbToHex = (rgb: number[]): string => {
+        return (
+          '#' +
+          (~~(rgb[0])).toString(16).padStart(2, '0') +
+          (~~(rgb[1])).toString(16).padStart(2, '0') +
+          (~~(rgb[2])).toString(16).padStart(2, '0')
+        )
+      }
 
-      console.error(rgbColor1, rgbColor2)
+      const rgbColor1 = hexToRGB(color1)
+      const rgbColor2 = hexToRGB(color2)
 
       const realPercentage = percentage / 100
-      console.error(realPercentage)
-
       const rgbAverageColor = [
         (rgbColor1[0] * (1 - realPercentage) + rgbColor2[0] * realPercentage),
         (rgbColor1[1] * (1 - realPercentage) + rgbColor2[1] * realPercentage),
         (rgbColor1[2] * (1 - realPercentage) + rgbColor2[2] * realPercentage)
       ]
-      console.error(rgbAverageColor)
-      console.error((~~(rgbAverageColor[0])).toString(16).padStart(2, '0'))
-      console.error((~~(rgbAverageColor[1])).toString(16).padStart(2, '0'))
-      console.error((~~(rgbAverageColor[2])).toString(16).padStart(2, '0'))
 
-      const hexAverageColor = (
-        '#' +
-        (~~(rgbAverageColor[0])).toString(16).padStart(2, '0') +
-        (~~(rgbAverageColor[1])).toString(16).padStart(2, '0') +
-        (~~(rgbAverageColor[2])).toString(16).padStart(2, '0')
-      )
-      console.error(hexAverageColor)
-
-      return hexAverageColor
+      return rgbToHex(rgbAverageColor)
     }
   },
   data () {
