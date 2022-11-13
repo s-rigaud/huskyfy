@@ -1,17 +1,17 @@
 {
+    "404": {
+        "title": {
+            "part1": "You are lost ! ",
+            "part2": "This is a 404 page"
+        },
+        "button": "Try to head back from where you come"
+    },
     "_emojis": {
         "public": "📣",
         "collaborative": "👪",
         "private": "🔒",
         "popular": "🔥",
         "indie": "🌴"
-    },
-    "page-title": {
-        "about": "About",
-        "explore": "Explore",
-        "login": "Login",
-        "playlist": "Playlist",
-        "duplicate-my-music": "Duplicate My Music playlist"
     },
     "about": {
         "connection": {
@@ -50,8 +50,21 @@
             "content": "The Huskyfy logo and other images are from "
         }
     },
+    "drawer": {
+        "update-playlist": "Update playlist",
+        "reorder-playlist": "Reorder the playlist according to the",
+        "reorder-by-genre": "Most present genres",
+        "reorder-by-artist-pop": "Most present artists",
+        "reorder-by-artist-name": "Names of the artists",
+        "export-image": "Export artist image",
+        "image-display-title": "Display title",
+        "image-display-stats": "Display stats"
+    },
     "footer": {
         "built": "Built with ♥ by"
+    },
+    "generating-picture": {
+        "subtitle": "{count} most popular playlist artists"
     },
     "login": {
         "about": "Learn more about this website",
@@ -67,6 +80,13 @@
     "navbar": {
         "logout": "Sign out"
     },
+    "page-title": {
+        "about": "About",
+        "explore": "Explore",
+        "login": "Login",
+        "playlist": "Playlist",
+        "duplicate-my-music": "Duplicate My Music playlist"
+    },
     "playlist": {
         "you": "you",
         "collaborative": "Collaborative playlist",
@@ -79,6 +99,7 @@
         },
         "indie-score-text": "Indie score",
         "duration": "Duration",
+        "no-description": "No description",
         "total-track-number": "Total number of tracks",
         "duplicate": {
             "button": "Duplicate the playlist ",
@@ -140,25 +161,5 @@
         "name": "tracks",
         "no-genre": "No genre provided",
         "popular": "🔥 Popular artist | 🔥 Popular artists"
-    },
-    "404": {
-        "title": {
-            "part1": "You are lost ! ",
-            "part2": "This is a 404 page"
-        },
-        "button": "Try to head back from where you come"
-    },
-    "drawer": {
-        "update-playlist": "Update playlist",
-        "reorder-playlist": "Reorder the playlist according to the",
-        "reorder-by-genre": "Most present genres",
-        "reorder-by-artist-pop": "Most present artists",
-        "reorder-by-artist-name": "Names of the artists",
-        "export-image": "Export artist image",
-        "image-display-title": "Display title",
-        "image-display-stats": "Display stats"
-    },
-    "generating-picture": {
-        "subtitle": "{count} most popular playlist artists"
     }
 }

@@ -51,7 +51,7 @@
         </div>
         <v-card-text id="playlist-description">
           <p id="description" v-if="formattedDescription"> {{ formattedDescription }} </p>
-          <p id="description" class="font-italic" v-else> {{ $t('no description %%') }} </p>
+          <p id="description" class="font-italic" v-else> {{ $t('playlist.no-description') }} </p>
         </v-card-text>
 
         <v-icon id="burger-button" @click="drawer = !drawer" color="var(--text-color)">

@@ -29,8 +29,8 @@
 import { defineComponent } from 'vue'
 import { ApexOptions } from 'apexcharts'
 
-const LOWEST_VALUE_COLOR = '#f3d200'
-const HIGHEST_VALUE_COLOR = '#76f921'
+const LOWEST_VALUE_COLOR = '#f35800'
+const HIGHEST_VALUE_COLOR = '#21f92e'
 
 export default defineComponent({
   name: 'IndieChart',
@@ -38,7 +38,7 @@ export default defineComponent({
     indiePercentage: Number
   },
   watch: {
-    indiePercentage(newValue: number) {
+    indiePercentage (newValue: number) {
       this.series = [newValue]
 
       const averageColor = this.getAverageColor(LOWEST_VALUE_COLOR, HIGHEST_VALUE_COLOR, newValue)
@@ -60,7 +60,7 @@ export default defineComponent({
     }
   },
   methods: {
-    getAverageColor(color1: string, color2: string, percentage: number): string {
+    getAverageColor (color1: string, color2: string, percentage: number): string {
       const rgbColor1 = (color1.replace('#', '').match(/.{1,2}/g) as RegExpMatchArray).map(hex => parseInt(hex, 16))
       const rgbColor2 = (color2.replace('#', '').match(/.{1,2}/g) as RegExpMatchArray).map(hex => parseInt(hex, 16))
 
@@ -70,9 +70,9 @@ export default defineComponent({
       console.error(realPercentage)
 
       const rgbAverageColor = [
-        (rgbColor1[0] * realPercentage + rgbColor2[0] * (1 - realPercentage)) / 2,
-        (rgbColor1[1] * realPercentage + rgbColor2[1] * (1 - realPercentage)) / 2,
-        (rgbColor1[2] * realPercentage + rgbColor2[2] * (1 - realPercentage)) / 2
+        (rgbColor1[0] * (1 - realPercentage) + rgbColor2[0] * realPercentage),
+        (rgbColor1[1] * (1 - realPercentage) + rgbColor2[1] * realPercentage),
+        (rgbColor1[2] * (1 - realPercentage) + rgbColor2[2] * realPercentage)
       ]
       console.error(rgbAverageColor)
       console.error((~~(rgbAverageColor[0])).toString(16).padStart(2, '0'))
@@ -90,7 +90,7 @@ export default defineComponent({
       return hexAverageColor
     }
   },
-  data() {
+  data () {
     // All data needed to customize graph UI and data
     return {
       series: [this.indiePercentage],
@@ -145,9 +145,9 @@ export default defineComponent({
           type: 'gradient',
           gradient: {
             shade: 'light',
-            type: 'vertical',
+            type: 'diagonal2',
             gradientToColors: [LOWEST_VALUE_COLOR],
-            stops: [0, 100]
+            stops: [-0]
           }
         }
       } as ApexOptions)

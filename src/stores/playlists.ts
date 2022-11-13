@@ -164,7 +164,16 @@ export const usePlaylistsStore = defineStore('playlists', {
     },
     // Retrieve playlists for user
     async getUserPlaylists (offset: number) {
-      const userStore = useUserStore()
+      const username = useUserStore().username
+
+      // Delete playlist tracks if too many playlists already loaded
+      let playlistsAlreadyLoaded = 0
+      for (const playlistId of Object.keys(this.playlists)) {
+        playlistsAlreadyLoaded += +(this.playlists[playlistId].tracks.length > 10)
+      }
+      if (playlistsAlreadyLoaded > 10) {
+        this.softReset()
+      }
 
       const response = await api.spotify.playlists.getUserPlaylists(
         MAX_PLAYLISTS_LIMIT,
@@ -172,7 +181,7 @@ export const usePlaylistsStore = defineStore('playlists', {
       )
       offset += MAX_PLAYLISTS_LIMIT
       const playlists = response.data.items
-      playlists.unshift(this.getLikedSongPlaylist(userStore.username))
+      playlists.unshift(this.getLikedSongPlaylist(username))
 
       // Update existing playlist or create it
       for (const requestPlaylist of playlists) {
@@ -199,7 +208,7 @@ export const usePlaylistsStore = defineStore('playlists', {
         } else {
           this.playlists[requestPlaylist.id] = {
             ...requestPlaylist,
-            total: this.getTrackCount(requestPlaylist, userStore.username),
+            total: this.getTrackCount(requestPlaylist, username),
             tracks: []
           }
         }
