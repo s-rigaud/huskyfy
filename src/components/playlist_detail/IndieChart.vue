@@ -1,6 +1,6 @@
 <template>
   <div id="genre-chart-container">
-    <apexchart type="radialBar" :options="chartOptions" :series="series" height="200"></apexchart>
+    <apexchart type="radialBar" :options="chartOptions" :series="series"></apexchart>
     <p id="genre-chart-subtitle"> {{ $t("playlist.indie-score-text") }}</p>
   </div>
 </template>
@@ -29,6 +29,9 @@
 import { defineComponent } from 'vue'
 import { ApexOptions } from 'apexcharts'
 
+const LOWEST_VALUE_COLOR = '#f3d200'
+const HIGHEST_VALUE_COLOR = '#76f921'
+
 export default defineComponent({
   name: 'IndieChart',
   props: {
@@ -37,6 +40,54 @@ export default defineComponent({
   watch: {
     indiePercentage(newValue: number) {
       this.series = [newValue]
+
+      const averageColor = this.getAverageColor(LOWEST_VALUE_COLOR, HIGHEST_VALUE_COLOR, newValue)
+      this.chartOptions = {
+        ...this.chartOptions,
+        ...{
+          colors: [averageColor],
+          plotOptions: {
+            radialBar: {
+              dataLabels: {
+                value: {
+                  color: this.getAverageColor(LOWEST_VALUE_COLOR, HIGHEST_VALUE_COLOR, newValue)
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  methods: {
+    getAverageColor(color1: string, color2: string, percentage: number): string {
+      const rgbColor1 = (color1.replace('#', '').match(/.{1,2}/g) as RegExpMatchArray).map(hex => parseInt(hex, 16))
+      const rgbColor2 = (color2.replace('#', '').match(/.{1,2}/g) as RegExpMatchArray).map(hex => parseInt(hex, 16))
+
+      console.error(rgbColor1, rgbColor2)
+
+      const realPercentage = percentage / 100
+      console.error(realPercentage)
+
+      const rgbAverageColor = [
+        (rgbColor1[0] * realPercentage + rgbColor2[0] * (1 - realPercentage)) / 2,
+        (rgbColor1[1] * realPercentage + rgbColor2[1] * (1 - realPercentage)) / 2,
+        (rgbColor1[2] * realPercentage + rgbColor2[2] * (1 - realPercentage)) / 2
+      ]
+      console.error(rgbAverageColor)
+      console.error((~~(rgbAverageColor[0])).toString(16).padStart(2, '0'))
+      console.error((~~(rgbAverageColor[1])).toString(16).padStart(2, '0'))
+      console.error((~~(rgbAverageColor[2])).toString(16).padStart(2, '0'))
+
+      const hexAverageColor = (
+        '#' +
+        (~~(rgbAverageColor[0])).toString(16).padStart(2, '0') +
+        (~~(rgbAverageColor[1])).toString(16).padStart(2, '0') +
+        (~~(rgbAverageColor[2])).toString(16).padStart(2, '0')
+      )
+      console.error(hexAverageColor)
+
+      return hexAverageColor
     }
   },
   data() {
@@ -46,16 +97,15 @@ export default defineComponent({
       chartOptions: ({
         chart: {
           type: 'radialBar',
-          height: 350,
           offsetY: -20,
           sparkline: {
             enabled: true
           }
         },
         stroke: {
-          lineCap: "round",
+          lineCap: 'round'
         },
-        colors: ['#F39200'],
+        colors: [HIGHEST_VALUE_COLOR],
         plotOptions: {
           radialBar: {
             startAngle: -90,
@@ -79,7 +129,7 @@ export default defineComponent({
               },
               value: {
                 offsetY: 0,
-                color: '#F39200',
+                color: '#000000',
                 fontSize: '36px',
                 show: true
               }
@@ -95,11 +145,9 @@ export default defineComponent({
           type: 'gradient',
           gradient: {
             shade: 'light',
-            shadeIntensity: 0.4,
-            inverseColors: false,
-            opacityFrom: 1,
-            opacityTo: 1,
-            stops: [0, 50, 53, 91]
+            type: 'vertical',
+            gradientToColors: [LOWEST_VALUE_COLOR],
+            stops: [0, 100]
           }
         }
       } as ApexOptions)
