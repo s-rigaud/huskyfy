@@ -40,8 +40,8 @@ export default {
     return request.get(`playlists/${playlistId}/tracks`, {
       params: {
         limit,
-        offset,
-        fields: 'items(track(id,name,type,uri,album.images,artists(id, name, uri, followers, images, genres)),is_local),total,limit,offset'
+        offset
+        // fields: 'items(track(id,name,type,uri,duration_ms,album.images,artists(id, name, uri, followers, images, genres)),is_local),total,limit,offset'
       }
     })
   },

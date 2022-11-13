@@ -79,6 +79,9 @@ export interface SpotifyTrack {
     track: boolean;
     type: string;
     uri: string;
+    duration_ms: number;
+
+    // Fields added by Huskyfy
     isIndie: boolean;
     genres: string[];
 }

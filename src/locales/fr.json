@@ -81,6 +81,8 @@
 			"disagree": "Annuler"
 		},
 		"indie-score-text": "Score indé",
+		"duration": "Durée",
+		"total-track-number": "Nombre total de titres",
 		"duplicate": {
 			"button": "Dupliquer la playlist ",
 			"copy-of": "Copie de",

@@ -5,7 +5,8 @@
     <template v-slot:prepend>
       <p class="track-index">{{ trackIndex + 1 }}</p>
       <v-avatar class="ma-3 track-image" size="90" rounded="0">
-        <v-img rel="preconnect" v-bind:src="image" lazy-src='@/assets/default_cover.jpg' alt="Cover image"></v-img>
+        <v-img rel="preconnect" v-bind:src="image" lazy-src='@/assets/default_cover.jpg' alt="Cover image"
+          :option="{ rootMargin: '100px' }"></v-img>
       </v-avatar>
     </template>
 
@@ -13,7 +14,7 @@
     <div class="second-line">
       <div v-for="(artist, index) in artists" class="artist-names" :key="artist.id"
         @click.stop="openArtistOnSpotify(artist)">
-        <v-list-item-subtitle class="artist-name text-truncate">
+        <v-list-item-subtitle class="artist-name text-truncate" v-ripple.stop>
           {{ addCommaDivider(artist.name, index) }}
         </v-list-item-subtitle>
       </div>
@@ -25,8 +26,7 @@
       </v-chip>
     </div>
 
-    <!-- TODO -->
-    <!-- Genre chips (Should be VSlideGroup but not yet implemented until Vuetify 3.1) -->
+    <!-- TODO Genre chips (Should be VSlideGroup but not yet implemented until Vuetify 3.1) -->
     <div v-if="genres.length > 0" class="chips">
       <v-chip v-for="(genre, index) in genres.slice(0, MAXIMUM_GENRE_DISPLAYED)" :key="genre"
         :text="genre.toUpperCase()" label size="small" class="genre-chip" :style="getGenreAnimationDelay(index)">
@@ -73,34 +73,34 @@ export default defineComponent({
       required: true
     }
   },
-  data () {
+  data() {
     return {
       displayAllGenres: false,
       MAXIMUM_GENRE_DISPLAYED: 2
     }
   },
-  mounted () {
+  mounted() {
     this.MAXIMUM_GENRE_DISPLAYED = window.innerWidth > 500 ? 4 : 2
   },
   computed: {
     // Delay animation so items appear one after another
-    trackAnimationDelay (): StyleValue {
+    trackAnimationDelay(): StyleValue {
       const limit = (window.innerWidth > 500) ? 20 : 10
       const delay = (this.trackIndex < limit) ? `${300 * this.trackIndex}ms` : '0ms'
       return { 'animation-delay': delay }
     }
   },
   methods: {
-    addCommaDivider (artistName: string, index: number): string {
+    addCommaDivider(artistName: string, index: number): string {
       return (index === this.artists.length - 1) ? artistName : `${artistName},`
     },
-    getGenreAnimationDelay (index: number): StyleValue {
+    getGenreAnimationDelay(index: number): StyleValue {
       return { 'animation-delay': `${index * 400}ms` }
     },
-    openTrackOnSpotify () {
+    openTrackOnSpotify() {
       window.location.href = this.trackURI
     },
-    openArtistOnSpotify (artist: SpotifyArtist) {
+    openArtistOnSpotify(artist: SpotifyArtist) {
       window.location.href = artist.uri
     }
   }
@@ -139,15 +139,10 @@ export default defineComponent({
   width: 100%;
   padding: 0 !important;
 
-  opacity: 0;
   border-bottom: 1px grey solid;
 
   animation: track-append 200ms linear;
   animation-fill-mode: forwards;
-}
-
-.track-item:hover {
-  opacity: 1.1;
 }
 
 .v-img {
@@ -159,11 +154,12 @@ export default defineComponent({
 }
 
 .artist-names {
-  margin-right: 5px;
-  text-decoration: none;
-  color: var(--link-color);
   max-width: 100%;
+  margin-right: 5px;
   padding: 0 !important;
+
+  color: var(--link-color);
+  text-decoration: none;
 }
 
 .artist-name {

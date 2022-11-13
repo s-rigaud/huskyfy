@@ -1,10 +1,10 @@
 # TODO
 
-[ ] Fix other Github branch for reordering playlist
+[ ] TS: Fix other Github branch for reordering playlist
 
-[ ] Fix style for larger screens (only head of PlaylistDetail left)
+[ ] UI: Fix style for larger screens (only head of PlaylistDetail left)
 
-[ ] Better style for filtering tags
+[ ] UI: Better style for filtering tags
 
 1. [X] Check frontend playlist
 2. [X] Read Spotify design recommendation

@@ -7,7 +7,7 @@
 
 <style>
 #genre-chart-container {
-  display: flex;
+  display: flex !important;
   flex-direction: column;
   align-items: center;
 }
@@ -35,11 +35,11 @@ export default defineComponent({
     indiePercentage: Number
   },
   watch: {
-    indiePercentage (newValue: number) {
+    indiePercentage(newValue: number) {
       this.series = [newValue]
     }
   },
-  data () {
+  data() {
     // All data needed to customize graph UI and data
     return {
       series: [this.indiePercentage],
@@ -52,8 +52,10 @@ export default defineComponent({
             enabled: true
           }
         },
+        stroke: {
+          lineCap: "round",
+        },
         colors: ['#F39200'],
-        labels: [this.$t('Indie sco%%')],
         plotOptions: {
           radialBar: {
             startAngle: -90,

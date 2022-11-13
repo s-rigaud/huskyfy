@@ -134,8 +134,21 @@ export const usePlaylistsStore = defineStore('playlists', {
         }
         return ~~(indieTracks / tracks.length * 100)
       }
+    },
+    getPlaylistFullLength (state) {
+      return (playlistId: string): string => {
+        const durationInMS = state.playlists[playlistId].tracks.reduce(
+          (duration, nexTrack) => duration + nexTrack.duration_ms,
+          0
+        )
+        const durationInSeconds = ~~(durationInMS / 1000)
+        const seconds = durationInSeconds % 60
+        const hours = ~~(durationInSeconds / (60 * 60))
+        const minutes = (durationInSeconds - hours * (60 * 60) - seconds) / 60
+        if (hours) return `${hours} h ${minutes} min`
+        return `${minutes} min ${seconds}s`
+      }
     }
-
   },
   actions: {
     reset () {
