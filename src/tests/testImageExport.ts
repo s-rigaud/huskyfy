@@ -1,5 +1,5 @@
 import { SpotifyArtist, SpotifyTrack } from "@/api/spotify/types/entities"
-import { makeImage, GridSize } from "@/services/playlistImageMaker"
+import { makeImage, GridSize, downloadImage } from "@/services/playlistImageMaker"
 import { usePlaylistsStore } from "@/stores/playlists"
 import { range } from "@/utils/functions"
 
@@ -16,8 +16,8 @@ const generateRandomString = (length: number): string => {
 
 export const testImageGeneration_generatePlenty = () => {
     const availableGridSizes: GridSize[] = [2, 3, 4]
-    const empiricPopularityBreakpoints = range(0, 100, 10)
-    const empiricPlaylistTitleLength = range(0, 40, 7)
+    const empiricPopularityBreakpoints = range(0, 101, 25)
+    const empiricPlaylistTitleLength = range(3, 40, 7)
 
     let imageNumber = 0
     for (const gridSize of availableGridSizes) {
@@ -51,17 +51,27 @@ export const testImageGeneration_generatePlenty = () => {
 
                     tracks: createFakeTracks(gridSize, indiePopularity),
                 }
-                makeImage(playlistId, gridSize, true, true, console.error);
+                makeImage(
+                    playlistId,
+                    gridSize,
+                    true,
+                    true,
+                    (dataUrl) => {
+                        downloadImage(dataUrl, `test-image-${imageNumber}`);
+                        delete playlistsStore.playlists[playlistId]
+                    }
+                );
+                imageNumber += 1
             }
         }
     }
 
 }
 
-const createFakeTracks = (gridSize: number, indiePopularity: number): SpotifyTrack[] => {
+const createFakeTracks = (gridSize: number, targetedIndiePopularity: number): SpotifyTrack[] => {
     const fakeTracks: SpotifyTrack[] = []
     for (let index = 0; index < gridSize ** 2; index++) {
-        const currentGeneralIndieScore = fakeTracks.reduce((score, t) => score + +(t.isIndie), 0)
+        const currentGeneralIndieScore = fakeTracks.reduce((score, t) => score + +(t.isIndie), 0) / fakeTracks.length * 100
 
         fakeTracks.push({
             album: { images: [] },
@@ -74,7 +84,7 @@ const createFakeTracks = (gridSize: number, indiePopularity: number): SpotifyTra
             type: "track",
             uri: "",
             duration_ms: 35,
-            isIndie: currentGeneralIndieScore < indiePopularity,
+            isIndie: currentGeneralIndieScore < targetedIndiePopularity,
             genres: ["pop", "groove", "indie", "rock"],
         })
     }
@@ -86,7 +96,7 @@ const generateFakeArtist = (index: number): SpotifyArtist => {
         followers: { total: 2 },
         genres: ["pop", "groove", "indie", "rock"],
         id: `artist-${index}`,
-        images: [require('@/assets/default_cover.jpg')],
+        images: [{ url: require('@/assets/default_cover.jpg') }],
         name: `artist-${index}`,
         uri: "",
     }

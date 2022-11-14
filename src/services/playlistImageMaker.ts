@@ -136,7 +136,7 @@ const addCanvasTitle = (
   ctx.fillStyle = '#F9B621'
 
   const subText = t('generating-picture.subtitle', { count: gridSize ** 2 })
-  ctx.fillText(subText, 400 / 2, 35 + fontSize / 3)
+  ctx.fillText(subText, 400 / 2, 45 + gridSize)
 }
 
 const addCanvasArtistImages = (
@@ -185,10 +185,10 @@ const addCanvasLegend = (
   const INDIE_BACKGROUND_COLOR = '#27ae6077'
   const INDIE_TEXT_COLOR = '#27ae60'
   const POPULAR_BACKGROUND_COLOR = '#e67e2277'
-  const POPULAR_TEXT_COLOR = '#e67e22'
+  const POPULAR_TEXT_COLOR = '#e74c3c'
 
   // 1. INDIE PERCENTAGES
-  const indiePercentage = 65// playlistsStore.getIndiePercentage(playlistId)
+  const indiePercentage = playlistsStore.getIndiePercentage(playlistId)
   if (indiePercentage > 65) {
     // Only indie percentage
     ctx.fillStyle = '#fff'

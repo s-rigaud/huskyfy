@@ -20,14 +20,14 @@
 import FooterComponent from '@/components/FooterComponent.vue'
 import NavbarComponent from '@/components/NavbarHeader.vue'
 import { defineComponent } from 'vue'
+import { testImageGeneration_generatePlenty } from './tests/testImageExport'
 
 export default defineComponent({
   name: 'App',
   components: { NavbarComponent, FooterComponent },
-  created () {
+  created() {
     document.documentElement.lang = this.$i18n.locale
-  }
-})
+  }})
 </script>
 <style scoped>
 @font-face {

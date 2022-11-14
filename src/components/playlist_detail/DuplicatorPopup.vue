@@ -52,8 +52,6 @@ export default defineComponent({
     async createNewPlaylist() {
       this.loadingText = this.$t('playlist.new.create')
       this.loadingPercentage = 1
-      console.error(this.playlistsStore.playlists);
-
       const newPlaylistId = await this.playlistsStore.createPlaylist(
         this.playlistId,
         this.getNewPlaylistName(),
@@ -64,8 +62,6 @@ export default defineComponent({
 
       this.loadingText = this.$t('playlist.new.cover')
       this.loadingPercentage = 33
-      console.error(this.playlistsStore.playlists);
-
       await this.playlistsStore.updatePlaylistCover(
         newPlaylistId,
         this.playlistsStore.playlists[this.playlistId].images[0].url
