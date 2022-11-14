@@ -55,7 +55,7 @@ export default defineComponent({
       this.waitingForResponse = true
       // Arbitrary
       if (this.playlist.total > 500) {
-        this.playlistsStore.softReset()
+        this.playlistsStore.softReset(this.playlist.id)
       }
       await this.downloadPlaylistTracks(this.playlist.id, this.playlist.total)
       this.waitingForResponse = false

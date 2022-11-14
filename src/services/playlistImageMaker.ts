@@ -15,9 +15,11 @@ export const downloadImage = (url: string, playlistName: string) => {
   a.remove()
 }
 
+export type GridSize = 2 | 3 | 4
+
 export const makeImage = (
   playlistId: string,
-  size: string | number,
+  size: string | GridSize,
   showTitle: boolean,
   showStats: boolean,
   callback: { (dataUrl: string): void; }
@@ -26,7 +28,7 @@ export const makeImage = (
   const playlist = playlistsStore.playlists[playlistId]
 
   if (typeof size === 'string') {
-    size = parseInt(size.charAt(0))
+    size = (parseInt(size.charAt(0)) as GridSize)
   }
 
   const topArtists = playlistsStore.getTopArtists(playlistId, size ** 2)
@@ -49,7 +51,7 @@ export const makeImage = (
         imageLoadCounter++
 
         if (imageLoadCounter === images.length) {
-          const dataUrl = createCanvas(artistNames, images, playlist, (size as number), showTitle, showStats)
+          const dataUrl = createCanvas(artistNames, images, playlist, (size as GridSize), showTitle, showStats)
           // Had to use callback as HtmlImageElement.onload is asynchronous and can't be awaited
           callback(dataUrl)
         }
@@ -62,7 +64,7 @@ const createCanvas = (
   artistNames: string[],
   images: HTMLImageElement[],
   playlist: SpotifyPlaylist,
-  gridSize: number,
+  gridSize: GridSize,
   showTitle: boolean,
   showStats: boolean
 ): string => {
@@ -105,7 +107,7 @@ const createCanvas = (
 const addCanvasTitle = (
   ctx: CanvasRenderingContext2D,
   playlistName: string,
-  gridSize: number
+  gridSize: GridSize
 ) => {
   let fontSize: number
   const characterLength = playlistName.length
@@ -141,7 +143,7 @@ const addCanvasArtistImages = (
   ctx: CanvasRenderingContext2D,
   artistNames: string[],
   images: HTMLImageElement[],
-  gridSize: number,
+  gridSize: GridSize,
   heightStart: number,
   artistNameHeight: number
 ) => {

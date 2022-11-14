@@ -36,22 +36,23 @@ export default defineComponent({
       required: true
     }
   },
-  setup () {
+  setup() {
     const playlistsStore = usePlaylistsStore()
     return { playlistsStore }
   },
-  async created () {
+  async created() {
     await this.createNewPlaylist()
   },
   computed: {
-    timeout (): number {
+    timeout(): number {
       return this.loadingPercentage === 100 ? 10_000 : -1
     }
   },
   methods: {
-    async createNewPlaylist () {
+    async createNewPlaylist() {
       this.loadingText = this.$t('playlist.new.create')
       this.loadingPercentage = 1
+      console.error(this.playlistsStore.playlists);
 
       const newPlaylistId = await this.playlistsStore.createPlaylist(
         this.playlistId,
@@ -63,6 +64,8 @@ export default defineComponent({
 
       this.loadingText = this.$t('playlist.new.cover')
       this.loadingPercentage = 33
+      console.error(this.playlistsStore.playlists);
+
       await this.playlistsStore.updatePlaylistCover(
         newPlaylistId,
         this.playlistsStore.playlists[this.playlistId].images[0].url
@@ -79,10 +82,10 @@ export default defineComponent({
       this.loadingPercentage = 100
       this.newPlaylistId = newPlaylistId
     },
-    displayNewPlaylistDetails () {
+    displayNewPlaylistDetails() {
       window.location.href = `/playlist/${this.newPlaylistId}`
     },
-    getNewPlaylistName (): string {
+    getNewPlaylistName(): string {
       const basePlaylist = this.playlistsStore.playlists[this.playlistId]
       let newPlaylistName: string
       if (this.selectedGenres.length > 0) {
@@ -92,7 +95,7 @@ export default defineComponent({
       }
       return newPlaylistName
     },
-    getNewPlaylistDescription (): string {
+    getNewPlaylistDescription(): string {
       const basePlaylist = this.playlistsStore.playlists[this.playlistId]
       let genreString = ''
       if (this.selectedGenres.length > 0) {
@@ -107,7 +110,7 @@ export default defineComponent({
       ].join(' ')
     }
   },
-  data () {
+  data() {
     return {
       loadingPercentage: 0,
       loadingText: '',
@@ -118,7 +121,7 @@ export default defineComponent({
     }
   },
   watch: {
-    snackbarVisible (newValue: boolean) {
+    snackbarVisible(newValue: boolean) {
       if (newValue === false) {
         this.loadingPercentage = 0
         this.loadingText = ''

@@ -18,37 +18,35 @@
 <script lang="ts">
 import { SpotifyPlaylist } from '@/api/spotify/types/entities'
 import PlaylistCard from '@/components/PlaylistCard.vue'
-import { usePlaylistsStore } from '@/stores/playlists'
+import { MY_MUSIC_PLAYLIST_ID, usePlaylistsStore } from '@/stores/playlists'
 import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'PlaylistExplorer',
   components: { PlaylistCard },
-  setup () {
+  setup() {
     const playlistsStore = usePlaylistsStore()
     return { playlistsStore }
   },
   computed: {
-    formatName () {
+    formatName() {
       return (playlist: SpotifyPlaylist): string => {
-        return playlist.id === 'my-music'
-          ? this.$t('playlist.your-music.name')
-          : playlist.name
+        return playlist.id === MY_MUSIC_PLAYLIST_ID ? this.$t('playlist.your-music.name') : playlist.name
       }
     }
   },
-  async created () {
+  async created() {
     await this.loadMorePlaylists()
     this.playlistLoaded = true
   },
   methods: {
-    async loadMorePlaylists () {
+    async loadMorePlaylists() {
       const response = await this.playlistsStore.getUserPlaylists(this.offset)
       this.playlistTotal = response.total
       this.offset = response.offset
     }
   },
-  data () {
+  data() {
     return {
       playlistTotal: 0,
       offset: 0,
