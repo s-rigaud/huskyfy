@@ -33,20 +33,20 @@ export default defineComponent({
     },
     filterTag: String
   },
-  setup() {
+  setup () {
     const playlistsStore = usePlaylistsStore()
     return { playlistsStore }
   },
-  async created() {
+  async created () {
     await this.createNewPlaylist()
   },
   computed: {
-    timeout(): number {
+    timeout (): number {
       return this.loadingPercentage === 100 ? 10_000 : -1
     }
   },
   methods: {
-    async createNewPlaylist() {
+    async createNewPlaylist () {
       this.loadingText = this.$t('playlist.new.create')
       this.loadingPercentage = 1
       const newPlaylistId = await this.playlistsStore.createPlaylist(
@@ -75,10 +75,10 @@ export default defineComponent({
       this.loadingPercentage = 100
       this.newPlaylistId = newPlaylistId
     },
-    displayNewPlaylistDetails() {
+    displayNewPlaylistDetails () {
       window.location.href = `/playlist/${this.newPlaylistId}`
     },
-    getNewPlaylistName(): string {
+    getNewPlaylistName (): string {
       const basePlaylist = this.playlistsStore.playlists[this.playlistId]
       let newPlaylistName: string
       if (this.filterTag) {
@@ -88,7 +88,7 @@ export default defineComponent({
       }
       return newPlaylistName
     },
-    getNewPlaylistDescription(): string {
+    getNewPlaylistDescription (): string {
       const basePlaylist = this.playlistsStore.playlists[this.playlistId]
       const tag = this.filterTag ? `[${this.filterTag}]` : ''
 
@@ -96,18 +96,17 @@ export default defineComponent({
       const day = now.getDay()
       const month = now.getMonth()
       const year = now.getFullYear()
-      // TODO use i18n to format according to country directly
-      const formattedDate = (this.$i18n.locale === "en") ? `[${month}/${day}/${year}]` : `[${day}/${month}/${year}]`
+      const formattedDate = (this.$i18n.locale === 'en') ? `[${month}/${day}/${year}]` : `[${day}/${month}/${year}]`
 
       return [
         this.$t('playlist.duplicate.copy-of'),
         basePlaylist.name, tag,
         '•', formattedDate,
-        '•', this.$t('playlist.duplicate.created-by'),
+        '•', this.$t('playlist.duplicate.created-by')
       ].join(' ')
     }
   },
-  data() {
+  data () {
     return {
       loadingPercentage: 0,
       loadingText: '',
@@ -118,7 +117,7 @@ export default defineComponent({
     }
   },
   watch: {
-    snackbarVisible(newValue: boolean) {
+    snackbarVisible (newValue: boolean) {
       if (newValue === false) {
         this.loadingPercentage = 0
         this.loadingText = ''

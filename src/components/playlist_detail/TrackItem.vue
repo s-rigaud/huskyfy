@@ -75,41 +75,41 @@ export default defineComponent({
       required: true
     }
   },
-  setup() {
+  setup () {
     const playlistsStore = usePlaylistsStore()
     return { playlistsStore }
   },
-  data() {
+  data () {
     return {
       displayAllGenres: false,
       MAXIMUM_GENRE_DISPLAYED: 2
     }
   },
-  mounted() {
+  mounted () {
     this.MAXIMUM_GENRE_DISPLAYED = window.innerWidth > 500 ? 4 : 2
   },
   computed: {
     // Delay animation so items appear one after another
-    trackAnimationDelay(): StyleValue {
+    trackAnimationDelay (): StyleValue {
       const limit = (window.innerWidth > 500) ? 20 : 10
       const delay = (this.trackIndex < limit) ? `${300 * this.trackIndex}ms` : '0ms'
       return { 'animation-delay': delay }
     }
   },
   methods: {
-    addCommaDivider(artistName: string, index: number): string {
+    addCommaDivider (artistName: string, index: number): string {
       return (index === this.artists.length - 1) ? artistName : `${artistName},`
     },
-    getGenreAnimationDelay(index: number): StyleValue {
+    getGenreAnimationDelay (index: number): StyleValue {
       return { 'animation-delay': `${index * 400}ms` }
     },
-    openTrackOnSpotify() {
+    openTrackOnSpotify () {
       window.location.href = this.trackURI
     },
-    openArtistOnSpotify(artist: SpotifyArtist) {
+    openArtistOnSpotify (artist: SpotifyArtist) {
       window.location.href = artist.uri
     },
-    getColorForGenre(genre: string): string {
+    getColorForGenre (genre: string): string {
       return this.playlistsStore.genreColorMapping[genre]
     }
   }

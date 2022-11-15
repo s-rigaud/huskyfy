@@ -107,7 +107,6 @@ const addCanvasTitle = (
 ) => {
   let fontSize: number
   const characterLength = playlistName.length
-  // TODO: Adjust and do some fine tunning
   if (characterLength < 10) fontSize = 35
   else if (characterLength < 20) fontSize = 25
   else if (characterLength < 30) fontSize = 25

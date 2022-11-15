@@ -24,9 +24,10 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'App',
   components: { NavbarComponent, FooterComponent },
-  created() {
+  created () {
     document.documentElement.lang = this.$i18n.locale
-  }})
+  }
+})
 </script>
 <style scoped>
 @font-face {

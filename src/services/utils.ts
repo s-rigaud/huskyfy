@@ -1,5 +1,5 @@
 // From https://stackoverflow.com/questions/1255512
-export default function drawRoundRect(
+export default function drawRoundRect (
   ctx: CanvasRenderingContext2D,
   x: number,
   y: number,
