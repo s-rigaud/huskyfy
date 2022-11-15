@@ -1,12 +1,20 @@
 import api from '@/api'
-import playlists from '@/api/spotify/playlists'
 import { SimplifiedSpotifyPlaylist, SpotifyArtist, SpotifyPlaylist, SpotifyTrack, SpotifyTrackMetadata } from '@/api/spotify/types/entities'
 import { t } from '@/i18n'
 import { Genre } from '@/model'
+import { getRandomColor } from '@/services/utils'
 import { useUserStore } from '@/stores/user'
 import { capitalize, getDefaultMap, range } from '@/utils/functions'
 import { RemovableRef, useStorage } from '@vueuse/core'
 import { defineStore } from 'pinia'
+
+// Order matters as only first match will be used (trap before rap, ...)
+// Sorting in length descending order to avoid this
+const COMMON_GENRES = [
+  "alternative", "death metal", "electropop", "pop rock", "hip hop",
+  "drill", "house", "indie", "psych", "swing", "metal", "dance", "rock",
+  "jazz", "trap", "soul", "funk", "pop", "r&b", "rap", "edm"
+]
 
 export const MY_MUSIC_PLAYLIST_ID = "my-music"
 const DEFAULT_MY_MUSIC_PLAYLIST: SimplifiedSpotifyPlaylist = {
@@ -23,7 +31,7 @@ const DEFAULT_MY_MUSIC_PLAYLIST: SimplifiedSpotifyPlaylist = {
     display_name: '',
     external_urls: { spotify: '' },
     href: '',
-    id: '0',
+    id: '',
     type: 'user',
     uri: ''
   },
@@ -42,6 +50,7 @@ const MAX_PLAYLISTS_LIMIT = 50
 
 export type PlaylistState = {
   playlists: RemovableRef<Record<string, SpotifyPlaylist>>;
+  genreColorMapping: RemovableRef<Record<string, string>>;
 }
 
 type ArtistCount = {
@@ -49,9 +58,16 @@ type ArtistCount = {
   count: number
 }
 
+const DEFAULT_GENRE_COLOR_MAPPING: Record<string, string> = {
+  "rock": "red",
+  "indie": "green",
+  "funk": "yellow"
+}
+
 export const usePlaylistsStore = defineStore('playlists', {
   state: () => ({
-    playlists: useStorage('playlists', {})
+    playlists: useStorage('playlists', {}),
+    genreColorMapping: useStorage('genreColorMapping', DEFAULT_GENRE_COLOR_MAPPING),
   } as PlaylistState),
   getters: {
     getTopArtists(state) {
@@ -329,8 +345,15 @@ export const usePlaylistsStore = defineStore('playlists', {
         this.playlists[playlistId].tracks.push({
           ...track,
           isIndie: allArtistIndie,
-          genres: Array.from(trackGenres)
+          genres: this.filterUncommonGenres(Array.from(trackGenres))
         })
+
+        // Assign a color for each genre
+        for (const genre of trackGenres) {
+          if (!this.genreColorMapping[genre]) {
+            this.genreColorMapping[genre] = getRandomColor()
+          }
+        }
       }
 
       return this.playlists[playlistId].tracks
@@ -469,6 +492,19 @@ export const usePlaylistsStore = defineStore('playlists', {
       }
 
       this.addTracksToPlaylist(playlistId, sortedTracks)
+    },
+    filterUncommonGenres(trackGenres: string[]): string[] {
+      //console.error(Object.keys(this.genreColorMapping));
+
+      for (let i = 0; i < trackGenres.length; i++) {
+        for (const commonGenre of COMMON_GENRES) {
+          if (trackGenres[i].includes(commonGenre)) {
+            trackGenres[i] = commonGenre
+            break
+          }
+        }
+      }
+      return Array.from(new Set(trackGenres))
     }
   }
 })

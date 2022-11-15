@@ -142,8 +142,9 @@
 
                   <div v-if="selectedGenres.length > 0">
                     <v-chip v-for="genre in selectedGenres" :key="genre" :text="genre.toUpperCase()" closable
-                      color="orange" @click:close="selectedGenres = selectedGenres.filter(g => g !== genre)"
-                      variant="outlined" prepend-icon="mdi-chart-bar-stacked">
+                      :color="getColorForGenre(genre)"
+                      @click:close="selectedGenres = selectedGenres.filter(g => g !== genre)" variant="outlined"
+                      prepend-icon="mdi-chart-bar-stacked">
                     </v-chip>
                   </div>
 
@@ -459,6 +460,9 @@ export default defineComponent({
       if (popularity === Popularity.Indie) return 'green'
       if (popularity === Popularity.Popular) return 'red'
       return '#ddd'
+    },
+    getColorForGenre(genre: string): string {
+      return this.playlistsStore.genreColorMapping[genre]
     }
   },
   computed: {

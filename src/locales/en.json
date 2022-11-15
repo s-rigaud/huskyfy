@@ -104,7 +104,7 @@
         "duplicate": {
             "button": "Duplicate the playlist ",
             "copy-of": "Copy of",
-            "created-by": "created by Huskyfy 🐺",
+            "created-by": "made with Huskyfy 🐺",
             "tooltip": "Create a new playlist with currently selected tracks",
             "only-with-filter": "Create a new playlist only with filtered tracks"
         },

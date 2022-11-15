@@ -1,5 +1,5 @@
 // From https://stackoverflow.com/questions/1255512
-function drawRoundRect (
+export default function drawRoundRect(
   ctx: CanvasRenderingContext2D,
   x: number,
   y: number,
@@ -33,4 +33,20 @@ function drawRoundRect (
   }
 }
 
-export default drawRoundRect
+// German palette https://flatuicolors.com/palette/de
+const THEME_COLORS = [
+  '#fc5c65', '#eb3b5a',
+  '#fd9644', '#fa8231',
+  '#fed330', '#f7b731',
+  '#26de81', '#20bf6b',
+  '#2bcbba', '#0fb9b1',
+  '#45aaf2', '#2d98da',
+  '#4b7bec', '#3867d6',
+  '#a55eea', '#8854d0',
+  '#d1d8e0', '#a5b1c2',
+  '#778ca3', '#4b6584'
+]
+const THEME_COLOR_SIZE = THEME_COLORS.length
+export const getRandomColor = (): string => {
+  return THEME_COLORS[Math.floor(Math.random() * THEME_COLOR_SIZE)]
+}

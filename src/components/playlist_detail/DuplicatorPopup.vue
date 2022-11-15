@@ -97,12 +97,24 @@ export default defineComponent({
       if (this.selectedGenres.length > 0) {
         genreString = `[${this.selectedGenres.join(', ')}]`
       }
+
+      const now = new Date()
+      const day = now.getDay()
+      const month = now.getMonth()
+      const year = now.getFullYear()
+      // TODO use i18n to format according to country directly
+      let formattedDate: string
+      if (this.$i18n.locale === "en") {
+        formattedDate = `[${month}/${day}/${year}]`
+      } else {
+        formattedDate = `[${day}/${month}/${year}]`
+      }
+
       return [
         this.$t('playlist.duplicate.copy-of'),
-        basePlaylist.name,
-        genreString,
-        '•',
-        this.$t('playlist.duplicate.created-by')
+        basePlaylist.name, genreString,
+        '•', formattedDate,
+        '•', this.$t('playlist.duplicate.created-by'),
       ].join(' ')
     }
   },

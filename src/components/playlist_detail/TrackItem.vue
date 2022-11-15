@@ -29,7 +29,8 @@
     <!-- TODO Genre chips (Should be VSlideGroup but not yet implemented until Vuetify 3.1) -->
     <div v-if="genres.length > 0" class="chips">
       <v-chip v-for="(genre, index) in genres.slice(0, MAXIMUM_GENRE_DISPLAYED)" :key="genre"
-        :text="genre.toUpperCase()" label size="small" class="genre-chip" :style="getGenreAnimationDelay(index)">
+        :text="genre.toUpperCase()" label size="small" class="genre-chip" :style="getGenreAnimationDelay(index)"
+        :color="getColorForGenre(genre)">
       </v-chip>
       <v-chip v-if="genres.length > MAXIMUM_GENRE_DISPLAYED && !displayAllGenres" label size="small" text="+"
         class="genre-chip" :style="getGenreAnimationDelay(MAXIMUM_GENRE_DISPLAYED)"
@@ -37,7 +38,7 @@
       </v-chip>
       <div v-if="displayAllGenres">
         <v-chip v-for="(genre, index) in genres.slice(MAXIMUM_GENRE_DISPLAYED)" :key="genre" :text="genre.toUpperCase()"
-          label size="small" class="genre-chip" :style="getGenreAnimationDelay(index)">
+          label size="small" class="genre-chip" :style="getGenreAnimationDelay(index)" :color="getColorForGenre(genre)">
         </v-chip>
       </div>
     </div>
@@ -47,6 +48,8 @@
 
 <script lang="ts">
 import { SpotifyArtist } from '@/api/spotify/types/entities'
+import { usePlaylistsStore } from '@/stores/playlists'
+import { storeToRefs } from 'pinia'
 import { defineComponent, PropType, StyleValue } from 'vue'
 
 export default defineComponent({
@@ -73,35 +76,42 @@ export default defineComponent({
       required: true
     }
   },
-  data () {
+  setup(props) {
+    const playlistsStore = usePlaylistsStore()
+    return { playlistsStore }
+  },
+  data() {
     return {
       displayAllGenres: false,
       MAXIMUM_GENRE_DISPLAYED: 2
     }
   },
-  mounted () {
+  mounted() {
     this.MAXIMUM_GENRE_DISPLAYED = window.innerWidth > 500 ? 4 : 2
   },
   computed: {
     // Delay animation so items appear one after another
-    trackAnimationDelay (): StyleValue {
+    trackAnimationDelay(): StyleValue {
       const limit = (window.innerWidth > 500) ? 20 : 10
       const delay = (this.trackIndex < limit) ? `${300 * this.trackIndex}ms` : '0ms'
       return { 'animation-delay': delay }
     }
   },
   methods: {
-    addCommaDivider (artistName: string, index: number): string {
+    addCommaDivider(artistName: string, index: number): string {
       return (index === this.artists.length - 1) ? artistName : `${artistName},`
     },
-    getGenreAnimationDelay (index: number): StyleValue {
+    getGenreAnimationDelay(index: number): StyleValue {
       return { 'animation-delay': `${index * 400}ms` }
     },
-    openTrackOnSpotify () {
+    openTrackOnSpotify() {
       window.location.href = this.trackURI
     },
-    openArtistOnSpotify (artist: SpotifyArtist) {
+    openArtistOnSpotify(artist: SpotifyArtist) {
       window.location.href = artist.uri
+    },
+    getColorForGenre(genre: string): string {
+      return this.playlistsStore.genreColorMapping[genre]
     }
   }
 })

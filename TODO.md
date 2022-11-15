@@ -1,8 +1,8 @@
 # TODO
 
 - [ ] 🚧: Fix other Github branch for reordering playlist
-- [ ] 🔖: Factorise genres returned by Spotify
-- [ ] 🎨: Give each genre a color and use it in both TrackCard and filtering chips
+- [ ] 🎨: Improve random color generator for genres (add default value for specific genre ex: rock, pop, ...)
+- [ ] 🎨: Genre checkbox in genre filter should use the color of the genre
 - [ ] 🎨: Add fade transition for all the genre (learn about transition-group)
 
 ## Release requirements
