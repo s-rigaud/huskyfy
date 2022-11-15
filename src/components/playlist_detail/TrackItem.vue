@@ -49,7 +49,6 @@
 <script lang="ts">
 import { SpotifyArtist } from '@/api/spotify/types/entities'
 import { usePlaylistsStore } from '@/stores/playlists'
-import { storeToRefs } from 'pinia'
 import { defineComponent, PropType, StyleValue } from 'vue'
 
 export default defineComponent({
@@ -76,7 +75,7 @@ export default defineComponent({
       required: true
     }
   },
-  setup(props) {
+  setup() {
     const playlistsStore = usePlaylistsStore()
     return { playlistsStore }
   },

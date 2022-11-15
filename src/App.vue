@@ -20,7 +20,6 @@
 import FooterComponent from '@/components/FooterComponent.vue'
 import NavbarComponent from '@/components/NavbarHeader.vue'
 import { defineComponent } from 'vue'
-import { testImageGeneration_generatePlenty } from './tests/testImageExport'
 
 export default defineComponent({
   name: 'App',

@@ -236,18 +236,21 @@ export const usePlaylistsStore = defineStore('playlists', {
 
       // When reloading for the first time
       if (offset === MAX_PLAYLISTS_LIMIT) {
-        // Delete cached playlists deleted by user
-        const playlistRequestId = playlists.map(p => p.id)
-        for (const key in this.playlists) {
-          if (!playlistRequestId.includes(key)) {
-            delete this.playlists[key]
-          }
-        }
+        this.purgeDeletedPlaylists(playlists)
       }
 
       return {
         offset,
         total: response.data.total
+      }
+    },
+    // Delete cached playlists deleted by user
+    purgeDeletedPlaylists(playlists: SimplifiedSpotifyPlaylist[]) {
+      const playlistRequestId = playlists.map(p => p.id)
+      for (const key in this.playlists) {
+        if (!playlistRequestId.includes(key)) {
+          delete this.playlists[key]
+        }
       }
     },
     // Special playlist from user liked song treated differently in Spotify API
@@ -347,13 +350,6 @@ export const usePlaylistsStore = defineStore('playlists', {
           isIndie: allArtistIndie,
           genres: this.filterUncommonGenres(Array.from(trackGenres))
         })
-
-        // Assign a color for each genre
-        for (const genre of trackGenres) {
-          if (!this.genreColorMapping[genre]) {
-            this.genreColorMapping[genre] = getRandomColor()
-          }
-        }
       }
 
       return this.playlists[playlistId].tracks
@@ -385,8 +381,6 @@ export const usePlaylistsStore = defineStore('playlists', {
     async createPlaylist(basePlaylistId: string, name: string, description: string, public_: boolean, collaborative: boolean): Promise<string> {
       const basePlaylist = this.playlists[basePlaylistId]
 
-      // const public_ = basePlaylist.public && !basePlaylist.collaborative
-      // const collaborative = basePlaylist.collaborative
       const response = await api.spotify.playlists.createPlaylist(
         name,
         description,
@@ -494,8 +488,6 @@ export const usePlaylistsStore = defineStore('playlists', {
       this.addTracksToPlaylist(playlistId, sortedTracks)
     },
     filterUncommonGenres(trackGenres: string[]): string[] {
-      //console.error(Object.keys(this.genreColorMapping));
-
       for (let i = 0; i < trackGenres.length; i++) {
         for (const commonGenre of COMMON_GENRES) {
           if (trackGenres[i].includes(commonGenre)) {
@@ -504,7 +496,16 @@ export const usePlaylistsStore = defineStore('playlists', {
           }
         }
       }
-      return Array.from(new Set(trackGenres))
+
+      const filteredGenres = Array.from(new Set(trackGenres))
+      // Assign a color for each genre
+      for (const genre of filteredGenres) {
+        if (!this.genreColorMapping[genre]) {
+          this.genreColorMapping[genre] = getRandomColor()
+        }
+      }
+
+      return filteredGenres
     }
   }
 })
