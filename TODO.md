@@ -1,8 +1,8 @@
 # TODO
 
 - [ ] 🚧: Fix other Github branch for reordering playlist
-- [ ] 🎨: Improve random color generator for genres (add default value for specific genre ex: rock, pop, ...)
-- [ ] 🎨: Genre checkbox in genre filter should use the color of the genre
+- [ ] 🚧: Back to last page when Spotify API token needs refresh
+- [ ] 🎨: Genre checkbox in genre filter should use the color of the genre (Vuetify menu-props)
 - [ ] 🎨: Add fade transition for all the genre (learn about transition-group)
 
 ## Release requirements

@@ -31,10 +31,7 @@ export default defineComponent({
       type: Array as PropType<SpotifyTrack[]>,
       required: true
     },
-    selectedGenres: {
-      type: Array as PropType<string[]>,
-      required: true
-    }
+    filterTag: String
   },
   setup() {
     const playlistsStore = usePlaylistsStore()
@@ -84,8 +81,8 @@ export default defineComponent({
     getNewPlaylistName(): string {
       const basePlaylist = this.playlistsStore.playlists[this.playlistId]
       let newPlaylistName: string
-      if (this.selectedGenres.length > 0) {
-        newPlaylistName = `${basePlaylist.name} [${this.selectedGenres.join(', ')}]`
+      if (this.filterTag) {
+        newPlaylistName = `${basePlaylist.name} [${this.filterTag}]`
       } else {
         newPlaylistName = `${this.$t('playlist.duplicate.copy-of')} ${basePlaylist.name}`
       }
@@ -93,26 +90,18 @@ export default defineComponent({
     },
     getNewPlaylistDescription(): string {
       const basePlaylist = this.playlistsStore.playlists[this.playlistId]
-      let genreString = ''
-      if (this.selectedGenres.length > 0) {
-        genreString = `[${this.selectedGenres.join(', ')}]`
-      }
+      const tag = this.filterTag ? `[${this.filterTag}]` : ''
 
       const now = new Date()
       const day = now.getDay()
       const month = now.getMonth()
       const year = now.getFullYear()
       // TODO use i18n to format according to country directly
-      let formattedDate: string
-      if (this.$i18n.locale === "en") {
-        formattedDate = `[${month}/${day}/${year}]`
-      } else {
-        formattedDate = `[${day}/${month}/${year}]`
-      }
+      const formattedDate = (this.$i18n.locale === "en") ? `[${month}/${day}/${year}]` : `[${day}/${month}/${year}]`
 
       return [
         this.$t('playlist.duplicate.copy-of'),
-        basePlaylist.name, genreString,
+        basePlaylist.name, tag,
         '•', formattedDate,
         '•', this.$t('playlist.duplicate.created-by'),
       ].join(' ')

@@ -30,7 +30,7 @@ export default defineComponent({
   computed: {
     profilePictureOrDefault (): string {
       // eslint-disable-next-line
-      const DEFAULT_PICTURE = require("@/assets/no-user.png")
+      const DEFAULT_PICTURE: string = require("@/assets/no-user.png")
       return this.userStore.profilePicture || DEFAULT_PICTURE
     }
   },

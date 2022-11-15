@@ -11,9 +11,14 @@
               </v-img>
             </div>
             <div id="title-container">
-              <h3 id="playlist-name" class="text-truncate rainbow-text" @click.self="openPlaylistOnSpotify">
-                {{ playlist.name }}
-              </h3>
+              <v-tooltip :text="playlist.name" class="rainbow-tooltip" location="center">
+                <template v-slot:activator="{ props }">
+                  <h3 id="playlist-name" class="text-truncate rainbow-text" v-bind="props"
+                    @click.self="openPlaylistOnSpotify">
+                    {{ playlist.name }}
+                  </h3>
+                </template>
+              </v-tooltip>
               <p> {{ getTextFromVisibility }} </p>
               <p id="playlist-owner">
                 {{ $t("playlist.created-by") }}
@@ -27,7 +32,7 @@
                 <span :style="colorForPercentage" style="margin: 0px 5px;" class="black-highlight">
                   {{ ` ${indiePercentage}` }} %
                 </span>
-                <v-tooltip :text="$t('playlist.explanation-indie-score')" id="indie-tooltip">
+                <v-tooltip :text="$t('playlist.explanation-indie-score')" class="rainbow-tooltip">
                   <template v-slot:activator="{ props }">
                     <v-btn id="help-indie-percentage" v-bind="props">
                       <v-icon size="x-small">mdi-help</v-icon>
@@ -37,7 +42,7 @@
               </p>
             </div>
           </div>
-          <v-tooltip :text="$t('playlist.explanation-indie-score')" id="indie-tooltip" location="bottom">
+          <v-tooltip :text="$t('playlist.explanation-indie-score')" class="rainbow-tooltip" location="bottom">
             <template v-slot:activator="{ props }">
               <IndieChart v-bind="props" :indie-percentage="indiePercentage" class="playlist-meta-middle" />
             </template>
@@ -58,7 +63,7 @@
           </div>
         </div>
         <v-card-text id="playlist-description">
-          <p v-if="formattedDescription" id="description" class="text-truncate"> {{ formattedDescription }} </p>
+          <p v-if="formattedDescription" id="description"> {{ formattedDescription }} </p>
           <p v-else id="description" class="font-italic"> {{ $t('playlist.no-description') }} </p>
         </v-card-text>
 
@@ -153,7 +158,7 @@
                       @click:close="selectedArtists = selectedArtists.filter(a => a.id != artist.id)"
                       variant="outlined">
                       <v-avatar left>
-                        <v-img :src="artist.images[0].url"></v-img>
+                        <v-img :src="artist.images[0]?.url || '@/assets/no-user.png'"></v-img>
                       </v-avatar>
                       {{ artist.name }}
                     </v-chip>
@@ -225,7 +230,7 @@
   </div>
 
   <DuplicatorPopup v-if="startDuplication" :playlistId="playlist.id" :new-tracks="filteredTracks"
-    :selected-genres="selectedGenres" />
+    :filter-tag="filterTag" />
 </template>
 
 <script lang="ts">
@@ -514,6 +519,14 @@ export default defineComponent({
         this.selectedArtists.length +
         +(this.selectedPopularity !== NO_POPULARITY)
       )
+    },
+    filterTag(): string {
+      const keyword = (this.isFilterExclusive) ? this.$t('track.filters.keyword.and') : this.$t('track.filters.keyword.or')
+
+      return ((this.selectedPopularity !== NO_POPULARITY ? [this.selectedPopularity] : []) as string[])
+        .concat(this.selectedArtists.map(a => a.name))
+        .concat(this.selectedGenres)
+        .join(` ${keyword} `)
     }
   },
   watch: {
@@ -587,6 +600,7 @@ export default defineComponent({
 #playlist-card {
   width: 100%;
   min-height: 150px;
+  height: -webkit-fill-available;
 
   margin-bottom: 5px;
   border: 2px var(--text-color) solid;
@@ -632,7 +646,7 @@ export default defineComponent({
 }
 
 #playlist-name {
-  margin-right: 5px;
+  margin-right: 10px;
   cursor: pointer;
 }
 
@@ -682,7 +696,7 @@ export default defineComponent({
   min-width: fit-content;
 }
 
-#indie-tooltip .v-overlay__content {
+.rainbow-tooltip .v-overlay__content {
   background-color: var(--primary-color);
   color: var(--text-color);
   border: var(--text-color) 2px solid;

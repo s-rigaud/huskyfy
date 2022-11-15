@@ -13,7 +13,7 @@ import { defineStore } from 'pinia'
 const COMMON_GENRES = [
   "alternative", "death metal", "electropop", "pop rock", "hip hop",
   "drill", "house", "indie", "psych", "swing", "metal", "dance", "rock",
-  "jazz", "trap", "soul", "funk", "pop", "r&b", "rap", "edm"
+  "jazz", "trap", "lo-fi", "soul", "funk", "pop", "r&b", "rap", "edm"
 ]
 
 export const MY_MUSIC_PLAYLIST_ID = "my-music"
@@ -505,7 +505,7 @@ export const usePlaylistsStore = defineStore('playlists', {
         }
       }
 
-      return filteredGenres
+      return filteredGenres.sort()
     }
   }
 })

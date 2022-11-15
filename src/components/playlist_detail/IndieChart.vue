@@ -38,7 +38,7 @@ export default defineComponent({
     indiePercentage: Number
   },
   watch: {
-    indiePercentage (newValue: number) {
+    indiePercentage(newValue: number) {
       this.series = [newValue]
 
       const averageColor = this.getAverageColor(LOWEST_VALUE_COLOR, HIGHEST_VALUE_COLOR, newValue)
@@ -60,7 +60,7 @@ export default defineComponent({
     }
   },
   methods: {
-    getAverageColor (color1: string, color2: string, percentage: number): string {
+    getAverageColor(color1: string, color2: string, percentage: number): string {
       const hexToRGB = (color: string): number[] => {
         return (color.replace('#', '').match(/.{1,2}/g) as RegExpMatchArray).map(hex => parseInt(hex, 16))
       }
@@ -86,7 +86,7 @@ export default defineComponent({
       return rgbToHex(rgbAverageColor)
     }
   },
-  data () {
+  data() {
     // All data needed to customize graph UI and data
     return {
       series: [this.indiePercentage],
@@ -125,7 +125,7 @@ export default defineComponent({
               },
               value: {
                 offsetY: 0,
-                color: '#000000',
+                color: LOWEST_VALUE_COLOR,
                 fontSize: '36px',
                 show: true
               }
