@@ -6,6 +6,11 @@
 - [ ] 🎨: Genre checkbox in genre filter should use the color of the genre (Vuetify menu-props)
 - [ ] 🎨: Add fade transition for all the genre (learn about transition-group)
 
+## Vuetify 3.1
+
+- [ ] 🎨: Add skeleton loader for PlaylistCard & TrackItem
+- [ ] 🎨: Add VSlideGroup for "genre-chips"
+
 
 ## Release requirements
 

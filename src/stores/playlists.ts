@@ -424,7 +424,6 @@ export const usePlaylistsStore = defineStore('playlists', {
     },
     async sortPlaylistTracksByGenres (playlistId: string) {
       // 1. Save a copy of tracks
-      // TODO ALL tracks LOADED ?!?
       let tracks = this.playlists[playlistId].tracks.slice()
       const genres = this.getTopGenres(playlistId)
 
@@ -444,7 +443,6 @@ export const usePlaylistsStore = defineStore('playlists', {
     },
     async sortPlaylistTracksByArtistTrackInPlaylist (playlistId: string) {
       // 1. Save tracks
-      // TODO WHAT IF NOT ALL tracks LOADED ?!?
       let tracks = this.playlists[playlistId].tracks
       const artists = this.getTopArtists(playlistId)
 
@@ -465,7 +463,6 @@ export const usePlaylistsStore = defineStore('playlists', {
     },
     async sortPlaylistTracksByArtistName (playlistId: string) {
       // 1. Save tracks
-      // TODO WHAT IF NOT ALL tracks LOADED ?!?
       let tracks = this.playlists[playlistId].tracks
       const artistNames = this.getArtistsByName(playlistId)
 

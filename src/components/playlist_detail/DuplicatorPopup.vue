@@ -44,7 +44,7 @@ export default defineComponent({
   },
   computed: {
     timeout (): number {
-      return this.loadingPercentage === 100 ? 1_000/* TODO 10_000 */ : -1
+      return this.loadingPercentage === 100 ? 10_000 : -1
     }
   },
   methods: {

@@ -1,6 +1,4 @@
 <template>
-  <!-- Playlist representation as a card -->
-  <!-- TODO add skeleton loader when Vuetify 3.1 will be out -->
   <v-card flat @click="displayDetails" class="playlist-card">
     <v-img rel="preconnect" :src="images[0].url" alt="Playlist cover" lazy-src='@/assets/default_cover.jpg' cover>
     </v-img>

@@ -1,6 +1,4 @@
 <template>
-  <!-- Item to represent a track, many of them are stacked -->
-  <!-- TODO add skeleton loader when Vuetify 3.1 will be out -->
   <v-list-item class="track-item" :style="trackAnimationDelay" link @click="openTrackOnSpotify">
     <template v-slot:prepend>
       <p class="track-index">{{ trackIndex + 1 }}</p>
@@ -26,7 +24,6 @@
       </v-chip>
     </div>
 
-    <!-- TODO Genre chips (Should be VSlideGroup but not yet implemented until Vuetify 3.1) -->
     <div v-if="genres.length > 0" class="chips">
       <v-chip v-for="(genre, index) in genres.slice(0, MAXIMUM_GENRE_DISPLAYED)" :key="genre"
         :text="genre.toUpperCase()" label size="small" class="genre-chip" :style="getGenreAnimationDelay(index)"

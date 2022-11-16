@@ -46,7 +46,7 @@
 
       <v-divider></v-divider>
 
-      <div v-if="userOwnsPlaylist">
+      <div v-if="userOwnsPlaylist && allTracksLoaded">
         <v-list-subheader> {{ $t('drawer.reorder-playlist') }}</v-list-subheader>
         <!-- 2.1 Sort by genre -->
         <v-list-item @click="sortPlaylistTracksByGenres">
@@ -184,6 +184,9 @@ export default defineComponent({
     },
     maxTick (): number {
       return Object.keys(this.ticks).length - 1
+    },
+    allTracksLoaded (): boolean {
+      return this.playlist.tracks.length === this.playlist.total
     }
   },
   methods: {
