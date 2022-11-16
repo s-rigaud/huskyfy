@@ -1,6 +1,7 @@
 <template>
   <!-- Layer on top to follow steps of playlist duplication -->
-  <v-snackbar v-model="snackbarVisible" :timeout="timeout" elevation="24" color="var(--primary-color)">
+  <v-snackbar v-model="snackbarVisible" id="duplicate-snackbar" :timeout="timeout" elevation="24"
+    color="var(--primary-color)">
     <div id="loading-create-new-playlist" v-if="loadingPercentage > 0">
       <v-progress-circular :model-value="loadingPercentage" color="var(--text-color)">
       </v-progress-circular>
@@ -22,6 +23,7 @@ import { usePlaylistsStore } from '@/stores/playlists'
 
 export default defineComponent({
   name: 'DuplicatorPopup',
+  emits: ['onEnd'],
   props: {
     playlistId: {
       type: String,
@@ -42,7 +44,7 @@ export default defineComponent({
   },
   computed: {
     timeout (): number {
-      return this.loadingPercentage === 100 ? 10_000 : -1
+      return this.loadingPercentage === 100 ? 1_000/* TODO 10_000 */ : -1
     }
   },
   methods: {
@@ -93,8 +95,8 @@ export default defineComponent({
       const tag = this.filterTag ? `[${this.filterTag}]` : ''
 
       const now = new Date()
-      const day = now.getDay()
-      const month = now.getMonth()
+      const day = now.getDate().toString(10).padStart(2, '0')
+      const month = (now.getMonth() + 1).toString(10).padStart(2, '0')
       const year = now.getFullYear()
       const formattedDate = (this.$i18n.locale === 'en') ? `[${month}/${day}/${year}]` : `[${day}/${month}/${year}]`
 
@@ -122,6 +124,7 @@ export default defineComponent({
         this.loadingPercentage = 0
         this.loadingText = ''
         this.newPlaylistId = ''
+        this.$emit('onEnd')
       }
     }
   }
@@ -130,13 +133,18 @@ export default defineComponent({
 <style>
 #loading-create-new-playlist {
   margin-bottom: 10px;
+
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
 }
 
-.v-progress-circular__underlay {
+#duplicate-snackbar .v-snackbar__wrapper {
+  border: 2px var(--text-color) solid;
+}
+
+#duplicate-snackbar .v-progress-circular__underlay {
   stroke: rgba(255, 255, 255, 0.1);
   z-index: 1;
 }

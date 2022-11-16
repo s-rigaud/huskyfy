@@ -86,7 +86,11 @@ export default defineComponent({
     }
   },
   mounted () {
-    this.MAXIMUM_GENRE_DISPLAYED = window.innerWidth > 500 ? 4 : 2
+    let genreToDisplay = 2
+    if (window.innerWidth > 900) genreToDisplay = 8
+    else if (window.innerWidth > 700) genreToDisplay = 6
+    else if (window.innerWidth > 500) genreToDisplay = 4
+    this.MAXIMUM_GENRE_DISPLAYED = genreToDisplay
   },
   computed: {
     // Delay animation so items appear one after another

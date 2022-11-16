@@ -121,7 +121,8 @@
             "tracks": "Adding all selected tracks"
         },
         "next": "Jump to new playlist",
-        "no-tracks": "This playlist doesn't have any track now. Open the playlist on Spotify and try to add tracks to start seeing them here",
+        "no-tracks-title": "This playlist doesn't have any track now.",
+        "no-tracks-subtitle": "Open the playlist on Spotify and try to add tracks to start seeing them here",
         "open-on-spotify": "Open on Spotify",
         "private": "Private playlist",
         "public": "Public playlist",

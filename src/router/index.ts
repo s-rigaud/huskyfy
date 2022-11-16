@@ -13,11 +13,12 @@ import PlaylistExplorer from '@/views/PlaylistExplorer.vue'
 
 import { createRouter, createWebHistory } from 'vue-router'
 
+export const ROUTE_NAME_LOGIN = 'Login'
 const routes = [
   { path: '/', redirect: '/explore' },
   {
     path: '/login',
-    name: 'LoginView',
+    name: ROUTE_NAME_LOGIN,
     component: LoginView
   },
   {
@@ -52,17 +53,19 @@ const router = createRouter({
   }
 })
 
+// eslint-disable-next-line
+const DEFAULT_USER_PICTURE = (require('@/assets/no-user.png') as string)
 router.beforeEach(async function (to, from, next) {
   const authStore = useAuthStore()
 
   // Intercept and autolog user when code is received
-  if (to.name === 'LoginView' && to.query.code) {
+  if (to.name === ROUTE_NAME_LOGIN && to.query.code) {
     if (to.query.state !== authStore.stateAuthorizationCode) {
       console.error(
         'Possibly a CSRF, state received from Spotify ' +
         'is not the one used to make request for authentification'
       )
-      next({ name: 'LoginView' })
+      next({ name: ROUTE_NAME_LOGIN })
     }
     authStore.temporaryToken = to.query.code
 
@@ -72,7 +75,7 @@ router.beforeEach(async function (to, from, next) {
     // Getting user info
     const response = await api.spotify.users.getUserProfile()
     const data = response.data
-    const userPicture = data.images ? data.images[0].url : require('@/assets/no-user.png')
+    const userPicture = data.images[0]?.url || DEFAULT_USER_PICTURE
     useUserStore().$patch({
       id: data.id,
       username: data.display_name,
@@ -84,11 +87,11 @@ router.beforeEach(async function (to, from, next) {
     next({ name: 'Explore' })
 
     // Does not allow to visit other pages while not connected
-  } else if (!authStore.accessToken && to.name !== 'LoginView' && to.name !== 'About') {
-    next({ name: 'LoginView' })
+  } else if (!authStore.accessToken && to.name !== ROUTE_NAME_LOGIN && to.name !== 'About') {
+    next({ name: ROUTE_NAME_LOGIN })
 
     // Redirect user to main page if already connected
-  } else if (to.name === 'LoginView' && authStore.accessToken) {
+  } else if (to.name === ROUTE_NAME_LOGIN && authStore.accessToken) {
     next({ name: 'Explore' })
   } else {
     next()

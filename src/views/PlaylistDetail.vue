@@ -47,16 +47,16 @@
               <IndieChart v-bind="props" :indie-percentage="indiePercentage" class="playlist-meta-middle" />
             </template>
           </v-tooltip>
-          <div id="playlist-meta-right">
+          <div id="playlist-meta-right" v-show="allTracksLoaded">
             <p>
               <span class="rainbow-text">{{ $t('playlist.duration') }}</span>
-              <span v-if="allTracksLoaded" class="playlist-metric">
+              <span class="playlist-metric">
                 {{ getPlaylistDuration() }}
               </span>
             </p>
             <p>
               <span class="rainbow-text">{{ $t('playlist.total-track-number') }}</span>
-              <span v-if="allTracksLoaded" class="playlist-metric">
+              <span class="playlist-metric">
                 {{ playlist.tracks.length }}
               </span>
             </p>
@@ -222,7 +222,8 @@
 
   <!-- No tracks in the playlist -->
   <div id="no-tracks" v-else>
-    <h1>{{ $t("playlist.no-tracks") }}</h1>
+    <h1>{{ $t("playlist.no-tracks-title") }}</h1>
+    <h2>{{ $t("playlist.no-tracks-subtitle") }}</h2>
     <v-btn @click="openPlaylistOnSpotify" id="open-spotify" variant="outlined" rounded="pill" size="x-large">
       {{ $t("playlist.open-on-spotify") }}
       <v-img width="25" src='@/assets/spotify.png' alt="Spotify Logo" />
@@ -230,7 +231,7 @@
   </div>
 
   <DuplicatorPopup v-if="startDuplication" :playlistId="playlist.id" :new-tracks="filteredTracks"
-    :filter-tag="filterTag" />
+    :filter-tag="filterTag" @on-end="startDuplication = false"/>
 </template>
 
 <script lang="ts">
@@ -514,7 +515,14 @@ export default defineComponent({
       return this.$t('playlist.private') + ' ' + this.$t('_emojis.private')
     },
     formattedDescription (): string {
-      return this.playlist.description.replace(/(<([^>]+)>)/ig, '').replace(/&quot;/ig, '"')
+      return (
+        this.playlist.description
+          .replace(/(<([^>]+)>)/ig, '')
+          // Escaped " back to real character
+          .replace(/&quot;/ig, '"')
+          // Escaped / back to real character
+          .replace(/&#x2F;/ig, '/')
+      )
     },
     toButtonOpacity (): StyleValue {
       return { opacity: (this.displayGoTopButton) ? 100 : 0 }
@@ -623,6 +631,7 @@ export default defineComponent({
 
 #genre-chart-container {
   display: none !important;
+  width: 246px;
 }
 
 .playlist-meta-middle {

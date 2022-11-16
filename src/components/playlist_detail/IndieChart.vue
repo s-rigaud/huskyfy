@@ -1,19 +1,24 @@
 <template>
   <div id="genre-chart-container">
     <apexchart type="radialBar" :options="chartOptions" :series="series"></apexchart>
-    <p id="genre-chart-subtitle"> {{ $t("playlist.indie-score-text") }}</p>
+    <p id="genre-chart-subtitle" :style="{ 'color': currentAverageColor }">
+      {{ $t("playlist.indie-score-text") }}
+    </p>
   </div>
 </template>
 
 <style>
 #genre-chart-container {
+  margin-top: 15px;
+
   display: flex !important;
   flex-direction: column;
   align-items: center;
 }
 
 #genre-chart-container .vue-apexcharts {
-  min-height: 75px !important;
+  min-height: 55px !important;
+  height: 55px !important;
 }
 
 #genre-chart-container .apexcharts-canvas {
@@ -35,28 +40,14 @@ const HIGHEST_VALUE_COLOR = '#21f92e'
 export default defineComponent({
   name: 'IndieChart',
   props: {
-    indiePercentage: Number
+    indiePercentage: {
+      type: Number,
+      required: true
+    }
   },
-  watch: {
-    indiePercentage (newValue: number) {
-      this.series = [newValue]
-
-      const averageColor = this.getAverageColor(LOWEST_VALUE_COLOR, HIGHEST_VALUE_COLOR, newValue)
-      this.chartOptions = {
-        ...this.chartOptions,
-        ...{
-          colors: [averageColor],
-          plotOptions: {
-            radialBar: {
-              dataLabels: {
-                value: {
-                  color: this.getAverageColor(LOWEST_VALUE_COLOR, HIGHEST_VALUE_COLOR, newValue)
-                }
-              }
-            }
-          }
-        }
-      }
+  computed: {
+    currentAverageColor (): string {
+      return this.getAverageColor(LOWEST_VALUE_COLOR, HIGHEST_VALUE_COLOR, this.indiePercentage)
     }
   },
   methods: {
@@ -84,6 +75,28 @@ export default defineComponent({
       ]
 
       return rgbToHex(rgbAverageColor)
+    }
+  },
+  watch: {
+    indiePercentage (newValue: number) {
+      this.series = [newValue]
+
+      const averageColor = this.getAverageColor(LOWEST_VALUE_COLOR, HIGHEST_VALUE_COLOR, newValue)
+      this.chartOptions = {
+        ...this.chartOptions,
+        ...{
+          colors: [averageColor],
+          plotOptions: {
+            radialBar: {
+              dataLabels: {
+                value: {
+                  color: this.getAverageColor(LOWEST_VALUE_COLOR, HIGHEST_VALUE_COLOR, newValue)
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   data () {

@@ -1,4 +1,5 @@
 import api from '@/api'
+import router, { ROUTE_NAME_LOGIN } from '@/router'
 import { useAuthStore } from '@/stores/auth'
 import axios from 'axios'
 
@@ -44,6 +45,9 @@ request.interceptors.response.use(response => {
       "Sorry Huskyfy is in beta now and it's not open for everyone. " +
       'If you want access to the website send a mail to huskyfy.bugtracker@gmail.com'
     )
+    // Delete obsolete already collected tokens
+    useAuthStore().reset()
+    router.push({ name: ROUTE_NAME_LOGIN })
   }
 
   console.log('Exception while trying to handle error')

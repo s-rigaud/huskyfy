@@ -298,8 +298,7 @@ export const usePlaylistsStore = defineStore('playlists', {
         this.playlists[playlistId] = {
           ...response.data,
           ...this.playlists[playlistId],
-          // eslint-disable-next-line
-          offset: this.playlists[playlistId].offset! + API_TRACK_LIMIT,
+          offset: (this.playlists[playlistId].offset as number) + API_TRACK_LIMIT,
           total: response.data.total
         }
       }
@@ -333,11 +332,9 @@ export const usePlaylistsStore = defineStore('playlists', {
         for (let i = 0; i < artists.length; i++) {
           const artist = artists[i]
 
-          // eslint-disable-next-line
-          artistMap.get(artist.id)!.genres.forEach(t => trackGenres.add(t))
-          // eslint-disable-next-line
-          const followerCount = artistMap.get(artist.id)!.followers
-          if (followerCount > 500_000) {
+          const artistStatistics = (artistMap.get(artist.id) as ArtistStatistics)
+          artistStatistics.genres.forEach(t => trackGenres.add(t))
+          if (artistStatistics.followers > 500_000) {
             allArtistIndie = false
           }
 

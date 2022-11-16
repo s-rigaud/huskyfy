@@ -1,13 +1,12 @@
 {
   "name": "huskyfy",
-  "version": "0.9.4",
+  "version": "0.9.6",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "fix": "vue-cli-service lint --fix",
-    "test": "jest"
+    "fix": "vue-cli-service lint --fix"
   },
   "dependencies": {
     "@mdi/font": "7.0.96",

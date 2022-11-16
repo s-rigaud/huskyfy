@@ -1,9 +1,13 @@
 # TODO
 
+- [ ] 🚩🎨🚧: Fix css animation for TrackCard (actually blinking instead of showing properly)
+- [ ] ⚡️: Use v-lazy to improve performance when displaying TrackCard
 - [ ] 🚧: Fix other Github branch for reordering playlist
 - [ ] 🚧: Back to last page when Spotify API token needs refresh
+- [ ] 🎨: Fix indie percentage
 - [ ] 🎨: Genre checkbox in genre filter should use the color of the genre (Vuetify menu-props)
 - [ ] 🎨: Add fade transition for all the genre (learn about transition-group)
+
 
 ## Release requirements
 
