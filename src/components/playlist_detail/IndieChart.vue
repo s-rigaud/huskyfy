@@ -9,8 +9,6 @@
 
 <style>
 #genre-chart-container {
-  margin-top: 15px;
-
   display: flex !important;
   flex-direction: column;
   align-items: center;
@@ -26,6 +24,8 @@
 }
 
 #genre-chart-subtitle {
+  margin-top: 20px;
+
   color: var(--text-color)
 }
 </style>
@@ -75,13 +75,12 @@ export default defineComponent({
       ]
 
       return rgbToHex(rgbAverageColor)
-    }
-  },
-  watch: {
-    indiePercentage (newValue: number) {
-      this.series = [newValue]
+    },
+    updateChart (indiePercentage: number) {
+      console.error('update chart called')
 
-      const averageColor = this.getAverageColor(LOWEST_VALUE_COLOR, HIGHEST_VALUE_COLOR, newValue)
+      this.series = [indiePercentage]
+      const averageColor = this.getAverageColor(LOWEST_VALUE_COLOR, HIGHEST_VALUE_COLOR, indiePercentage)
       this.chartOptions = {
         ...this.chartOptions,
         ...{
@@ -90,13 +89,18 @@ export default defineComponent({
             radialBar: {
               dataLabels: {
                 value: {
-                  color: this.getAverageColor(LOWEST_VALUE_COLOR, HIGHEST_VALUE_COLOR, newValue)
+                  color: averageColor
                 }
               }
             }
           }
         }
       }
+    }
+  },
+  watch: {
+    indiePercentage (newValue: number) {
+      this.updateChart(newValue)
     }
   },
   data () {
@@ -106,7 +110,7 @@ export default defineComponent({
       chartOptions: ({
         chart: {
           type: 'radialBar',
-          offsetY: -20,
+          offsetY: 0,
           sparkline: {
             enabled: true
           }

@@ -151,6 +151,7 @@ export default defineComponent({
 .track-item {
   width: 100%;
   padding: 0 !important;
+  opacity: 0;
 
   border-bottom: 1px grey solid;
 

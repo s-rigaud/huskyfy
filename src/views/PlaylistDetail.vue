@@ -47,8 +47,8 @@
               <IndieChart v-bind="props" :indie-percentage="indiePercentage" class="playlist-meta-middle" />
             </template>
           </v-tooltip>
-          <div id="playlist-meta-right" v-show="allTracksLoaded">
-            <p>
+          <div id="playlist-meta-right">
+            <p v-show="allTracksLoaded">
               <span class="rainbow-text">{{ $t('playlist.duration') }}</span>
               <span class="playlist-metric">
                 {{ getPlaylistDuration() }}
@@ -57,7 +57,7 @@
             <p>
               <span class="rainbow-text">{{ $t('playlist.total-track-number') }}</span>
               <span class="playlist-metric">
-                {{ playlist.tracks.length }}
+                {{ playlist.total }}
               </span>
             </p>
           </div>
@@ -231,7 +231,7 @@
   </div>
 
   <DuplicatorPopup v-if="startDuplication" :playlistId="playlist.id" :new-tracks="filteredTracks"
-    :filter-tag="filterTag" @on-end="startDuplication = false"/>
+    :filter-tag="filterTag" @on-end="startDuplication = false" />
 </template>
 
 <script lang="ts">
@@ -471,9 +471,6 @@ export default defineComponent({
       return this.playlistsStore.genreColorMapping[genre]
     },
     getArtistImage (artist: SpotifyArtist): string {
-      if (!artist.images[0]?.url) {
-        console.error(artist)
-      }
       return artist.images[0]?.url || require('@/assets/no-user.png')
     }
   },
@@ -517,6 +514,7 @@ export default defineComponent({
     formattedDescription (): string {
       return (
         this.playlist.description
+          // Remove html markups from content
           .replace(/(<([^>]+)>)/ig, '')
           // Escaped " back to real character
           .replace(/&quot;/ig, '"')
