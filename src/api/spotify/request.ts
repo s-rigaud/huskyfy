@@ -44,7 +44,7 @@ request.interceptors.response.use(response => {
   ) {
     useNotificationsStore().notifications.push(
       {
-        message: "Sorry Huskyfy is in beta now and is not open for everyone. " +
+        message: 'Sorry Huskyfy is in beta now and is not open for everyone. ' +
           'If you want access to the website send a mail to huskyfy.bugtracker@gmail.com',
         type: Relevance.warning
       }

@@ -26,10 +26,10 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'App',
   components: { NavbarComponent, NotificationProvider, FooterComponent },
-  created() {
+  created () {
     document.documentElement.lang = this.$i18n.locale
   },
-  data() {
+  data () {
     return {
       snackbar: true
     }

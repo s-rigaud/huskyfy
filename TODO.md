@@ -5,7 +5,6 @@
 - [ ] 🚧: Back to last page when Spotify API token needs refresh
 - [ ] 🎨: Genre checkbox in genre filter should use the color of the genre (Vuetify menu-props) (https://tinyurl.com/yc5btbrd)
 - [ ] 🎨: Add fade transition for all the genres (learn about transition-group)
-- [ ] 🎨: Add white elevation based on Vuetify instead of colorful colors
 
 ## Feedbacks
 

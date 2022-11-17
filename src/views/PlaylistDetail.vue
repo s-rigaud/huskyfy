@@ -867,6 +867,9 @@ export default defineComponent({
   border: 1px var(--text-color) solid;
   border-radius: 5px;
   background-color: black;
+
+  box-shadow: 0 3px 5px -1px var(--text-color),
+    0 1px 10px 0 var(--text-color) !important;
 }
 
 #burger-button-badge {
