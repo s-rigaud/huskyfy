@@ -67,9 +67,10 @@
           <p v-else id="description" class="font-italic"> {{ $t('playlist.no-description') }} </p>
         </v-card-text>
 
-        <v-icon id="burger-button" @click="drawer = !drawer" color="var(--text-color)">
-          {{ drawer ? "mdi-backburger" : "mdi-menu" }}
-        </v-icon>
+        <v-badge id="burger-button-badge" color="red" dot>
+          <v-icon id="burger-button" @click="drawer = !drawer" icon="mdi-menu" color="var(--text-color)" size="x-large">
+          </v-icon>
+        </v-badge>
       </v-card>
 
       <ActionDrawer :open="drawer" :playlistId="playlistId" @on-close="drawer = false"
@@ -801,6 +802,10 @@ export default defineComponent({
   color: black;
 }
 
+#filters-and-reset .v-switch {
+  height: 10px;
+}
+
 /* Main section and track display */
 #main-section {
   width: 100%;
@@ -857,15 +862,26 @@ export default defineComponent({
 
 /* Button to display vertical sidebar */
 #burger-button {
-  padding: 15px;
-
-  position: absolute;
-  top: 10px;
-  right: 5px;
+  padding: 20px;
 
   border: 1px var(--text-color) solid;
   border-radius: 5px;
   background-color: black;
+}
+
+#burger-button-badge {
+  position: absolute;
+  top: 10px;
+  right: 5px;
+}
+
+#burger-button-badge .v-badge__badge {
+  height: 13px;
+  width: 13px;
+
+  bottom: calc(100% - 10px);
+  left: calc(100% - 10px);
+  border-radius: 10px;
 }
 
 .mdi-menu:hover:before {
@@ -928,10 +944,6 @@ export default defineComponent({
 
   #percentage-row {
     display: none;
-  }
-
-  #filters-and-reset .v-switch {
-    height: 10px;
   }
 }
 </style>

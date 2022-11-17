@@ -12,6 +12,10 @@
       @click="displayNewPlaylistDetails">
       {{ $t("playlist.next") }}
     </v-btn>
+
+    <template v-slot:actions>
+      <v-btn color="red" variant="text" @click="snackbarVisible = false">X</v-btn>
+    </template>
   </v-snackbar>
 </template>
 

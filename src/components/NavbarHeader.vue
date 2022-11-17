@@ -8,7 +8,7 @@
     <v-spacer></v-spacer>
 
     <!-- Right part -->
-    <div id="user-info" @click="openUserSpotifyProfile">
+    <div id="user-info">
       <h3 id="profile-name" class="rainbow-text"> {{ userStore.username }} </h3>
       <v-avatar id="profile-picture">
         <v-img rel="preconnect" :src="userStore.profilePicture" alt="Profile picture"></v-img>
@@ -32,11 +32,6 @@ export default defineComponent({
       // eslint-disable-next-line
       const DEFAULT_PICTURE: string = require("@/assets/no-user.png")
       return this.userStore.profilePicture || DEFAULT_PICTURE
-    }
-  },
-  methods: {
-    openUserSpotifyProfile () {
-      window.location.href = this.userStore.uri
     }
   }
 })
@@ -68,9 +63,9 @@ export default defineComponent({
 
 #user-info {
   margin-right: 15px;
+
   display: flex;
   align-items: center;
-  cursor: pointer;
 }
 
 #profile-name {

@@ -18,7 +18,7 @@
       </v-list-item>
 
       <!-- 1.3 Playlist deletion -->
-      <v-dialog v-model="isDeleteModalOpen">
+      <v-dialog v-if="isNotMyMusicPlaylist" v-model="isDeleteModalOpen">
         <template v-slot:activator="{ props }">
           <v-list-item v-bind="props">
             <v-list-item-title>{{ $t("playlist.unfollow") }}</v-list-item-title>
@@ -103,7 +103,7 @@
 <script lang="ts">
 import { downloadImage, GridSize, makeImage } from '@/services/playlistImageMaker'
 
-import { usePlaylistsStore } from '@/stores/playlists'
+import { MY_MUSIC_PLAYLIST_ID, usePlaylistsStore } from '@/stores/playlists'
 import { useUserStore } from '@/stores/user'
 import { storeToRefs } from 'pinia'
 import { defineComponent, toRef } from 'vue'
@@ -165,6 +165,9 @@ export default defineComponent({
     }
   },
   computed: {
+    isNotMyMusicPlaylist (): boolean {
+      return this.playlist.id !== MY_MUSIC_PLAYLIST_ID
+    },
     starImage (): string {
       return require('@/assets/stars.jpg')
     },
@@ -254,6 +257,7 @@ export default defineComponent({
   min-width: max(25%, 300px);
 }
 
+/* Image styling part */
 #drawer .v-slider__container {
   width: 90%;
 }
@@ -277,6 +281,11 @@ export default defineComponent({
   flex-direction: column;
 }
 
+#live-image-preview {
+  margin: 0px 5px;
+}
+
+/* Generic styling */
 #drawer .v-list-subheader {
   font-size: large;
   color: var(--text-color);
@@ -298,10 +307,6 @@ export default defineComponent({
 #deletion-dialog {
   max-width: 100%;
   margin: auto;
-}
-
-#live-image-preview {
-  margin: 0px 5px;
 }
 
 #drawer .v-list-item:hover>.v-list-item__overlay {

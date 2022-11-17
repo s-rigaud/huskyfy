@@ -77,8 +77,6 @@ export default defineComponent({
       return rgbToHex(rgbAverageColor)
     },
     updateChart (indiePercentage: number) {
-      console.error('update chart called')
-
       this.series = [indiePercentage]
       const averageColor = this.getAverageColor(LOWEST_VALUE_COLOR, HIGHEST_VALUE_COLOR, indiePercentage)
       this.chartOptions = {
