@@ -10,7 +10,6 @@
 
 ## Feedbacks
 
-- [ ] 🎨: Add hero to PlaylistExplorer
 - [ ] 🎨: Emphasis the fact that user can create playlist by genre
 
 ## Vuetify 3.1

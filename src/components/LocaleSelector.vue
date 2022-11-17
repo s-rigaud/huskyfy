@@ -1,5 +1,4 @@
 <template>
-  <!-- Language selector -->
   <v-menu open-on-hover transition="fade-transition">
     <template v-slot:activator="{ props }">
       <v-btn class="select-btn rainbow-v-btn" v-bind="props">
@@ -20,6 +19,7 @@ import { useUserStore } from '@/stores/user'
 import { defineComponent } from 'vue'
 
 export default defineComponent({
+  name: 'LocaleSelector',
   setup () {
     const userStore = useUserStore()
     return { userStore }

@@ -1,5 +1,6 @@
 <template>
   <!-- Display all playlists in the Spotify user library -->
+  <HuskyfyBanner />
   <div id="full-page">
     <div id="playlists">
       <PlaylistCard v-for="playlist in playlistsStore.playlists" :key="playlist.id" :id="playlist.id"
@@ -17,13 +18,17 @@
 
 <script lang="ts">
 import { SpotifyPlaylist } from '@/api/spotify/types/entities'
+import HuskyfyBanner from '@/components/HuskyfyBanner.vue'
 import PlaylistCard from '@/components/PlaylistCard.vue'
 import { MY_MUSIC_PLAYLIST_ID, usePlaylistsStore } from '@/stores/playlists'
 import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'PlaylistExplorer',
-  components: { PlaylistCard },
+  components: {
+    HuskyfyBanner,
+    PlaylistCard
+  },
   setup () {
     const playlistsStore = usePlaylistsStore()
     return { playlistsStore }

@@ -112,6 +112,7 @@
 			"only-with-filter": "Créer une nouvelle playlist avec les titres sélectionnés"
 		},
 		"explanation-indie-score": "% de titres faits par des artistes avec moins de 500 000 auditeurs mensuels",
+		"explorer-title": "Cliquez sur votre playlist préférée pour commencer à explorer",
 		"export-preview": "Sauvegarder un aperçu 🖼️",
 		"fully-loaded": "Tous les artistes, les titres et les genres ont pu être récupérés",
 		"load-more-button": "Charger tous les titres",

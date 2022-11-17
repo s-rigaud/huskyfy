@@ -109,6 +109,7 @@
             "only-with-filter": "Create a new playlist only with filtered tracks"
         },
         "explanation-indie-score": "% of tracks from artists with less than 500,000 monthly listeners",
+        "explorer-title": "Click on your favorite playlist to start exploring",
         "export-preview": "Export playlist preview 🖼️",
         "fully-loaded": "All artists, tracks and genres have been retrieved",
         "load-more-button": "Load all tracks",

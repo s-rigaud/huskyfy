@@ -141,7 +141,7 @@ export default defineComponent({
               value: {
                 offsetY: 0,
                 color: LOWEST_VALUE_COLOR,
-                fontSize: '36px',
+                fontSize: '30px',
                 show: true
               }
             }
