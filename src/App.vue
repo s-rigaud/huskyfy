@@ -7,6 +7,7 @@
     <!-- Main view with routing -->
     <v-main id="main">
       <v-container id="container" fluid>
+        <NotificationProvider />
         <router-view />
       </v-container>
     </v-main>
@@ -19,13 +20,19 @@
 <script lang="ts">
 import FooterComponent from '@/components/FooterComponent.vue'
 import NavbarComponent from '@/components/NavbarHeader.vue'
+import NotificationProvider from './components/NotificationProvider.vue'
 import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'App',
-  components: { NavbarComponent, FooterComponent },
-  created () {
+  components: { NavbarComponent, NotificationProvider, FooterComponent },
+  created() {
     document.documentElement.lang = this.$i18n.locale
+  },
+  data() {
+    return {
+      snackbar: true
+    }
   }
 })
 </script>

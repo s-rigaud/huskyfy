@@ -50,6 +50,9 @@
 			"content": "Le logo d'Huskyfy et d'autre images proviennent du site "
 		}
 	},
+	"api": {
+		"refresh-succeeded": "Connexion à l'API de Spotify réussie"
+	},
 	"drawer": {
 		"update-playlist": "Mettre à jour la playlist",
 		"reorder-playlist": "Réordonner la playlist en fonction",

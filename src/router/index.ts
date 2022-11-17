@@ -2,6 +2,7 @@ import api from '@/api'
 import { t } from '@/i18n'
 
 import { useAuthStore } from '@/stores/auth'
+import { Relevance, useNotificationsStore } from '@/stores/notifications'
 import { usePlaylistsStore } from '@/stores/playlists'
 import { useUserStore } from '@/stores/user'
 
@@ -47,7 +48,7 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
-  scrollBehavior () {
+  scrollBehavior() {
     // always scroll to top
     return { top: 0, behavior: 'smooth' }
   }
@@ -84,6 +85,9 @@ router.beforeEach(async function (to, from, next) {
       connected: true,
       uri: data.uri
     })
+    useNotificationsStore().notifications.push(
+      { message: t('api.refresh-succeeded'), type: Relevance.success }
+    )
     next({ name: 'Explore' })
 
     // Does not allow to visit other pages while not connected

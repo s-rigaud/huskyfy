@@ -50,6 +50,9 @@
             "content": "The Huskyfy logo and other images are from "
         }
     },
+    "api": {
+        "refresh-succeeded": "Connection with Spotify API established"
+    },
     "drawer": {
         "update-playlist": "Update playlist",
         "reorder-playlist": "Reorder the playlist according to the",

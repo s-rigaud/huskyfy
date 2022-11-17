@@ -1,6 +1,7 @@
 import api from '@/api'
 import router, { ROUTE_NAME_LOGIN } from '@/router'
 import { useAuthStore } from '@/stores/auth'
+import { Relevance, useNotificationsStore } from '@/stores/notifications'
 import axios from 'axios'
 
 const request = axios.create({
@@ -41,9 +42,12 @@ request.interceptors.response.use(response => {
     status === 403 &&
     error.response.data === 'User not registered in the Developer Dashboard'
   ) {
-    alert(
-      "Sorry Huskyfy is in beta now and it's not open for everyone. " +
-      'If you want access to the website send a mail to huskyfy.bugtracker@gmail.com'
+    useNotificationsStore().notifications.push(
+      {
+        message: "Sorry Huskyfy is in beta now and is not open for everyone. " +
+          'If you want access to the website send a mail to huskyfy.bugtracker@gmail.com',
+        type: Relevance.warning
+      }
     )
     // Delete obsolete already collected tokens
     useAuthStore().reset()
