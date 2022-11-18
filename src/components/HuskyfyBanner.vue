@@ -14,9 +14,6 @@ export default defineComponent({
     starImg (): string {
       return require('@/assets/stars.jpg')
     }
-  },
-  methods: {
-
   }
 })
 </script>
