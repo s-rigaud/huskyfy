@@ -40,6 +40,14 @@
                   </template>
                 </v-tooltip>
               </p>
+              <v-tooltip location="bottom start" :text="$t('playlist.open-on-spotify')" class="rainbow-tooltip">
+                <template v-slot:activator="{ props }">
+                  <v-img id="spotify-logo-meta" v-bind="props" @click="openPlaylistOnSpotify"
+                    src="@/assets/spotify-long.png" alt="Spotify Logo" rel="preconnect" width="90">
+                  </v-img>
+                </template>
+              </v-tooltip>
+
             </div>
           </div>
           <v-tooltip :text="$t('playlist.explanation-indie-score')" class="rainbow-tooltip" location="bottom">
@@ -63,14 +71,18 @@
           </div>
         </div>
         <v-card-text id="playlist-description">
-          <p v-if="formattedDescription" id="description"> {{ formattedDescription }} </p>
-          <p v-else id="description" class="font-italic"> {{ $t('playlist.no-description') }} </p>
+          <p v-if="formattedDescription"> {{ formattedDescription }} </p>
+          <p v-else class="font-italic"> {{ $t('playlist.no-description') }} </p>
         </v-card-text>
 
         <v-badge id="burger-button-badge" color="red" dot>
           <v-icon id="burger-button" @click="drawer = !drawer" icon="mdi-menu" color="var(--text-color)" size="x-large">
           </v-icon>
         </v-badge>
+
+        <v-img id="spotify-logo-meta-small" @click="openPlaylistOnSpotify" src="@/assets/spotify.png" alt="Spotify Logo"
+          rel="preconnect" width="40">
+        </v-img>
       </v-card>
 
       <ActionDrawer :open="drawer" :playlistId="playlistId" @on-close="drawer = false"
@@ -713,6 +725,20 @@ export default defineComponent({
   background-color: var(--primary-color);
   color: var(--text-color);
   border: var(--text-color) 2px solid;
+  outline: var(--primary-color) 0.5px solid;
+}
+
+#spotify-logo-meta {
+  display: none;
+  cursor: pointer;
+}
+
+#spotify-logo-meta-small {
+  position: absolute;
+  bottom: 30px;
+  right: 10px;
+
+  cursor: pointer;
 }
 
 /* Filters */
@@ -750,8 +776,10 @@ export default defineComponent({
 }
 
 #filters-and-reset .v-switch {
-  margin-left: 10px;
   width: fit-content;
+  height: 10px;
+
+  margin-left: 10px;
 }
 
 #filters-and-reset .v-switch .v-switch__thumb {
@@ -800,10 +828,6 @@ export default defineComponent({
   left: calc(100% - 329px);
   height: 35px;
   color: black;
-}
-
-#filters-and-reset .v-switch {
-  height: 10px;
 }
 
 /* Main section and track display */
@@ -946,6 +970,14 @@ export default defineComponent({
   }
 
   #percentage-row {
+    display: none;
+  }
+
+  #spotify-logo-meta {
+    display: block;
+  }
+
+  #spotify-logo-meta-small {
     display: none;
   }
 }

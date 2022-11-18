@@ -262,7 +262,7 @@ const addCanvasLegend = (
     for (let y = 0; y < 2; y++) {
       index = i * 2 + y
       ctx.font = 'bold 13px Righteous'
-      ctx.fillText(`${getEmojiForRank(index)} ${top4Genres[i].value}%`, 10 + 200 * y, yStart + 65 + 20 * i)
+      ctx.fillText(`${getEmojiForRank(index)} ${top4Genres[i].percentage}%`, 10 + 200 * y, yStart + 65 + 20 * i)
       ctx.font = '13px Righteous'
       ctx.fillText(capitalize(top4Genres[index].name), 10 + 200 * y + 55, yStart + 65 + 20 * i)
     }

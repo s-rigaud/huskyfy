@@ -1,9 +1,9 @@
 <template>
-    <v-snackbar v-for="notification of notificationsStore.notifications" :key="notification" v-model="snackbar"
-        timeout="5000" :color="getColor(notification.type)" class="notification-snackbar">
-        {{ notification.message }}
-        <v-icon :icon="getIcon(notification.type)"></v-icon>
-    </v-snackbar>
+  <v-snackbar v-for="notification of notificationsStore.notifications" :key="notification" v-model="snackbar"
+    timeout="5000" :color="getColor(notification.type)" class="notification-snackbar">
+    {{ notification.message }}
+    <v-icon :icon="getIcon(notification.type)"></v-icon>
+  </v-snackbar>
 </template>
 
 <script lang="ts">
@@ -45,10 +45,11 @@ export default defineComponent({
 </script>
 <style>
 .notification-snackbar .v-snackbar__content {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 
-    text-align: center;
+  text-align: center;
 }
 </style>

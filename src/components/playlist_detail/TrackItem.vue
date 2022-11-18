@@ -156,10 +156,6 @@ export default defineComponent({
   animation-fill-mode: forwards;
 }
 
-.v-img {
-  border-radius: 10%;
-}
-
 .v-avatar {
   margin: 5px !important;
 }

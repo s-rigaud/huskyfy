@@ -1,20 +1,27 @@
 # TODO
 
-- [ ] ⚡️: Use v-lazy to improve performance when displaying TrackCard
-- [ ] 🚧: Fix other Github branch for reordering playlist
-- [ ] 🚧: Back to last page when Spotify API token needs refresh
-- [ ] 🎨: Genre checkbox in genre filter should use the color of the genre (Vuetify menu-props) (https://tinyurl.com/yc5btbrd)
-- [ ] 🎨: Add fade transition for all the genres (learn about transition-group)
+- [ ] ⚡️ Use v-lazy to improve performance when displaying TrackCard
+- [ ] 🚧 Fix other Github branch for reordering playlist
+- [ ] 🚧 Back to last page when Spotify API token needs refresh
+- [ ] 🎨 Genre checkbox in genre filter should use the color of the genre (Vuetify menu-props) (https//tinyurl.com/yc5btbrd)
+- [ ] 🎨 Add fade transition for all the genres (learn about transition-group)
+- [ ] 🎨 Export PlaylistDetail meta top part into a specific component
 
 ## Feedbacks
 
-- [ ] 🎨: Emphasis the fact that user can create playlist by genre
+- [ ] 🎨 Emphasis the fact that user can create playlist by genre
+
+## Content
+
+- [ ] 🎨 er and ez verbs mixed up in french translation on Login page
+
+## Spotify validation
 
 ## Vuetify 3.1
 
-- [ ] 🎨: Add v-skeleton-loader for TrackItem
-- [ ] 🎨: Add v-skeleton-loader for PlaylistCard
-- [ ] 🎨: Add v-slide-group for "genre-chips"
+- [ ] 🎨 Add v-skeleton-loader for TrackItem
+- [ ] 🎨 Add v-skeleton-loader for PlaylistCard
+- [ ] 🎨 Add v-slide-group for "genre-chips"
 
 
 ## Release requirements
@@ -23,4 +30,4 @@
 2. [X] Read Spotify design recommendation
 3. [X] Set project as public
 4. [ ] Ask Spotify to be officially open
-5. [ ] Release and ask for fast feedback
+5. [ ] Release and ask for fast feedbacks

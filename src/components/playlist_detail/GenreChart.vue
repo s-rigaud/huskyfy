@@ -30,7 +30,7 @@ export default defineComponent({
   },
   watch: {
     genres (newValue: Genre[]) {
-      this.series = newValue.map((genre) => genre.value)
+      this.series = newValue.map((genre) => genre.count)
       this.chartOptions.labels = newValue.map((genre) => genre.cap_name)
     }
   },
@@ -41,7 +41,7 @@ export default defineComponent({
       width: window.innerWidth - 10,
 
       // APEXCHART STYLING
-      series: this.genres.map((genre) => genre.value),
+      series: this.genres.map((genre) => genre.count),
 
       chartOptions: ({
         chart: {

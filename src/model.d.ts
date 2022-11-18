@@ -2,6 +2,7 @@
 // with the number of track of this genre in the specified playlist
 export interface Genre {
     name: string;
-    value: number;
     cap_name: string;
+    count: number;
+    percentage: number
 }

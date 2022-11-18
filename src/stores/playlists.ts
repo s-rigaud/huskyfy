@@ -125,10 +125,12 @@ export const usePlaylistsStore = defineStore('playlists', {
         }
 
         // Sampling & formatting
+        const trackNumber = state.playlists[playlistId].tracks.length
         return genreMapping.map((genre) => ({
           name: genre[0],
-          value: genre[1],
-          cap_name: capitalize(genre[0])
+          cap_name: capitalize(genre[0]),
+          count: genre[1],
+          percentage: ~~(genre[1] / trackNumber * 100)
         }))
       }
     },

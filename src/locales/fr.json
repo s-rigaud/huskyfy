@@ -61,7 +61,8 @@
 		"reorder-by-artist-name": "Des noms d'artistes",
 		"export-image": "Exporter un récap",
 		"image-display-title": "Afficher le titre",
-		"image-display-stats": "Afficher les stats"
+		"image-display-stats": "Afficher les stats",
+        "not-enough-data": "Pas assez d'artistes ou de genres différents pour créer une image"
 	},
 	"footer": {
 		"built": "Créé avec ♥ par"
@@ -130,7 +131,7 @@
 		"next": "Voir la nouvelle playlist",
 		"no-tracks-title": "Cette playlist n'a pas de titres pour le moment.",
 		"no-tracks-subtitle": "Ouvrez la playlist sur Spotify et essayez d'ajouter des titres pour commencer à les voir apparaître ici.",
-		"open-on-spotify": "Ouvrir sur Spotify",
+		"open-on-spotify": "OUVRIR SPOTIFY",
 		"private": "Playlist privée",
 		"public": "Playlist publique",
 		"reset-filters": "Réinitialiser les filtres",

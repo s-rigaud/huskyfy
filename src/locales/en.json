@@ -61,7 +61,8 @@
         "reorder-by-artist-name": "Names of the artists",
         "export-image": "Export artist image",
         "image-display-title": "Display title",
-        "image-display-stats": "Display stats"
+        "image-display-stats": "Display stats",
+        "not-enough-data": "Not enough artists or genres in playlist to create a picture"
     },
     "footer": {
         "built": "Built with ♥ by"
@@ -111,7 +112,7 @@
             "tooltip": "Create a new playlist with currently selected tracks",
             "only-with-filter": "Create a new playlist only with filtered tracks"
         },
-        "explanation-indie-score": "% of tracks from artists with less than 500,000 monthly listeners",
+        "explanation-indie-score": "% of tracks from artists having less than 500,000 monthly listeners",
         "explorer-title": "Click on your favorite playlist to start exploring",
         "export-preview": "Export playlist preview 🖼️",
         "fully-loaded": "All artists, tracks and genres have been retrieved",
@@ -127,7 +128,7 @@
         "next": "Jump to new playlist",
         "no-tracks-title": "This playlist doesn't have any track now.",
         "no-tracks-subtitle": "Open the playlist on Spotify and try to add tracks to start seeing them here",
-        "open-on-spotify": "Open on Spotify",
+        "open-on-spotify": "OPEN SPOTIFY",
         "private": "Private playlist",
         "public": "Public playlist",
         "reset-filters": "Reset filters",

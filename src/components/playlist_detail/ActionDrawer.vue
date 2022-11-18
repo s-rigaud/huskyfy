@@ -65,7 +65,7 @@
       <v-divider></v-divider>
 
       <!-- (At least 4 tracks to download image) -->
-      <div v-if="playlist.tracks.length > 3">
+      <div v-if="playlist.tracks.length >= 4 && playlistsStore.getTopGenres(playlistId).length >= 4">
         <!-- 3. Export Image -->
         <v-list-subheader> {{ $t('drawer.export-image') }}</v-list-subheader>
 
@@ -95,6 +95,9 @@
         <div id="generate-image-button">
           <v-btn @click="exportArtistPreview" class="rainbow-v-btn">{{ $t("playlist.export-preview") }}</v-btn>
         </div>
+      </div>
+      <div v-else>
+        <p> {{ $t('drawer.not-enough-data') }}</p>
       </div>
 
     </v-list>
@@ -190,10 +193,15 @@ export default defineComponent({
     },
     allTracksLoaded (): boolean {
       return this.playlist.tracks.length === this.playlist.total
+    },
+    canCreateExportImage (): boolean {
+      return this.playlist.tracks.length >= 4 && this.playlistsStore.getTopGenres(this.playlistId).length >= 4
     }
   },
   methods: {
     updateImagePreview () {
+      if (!this.canCreateExportImage) return
+
       makeImage(
         this.playlistId,
         ([2, 3, 4] as GridSize[])[this.generateImageSize],
