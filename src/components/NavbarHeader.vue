@@ -18,8 +18,9 @@
 </template>
 
 <script lang="ts">
-import { useUserStore } from '@/stores/user'
 import { defineComponent } from 'vue'
+
+import { useUserStore } from '@/stores/user'
 
 export default defineComponent({
   name: 'NavbarHeader',

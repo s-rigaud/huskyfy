@@ -164,19 +164,18 @@
 </template>
 
 <script lang="ts">
+import { storeToRefs } from 'pinia'
+import { defineComponent, StyleValue, toRef } from 'vue'
+
+import { SpotifyArtist, SpotifyTrack } from '@/api/spotify/types/entities'
 import DuplicatorPopup from '@/components/playlist_detail/DuplicatorPopup.vue'
 import GenreChart from '@/components/playlist_detail/GenreChart.vue'
 import LoadMoreTracksPopup from '@/components/playlist_detail/LoadMoreTracksPopup.vue'
-import TrackItem from '@/components/playlist_detail/TrackItem.vue'
 import PlaylistMetaDisplay from '@/components/playlist_detail/PlaylistMetaDisplay.vue'
-
-import { SpotifyArtist, SpotifyTrack } from '@/api/spotify/types/entities'
-
+import TrackItem from '@/components/playlist_detail/TrackItem.vue'
 import { Genre } from '@/model'
-import { usePlaylistsStore, API_TRACK_LIMIT, MY_MUSIC_PLAYLIST_ID } from '@/stores/playlists'
+import { API_TRACK_LIMIT, MY_MUSIC_PLAYLIST_ID, usePlaylistsStore } from '@/stores/playlists'
 import { capitalize } from '@/utils/functions'
-import { storeToRefs } from 'pinia'
-import { defineComponent, StyleValue, toRef } from 'vue'
 
 // It is used for typing Vuetify select slot props
 // eslint-disable-next-line
@@ -631,6 +630,7 @@ export default defineComponent({
   z-index: 3;
   transition: 0.2s all ease-out;
 }
+
 /* Main generic spinner while loading*/
 #spinner-block {
   height: 100%;

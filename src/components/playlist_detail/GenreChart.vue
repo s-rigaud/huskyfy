@@ -6,9 +6,10 @@
 </template>
 
 <script lang="ts">
-import { Genre } from '@/model'
 import { ApexOptions } from 'apexcharts'
 import { defineComponent, PropType } from 'vue'
+
+import { Genre } from '@/model'
 
 export default defineComponent({
   name: 'GenreChart',

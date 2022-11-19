@@ -34,10 +34,11 @@
 </template>
 
 <script lang="ts">
+import { defineComponent } from 'vue'
+
 import api from '@/api'
 import LocaleSelector from '@/components/LocaleSelector.vue'
 import { range } from '@/utils/functions'
-import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'LoginView',

@@ -33,7 +33,10 @@ export default defineComponent({
       type: Object as PropType<SpotifyPlaylist>,
       required: true
     },
-    trackRequestLimit: Number
+    trackRequestLimit: {
+      type: Number,
+      required: true
+    }
   },
   emits: ['allTracksLoaded'],
   setup () {

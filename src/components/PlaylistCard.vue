@@ -16,8 +16,14 @@ import { SpotifyImage } from '@/api/spotify/types/entities'
 export default defineComponent({
   name: 'PlaylistCard',
   props: {
-    id: String,
-    name: String,
+    id: {
+      type: String,
+      required: true
+    },
+    name: {
+      type: String,
+      required: true
+    },
     images: {
       type: Array as PropType<SpotifyImage[]>,
       required: true

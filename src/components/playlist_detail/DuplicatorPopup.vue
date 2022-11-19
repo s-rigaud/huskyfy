@@ -37,7 +37,10 @@ export default defineComponent({
       type: Array as PropType<SpotifyTrack[]>,
       required: true
     },
-    filterTag: String
+    filterTag: {
+      type: String,
+      required: true
+    }
   },
   setup () {
     const playlistsStore = usePlaylistsStore()

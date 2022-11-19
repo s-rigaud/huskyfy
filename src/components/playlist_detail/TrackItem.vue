@@ -44,16 +44,26 @@
 </template>
 
 <script lang="ts">
+import { defineComponent, PropType, StyleValue } from 'vue'
+
 import { SpotifyArtist } from '@/api/spotify/types/entities'
 import { usePlaylistsStore } from '@/stores/playlists'
-import { defineComponent, PropType, StyleValue } from 'vue'
 
 export default defineComponent({
   name: 'TrackItem',
   props: {
-    id: String,
-    name: String,
-    image: String,
+    id: {
+      type: String,
+      required: true
+    },
+    name: {
+      type: String,
+      required: true
+    },
+    image: {
+      type: String,
+      required: true
+    },
     artists: {
       type: Array as PropType<SpotifyArtist[]>,
       required: true
@@ -62,7 +72,10 @@ export default defineComponent({
       type: Array as PropType<string[]>,
       required: true
     },
-    isIndie: Boolean,
+    isIndie: {
+      type: Boolean,
+      required: true
+    },
     trackURI: {
       type: String,
       required: true

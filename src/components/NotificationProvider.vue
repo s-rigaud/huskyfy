@@ -8,6 +8,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+
 import { NotificationType, useNotificationsStore } from '@/stores/notifications'
 
 export default defineComponent({

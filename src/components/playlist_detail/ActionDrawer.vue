@@ -107,13 +107,13 @@
     @on-end="startDuplication = false" />
 </template>
 <script lang="ts">
-import { downloadImage, GridSize, makeImage } from '@/services/playlistImageMaker'
-
-import { MY_MUSIC_PLAYLIST_ID, usePlaylistsStore } from '@/stores/playlists'
-import { useUserStore } from '@/stores/user'
 import { storeToRefs } from 'pinia'
 import { defineComponent, toRef } from 'vue'
+
 import DuplicatorPopup from '@/components/playlist_detail/DuplicatorPopup.vue'
+import { downloadImage, GridSize, makeImage } from '@/services/playlistImageMaker'
+import { MY_MUSIC_PLAYLIST_ID, usePlaylistsStore } from '@/stores/playlists'
+import { useUserStore } from '@/stores/user'
 
 export default defineComponent({
   name: 'ActionDrawer',
@@ -128,7 +128,10 @@ export default defineComponent({
       type: String,
       required: true
     },
-    filteredTrackLength: Number
+    filteredTrackLength: {
+      type: Number,
+      required: true
+    }
   },
   setup (props) {
     const playlistsStore = usePlaylistsStore()

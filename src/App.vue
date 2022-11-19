@@ -18,10 +18,11 @@
 </template>
 
 <script lang="ts">
+import { defineComponent } from 'vue'
+
 import FooterComponent from '@/components/FooterComponent.vue'
 import NavbarComponent from '@/components/NavbarHeader.vue'
 import NotificationProvider from './components/NotificationProvider.vue'
-import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'App',

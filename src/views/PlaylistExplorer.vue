@@ -17,11 +17,12 @@
 </template>
 
 <script lang="ts">
+import { defineComponent } from 'vue'
+
 import { SpotifyPlaylist } from '@/api/spotify/types/entities'
 import HuskyfyBanner from '@/components/HuskyfyBanner.vue'
 import PlaylistCard from '@/components/PlaylistCard.vue'
 import { MY_MUSIC_PLAYLIST_ID, usePlaylistsStore } from '@/stores/playlists'
-import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'PlaylistExplorer',
@@ -85,6 +86,4 @@ export default defineComponent({
   justify-content: space-evenly;
   align-items: stretch;
 }
-
-@media only screen and (min-width: 768px) {}
 </style>
