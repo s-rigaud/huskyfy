@@ -8,14 +8,11 @@
                     </v-img>
                 </div>
                 <div id="title-container">
-                    <v-tooltip :text="playlist.name" class="rainbow-tooltip" location="center">
-                        <template v-slot:activator="{ props }">
-                            <h3 id="playlist-name" class="text-truncate rainbow-text" v-bind="props"
-                                @click.self="openPlaylistOnSpotify">
-                                {{ playlist.name }}
-                            </h3>
-                        </template>
-                    </v-tooltip>
+                    <v-text-field v-model="playlistNameText" id="playlist-name" :label="$t('playlist.name')"
+                        variant="outlined" :disabled="!userOwnsPlaylist" color="var(--text-color)" density="compact"
+                        :loading="playlist.name !== playlistNameText && !nameUpdatedInAPI"
+                        :append-inner-icon="nameUpdatedInAPI && playlist.name === playlistNameText ? 'mdi-check-circle-outline' : 'mdi-loading'">
+                    </v-text-field>
                     <p> {{ getTextFromVisibility }} </p>
                     <p id="playlist-owner">
                         {{ $t("playlist.created-by") }}
@@ -37,14 +34,6 @@
                             </template>
                         </v-tooltip>
                     </p>
-                    <v-tooltip location="bottom start" :text="$t('playlist.open-on-spotify')" class="rainbow-tooltip">
-                        <template v-slot:activator="{ props }">
-                            <v-img id="spotify-logo-meta" v-bind="props" @click="openPlaylistOnSpotify"
-                                src="@/assets/spotify-long.png" alt="Spotify Logo" rel="preconnect" width="90">
-                            </v-img>
-                        </template>
-                    </v-tooltip>
-
                 </div>
             </div>
             <v-tooltip :text="$t('playlist.explanation-indie-score')" class="rainbow-tooltip" location="bottom">
@@ -78,9 +67,13 @@
             </v-icon>
         </v-badge>
 
-        <v-img id="spotify-logo-meta-small" @click="openPlaylistOnSpotify" src="@/assets/spotify.png" alt="Spotify Logo"
-            rel="preconnect" width="40">
-        </v-img>
+        <v-tooltip location="bottom end" :text="$t('playlist.open-on-spotify')" class="rainbow-tooltip">
+            <template v-slot:activator="{ props }">
+                <v-img id="spotify-logo-meta-small" @click="openPlaylistOnSpotify" src="@/assets/spotify.png"
+                    alt="Spotify Logo" rel="preconnect" width="40" v-bind="props">
+                </v-img>
+            </template>
+        </v-tooltip>
     </v-card>
 
     <ActionDrawer :open="drawer" :playlistId="playlistId" @on-close="drawer = false"
@@ -88,6 +81,7 @@
 </template>
 
 <script lang="ts">
+import _ from 'lodash'
 import { defineComponent, StyleValue, toRef } from 'vue'
 import IndieChart from '@/components/playlist_detail/IndieChart.vue'
 
@@ -131,8 +125,22 @@ export default defineComponent({
   data () {
     return {
       drawer: false,
-      displayBurgerMenuBadge: 'block'
+      displayBurgerMenuBadge: 'block',
+      playlistNameText: '',
+
+      debouncedUpdateNameFunction: (null as Function | null),
+      nameUpdatedInAPI: false
     }
+  },
+  beforeMount () {
+    this.debouncedUpdateNameFunction = _.debounce(
+      async () => {
+        await this.playlistsStore.updatePlaylistName(this.playlistId, this.playlistNameText)
+        this.nameUpdatedInAPI = true
+      },
+      2000
+    )
+    this.playlistNameText = this.playlist.name
   },
   computed: {
     getTextFromVisibility (): string {
@@ -173,6 +181,9 @@ export default defineComponent({
     burgerButtonShadow (): StyleValue {
       if (this.displayBurgerMenuBadge === 'none') return { 'box-shadow': 'none' }
       return { 'box-shadow': '0 3px 5px -1px var(--text-color), 0 1px 10px 0 var(--text-color) !important' }
+    },
+    userOwnsPlaylist (): boolean {
+      return this.currentUserUsername === this.playlist.owner.display_name
     }
   },
   methods: {
@@ -184,6 +195,14 @@ export default defineComponent({
     },
     getPlaylistDuration (): string {
       return this.playlistsStore.getPlaylistFullLength(this.playlistId)
+    }
+  },
+  watch: {
+    playlistNameText (newValue: string) {
+      if (newValue !== this.playlist.name) {
+        this.nameUpdatedInAPI = false
+                this.debouncedUpdateNameFunction!()
+      }
     }
   }
 })
@@ -234,11 +253,24 @@ export default defineComponent({
 }
 
 #title-container {
-    max-width: calc(100% - 110px);
+    width: calc(100% - 140px);
+}
+
+/* Title v-select hidden second bar */
+#title-container .v-input__details {
+    display: none;
+}
+
+/* Title select icon color */
+#title-container .mdi-check-circle-outline {
+    color: var(--text-color);
+    opacity: 0.8;
 }
 
 #playlist-name {
     margin-right: 10px;
+
+    color: var(--text-color);
     cursor: pointer;
 }
 
@@ -295,11 +327,6 @@ export default defineComponent({
     outline: var(--primary-color) 0.5px solid;
 }
 
-#spotify-logo-meta {
-    display: none;
-    cursor: pointer;
-}
-
 #spotify-logo-meta-small {
     position: absolute;
     bottom: 30px;
@@ -344,6 +371,10 @@ export default defineComponent({
         width: 40%;
     }
 
+    #title-container {
+        width: 100%;
+    }
+
     #genre-chart-container {
         display: flex !important;
     }
@@ -356,14 +387,6 @@ export default defineComponent({
 
     #percentage-row {
         display: none !important;
-    }
-
-    #spotify-logo-meta {
-        display: block;
-    }
-
-    #spotify-logo-meta-small {
-        display: none;
     }
 }
 </style>

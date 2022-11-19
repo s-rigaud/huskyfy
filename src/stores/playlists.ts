@@ -419,6 +419,13 @@ export const usePlaylistsStore = defineStore('playlists', {
         coverUrl
       )
     },
+    async updatePlaylistName (playlistId: string, name: string) {
+      await api.spotify.playlists.updatePlaylistName(
+        playlistId,
+        name
+      )
+      this.playlists[playlistId].name = name
+    },
     async refreshMyMusicTotalTrack () {
       // My Music is a special Spotify playlist
       const response = await api.spotify.playlists.getUserSavedTracks(1, 0)

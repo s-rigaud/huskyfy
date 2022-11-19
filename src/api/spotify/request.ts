@@ -35,14 +35,14 @@ request.interceptors.response.use(response => {
       config.headers.Authorization = `Bearer ${accessToken}`
       return request(config)
     }
+  } else {
+    useNotificationsStore().notifications.push(
+      {
+        message: `Spotify error when accessing API : ${error.response.data}`,
+        type: NotificationType.error
+      }
+    )
   }
-
-  useNotificationsStore().notifications.push(
-    {
-      message: `Spotify error when accessing API : ${error.response.data}`,
-      type: NotificationType.error
-    }
-  )
 
   return Promise.reject(error)
 })

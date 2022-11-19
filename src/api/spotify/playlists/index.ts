@@ -95,6 +95,9 @@ export default {
   updatePlaylistPrivacy (playlistId: string, isPublic: boolean) {
     return request.put(`/playlists/${playlistId}`, { public: isPublic })
   },
+  updatePlaylistName (playlistId: string, name: string) {
+    return request.put(`/playlists/${playlistId}`, { name })
+  },
   async deleteTracks (playlistId: string, playlistTracks: SpotifyTrack[]) {
     // LIMIT is 100 tracks
     const formattedTracks = []

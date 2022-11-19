@@ -62,7 +62,7 @@
 		"export-image": "Exporter un récap",
 		"image-display-title": "Afficher le titre",
 		"image-display-stats": "Afficher les stats",
-        "not-enough-data": "Pas assez d'artistes ou de genres différents pour créer une image"
+		"not-enough-data": "Pas assez d'artistes ou de genres différents pour créer une image"
 	},
 	"footer": {
 		"built": "Créé avec ♥ par"
@@ -98,6 +98,7 @@
 		"you": "vous",
 		"collaborative": "Playlist collaborative",
 		"created-by": "Créée par",
+		"name": "Nom de la playlist",
 		"delete": {
 			"agree": "Supprimer 🗑️",
 			"confirm-message": "Voulez vous vraiment supprimer cette playlist de votre bibliothèque ?",

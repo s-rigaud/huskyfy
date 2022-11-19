@@ -6,6 +6,7 @@
 - [ ] 🚧🎨 Pb styling phone for multiple line description on phone
 - [ ] 🎨 Add better styling instead of borders for PlaylistDetail
 - [ ] 🎨 Genre checkbox in genre filter should use the color of the genre (Vuetify menu-props) (https//tinyurl.com/yc5btbrd)
+- [ ] 🎨 Autofocus on delete button for DeletionPopup
 - [ ] 🎨 Add fade transition for all the genres (learn about transition-group)
 - [ ] ✨🎨 Disconnect menu
 
@@ -13,7 +14,6 @@
 
 - [ ] 🎨 Emphasis the fact that user can create playlist by genre
 - [ ] 🎨 er and ez verbs mixed up in french translation on Login page
-- [ ] ✨ Playlist renaming
 
 ## Firefox UI
 
@@ -34,6 +34,6 @@
 1. [X] Check frontend playlist
 2. [X] Read Spotify design recommendation
 3. [X] Set project as public
-4. [ ] Ask Spotify to be officially open
+4. [X] Ask Spotify to be officially open
 5. [ ] Release and ask for fast feedbacks
 6. [ ] Add Huskyfy to ProductHunt

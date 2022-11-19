@@ -95,6 +95,7 @@
         "you": "you",
         "collaborative": "Collaborative playlist",
         "created-by": "Created by",
+        "name": "Playlist name",
         "delete": {
             "agree": "Delete 🗑️",
             "confirm-message": "Do you really want to delete this playlist from your library ?",
