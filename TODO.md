@@ -12,8 +12,6 @@
 
 ## Feedbacks
 
-
-
 ## Firefox UI
 
 - [ ] 🎨 No locale image on button

@@ -130,7 +130,7 @@ const addCanvasTitle = (
   ctx.fillStyle = '#F9B621'
 
   const subText = t('generating-picture.subtitle', { count: gridSize ** 2 })
-  ctx.fillText(subText, 400 / 2, 45 + gridSize)
+  ctx.fillText(subText, 400 / 2, 47 + gridSize)
 }
 
 const addCanvasArtistImages = (

@@ -9,9 +9,9 @@
         </div>
         <div id="title-container">
           <v-text-field v-model="playlistNameText" id="playlist-name" :label="$t('playlist.name')" variant="outlined"
-            :disabled="!userOwnsPlaylist" color="var(--text-color)" density="compact"
+            :disabled="!userOwnsPlaylist || isMyMusicPlaylist" color="var(--text-color)" density="compact"
             :loading="playlist.name !== playlistNameText && !nameUpdatedInAPI"
-            :append-inner-icon="nameUpdatedInAPI && playlist.name === playlistNameText ? 'mdi-check-circle-outline' : 'mdi-loading'">
+            :append-inner-icon="nameUpdatedInAPI && playlist.name === playlistNameText ? 'mdi-check-circle-outline' : ''">
           </v-text-field>
           <p> {{ getTextFromVisibility }} </p>
           <p id="playlist-owner">
@@ -87,7 +87,7 @@ import { defineComponent, StyleValue, toRef } from 'vue'
 
 import ActionDrawer from '@/components/playlist_detail/ActionDrawer.vue'
 import IndieChart from '@/components/playlist_detail/IndieChart.vue'
-import { usePlaylistsStore } from '@/stores/playlists'
+import { MY_MUSIC_PLAYLIST_ID, usePlaylistsStore } from '@/stores/playlists'
 import { useUserStore } from '@/stores/user'
 
 export default defineComponent({
@@ -184,6 +184,9 @@ export default defineComponent({
     },
     userOwnsPlaylist (): boolean {
       return this.currentUserUsername === this.playlist.owner.display_name
+    },
+    isMyMusicPlaylist (): boolean {
+      return this.playlist.id === MY_MUSIC_PLAYLIST_ID
     }
   },
   methods: {
@@ -266,6 +269,22 @@ export default defineComponent({
 #title-container .mdi-check-circle-outline {
   color: var(--text-color);
   opacity: 0.8;
+}
+
+/* Title is always clearly visible */
+#title-container .v-field--disabled {
+  opacity: 1;
+}
+
+/* Hide input boundaries when input disabled */
+#title-container .v-input--disabled .v-field__field {
+  position: relative;
+  left: -16px;
+}
+
+/* Hide input boundaries when input disabled */
+#title-container .v-input--disabled .v-field__outline {
+  display: none;
 }
 
 #playlist-name {

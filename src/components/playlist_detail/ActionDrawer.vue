@@ -1,9 +1,14 @@
 <template>
   <v-navigation-drawer id="drawer" v-model="isOpen" temporary location="right" :image='starImage' elevation="20">
     <v-list>
-      <v-list-subheader>{{ $t('drawer.update-playlist') }}</v-list-subheader>
+      <v-list-subheader v-if="
+      ((userOwnsPlaylist || spotifyOwnsPlaylist) && !playlist.collaborative && isNotMyMusicPlaylist)
+      || allTracksLoaded
+      || isNotMyMusicPlaylist">
+        {{ $t('drawer.update-playlist') }}
+      </v-list-subheader>
       <!-- 1.1 Update playlist privacy -->
-      <div v-if="(userOwnsPlaylist || spotifyOwnsPlaylist) && !playlist.collaborative">
+      <div v-if="(userOwnsPlaylist || spotifyOwnsPlaylist) && !playlist.collaborative && isNotMyMusicPlaylist">
         <v-list-item v-if="playlist.public" @click="setPlaylistPrivate">
           <v-list-item-title>{{ $t("playlist.set-private") }} {{ $t("_emojis.private") }}</v-list-item-title>
         </v-list-item>
@@ -126,10 +131,6 @@ export default defineComponent({
     },
     playlistId: {
       type: String,
-      required: true
-    },
-    filteredTrackLength: {
-      type: Number,
       required: true
     }
   },
