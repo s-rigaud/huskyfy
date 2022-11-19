@@ -24,6 +24,7 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   align-items: center;
+  flex-shrink: 0;
 
   overflow: hidden;
   position: relative;

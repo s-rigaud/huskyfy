@@ -45,7 +45,6 @@ export interface SpotifyArtist {
 
 // Profile Model
 export interface SpotifyProfile {
-    country: string;
     // eslint-disable-next-line
     display_name: string;
     // eslint-disable-next-line

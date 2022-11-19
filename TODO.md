@@ -7,12 +7,13 @@
 - [ ] 🎨 Add better styling instead of borders for PlaylistDetail
 - [ ] 🎨 Genre checkbox in genre filter should use the color of the genre (Vuetify menu-props) (https//tinyurl.com/yc5btbrd)
 - [ ] 🎨 Add fade transition for all the genres (learn about transition-group)
-- [ ] 🎨 Export PlaylistDetail meta top part into a specific component
+- [ ] ✨🎨 Disconnect menu
 
 ## Feedbacks
 
 - [ ] 🎨 Emphasis the fact that user can create playlist by genre
 - [ ] 🎨 er and ez verbs mixed up in french translation on Login page
+- [ ] ✨ Playlist renaming
 
 ## Firefox UI
 
@@ -20,8 +21,6 @@
 - [ ] 🎨 No green snackbar when playlist full loaded
 - [ ] 🎨 No spinner on Firefox (on button + large ones)
 - [ ] 🎨 Create a new playlist button in the filter section collapse with v-switch on phone
-
-## Spotify validation
 
 ## Vuetify 3.1
 

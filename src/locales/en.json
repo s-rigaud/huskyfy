@@ -51,7 +51,7 @@
         }
     },
     "api": {
-        "refresh-succeeded": "Connection with Spotify API established"
+        "refresh-succeeded": "Connection with Spotify established"
     },
     "drawer": {
         "update-playlist": "Update playlist",
@@ -62,7 +62,7 @@
         "export-image": "Export artist image",
         "image-display-title": "Display title",
         "image-display-stats": "Display stats",
-        "not-enough-data": "Not enough artists or genres in playlist to create a picture"
+        "not-enough-data": "Not enough artists or genres in the playlist to create a picture"
     },
     "footer": {
         "built": "Built with ♥ by"

@@ -13,7 +13,7 @@
       </div>
 
       <!-- 1.2 Duplicate playlist -->
-      <v-list-item @click="$emit('duplicatePlaylist')">
+      <v-list-item v-if='allTracksLoaded' @click="startDuplicationProcess">
         <v-list-item-title>{{ $t("playlist.duplicate.button") }}</v-list-item-title>
       </v-list-item>
 
@@ -97,11 +97,14 @@
         </div>
       </div>
       <div v-else>
-        <p> {{ $t('drawer.not-enough-data') }}</p>
+        <v-list-subheader> {{ $t('drawer.not-enough-data') }}</v-list-subheader>
       </div>
 
     </v-list>
   </v-navigation-drawer>
+
+  <DuplicatorPopup v-if="startDuplication" :playlistId="playlist.id" :new-tracks="[]" :filter-tag="''"
+    @on-end="startDuplication = false" />
 </template>
 <script lang="ts">
 import { downloadImage, GridSize, makeImage } from '@/services/playlistImageMaker'
@@ -110,10 +113,12 @@ import { MY_MUSIC_PLAYLIST_ID, usePlaylistsStore } from '@/stores/playlists'
 import { useUserStore } from '@/stores/user'
 import { storeToRefs } from 'pinia'
 import { defineComponent, toRef } from 'vue'
+import DuplicatorPopup from '@/components/playlist_detail/DuplicatorPopup.vue'
 
 export default defineComponent({
   name: 'ActionDrawer',
-  emits: ['onClose', 'duplicatePlaylist', 'onSortEnd'],
+  components: { DuplicatorPopup },
+  emits: ['onClose', 'onSortEnd'],
   props: {
     open: {
       type: Boolean,
@@ -164,7 +169,9 @@ export default defineComponent({
       generateImageDisplayTitle: true,
       generateImageDisplayStats: true,
 
-      imagePreview: ''
+      imagePreview: '',
+
+      startDuplication: false
     }
   },
   computed: {
@@ -199,6 +206,10 @@ export default defineComponent({
     }
   },
   methods: {
+    startDuplicationProcess () {
+      this.isOpen = false
+      this.startDuplication = true
+    },
     updateImagePreview () {
       if (!this.canCreateExportImage) return
 
@@ -300,6 +311,10 @@ export default defineComponent({
   text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
 }
 
+#drawer .v-list-subheader__text {
+  white-space: break-spaces;
+}
+
 #drawer .v-list-item {
   text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
 }
@@ -317,6 +332,7 @@ export default defineComponent({
   margin: auto;
 }
 
+/* Update default opacity for Vuetify hover link effect */
 #drawer .v-list-item:hover>.v-list-item__overlay {
   opacity: calc(0.2 * var(--v-theme-overlay-multiplier));
 }

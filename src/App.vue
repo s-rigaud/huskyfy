@@ -59,7 +59,7 @@ export default defineComponent({
 
   display: flex;
   flex-direction: column;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: stretch;
   align-content: space-between;
   justify-content: center;

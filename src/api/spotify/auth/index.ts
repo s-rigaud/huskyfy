@@ -51,7 +51,7 @@ export default {
     const authStore = useAuthStore()
 
     const STATE_AUTHORIZATION_CODE = generateRandomString(15)
-    const CODE_VERIFIER = '2bscelmwgoqewakfzyua7t4blfcsubfa27ej655g6w96dt8hmxpagbtw24dhiyj31if93fxowut2lxfjz8r4tmhexbf559pbjrugktzlxaggemosne1qly4okmys9r1t'
+    const CODE_VERIFIER = generateRandomString(128)
     const SECRET_CODE_CHALLENGE = base64urlencode(await sha256(CODE_VERIFIER))
 
     authStore.$patch({
@@ -93,12 +93,15 @@ export default {
       },
       data
     }).then(function ({ data }: AxiosResponse<SpotifyAuthResponse, SpotifyAuthResponse>) {
-      // Delete old token not useful anymore
       authStore.$patch({
+        accessToken: data.access_token,
+        refreshToken: data.refresh_token,
+
+        // Delete old token not useful anymore
         temporaryToken: '',
         stateAuthorizationCode: '',
-        accessToken: data.access_token,
-        refreshToken: data.refresh_token
+        codeVerifier: '',
+        secretCodeChallenge: ''
       })
     })
   },

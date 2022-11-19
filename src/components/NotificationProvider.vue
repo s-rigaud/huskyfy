@@ -8,7 +8,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { Relevance, useNotificationsStore } from '@/stores/notifications'
+import { NotificationType, useNotificationsStore } from '@/stores/notifications'
 
 export default defineComponent({
   name: 'NotificationProvider',
@@ -22,16 +22,16 @@ export default defineComponent({
     }
   },
   methods: {
-    getColor (type: Relevance): string {
-      if (type === Relevance.success) return 'green'
-      if (type === Relevance.warning) return '#e1b12c'
-      if (type === Relevance.error) return '#e84118'
+    getColor (type: NotificationType): string {
+      if (type === NotificationType.success) return 'green'
+      if (type === NotificationType.warning) return '#e1b12c'
+      if (type === NotificationType.error) return '#e84118'
       return 'grey'
     },
-    getIcon (type: Relevance): string {
-      if (type === Relevance.success) return 'mdi-checkbox-marked-circle'
-      if (type === Relevance.warning) return 'mdi-alert'
-      if (type === Relevance.error) return 'mdi-alert-octagon'
+    getIcon (type: NotificationType): string {
+      if (type === NotificationType.success) return 'mdi-checkbox-marked-circle'
+      if (type === NotificationType.warning) return 'mdi-alert'
+      if (type === NotificationType.error) return 'mdi-alert-octagon'
       return 'mdi-menu'
     }
   },

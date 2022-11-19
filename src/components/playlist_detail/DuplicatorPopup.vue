@@ -70,11 +70,15 @@ export default defineComponent({
         this.playlistsStore.playlists[this.playlistId].images[0].url
       )
 
+      // If newTracks is empty that means we have to duplicate all the tracks
+      const tracksToAdd = this.newTracks.length ? this.newTracks : this.playlistsStore.playlists[this.playlistId].tracks
+      console.error(this.newTracks, tracksToAdd, this.playlistsStore.playlists[this.playlistId].tracks)
+
       this.loadingText = this.$t('playlist.new.tracks')
       this.loadingPercentage = 66
       await this.playlistsStore.addTracksToPlaylist(
         newPlaylistId,
-        this.newTracks
+        tracksToAdd
       )
 
       this.loadingText = this.$t('playlist.new.done')

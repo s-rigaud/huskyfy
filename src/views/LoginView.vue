@@ -16,7 +16,7 @@
     </div>
 
     <div id="lower-part">
-      <v-btn id="connect-button" @click="accessOAuthPage" v-if="!userStore.connected" rounded class="rainbow-v-btn"
+      <v-btn id="connect-button" @click="accessOAuthPage" rounded class="rainbow-v-btn"
         size="large">
         {{ $t("login.connect") }}
         <v-icon right light style="padding-top: 5px;"> mdi-account-circle </v-icon>
@@ -36,15 +36,24 @@
 <script lang="ts">
 import api from '@/api'
 import LocaleSelector from '@/components/LocaleSelector.vue'
-import { useUserStore } from '@/stores/user'
+import { useNotificationsStore, NotificationType } from '@/stores/notifications'
 import { range } from '@/utils/functions'
 import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'LoginView',
   setup () {
-    const userStore = useUserStore()
-    return { userStore }
+    const notificationsStore = useNotificationsStore()
+    return { notificationsStore }
+  },
+  mounted () {
+    this.notificationsStore.notifications.push(
+      {
+        message: 'Huskyfy is actually in alpha, some features may be broken.' +
+          'If you find a bug, please report it to huskyfy.bugtracker@gmail.com',
+        type: NotificationType.warning
+      }
+    )
   },
   components: { LocaleSelector },
   computed: {

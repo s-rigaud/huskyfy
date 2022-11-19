@@ -2,93 +2,8 @@
   <!-- Description of all the playlist with all the tracks and filters -->
   <div id="playlist-detail" v-if="playlist && playlist.total > 0" v-scroll="onScroll">
     <div id="main-content">
-      <v-card id="playlist-card" v-if="playlistId">
-        <div id="playlist-meta">
-          <div id="playlist-meta-left">
-            <div id="playlist-image" @click.self="openPlaylistOnSpotify">
-              <v-img v-bind:src="playlist.images[0].url" lazy-src='@/assets/default_cover.jpg' alt="Cover image" cover
-                rel="preconnect" width="90">
-              </v-img>
-            </div>
-            <div id="title-container">
-              <v-tooltip :text="playlist.name" class="rainbow-tooltip" location="center">
-                <template v-slot:activator="{ props }">
-                  <h3 id="playlist-name" class="text-truncate rainbow-text" v-bind="props"
-                    @click.self="openPlaylistOnSpotify">
-                    {{ playlist.name }}
-                  </h3>
-                </template>
-              </v-tooltip>
-              <p> {{ getTextFromVisibility }} </p>
-              <p id="playlist-owner">
-                {{ $t("playlist.created-by") }}
-                <span id="playlist-owner-name" @click.stop="openPlaylistOwnerSpotifyProfile">
-                  {{ usernameToDisplay }}
-                </span>
-              </p>
-              <p v-if="allTracksLoaded" id="percentage-row">
-                <span class="rainbow-text">{{ $t("playlist.indie-score-text") }}</span>
-                <!-- Only if all tracks are loaded -->
-                <span :style="colorForPercentage" style="margin: 0px 5px;" class="black-highlight">
-                  {{ ` ${indiePercentage}` }} %
-                </span>
-                <v-tooltip :text="$t('playlist.explanation-indie-score')" class="rainbow-tooltip">
-                  <template v-slot:activator="{ props }">
-                    <v-btn id="help-indie-percentage" v-bind="props">
-                      <v-icon size="x-small">mdi-help</v-icon>
-                    </v-btn>
-                  </template>
-                </v-tooltip>
-              </p>
-              <v-tooltip location="bottom start" :text="$t('playlist.open-on-spotify')" class="rainbow-tooltip">
-                <template v-slot:activator="{ props }">
-                  <v-img id="spotify-logo-meta" v-bind="props" @click="openPlaylistOnSpotify"
-                    src="@/assets/spotify-long.png" alt="Spotify Logo" rel="preconnect" width="90">
-                  </v-img>
-                </template>
-              </v-tooltip>
-
-            </div>
-          </div>
-          <v-tooltip :text="$t('playlist.explanation-indie-score')" class="rainbow-tooltip" location="bottom">
-            <template v-slot:activator="{ props }">
-              <IndieChart v-bind="props" :indie-percentage="indiePercentage" class="playlist-meta-middle" />
-            </template>
-          </v-tooltip>
-          <div id="playlist-meta-right">
-            <p v-show="allTracksLoaded">
-              <span class="rainbow-text">{{ $t('playlist.duration') }}</span>
-              <span class="playlist-metric">
-                {{ getPlaylistDuration() }}
-              </span>
-            </p>
-            <p>
-              <span class="rainbow-text">{{ $t('playlist.total-track-number') }}</span>
-              <span class="playlist-metric">
-                {{ playlist.total }}
-              </span>
-            </p>
-          </div>
-        </div>
-        <v-card-text id="playlist-description">
-          <p v-if="formattedDescription"> {{ formattedDescription }} </p>
-          <p v-else class="font-italic"> {{ $t('playlist.no-description') }} </p>
-        </v-card-text>
-
-        <v-badge id="burger-button-badge" color="red" dot>
-          <v-icon id="burger-button" @click="() => { drawer = !drawer; drawerIconDisplay = 'none' }" icon="mdi-menu"
-            color="var(--text-color)" size="x-large">
-          </v-icon>
-        </v-badge>
-
-        <v-img id="spotify-logo-meta-small" @click="openPlaylistOnSpotify" src="@/assets/spotify.png" alt="Spotify Logo"
-          rel="preconnect" width="40">
-        </v-img>
-      </v-card>
-
-      <ActionDrawer :open="drawer" :playlistId="playlistId" @on-close="drawer = false"
-        @duplicate-playlist="() => { startDuplication = true; drawer = false }"
-        @on-sort-end="() => { resetFilters(); drawer = false }" />
+      <PlaylistMetaDisplay :playlist-id="playlistId" :indie-percentage="indiePercentage"
+        @playlist-updated="resetFilters" />
 
       <v-expansion-panels v-model="openPanels" variant="accordion">
         <v-expansion-panel>
@@ -230,9 +145,8 @@
     </div>
 
     <!-- Load more tracks to lazy-load all of them -->
-    <LoadMoreTracksPopup v-if="isHugePlaylist && playlist.tracks.length < playlist.total && !startDuplication"
-      :playlist="playlist" :trackRequestLimit="TRACK_REQUEST_LIMIT"
-      @all-tracks-loaded="() => { resetFilters(); refreshStats() }" />
+    <LoadMoreTracksPopup v-if="isHugePlaylist && playlist.tracks.length < playlist.total" :playlist="playlist"
+      :trackRequestLimit="TRACK_REQUEST_LIMIT" @all-tracks-loaded="() => { resetFilters(); refreshStats() }" />
   </div>
 
   <!-- No tracks in the playlist -->
@@ -250,19 +164,16 @@
 </template>
 
 <script lang="ts">
-import ActionDrawer from '@/components/playlist_detail/ActionDrawer.vue'
 import DuplicatorPopup from '@/components/playlist_detail/DuplicatorPopup.vue'
 import GenreChart from '@/components/playlist_detail/GenreChart.vue'
 import LoadMoreTracksPopup from '@/components/playlist_detail/LoadMoreTracksPopup.vue'
 import TrackItem from '@/components/playlist_detail/TrackItem.vue'
-
-import IndieChart from '@/components/playlist_detail/IndieChart.vue'
+import PlaylistMetaDisplay from '@/components/playlist_detail/PlaylistMetaDisplay.vue'
 
 import { SpotifyArtist, SpotifyTrack } from '@/api/spotify/types/entities'
 
 import { Genre } from '@/model'
 import { usePlaylistsStore, API_TRACK_LIMIT, MY_MUSIC_PLAYLIST_ID } from '@/stores/playlists'
-import { useUserStore } from '@/stores/user'
 import { capitalize } from '@/utils/functions'
 import { storeToRefs } from 'pinia'
 import { defineComponent, StyleValue, toRef } from 'vue'
@@ -292,14 +203,13 @@ export default defineComponent({
     }
   },
   components: {
-    ActionDrawer,
     DuplicatorPopup,
-    IndieChart,
     GenreChart,
     LoadMoreTracksPopup,
+    PlaylistMetaDisplay,
     TrackItem
   },
-  setup(props) {
+  setup (props) {
     const playlistsStore = usePlaylistsStore()
 
     // Shorthand
@@ -307,16 +217,14 @@ export default defineComponent({
     const playlist = toRef(playlists.value, props.playlistId)
 
     const { downloadPlaylistTracks } = playlistsStore
-    const currentUserUsername = useUserStore().username
 
     return {
       playlistsStore,
       playlist,
-      downloadPlaylistTracks,
-      currentUserUsername
+      downloadPlaylistTracks
     }
   },
-  async mounted() {
+  async mounted () {
     this.TRACK_REQUEST_LIMIT = API_TRACK_LIMIT * 3
     if (this.playlist.id === MY_MUSIC_PLAYLIST_ID) {
       await this.playlistsStore.refreshMyMusicTotalTrack()
@@ -324,7 +232,7 @@ export default defineComponent({
     await this.loadFirstTracks()
     this.filteredTracks = this.playlist.tracks
   },
-  data() {
+  data () {
     return {
       TRACK_REQUEST_LIMIT: 150,
 
@@ -341,9 +249,6 @@ export default defineComponent({
       topGenres: ([] as Genre[]),
       indiePercentage: 0,
 
-      drawer: false,
-      drawerIconDisplay: 'block',
-
       startDuplication: false,
 
       displayGoTopButton: false,
@@ -353,10 +258,10 @@ export default defineComponent({
     }
   },
   methods: {
-    onScroll() {
+    onScroll () {
       this.displayGoTopButton = (window.scrollY > 100)
     },
-    async loadFirstTracks() {
+    async loadFirstTracks () {
       // Only asking for the right number of tracks as we already know how many tracks are in the playlist
       const maxLimit = Math.min(this.TRACK_REQUEST_LIMIT, this.playlist.total)
       await this.downloadPlaylistTracks(this.playlistId, maxLimit)
@@ -366,14 +271,14 @@ export default defineComponent({
       this.indiePercentage = this.getIndiePercentage()
       this.resetFilters()
     },
-    refreshStats() {
+    refreshStats () {
       this.topGenres = this.getTopGenres()
       this.indiePercentage = this.getIndiePercentage()
     },
-    getIndiePercentage(): number {
+    getIndiePercentage (): number {
       return this.playlistsStore.getIndiePercentage(this.playlistId)
     },
-    applyFilters() {
+    applyFilters () {
       if (this.numberOfActiveFilters === 0) {
         return this.resetFilters()
       }
@@ -427,24 +332,21 @@ export default defineComponent({
 
       this.filteredTracks = newFilteredTracks
     },
-    addTracksConserveUnicity(filteredTracks: SpotifyTrack[], validTracks: SpotifyTrack[]) {
+    addTracksConserveUnicity (filteredTracks: SpotifyTrack[], validTracks: SpotifyTrack[]) {
       const alreadyKnownTrackIds = filteredTracks.map(t => t.id)
       const tracksToAdd = validTracks.filter(t => !alreadyKnownTrackIds.includes(t.id))
       filteredTracks.push(...tracksToAdd)
     },
-    resetFilters() {
+    resetFilters () {
       this.selectedGenres = []
       this.selectedArtists = []
       this.selectedPopularity = NO_POPULARITY
       this.filteredTracks = this.playlist.tracks
     },
-    openPlaylistOnSpotify() {
+    openPlaylistOnSpotify () {
       window.location.href = this.playlist.uri
     },
-    openPlaylistOwnerSpotifyProfile() {
-      window.location.href = this.playlist.owner.uri
-    },
-    getSortedArtists(): SpotifyArtist[] {
+    getSortedArtists (): SpotifyArtist[] {
       // Need to have a set of object in JS ...
       const alreadyAddedArtistNames: string[] = []
       const artistsToReturn: SpotifyArtist[] = []
@@ -459,10 +361,10 @@ export default defineComponent({
       }
       return artistsToReturn.sort((a1, a2) => a1.name.localeCompare(a2.name))
     },
-    scrollTop() {
+    scrollTop () {
       window.scrollTo({ top: 0, behavior: 'smooth' })
     },
-    getTextForPopularity(popularity: Popularity): string {
+    getTextForPopularity (popularity: Popularity): string {
       const allPopularities: Record<Popularity, string> = {
         Indie: this.$t('track.filters.indie'),
         Popular: this.$t('track.filters.popular'),
@@ -470,85 +372,48 @@ export default defineComponent({
       }
       return allPopularities[popularity]
     },
-    getPlaylistDuration(): string {
-      return this.playlistsStore.getPlaylistFullLength(this.playlistId)
-    },
+
     // Returns only top genres sorted by most to least popular
-    getTopGenres(): Genre[] {
+    getTopGenres (): Genre[] {
       const limit = (window.innerWidth > 500) ? 25 : 10
       return this.playlistsStore.getTopGenres(this.playlistId, limit)
     },
-    getColorForPopularity(popularity: string): string {
+    getColorForPopularity (popularity: string): string {
       if (popularity === Popularity.Indie) return 'green'
       if (popularity === Popularity.Popular) return 'red'
       return '#ddd'
     },
-    getColorForGenre(genre: string): string {
+    getColorForGenre (genre: string): string {
       return this.playlistsStore.genreColorMapping[genre]
     },
-    getArtistImage(artist: SpotifyArtist): string {
+    getArtistImage (artist: SpotifyArtist): string {
       return artist.images[0]?.url || require('@/assets/no-user.png')
     }
   },
   computed: {
-    allTracksLoaded(): boolean {
-      return this.playlist.tracks.length === this.playlist.total
-    },
-    generalTitle(): string {
+    generalTitle (): string {
       const keyword = (this.isFilterExclusive) ? this.$t('track.filters.keyword.and') : this.$t('track.filters.keyword.or')
       const separator = ` ${keyword} `
       const popularityFilter: string[] = (this.selectedPopularity !== NO_POPULARITY) ? [this.selectedPopularity] : []
       const filters = popularityFilter.concat(this.selectedGenres).concat(this.selectedArtists.map(a => a.name))
       return `${filters.map(f => capitalize(f)).join(separator)}` || this.$t('track.all-tracks')
     },
-    colorForPercentage(): StyleValue {
-      let color: string
-      if (this.indiePercentage < 10) color = '#FF0D0D'
-      else if (this.indiePercentage < 25) color = '#FF4E11'
-      else if (this.indiePercentage < 50) color = '#FF8E15'
-      else if (this.indiePercentage < 65) color = '#FAB733'
-      else if (this.indiePercentage < 80) color = '#ACB334'
-      else color = '#69B34C'
-      return { color }
-    },
-    usernameToDisplay(): string {
-      const playlistCreator = this.playlist.owner.display_name
-      return this.currentUserUsername === playlistCreator ? this.$t('playlist.you') : playlistCreator
-    },
-    getEmojiFromVisibility(): string {
+    getEmojiFromVisibility (): string {
       if (this.playlist.collaborative) return this.$t('_emojis.collaborative')
       if (this.playlist.public) return this.$t('_emojis.public')
       return this.$t('_emojis.private')
     },
-    getTextFromVisibility(): string {
-      if (this.playlist.collaborative) {
-        return this.$t('playlist.collaborative') + ' ' + this.$t('_emojis.collaborative')
-      }
-      if (this.playlist.public) return this.$t('playlist.public') + ' ' + this.$t('_emojis.public')
-      return this.$t('playlist.private') + ' ' + this.$t('_emojis.private')
-    },
-    formattedDescription(): string {
-      return (
-        this.playlist.description
-          // Remove html markups from content
-          .replace(/(<([^>]+)>)/ig, '')
-          // Escaped " back to real character
-          .replace(/&quot;/ig, '"')
-          // Escaped / back to real character
-          .replace(/&#x2F;/ig, '/')
-      )
-    },
-    toButtonOpacity(): StyleValue {
+    toButtonOpacity (): StyleValue {
       return { opacity: (this.displayGoTopButton) ? 100 : 0 }
     },
-    numberOfActiveFilters(): number {
+    numberOfActiveFilters (): number {
       return (
         this.selectedGenres.length +
         this.selectedArtists.length +
         +(this.selectedPopularity !== NO_POPULARITY)
       )
     },
-    filterTag(): string {
+    filterTag (): string {
       const keyword = (this.isFilterExclusive) ? this.$t('track.filters.keyword.and') : this.$t('track.filters.keyword.or')
 
       return ((this.selectedPopularity !== NO_POPULARITY ? [this.selectedPopularity] : []) as string[])
@@ -558,18 +423,18 @@ export default defineComponent({
     }
   },
   watch: {
-    isFilterExclusive() {
+    isFilterExclusive () {
       this.applyFilters()
     },
-    selectedPopularity() {
+    selectedPopularity () {
       this.applyFilters()
     },
-    selectedArtists(newValue: SpotifyArtist[], oldValue: SpotifyArtist[]) {
+    selectedArtists (newValue: SpotifyArtist[], oldValue: SpotifyArtist[]) {
       if (oldValue.length !== 0 || newValue.length !== 0) {
         this.applyFilters()
       }
     },
-    selectedGenres(newValue: string[], oldValue: string[]) {
+    selectedGenres (newValue: string[], oldValue: string[]) {
       if (oldValue.length !== 0 || newValue.length !== 0) {
         this.applyFilters()
       }
@@ -622,126 +487,6 @@ export default defineComponent({
 #open-spotify .v-btn__content img {
   margin: 0px 3px;
   width: 20px;
-}
-
-/* playlist-card */
-#playlist-card {
-  width: 100%;
-  min-height: 150px;
-
-  margin-bottom: 5px;
-  border: 2px var(--text-color) solid;
-}
-
-#playlist-meta {
-  display: flex;
-  padding: 10px 10px 0px 10px;
-}
-
-#playlist-meta-left {
-  display: flex;
-  width: 100%;
-}
-
-#genre-chart-container {
-  display: none !important;
-  width: 246px;
-}
-
-.playlist-meta-middle {
-  cursor: pointer;
-}
-
-#playlist-meta-right {
-  display: none;
-
-  width: 50%;
-  margin-right: 50px;
-  padding: 10px;
-
-  background-color: var(--primary-color);
-  border: 1px grey solid;
-  border-radius: 5px;
-}
-
-#playlist-image {
-  margin: 5px 5px 5px -5px;
-  cursor: pointer;
-}
-
-#title-container {
-  max-width: calc(100% - 110px);
-}
-
-#playlist-name {
-  margin-right: 10px;
-  cursor: pointer;
-}
-
-#playlist-owner {
-  opacity: 0.8;
-}
-
-#playlist-owner-name:hover {
-  cursor: pointer;
-  text-decoration: underline;
-}
-
-#playlist-description {
-  padding: 5px 10px 10px 10px;
-}
-
-.playlist-metric {
-  margin-left: 5px;
-}
-
-#help-indie-percentage {
-  min-width: fit-content;
-  height: 23px;
-  margin-left: 5px;
-  padding: 0;
-
-  border: 2px var(--text-color) solid;
-  border-radius: 5px;
-  background-color: var(--primary-color);
-}
-
-#help-indie-percentage:hover {
-  background-color: var(--text-color);
-  border-color: var(--primary-color);
-}
-
-#help-indie-percentage .v-icon {
-  padding: 8px 9px;
-  color: var(--text-color);
-}
-
-#help-indie-percentage:hover .v-icon {
-  color: var(--primary-color);
-}
-
-#help-indie-percentage .v-btn--size-default {
-  min-width: fit-content;
-}
-
-.rainbow-tooltip .v-overlay__content {
-  background-color: var(--primary-color);
-  color: var(--text-color);
-  border: var(--text-color) 2px solid;
-  outline: var(--primary-color) 0.5px solid;
-}
-
-#spotify-logo-meta {
-  display: none;
-  cursor: pointer;
-}
-
-#spotify-logo-meta-small {
-  position: absolute;
-  bottom: 30px;
-  right: 10px;
-
-  cursor: pointer;
 }
 
 /* Filters */
@@ -886,41 +631,6 @@ export default defineComponent({
   z-index: 3;
   transition: 0.2s all ease-out;
 }
-
-/* Button to display vertical sidebar */
-#burger-button {
-  padding: 20px;
-
-  border: 1px var(--text-color) solid;
-  border-radius: 5px;
-  background-color: black;
-
-  box-shadow: 0 3px 5px -1px var(--text-color),
-    0 1px 10px 0 var(--text-color) !important;
-}
-
-#burger-button-badge {
-  position: absolute;
-  top: 10px;
-  right: 5px;
-}
-
-#burger-button-badge .v-badge__badge {
-  height: 13px;
-  width: 13px;
-
-  display: v-bind(drawerIconDisplay);
-  bottom: calc(100% - 10px);
-  left: calc(100% - 10px);
-
-  border-radius: 10px;
-  background: linear-gradient(180deg, #c0392b 20%, #e74c3c 51%, #c0392b 86%) !important;
-}
-
-.mdi-menu:hover:before {
-  content: "\F006D"
-}
-
 /* Main generic spinner while loading*/
 #spinner-block {
   height: 100%;
@@ -959,32 +669,6 @@ export default defineComponent({
 
   #main-content {
     width: 80%;
-  }
-
-  #playlist-meta-left {
-    width: 40%;
-  }
-
-  #genre-chart-container {
-    display: flex !important;
-  }
-
-  #playlist-meta-right {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-  }
-
-  #percentage-row {
-    display: none;
-  }
-
-  #spotify-logo-meta {
-    display: block;
-  }
-
-  #spotify-logo-meta-small {
-    display: none;
   }
 }
 </style>

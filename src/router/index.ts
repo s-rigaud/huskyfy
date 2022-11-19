@@ -2,7 +2,7 @@ import api from '@/api'
 import { t } from '@/i18n'
 
 import { useAuthStore } from '@/stores/auth'
-import { Relevance, useNotificationsStore } from '@/stores/notifications'
+import { NotificationType, useNotificationsStore } from '@/stores/notifications'
 import { usePlaylistsStore } from '@/stores/playlists'
 import { useUserStore } from '@/stores/user'
 
@@ -81,12 +81,10 @@ router.beforeEach(async function (to, from, next) {
       id: data.id,
       username: data.display_name,
       profilePicture: userPicture,
-      country: data.country,
-      connected: true,
-      uri: data.uri
+      connected: true
     })
     useNotificationsStore().notifications.push(
-      { message: t('api.refresh-succeeded'), type: Relevance.success }
+      { message: t('api.refresh-succeeded'), type: NotificationType.success }
     )
     next({ name: 'Explore' })
 
