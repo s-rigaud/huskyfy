@@ -12,8 +12,7 @@
 
 ## Feedbacks
 
-- [ ] 🎨 Emphasis the fact that user can create playlist by genre
-- [ ] 🎨 er and ez verbs mixed up in french translation on Login page
+
 
 ## Firefox UI
 

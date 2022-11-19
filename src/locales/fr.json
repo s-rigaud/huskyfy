@@ -75,11 +75,11 @@
 		"connect": "Se connecter à Spotify",
 		"header": "Découvrez de nouvelles fonctionnalités avec vos playlists Spotify",
 		"functionality1": "Découvrez les genres musicaux que vous écoutez le plus souvent",
-		"functionality2": "Dupliquer et partager votre playlist facilement",
-		"functionality3": "Partagez vos chansons préférées avec tous vos amis",
+		"functionality2": "Créez de nouvelles playlists en séparant vos playlists par genre",
+		"functionality3": "Dupliquez et partager votre playlist facilement",
 		"functionality4": "Filtrez et analysez votre playlist en fonction de la popularité des artistes ou des genres musicaux",
-		"functionality5": "Trier vos playlists en fonction des genres ou des artistes les plus populaires",
-		"functionality6": "Enregistrer des images contenant toutes les informations de vos playlists"
+		"functionality5": "Triez vos playlists en fonction des genres ou des artistes les plus populaires",
+		"functionality6": "Enregistrez des images contenant toutes les informations de vos playlists"
 	},
 	"navbar": {
 		"logout": "Déconnexion"

@@ -36,25 +36,11 @@
 <script lang="ts">
 import api from '@/api'
 import LocaleSelector from '@/components/LocaleSelector.vue'
-import { useNotificationsStore, NotificationType } from '@/stores/notifications'
 import { range } from '@/utils/functions'
 import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'LoginView',
-  setup () {
-    const notificationsStore = useNotificationsStore()
-    return { notificationsStore }
-  },
-  mounted () {
-    this.notificationsStore.notifications.push(
-      {
-        message: 'Huskyfy is actually in alpha, some features may be broken.' +
-          'If you find a bug, please report it to huskyfy.bugtracker@gmail.com',
-        type: NotificationType.warning
-      }
-    )
-  },
   components: { LocaleSelector },
   computed: {
     maxNumberOfFunctionalities (): number[] {
