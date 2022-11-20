@@ -16,8 +16,7 @@
     </div>
 
     <div id="lower-part">
-      <v-btn id="connect-button" @click="accessOAuthPage" rounded class="rainbow-v-btn"
-        size="large">
+      <v-btn id="connect-button" @click="accessOAuthPage" rounded class="rainbow-v-btn" size="large">
         {{ $t("login.connect") }}
         <v-icon right light style="padding-top: 5px;"> mdi-account-circle </v-icon>
       </v-btn>
@@ -99,7 +98,7 @@ export default defineComponent({
   padding: 15px;
 
   border-radius: 15px;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.8);
 
   display: flex;
   flex-direction: column;
@@ -108,12 +107,13 @@ export default defineComponent({
 
 #functionalities {
   width: fit-content;
-  margin: auto;
+  height: 100%;
+  margin: 10px auto;
 
   display: flex;
   flex-direction: column;
-
   text-align: left;
+  justify-content: space-evenly;
 }
 
 .functionality {
@@ -123,11 +123,14 @@ export default defineComponent({
   align-items: flex-start;
 
   font-size: 15px;
-  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+  text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
 }
 
 .functionality>h4 {
   margin-left: 5px;
+
+  font-size: 17px;
+  color: #ECECEC;
 }
 
 .functionality .v-img {

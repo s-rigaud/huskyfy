@@ -251,6 +251,7 @@ export default defineComponent({
 
 #title-container {
   width: calc(100% - 140px);
+  margin-left: 5px;
 
   display: flex;
   flex-direction: column;
@@ -273,21 +274,11 @@ export default defineComponent({
   opacity: 0.9;
 }
 
-/* Title is always clearly visible */
-#title-container .v-field--disabled {
-  opacity: 1;
-}
-
-/* Hide input boundaries when input disabled */
-#title-container .v-input--disabled .v-field__field {
+#simplified-title {
   position: relative;
-  left: -16px;
-  top: -8px;
-}
+  top: -4px;
 
-/* Hide input boundaries when input disabled */
-#title-container .v-input--disabled .v-field__outline {
-  display: none;
+  font-size: 20px;
 }
 
 #playlist-name {

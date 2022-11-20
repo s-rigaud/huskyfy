@@ -30,7 +30,7 @@
         "description": {
             "title": "Huskyfy playlist manager",
             "content": {
-                "part1": "Huskyfy is a small web project that aims to provide new functionalities when manipulating Spotify playlists. Right now, it is not possible to create sub-playlists on Spotify filtering by track genres or artists.",
+                "part1": "Huskyfy is a small web project that aims to provide new functionalities when manipulating Spotify playlists. Right now, it is not possible to create sub-playlists filtering by track genres or artists on Spotify. But this is possible thanks to ",
                 "part2": "Moreover, indie artists are not really promoted on the platform so Huskyfy try to highlight their work."
             }
         },
@@ -74,12 +74,12 @@
         "about": "Learn more about this website",
         "connect": "Log in with Spotify",
         "header": "Interact with Spotify playlists smoothly",
-        "functionality1": "Find out which music genres you are mostly listening to",
-        "functionality2": "Duplicate and share your playlists easily",
-        "functionality3": "Share your liked songs with all your friends",
-        "functionality4": "Filter and analyse your playlist by artist popularity or music genres",
-        "functionality5": "Sort playlist tracks according to most popular genres or artists in the playlist",
-        "functionality6": "Save image recaps about all the informations of your playlists"
+        "functionality1": "Discover the music genres you listen most of the time",
+        "functionality2": "Create new playlists by splitting your playlists by genre",
+        "functionality3": "Duplicate and share your playlists easily",
+        "functionality4": "Filter and analyze your playlists according to the popularity of artists or music genres",
+        "functionality5": "Sort your playlists according to the most popular genres or artists",
+        "functionality6": "Save images containing all the information about your playlists"
     },
     "navbar": {
         "logout": "Sign out"

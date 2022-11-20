@@ -11,11 +11,11 @@ import { capitalize, getDefaultMap, range } from '@/utils/functions'
 
 // Order matters as only first match will be used (trap before rap, ...)
 // Sorting in length descending order to avoid this
-const COMMON_GENRES = [
+const COMMON_GENRES = ([
   'alternative', 'death metal', 'electropop', 'pop rock', 'hip hop',
   'drill', 'house', 'indie', 'psych', 'swing', 'metal', 'dance', 'rock',
   'jazz', 'trap', 'lo-fi', 'soul', 'funk', 'pop', 'r&b', 'rap', 'edm'
-]
+] as const)
 
 export const MY_MUSIC_PLAYLIST_ID = 'my-music'
 const DEFAULT_MY_MUSIC_PLAYLIST: SimplifiedSpotifyPlaylist = {
@@ -60,9 +60,22 @@ type ArtistCount = {
 }
 
 const DEFAULT_GENRE_COLOR_MAPPING: Record<string, string> = {
-  rock: 'red',
-  indie: 'green',
-  funk: 'yellow'
+  rock: '#DC143C',
+  'heavy metal': '#BB0022',
+  soul: '#FFA500',
+  funk: '#FFA500',
+  disco: '#FFA500',
+  reggae: '#008000',
+  electro: '#C0C0C0',
+  jazz: '#FFC0CB',
+  'hip hop': '#00008B',
+  pop: '#87CEEB',
+  house: '#F89122',
+  indie: '#00FF00',
+  dubstep: 'black',
+  techno: '#F36533',
+  'black metal': '#FFFFFF',
+  opera: '#AD1131'
 }
 
 export const usePlaylistsStore = defineStore('playlists', {

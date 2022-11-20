@@ -7,9 +7,14 @@
         <h1 class="rainbow-text">{{ $t("about.description.title") }}</h1>
       </div>
       <p style="margin-bottom: 0">
-        {{ $t("about.description.content.part1") + ' ' + $t("about.description.content.part2") }}
+        {{ $t("about.description.content.part1") }}
+        <span style="color: var(--link-color); cursor: pointer;" @mouseover="drawFireworks">
+          Huskyfy !
+        </span>
+        {{ $t("about.description.content.part2") }}
       </p>
-      <v-chip id="indie-chip" :text="$t('track.indie')" color="green" label text-color="white" size="small">
+      <v-chip id="indie-chip" :text="$t('track.indie')" color="green" label text-color="white" size="large"
+        @click="drawStars">
       </v-chip>
 
       <div class="subtitle">
@@ -21,6 +26,7 @@
 
       <div class="subtitle">
         <h2 class="rainbow-text">{{ $t("about.process.title") }}</h2>
+        <h2>💻</h2>
       </div>
       <v-divider></v-divider>
       <p> {{ $t("about.process.content") }}</p>
@@ -33,7 +39,7 @@
       <p>
         {{ $t("about.expose-liked-songs.content.part1") }} {{ $t("_emojis.collaborative") }}
         <br />
-        <span @click="openMyMusicOnSpotify">
+        <span style="cursor: pointer; color: var(--link-color)" @click="openMyMusicOnSpotify">
           {{ $t("about.expose-liked-songs.content.part2") }}
           <v-img id="my-song-img" width="20" src='@/assets/my-music.jpeg' alt="My Music playlist"></v-img>
         </span>
@@ -57,6 +63,7 @@
 
       <div class="subtitle">
         <h2 class="rainbow-text">{{ $t("about.copyright.title") }}</h2>
+        <h2 class="rainbow-text" style="margin-left: 5px">©️</h2>
       </div>
       <v-divider></v-divider>
       <p>
@@ -74,13 +81,10 @@
       </div>
     </div>
   </div>
-
-  <v-btn id="exit-button" @click="backToPreviousPage" class="rainbow-v-btn">
-    <v-icon>mdi-home</v-icon>
-  </v-btn>
 </template>
 
 <script lang="ts">
+import confetti from 'canvas-confetti'
 import { defineComponent } from 'vue'
 
 export default defineComponent({
@@ -89,8 +93,65 @@ export default defineComponent({
     openMyMusicOnSpotify () {
       window.location.href = process.env.VUE_APP_BASE_SERVER_URL + '/playlist/my-music'
     },
-    backToPreviousPage () {
-      this.$router.go(-1)
+    drawStars () {
+      const indieChip = (document.getElementById('indie-chip') as HTMLElement)
+      const rect = indieChip.getBoundingClientRect()
+      const origin = {
+        x: (rect.left + rect.right) / 2 / window.innerWidth,
+        y: (rect.top + rect.bottom) / 2 / window.innerHeight
+      }
+      const defaults = {
+        spread: 360,
+        ticks: 50,
+        gravity: 0,
+        decay: 0.94,
+        startVelocity: 30,
+        shapes: ['star'],
+        origin,
+        colors: ['FFE400', 'FFBD00', 'E89400', 'FFCA6C', 'FDFFB8']
+      }
+
+      function shoot () {
+        confetti({
+          ...defaults,
+          particleCount: 40,
+          scalar: 1.2,
+          shapes: ['star']
+        })
+
+        confetti({
+          ...defaults,
+          particleCount: 10,
+          scalar: 0.75,
+          shapes: ['circle']
+        })
+      }
+
+      setTimeout(shoot, 0)
+      setTimeout(shoot, 100)
+      setTimeout(shoot, 200)
+    },
+    drawFireworks () {
+      const duration = 1500
+      const animationEnd = Date.now() + duration
+      const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 }
+
+      function randomInRange (min: number, max: number): number {
+        return Math.random() * (max - min) + min
+      }
+
+      const interval = setInterval(function () {
+        const timeLeft = animationEnd - Date.now()
+
+        if (timeLeft <= 0) {
+          return clearInterval(interval)
+        }
+
+        const particleCount = 50 * (timeLeft / duration)
+        // since particles fall down, start a bit higher than random
+        confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }))
+        confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }))
+      }, 250)
     }
   }
 })
@@ -99,22 +160,32 @@ export default defineComponent({
 #about-content {
   width: 100%;
   height: 100%;
+
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  /* Monochromatic for --secondary-color */
+  background-color: #464646;
 }
 
 #text {
-  margin: 20px;
-  max-width: 700px;
+  max-width: 800px;
+  padding: 10px 30px;
+
   text-align: justify;
+
+  background-color: var(--secondary-color);
+  box-shadow: 14px 2px 20px 1px rgba(0, 0, 0, 0.5), -14px 2px 20px 1px rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: 14px 2px 20px 1px rgba(0, 0, 0, 0.5), -14px 2px 20px 1px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 14px 2px 20px 1px rgba(0, 0, 0, 0.5), -14px 2px 20px 1px rgba(0, 0, 0, 0.5);
 }
 
 #main-title {
   width: 100%;
+
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
 }
 
 #main-title-image {
@@ -152,17 +223,6 @@ export default defineComponent({
   }
 }
 
-#exit-button {
-  width: 50px;
-  height: 66px;
-  font-size: larger;
-  border-radius: 50%;
-  position: fixed;
-  top: 70px;
-  right: 10px;
-  display: none;
-}
-
 #my-song-img {
   display: inline-block;
   top: 5px;
@@ -182,6 +242,7 @@ h1 {
 }
 
 p {
+  color: lightgray;
   margin-bottom: 30px;
 }
 
@@ -212,7 +273,7 @@ a:hover {
   }
 
   p {
-    font-size: 15px;
+    font-size: 17px;
   }
 }
 </style>

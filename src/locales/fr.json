@@ -30,8 +30,8 @@
 		"description": {
 			"title": "Huskyfy playlist manager",
 			"content": {
-				"part1": "Huskyfy est un site web qui vise à fournir de nouvelles fonctionnalités en manipulant des playlists Spotify. Actuellement, il n'est pas possible de créer des sous-playlists sur Spotify en filtrant par genres musicaux ou par artistes. Maintenant c'est possible avec Huskyfy !",
-				"part2": "De plus, les artistes indépendants ne sont pas vraiment mis en avant sur la plateforme, c'est pourquoi Huskyfy essaie de les valoriser."
+				"part1": "Huskyfy est un site web qui vise à fournir de nouvelles fonctionnalités en manipulant des playlists Spotify. Actuellement, il n'est pas possible de créer des sous-playlists sur Spotify en filtrant par genres musicaux ou par artistes. Maintenant c'est possible avec ",
+				"part2": "De plus, les artistes indépendants ne sont pas toujours mis en avant sur la plateforme, c'est pourquoi Huskyfy essaie de les valoriser."
 			}
 		},
 		"expose-liked-songs": {
@@ -43,11 +43,11 @@
 		},
 		"process": {
 			"title": "Comment ça marche ?",
-			"content": "Huskyfy utilise l'API de Spotify pour rassembler les genres et les données sur les artistes, le genre et les titres de vos playlists. L'application essaie ensuite de fournir une interface agréable pour vous permettre de filtrer et de créer facilement de nouvelles playlists à partir de celles déjà existantes."
+			"content": "Huskyfy utilise l'API de Spotify pour rassembler les données sur les artistes, les genres et les titres de vos playlists. L'application essaie ensuite de fournir une interface agréable pour vous permettre de filtrer et de créer facilement de nouvelles playlists à partir de celles déjà existantes."
 		},
 		"copyright": {
 			"title": "Copyright",
-			"content": "Le logo d'Huskyfy et d'autre images proviennent du site "
+			"content": "Le logo d'Huskyfy et d'autres images proviennent du site "
 		}
 	},
 	"api": {
@@ -76,8 +76,8 @@
 		"header": "Découvrez de nouvelles fonctionnalités avec vos playlists Spotify",
 		"functionality1": "Découvrez les genres musicaux que vous écoutez le plus souvent",
 		"functionality2": "Créez de nouvelles playlists en séparant vos playlists par genre",
-		"functionality3": "Dupliquez et partager votre playlist facilement",
-		"functionality4": "Filtrez et analysez votre playlist en fonction de la popularité des artistes ou des genres musicaux",
+		"functionality3": "Dupliquez et partager vos playlists facilement",
+		"functionality4": "Filtrez et analysez vos playlists en fonction de la popularité des artistes ou des genres musicaux",
 		"functionality5": "Triez vos playlists en fonction des genres ou des artistes les plus populaires",
 		"functionality6": "Enregistrez des images contenant toutes les informations de vos playlists"
 	},

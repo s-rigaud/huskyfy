@@ -66,32 +66,36 @@
               <div id="filters-and-reset">
                 <div id="filtering-chips">
                   <div>
-                    <v-fade-transition>
+                    <v-scale-transition>
                       <v-chip v-if="selectedPopularity !== NO_POPULARITY"
                         :text="getTextForPopularity(selectedPopularity)" closable
                         @click:close="selectedPopularity = NO_POPULARITY" variant="elevated"
                         :color="getColorForPopularity(selectedPopularity)">
                       </v-chip>
-                    </v-fade-transition>
+                    </v-scale-transition>
                   </div>
 
                   <div v-if="selectedGenres.length > 0">
-                    <v-chip v-for="genre in selectedGenres" :key="genre" :text="genre.toUpperCase()" closable
-                      :color="getColorForGenre(genre)"
-                      @click:close="selectedGenres = selectedGenres.filter(g => g !== genre)" variant="outlined"
-                      prepend-icon="mdi-chart-bar-stacked">
-                    </v-chip>
+                    <transition-group name="scale-transition" tag="v-chip">
+                      <v-chip v-for="genre in selectedGenres" :key="genre" :text="genre.toUpperCase()" closable
+                        :color="getColorForGenre(genre)"
+                        @click:close="selectedGenres = selectedGenres.filter(g => g !== genre)" variant="outlined"
+                        prepend-icon="mdi-chart-bar-stacked">
+                      </v-chip>
+                    </transition-group>
                   </div>
 
                   <div v-if="selectedArtists.length > 0">
-                    <v-chip v-for="artist in selectedArtists" :key="artist.name" closable color="yellow"
-                      @click:close="selectedArtists = selectedArtists.filter(a => a.id != artist.id)"
-                      variant="outlined">
-                      <v-avatar left>
-                        <v-img :src="getArtistImage(artist)"></v-img>
-                      </v-avatar>
-                      {{ artist.name }}
-                    </v-chip>
+                    <transition-group name="scale-transition" tag="v-chip">
+                      <v-chip v-for="artist in selectedArtists" :key="artist.name" closable color="yellow"
+                        @click:close="selectedArtists = selectedArtists.filter(a => a.id != artist.id)"
+                        variant="outlined">
+                        <v-avatar left>
+                          <v-img :src="getArtistImage(artist)"></v-img>
+                        </v-avatar>
+                        {{ artist.name }}
+                      </v-chip>
+                    </transition-group>
                   </div>
                 </div>
 
