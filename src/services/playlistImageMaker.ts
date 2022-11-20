@@ -2,7 +2,6 @@ import { SpotifyPlaylist } from '@/api/spotify/types/entities'
 import { t, tc } from '@/i18n'
 import { usePlaylistsStore } from '@/stores/playlists'
 import { capitalize } from '@/utils/functions'
-import drawRoundRect from './utils'
 
 export type GridSize = 2 | 3 | 4
 
@@ -274,4 +273,39 @@ const getEmojiForRank = (rank: number): string => {
   if (rank === 1) return '🥈'
   if (rank === 2) return '🥉'
   return '🏅'
+}
+
+// From https://stackoverflow.com/questions/1255512
+function drawRoundRect (
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+  radius: number | { tl: number, tr: number, br: number, bl: number } = 5,
+  fill = false,
+  stroke = true
+) {
+  if (typeof radius === 'number') {
+    radius = { tl: radius, tr: radius, br: radius, bl: radius }
+  } else {
+    radius = { ...{ tl: 0, tr: 0, br: 0, bl: 0 }, ...radius }
+  }
+  ctx.beginPath()
+  ctx.moveTo(x + radius.tl, y)
+  ctx.lineTo(x + width - radius.tr, y)
+  ctx.quadraticCurveTo(x + width, y, x + width, y + radius.tr)
+  ctx.lineTo(x + width, y + height - radius.br)
+  ctx.quadraticCurveTo(x + width, y + height, x + width - radius.br, y + height)
+  ctx.lineTo(x + radius.bl, y + height)
+  ctx.quadraticCurveTo(x, y + height, x, y + height - radius.bl)
+  ctx.lineTo(x, y + radius.tl)
+  ctx.quadraticCurveTo(x, y, x + radius.tl, y)
+  ctx.closePath()
+  if (fill) {
+    ctx.fill()
+  }
+  if (stroke) {
+    ctx.stroke()
+  }
 }

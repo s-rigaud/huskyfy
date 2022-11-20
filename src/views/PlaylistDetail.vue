@@ -104,8 +104,7 @@
                   </v-fade-transition>
 
                   <v-btn :disabled="filteredTracks.length === 0 || numberOfActiveFilters === 0"
-                    id="create-new-playlist-btn" size="small" @click="startDuplication = true" rounded="pill"
-                    class="rainbow-v-btn">
+                    id="create-new-playlist-btn" @click="startDuplication = true" rounded="pill" class="rainbow-v-btn">
                     {{ $t("playlist.duplicate.only-with-filter") }}
                   </v-btn>
                 </div>
@@ -122,7 +121,9 @@
             <h2>{{ generalTitle }}</h2>
           </div>
           <v-divider class="mx-4" vertical thickness="0.5" color="grey"></v-divider>
-          <h4> {{ filteredTracks.length }} {{ $t('track.name') }}</h4>
+          <div>
+            <h4 id="track-number-title"> {{ filteredTracks.length }} {{ $t('track.name') }}</h4>
+          </div>
         </div>
         <v-divider thickness="0.5" color="grey"></v-divider>
 
@@ -524,9 +525,12 @@ export default defineComponent({
 
 #filters-and-reset .v-switch {
   width: fit-content;
-  height: 10px;
 
   margin-left: 10px;
+}
+
+#filters-and-reset .v-switch .v-input__details {
+  display: none;
 }
 
 #filters-and-reset .v-switch .v-switch__thumb {
@@ -544,7 +548,7 @@ export default defineComponent({
 }
 
 #genre-select {
-  width: min(100%, 350px);
+  width: min(100%, 400px);
 }
 
 #popularity-select {
@@ -570,18 +574,17 @@ export default defineComponent({
 }
 
 #create-new-playlist-btn {
-  transform-origin: center top 0px;
-  position: relative;
-  left: calc(100% - 329px);
-  height: 35px;
+  float: right;
+
   color: black;
+  font-size: 10px;
 }
 
 /* Main section and track display */
 #main-section {
   width: 100%;
   height: 100%;
-  margin-top: 5px;
+  margin: 5px 0px;
 
   border: 2px var(--link-color) solid;
   border-radius: 5px;
@@ -596,8 +599,13 @@ export default defineComponent({
 }
 
 #list-title-embedded {
-  width: 70%;
-  padding-left: 5px;
+  width: 100%;
+  padding-left: 10px;
+}
+
+#track-number-title {
+  width: max-content;
+  margin-right: 40px;
 }
 
 #tracks {

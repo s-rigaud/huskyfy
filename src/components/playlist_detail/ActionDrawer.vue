@@ -9,10 +9,10 @@
       </v-list-subheader>
       <!-- 1.1 Update playlist privacy -->
       <div v-if="(userOwnsPlaylist || spotifyOwnsPlaylist) && !playlist.collaborative && isNotMyMusicPlaylist">
-        <v-list-item v-if="playlist.public" @click="setPlaylistPrivate">
+        <v-list-item v-if="playlist.public" @click="() => updatePlaylistPrivacy(false)">
           <v-list-item-title>{{ $t("playlist.set-private") }} {{ $t("_emojis.private") }}</v-list-item-title>
         </v-list-item>
-        <v-list-item v-else @click="setPlaylistPublic">
+        <v-list-item v-else @click="() => updatePlaylistPrivacy(true)">
           <v-list-item-title>{{ $t("playlist.set-public") }} {{ $t("_emojis.public") }}</v-list-item-title>
         </v-list-item>
       </div>
@@ -156,9 +156,7 @@ export default defineComponent({
       this.updateImagePreview()
     },
     isOpen (newValue: boolean) {
-      if (newValue === false) {
-        this.$emit('onClose')
-      }
+      !newValue && this.$emit('onClose')
     },
     generateImageSize () { this.updateImagePreview() },
     generateImageDisplayTitle () { this.updateImagePreview() },
@@ -237,17 +235,12 @@ export default defineComponent({
         (dataUrl: string) => { this.imagePreview = dataUrl }
       )
     },
-    async setPlaylistPrivate () {
+    async updatePlaylistPrivacy (isPublic: boolean) {
       await this.playlistsStore.updatePlaylistPrivacy(
         this.playlistId,
-        false
+        isPublic
       )
-    },
-    async setPlaylistPublic () {
-      await this.playlistsStore.updatePlaylistPrivacy(
-        this.playlistId,
-        true
-      )
+      this.isOpen = false
     },
     async sortPlaylistTracksByGenres () {
       await this.playlistsStore.sortPlaylistTracksByGenres(

@@ -31,11 +31,13 @@
 </style>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
 import { ApexOptions } from 'apexcharts'
+import { defineComponent } from 'vue'
 
-const LOWEST_VALUE_COLOR = '#f35800'
-const HIGHEST_VALUE_COLOR = '#21f92e'
+import { getAverageColor } from '@/services/colors'
+
+export const LOWEST_VALUE_COLOR = '#f35800'
+export const HIGHEST_VALUE_COLOR = '#21f92e'
 
 export default defineComponent({
   name: 'IndieChart',
@@ -47,38 +49,13 @@ export default defineComponent({
   },
   computed: {
     currentAverageColor (): string {
-      return this.getAverageColor(LOWEST_VALUE_COLOR, HIGHEST_VALUE_COLOR, this.indiePercentage)
+      return getAverageColor(LOWEST_VALUE_COLOR, HIGHEST_VALUE_COLOR, this.indiePercentage)
     }
   },
   methods: {
-    getAverageColor (color1: string, color2: string, percentage: number): string {
-      const hexToRGB = (color: string): number[] => {
-        return (color.replace('#', '').match(/.{1,2}/g) as RegExpMatchArray).map(hex => parseInt(hex, 16))
-      }
-      const rgbToHex = (rgb: number[]): string => {
-        return (
-          '#' +
-          (~~(rgb[0])).toString(16).padStart(2, '0') +
-          (~~(rgb[1])).toString(16).padStart(2, '0') +
-          (~~(rgb[2])).toString(16).padStart(2, '0')
-        )
-      }
-
-      const rgbColor1 = hexToRGB(color1)
-      const rgbColor2 = hexToRGB(color2)
-
-      const realPercentage = percentage / 100
-      const rgbAverageColor = [
-        (rgbColor1[0] * (1 - realPercentage) + rgbColor2[0] * realPercentage),
-        (rgbColor1[1] * (1 - realPercentage) + rgbColor2[1] * realPercentage),
-        (rgbColor1[2] * (1 - realPercentage) + rgbColor2[2] * realPercentage)
-      ]
-
-      return rgbToHex(rgbAverageColor)
-    },
     updateChart (indiePercentage: number) {
       this.series = [indiePercentage]
-      const averageColor = this.getAverageColor(LOWEST_VALUE_COLOR, HIGHEST_VALUE_COLOR, indiePercentage)
+      const averageColor = getAverageColor(LOWEST_VALUE_COLOR, HIGHEST_VALUE_COLOR, indiePercentage)
       this.chartOptions = {
         ...this.chartOptions,
         ...{

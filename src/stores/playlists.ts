@@ -5,7 +5,7 @@ import api from '@/api'
 import { SimplifiedSpotifyPlaylist, SpotifyArtist, SpotifyPlaylist, SpotifyTrack, SpotifyTrackMetadata } from '@/api/spotify/types/entities'
 import { t } from '@/i18n'
 import { Genre } from '@/model'
-import { getRandomColor } from '@/services/utils'
+import { getRandomColor } from '@/services/colors'
 import { useUserStore } from '@/stores/user'
 import { capitalize, getDefaultMap, range } from '@/utils/functions'
 

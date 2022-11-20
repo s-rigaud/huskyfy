@@ -37,9 +37,10 @@ request.interceptors.response.use(response => {
       return request(config)
     }
   } else {
+    const errorMsg = (error.response?.data?.error?.message || error as string)
     useNotificationsStore().notifications.push(
       {
-        message: `Spotify error when accessing API : ${error}`,
+        message: `Spotify error when accessing API : ${errorMsg}`,
         type: NotificationType.error
       }
     )

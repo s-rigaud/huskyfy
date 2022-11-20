@@ -8,11 +8,12 @@
           </v-img>
         </div>
         <div id="title-container">
-          <v-text-field v-model="playlistNameText" id="playlist-name" :label="$t('playlist.name')" variant="outlined"
-            :disabled="!userOwnsPlaylist || isMyMusicPlaylist" color="var(--text-color)" density="compact"
+          <v-text-field v-model="playlistNameText" v-if="userOwnsPlaylist && !isMyMusicPlaylist" id="playlist-name"
+            :label="$t('playlist.name')" variant="outlined" color="var(--text-color)" density="compact"
             :loading="playlist.name !== playlistNameText && !nameUpdatedInAPI"
             :append-inner-icon="nameUpdatedInAPI && playlist.name === playlistNameText ? 'mdi-check-circle-outline' : ''">
           </v-text-field>
+          <h4 v-else id="simplified-title" class="rainbow-text">{{ playlist.name }}</h4>
           <p> {{ getTextFromVisibility }} </p>
           <p id="playlist-owner">
             {{ $t("playlist.created-by") }}
@@ -86,7 +87,8 @@ import { storeToRefs } from 'pinia'
 import { defineComponent, StyleValue, toRef } from 'vue'
 
 import ActionDrawer from '@/components/playlist_detail/ActionDrawer.vue'
-import IndieChart from '@/components/playlist_detail/IndieChart.vue'
+import IndieChart, { HIGHEST_VALUE_COLOR, LOWEST_VALUE_COLOR } from '@/components/playlist_detail/IndieChart.vue'
+import { getAverageColor } from '@/services/colors'
 import { MY_MUSIC_PLAYLIST_ID, usePlaylistsStore } from '@/stores/playlists'
 import { useUserStore } from '@/stores/user'
 
@@ -158,13 +160,7 @@ export default defineComponent({
       return this.playlist.tracks.length === this.playlist.total
     },
     colorForPercentage (): StyleValue {
-      let color: string
-      if (this.indiePercentage < 10) color = '#FF0D0D'
-      else if (this.indiePercentage < 25) color = '#FF4E11'
-      else if (this.indiePercentage < 50) color = '#FF8E15'
-      else if (this.indiePercentage < 65) color = '#FAB733'
-      else if (this.indiePercentage < 80) color = '#ACB334'
-      else color = '#69B34C'
+      const color = getAverageColor(LOWEST_VALUE_COLOR, HIGHEST_VALUE_COLOR, this.indiePercentage)
       return { color }
     },
     formattedDescription (): string {
@@ -198,7 +194,7 @@ export default defineComponent({
   },
   watch: {
     playlistNameText (newValue: string) {
-      if (newValue !== this.playlist.name) {
+      if (newValue !== this.playlist.name && newValue) {
         this.nameUpdatedInAPI = false
         // eslint-disable-next-line
         this.debouncedUpdateNameFunction!()
@@ -210,10 +206,10 @@ export default defineComponent({
 <style>
 #playlist-card {
   width: 100%;
-  min-height: 150px;
+  margin: 5px 0px;
 
-  margin-bottom: 5px;
   border: 2px var(--text-color) solid;
+  flex-shrink: 0
 }
 
 #playlist-meta {
@@ -239,6 +235,7 @@ export default defineComponent({
   display: none;
 
   width: 50%;
+  margin-top: 2px;
   margin-right: 50px;
   padding: 10px;
 
@@ -254,6 +251,15 @@ export default defineComponent({
 
 #title-container {
   width: calc(100% - 140px);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+/* Title v-select hidden second bar */
+#title-container .v-input {
+  flex-grow: 0;
 }
 
 /* Title v-select hidden second bar */
@@ -264,7 +270,7 @@ export default defineComponent({
 /* Title select icon color */
 #title-container .mdi-check-circle-outline {
   color: var(--text-color);
-  opacity: 0.8;
+  opacity: 0.9;
 }
 
 /* Title is always clearly visible */
@@ -276,6 +282,7 @@ export default defineComponent({
 #title-container .v-input--disabled .v-field__field {
   position: relative;
   left: -16px;
+  top: -8px;
 }
 
 /* Hide input boundaries when input disabled */
@@ -292,6 +299,8 @@ export default defineComponent({
 
 #playlist-owner {
   opacity: 0.8;
+
+  display: none;
 }
 
 #playlist-owner-name:hover {
@@ -300,7 +309,7 @@ export default defineComponent({
 }
 
 #playlist-description {
-  padding: 5px 10px 10px 10px;
+  padding: 5px 10px;
 }
 
 .playlist-metric {
@@ -372,7 +381,7 @@ export default defineComponent({
 
 #burger-button-badge {
   position: absolute;
-  top: 10px;
+  top: 12px;
   right: 5px;
 }
 
@@ -381,8 +390,8 @@ export default defineComponent({
   width: 13px;
 
   display: v-bind(displayBurgerMenuBadge);
-  bottom: calc(100% - 10px);
-  left: calc(100% - 10px);
+  bottom: calc(100% - 10px) !important;
+  left: calc(100% - 10px) !important;
 
   border-radius: 10px;
   background: linear-gradient(180deg, #c0392b 20%, #e74c3c 51%, #c0392b 86%) !important;
@@ -395,10 +404,15 @@ export default defineComponent({
 @media only screen and (min-width: 768px) {
   #playlist-meta-left {
     width: 40%;
+    margin-left: 5px;
   }
 
   #title-container {
     width: 100%;
+  }
+
+  #playlist-owner {
+    display: block !important;
   }
 
   #percentage-row {

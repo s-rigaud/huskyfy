@@ -4,7 +4,7 @@
       <p class="track-index">{{ trackIndex + 1 }}</p>
       <v-avatar class="ma-3 track-image" size="90" rounded="0">
         <v-img rel="preconnect" v-bind:src="image" lazy-src='@/assets/default_cover.jpg' alt="Cover image"
-          :option="{ rootMargin: '100px' }"></v-img>
+          :option="{ rootMargin: '0px 100px 0px 0px' }"></v-img>
       </v-avatar>
     </template>
 
@@ -129,7 +129,7 @@ export default defineComponent({
   }
 })
 </script>
-<style scoped>
+<style>
 @keyframes track-append {
   from {
     -webkit-transform: translate3d(0, -4px, 0);
@@ -169,41 +169,41 @@ export default defineComponent({
   animation-fill-mode: forwards;
 }
 
-.v-avatar {
+.track-item .v-avatar {
   margin: 5px !important;
 }
 
-.artist-names {
+.track-item .artist-names {
   max-width: 100%;
-  margin-right: 5px;
+  margin: 0px 5px 3px 0px;
   padding: 0 !important;
 
   color: var(--link-color);
   text-decoration: none;
 }
 
-.artist-name {
+.track-item .artist-name {
   padding: 0 !important;
   opacity: 0.8;
 }
 
-.artist-name:hover {
+.track-item .artist-name:hover {
   text-decoration: underline;
 }
 
-.genre-chip {
+.track-item .genre-chip {
   margin: 0 5px 2px 0px;
   animation: genres-appear 2000ms linear;
   animation-fill-mode: forwards;
   opacity: 0;
 }
 
-.popularity-chip {
+.track-item .popularity-chip {
   font-family: "Righteous", Helvetica, Sans-serif !important;
   opacity: 1 !important;
 }
 
-.text-h6 {
+.track-item .text-h6 {
   width: fit-content;
   max-width: 100%;
 
@@ -211,25 +211,41 @@ export default defineComponent({
   cursor: pointer;
 }
 
-.track-index {
+.track-item .track-index {
   margin: 5px;
+
+  font-size: 20px;
 }
 
-.track-image {
+.track-item .track-image {
   min-width: 80px;
   cursor: pointer;
 }
 
-.second-line {
+.track-item .track-image .v-img {
+  border-radius: 5px;
+}
+
+.track-item .second-line {
   margin: 5px 0px;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
 }
 
-.chips {
+.track-item .chips {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+}
+
+@media only screen and (min-width: 768px) {
+  .track-item .track-index {
+    margin: 0px 15px;
+  }
+
+  .track-item .v-list-item__content {
+    margin-left: 15px;
+  }
 }
 </style>
