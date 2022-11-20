@@ -1,4 +1,5 @@
 import { AxiosResponse } from 'axios'
+
 import { SpotifyProfile } from '../types/entities'
 import request from '../request'
 

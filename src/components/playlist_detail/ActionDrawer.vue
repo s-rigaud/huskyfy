@@ -42,7 +42,8 @@
             <v-btn color="var(--text-color)" @click="isDeleteModalOpen = false">
               {{ $t('playlist.delete.disagree') }}
             </v-btn>
-            <v-btn :loading="waitingForDeletion" class="rainbow-v-btn font-weight-bold" @click="unfollowPlaylist">
+            <v-btn id="validateDeletionButton" :loading="waitingForDeletion" class="rainbow-v-btn font-weight-bold"
+              @click="unfollowPlaylist">
               {{ $t('playlist.delete.agree') }}
             </v-btn>
           </v-card-actions>
@@ -161,7 +162,18 @@ export default defineComponent({
     },
     generateImageSize () { this.updateImagePreview() },
     generateImageDisplayTitle () { this.updateImagePreview() },
-    generateImageDisplayStats () { this.updateImagePreview() }
+    generateImageDisplayStats () { this.updateImagePreview() },
+    isDeleteModalOpen (newValue: boolean) {
+      // 💩 Dirty code
+      // 1. Using ref return the Vuetify button instance which is not easily focusable
+      // 2. As the modal is injected into the DOM, we need to wait some time before being able to select the element
+      newValue && setTimeout(() => {
+        const deleteButton = (document.getElementById('validateDeletionButton') as HTMLButtonElement)
+        deleteButton.focus()
+      },
+      500
+      )
+    }
   },
   data () {
     return {

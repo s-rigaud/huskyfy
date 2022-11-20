@@ -6,7 +6,6 @@
 - [ ] 🚧🎨 Pb styling phone for multiple line description on phone
 - [ ] 🎨 Add better styling instead of borders for PlaylistDetail
 - [ ] 🎨 Genre checkbox in genre filter should use the color of the genre (Vuetify menu-props) (https//tinyurl.com/yc5btbrd)
-- [ ] 🎨 Autofocus on delete button for DeletionPopup
 - [ ] 🎨 Add fade transition for all the genres (learn about transition-group)
 - [ ] ✨🎨 Disconnect menu
 

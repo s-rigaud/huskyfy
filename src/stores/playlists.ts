@@ -1,3 +1,6 @@
+import { RemovableRef, useStorage } from '@vueuse/core'
+import { defineStore } from 'pinia'
+
 import api from '@/api'
 import { SimplifiedSpotifyPlaylist, SpotifyArtist, SpotifyPlaylist, SpotifyTrack, SpotifyTrackMetadata } from '@/api/spotify/types/entities'
 import { t } from '@/i18n'
@@ -5,8 +8,6 @@ import { Genre } from '@/model'
 import { getRandomColor } from '@/services/utils'
 import { useUserStore } from '@/stores/user'
 import { capitalize, getDefaultMap, range } from '@/utils/functions'
-import { RemovableRef, useStorage } from '@vueuse/core'
-import { defineStore } from 'pinia'
 
 // Order matters as only first match will be used (trap before rap, ...)
 // Sorting in length descending order to avoid this

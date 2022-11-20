@@ -59,7 +59,7 @@
         "reorder-by-genre": "Most present genres",
         "reorder-by-artist-pop": "Most present artists",
         "reorder-by-artist-name": "Names of the artists",
-        "export-image": "Export artist image",
+        "export-image": "Export preview",
         "image-display-title": "Display title",
         "image-display-stats": "Display stats",
         "not-enough-data": "Not enough artists or genres in the playlist to create a picture"

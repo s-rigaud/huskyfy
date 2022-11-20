@@ -1,7 +1,8 @@
-import { useUserStore } from '@/stores/user'
-import { chunkArray } from '@/utils/functions'
+
 import { AxiosResponse } from 'axios'
 
+import { useUserStore } from '@/stores/user'
+import { chunkArray } from '@/utils/functions'
 import request from '../request'
 import { SimplifiedSpotifyPlaylist, SpotifyTrack } from '../types/entities'
 import { SpotifyGetPlaylistResponse, SpotifyTrackResponse } from '../types/responses'

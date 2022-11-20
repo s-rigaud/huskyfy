@@ -1,5 +1,6 @@
-import { chunkArray } from '@/utils/functions'
 import { AxiosResponse } from 'axios'
+
+import { chunkArray } from '@/utils/functions'
 import request from '../request'
 import { SpotifyArtist } from '../types/entities'
 import { SpotifyArtistResponse } from '../types/responses'

@@ -63,14 +63,14 @@
 
     <v-badge id="burger-button-badge" color="red" dot>
       <v-icon id="burger-button" @click="() => { drawer = !drawer; displayBurgerMenuBadge = 'none' }" icon="mdi-menu"
-        color="var(--text-color)" size="x-large" :style="burgerButtonShadow">
+        color="var(--text-color)" size="x-large" class="highlight-icon">
       </v-icon>
     </v-badge>
 
     <v-tooltip location="bottom end" :text="$t('playlist.open-on-spotify')" class="rainbow-tooltip">
       <template v-slot:activator="{ props }">
         <v-img id="spotify-logo-meta-small" @click="openPlaylistOnSpotify" src="@/assets/spotify.png" alt="Spotify Logo"
-          rel="preconnect" width="40" v-bind="props">
+          rel="preconnect" width="40" v-bind="props" class="highlight-icon">
         </v-img>
       </template>
     </v-tooltip>
@@ -177,10 +177,6 @@ export default defineComponent({
           // Escaped / back to real character
           .replace(/&#x2F;/ig, '/')
       )
-    },
-    burgerButtonShadow (): StyleValue {
-      if (this.displayBurgerMenuBadge === 'none') return { 'box-shadow': 'none' }
-      return { 'box-shadow': '0 3px 5px -1px var(--text-color), 0 1px 10px 0 var(--text-color) !important' }
     },
     userOwnsPlaylist (): boolean {
       return this.currentUserUsername === this.playlist.owner.display_name
@@ -349,10 +345,20 @@ export default defineComponent({
 
 #spotify-logo-meta-small {
   position: absolute;
-  bottom: 30px;
-  right: 10px;
+  top: 70px;
+  right: 7px;
 
   cursor: pointer;
+  outline: 1px var(--text-color) solid;
+  border-radius: 5px;
+}
+
+#spotify-logo-meta-small .v-img__img {
+  padding: 5px;
+}
+
+.highlight-icon {
+  box-shadow: 0 3px 5px -1px var(--text-color), 0 1px 10px 0 var(--text-color) !important;
 }
 
 /* Button to display vertical sidebar */
@@ -395,6 +401,10 @@ export default defineComponent({
     width: 100%;
   }
 
+  #percentage-row {
+    display: none !important;
+  }
+
   #genre-chart-container {
     display: flex !important;
   }
@@ -405,8 +415,8 @@ export default defineComponent({
     justify-content: space-around;
   }
 
-  #percentage-row {
-    display: none !important;
+  #spotify-logo-meta-small {
+    top: 70px;
   }
 }
 </style>

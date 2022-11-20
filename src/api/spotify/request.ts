@@ -1,7 +1,8 @@
+import axios from 'axios'
+
 import api from '@/api'
 import { useAuthStore } from '@/stores/auth'
 import { NotificationType, useNotificationsStore } from '@/stores/notifications'
-import axios from 'axios'
 
 const request = axios.create({
   baseURL: 'https://api.spotify.com/v1/'
@@ -22,7 +23,7 @@ request.interceptors.response.use(response => {
   // console.info(response)
   return response
 }, async (error) => {
-  const { status } = error.response
+  const { status = 500 } = error.response
   const config = error.config
 
   // Handle access token refresh for 401
@@ -38,7 +39,7 @@ request.interceptors.response.use(response => {
   } else {
     useNotificationsStore().notifications.push(
       {
-        message: `Spotify error when accessing API : ${error.response.data}`,
+        message: `Spotify error when accessing API : ${error}`,
         type: NotificationType.error
       }
     )
