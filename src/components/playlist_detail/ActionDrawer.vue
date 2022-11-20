@@ -282,6 +282,8 @@ export default defineComponent({
 </script>
 <style>
 #drawer {
+  /* More than Vuetify default z-index for snackbar (2000) */
+  z-index: 3000 !important;
   min-width: max(25%, 300px);
 }
 
