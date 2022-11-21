@@ -12,7 +12,7 @@
               Stats
             </div>
           </v-expansion-panel-title>
-          <v-expansion-panel-text>
+          <v-expansion-panel-text id="stats-panel-content">
             <GenreChart :genres="topGenres" />
           </v-expansion-panel-text>
         </v-expansion-panel>
@@ -23,7 +23,7 @@
               Filters
             </div>
           </v-expansion-panel-title>
-          <v-expansion-panel-text>
+          <v-expansion-panel-text id="filters-panel-content">
 
             <!-- Filters -->
             <div id="filters">
@@ -108,7 +108,7 @@
                   </v-fade-transition>
 
                   <p v-if="!allTracksLoaded" id="warning-not-fully-loaded">
-                    ⚠️ {{ $t('track.filters.not-fully-loaded')}} ⚠️
+                    ⚠️ {{ $t('track.filters.not-fully-loaded') }} ⚠️
                   </p>
                   <v-badge id="create-new-playlist" color="red" :content="$t('track.filters.try-now')">
                     <v-btn :disabled="filteredTracks.length === 0 || numberOfActiveFilters === 0"
@@ -523,6 +523,15 @@ export default defineComponent({
 
   display: flex;
   flex-direction: column;
+}
+
+#stats-panel-content {
+  border: 2px var(--text-color) solid;
+}
+
+#filters-panel-content {
+  border: 2px var(--link-color) solid;
+  border-radius: 0px 0px 5px 5px;
 }
 
 .filter-select {
