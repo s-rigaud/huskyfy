@@ -164,6 +164,7 @@ export default defineComponent({
   opacity: 0;
 
   border-bottom: 1px grey solid;
+  border-radius: 5px;
 
   animation: track-append 200ms linear;
   animation-fill-mode: forwards;

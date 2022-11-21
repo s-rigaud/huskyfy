@@ -130,12 +130,12 @@
           <div id="list-title-embedded">
             <h2>{{ generalTitle }}</h2>
           </div>
-          <v-divider class="mx-4" vertical thickness="0.5" color="grey"></v-divider>
+          <v-divider class="mx-4" vertical thickness="0.5" color="white"></v-divider>
           <div>
             <h4 id="track-number-title"> {{ filteredTracks.length }} {{ $t('track.name') }}</h4>
           </div>
         </div>
-        <v-divider thickness="0.5" color="grey"></v-divider>
+        <v-divider thickness="0.5" color="white"></v-divider>
 
         <v-list id="tracks" v-if="filteredTracks.length >= 1 || playlistLoaded">
           <TrackItem v-for="(track, index) in filteredTracks" :key="track.id" :id="track.id" :name="track.name"
@@ -635,7 +635,7 @@ export default defineComponent({
   height: 100%;
   margin: 5px 0px;
 
-  border: 2px var(--link-color) solid;
+  background: radial-gradient(circle, var(--primary-color) 90%, #F9B621AA 100%);
   border-radius: 5px;
 }
 
@@ -643,7 +643,7 @@ export default defineComponent({
   display: flex;
   align-items: center;
 
-  background-color: black;
+  color: white;
   border-radius: 5px;
 }
 
@@ -668,6 +668,8 @@ export default defineComponent({
   justify-content: space-evenly;
   align-items: stretch;
   align-content: center;
+
+  background: none;
 }
 
 .v-expansion-panel-text__wrapper {

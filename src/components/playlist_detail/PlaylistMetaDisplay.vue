@@ -88,9 +88,9 @@ import { defineComponent, StyleValue, toRef } from 'vue'
 
 import ActionDrawer from '@/components/playlist_detail/ActionDrawer.vue'
 import IndieChart, { HIGHEST_VALUE_COLOR, LOWEST_VALUE_COLOR } from '@/components/playlist_detail/IndieChart.vue'
-import { getAverageColor } from '@/utils/colors'
 import { MY_MUSIC_PLAYLIST_ID, usePlaylistsStore } from '@/stores/playlists'
 import { useUserStore } from '@/stores/user'
+import { getAverageColor } from '@/utils/colors'
 
 export default defineComponent({
   name: 'PlaylistMetaDisplay',
@@ -208,8 +208,8 @@ export default defineComponent({
   width: 100%;
   margin: 5px 0px;
 
-  border: 2px var(--text-color) solid;
-  flex-shrink: 0
+  flex-shrink: 0;
+  background: radial-gradient(circle,      var(--primary-color) 80%,      var(--text-color) 100%);
 }
 
 #playlist-meta {
@@ -351,6 +351,7 @@ export default defineComponent({
   cursor: pointer;
   outline: 1px var(--text-color) solid;
   border-radius: 5px;
+  background: var(--primary-color);
 }
 
 #spotify-logo-meta-small .v-img__img {

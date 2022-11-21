@@ -2,7 +2,6 @@
 
 - [ ] 🚧 Fix other Github branch for reordering playlist
 - [ ] 🚧 Back to last page when Spotify API token needs refresh
-- [ ] 🎨 Add better styling instead of borders for PlaylistDetail
 
 ## Feedbacks
 
