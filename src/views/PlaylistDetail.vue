@@ -18,7 +18,7 @@
         </v-expansion-panel>
 
         <v-expansion-panel>
-          <v-expansion-panel-title color="var(--link-color)">
+          <v-expansion-panel-title color="var(--link-color)" id="filter-panel-title">
             <div class="d-flex justify-start">
               Filters
             </div>
@@ -107,10 +107,16 @@
                     </v-switch>
                   </v-fade-transition>
 
-                  <v-btn :disabled="filteredTracks.length === 0 || numberOfActiveFilters === 0"
-                    id="create-new-playlist-btn" @click="startDuplication = true" rounded="pill" class="rainbow-v-btn">
-                    {{ $t("playlist.duplicate.only-with-filter") }}
-                  </v-btn>
+                  <p v-if="!allTracksLoaded" id="warning-not-fully-loaded">
+                    ⚠️ {{ $t('track.filters.not-fully-loaded')}} ⚠️
+                  </p>
+                  <v-badge id="create-new-playlist" color="red" :content="$t('track.filters.try-now')">
+                    <v-btn :disabled="filteredTracks.length === 0 || numberOfActiveFilters === 0"
+                      id="create-new-playlist-btn" @click="startDuplication = true" rounded="pill"
+                      class="rainbow-v-btn">
+                      {{ $t("playlist.duplicate.only-with-filter") }}
+                    </v-btn>
+                  </v-badge>
                 </div>
               </div>
             </div>
@@ -424,6 +430,9 @@ export default defineComponent({
         .concat(this.selectedArtists.map(a => a.name))
         .concat(this.selectedGenres)
         .join(` ${keyword} `)
+    },
+    allTracksLoaded (): boolean {
+      return this.playlist.tracks.length === this.playlist.total
     }
   },
   watch: {
@@ -494,8 +503,23 @@ export default defineComponent({
 }
 
 /* Filters */
+#filter-panel-title .v-expansion-panel-title__icon::after {
+  /* Fave v-badge created from style only and not from Vuetify */
+  content: "";
+
+  width: 13px;
+  height: 13px;
+
+  position: absolute;
+  right: 17px;
+  top: 10px;
+
+  border-radius: 10px;
+  background: linear-gradient(180deg, #f3331e 20%, #e74c3c 51%, #f3331e 86%) !important;
+}
+
 #filters {
-  padding: 5px;
+  padding: 5px 15px;
 
   display: flex;
   flex-direction: column;
@@ -577,9 +601,21 @@ export default defineComponent({
   right: 5px;
 }
 
-#create-new-playlist-btn {
-  float: right;
+#warning-not-fully-loaded {
+  margin-left: 10px;
+  margin-bottom: 10px;
+}
 
+#create-new-playlist {
+  float: right;
+}
+
+#create-new-playlist .v-badge__badge {
+  bottom: calc(100% - 8px) !important;
+  left: calc(100% - 60px) !important;
+}
+
+#create-new-playlist-btn {
   color: black;
   font-size: 10px;
 }

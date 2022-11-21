@@ -30,29 +30,29 @@ export default defineComponent({
     HuskyfyBanner,
     PlaylistCard
   },
-  setup () {
+  setup() {
     const playlistsStore = usePlaylistsStore()
     return { playlistsStore }
   },
   computed: {
-    formatName () {
+    formatName() {
       return (playlist: SpotifyPlaylist): string => {
         return playlist.id === MY_MUSIC_PLAYLIST_ID ? this.$t('playlist.your-music.name') : playlist.name
       }
     }
   },
-  async created () {
+  async created() {
     await this.loadMorePlaylists()
     this.playlistLoaded = true
   },
   methods: {
-    async loadMorePlaylists () {
+    async loadMorePlaylists() {
       const response = await this.playlistsStore.getUserPlaylists(this.offset)
       this.playlistTotal = response.total
       this.offset = response.offset
     }
   },
-  data () {
+  data() {
     return {
       playlistTotal: 0,
       offset: 0,
@@ -71,6 +71,7 @@ export default defineComponent({
   flex-direction: column;
   align-items: center;
   text-align: center;
+  justify-content: center;
 }
 
 #playlists {

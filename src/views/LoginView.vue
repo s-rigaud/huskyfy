@@ -8,9 +8,9 @@
     <div id="hero">
       <h1 id="title" class="rainbow-text">{{ $t("login.header") }}</h1>
       <div id="functionalities">
-        <div v-for="n of maxNumberOfFunctionalities" :key="n" class="functionality">
-          <v-img src='@/assets/small-bone.png' alt="small-bone" width="24" style="max-width: 24px"></v-img>
-          <h4>{{ $t(`login.functionality${n}`) }}</h4>
+        <div v-for="n in 6" :key="n" class="functionality">
+          <p class="emoji"> {{ $t(`login.functionality${n}.emoji`) }}</p>
+          <h4>{{ $t(`login.functionality${n}.text`) }}</h4>
         </div>
       </div>
     </div>
@@ -37,17 +37,10 @@ import { defineComponent } from 'vue'
 
 import api from '@/api'
 import LocaleSelector from '@/components/LocaleSelector.vue'
-import { range } from '@/utils/functions'
 
 export default defineComponent({
   name: 'LoginView',
   components: { LocaleSelector },
-  computed: {
-    maxNumberOfFunctionalities (): number[] {
-      const length = (window.innerWidth > 700) ? 6 : 4
-      return range(1, length + 1)
-    }
-  },
   methods: {
     async accessOAuthPage () {
       window.location.href = await api.spotify.auth.getOAuthUrl()
@@ -87,6 +80,11 @@ export default defineComponent({
   margin-top: 15px;
 }
 
+#title {
+  font-size: 30px;
+  margin: 0px;
+}
+
 .mdi {
   margin-left: 3px;
 }
@@ -94,6 +92,7 @@ export default defineComponent({
 #hero {
   width: min(95%, 800px);
   min-height: 60%;
+  max-height: 65%;
   margin-top: 20px;
   padding: 15px;
 
@@ -111,7 +110,10 @@ export default defineComponent({
   margin: 10px auto;
 
   display: flex;
+  flex-wrap: wrap;
   flex-direction: column;
+  overflow: hidden;
+
   text-align: left;
   justify-content: space-evenly;
 }
@@ -119,8 +121,9 @@ export default defineComponent({
 .functionality {
   padding: 10px 0px;
 
-  display: inline-flex;
-  align-items: flex-start;
+  display: flex;
+  align-items: center;
+  align-content: center;
 
   font-size: 15px;
   text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
@@ -133,13 +136,8 @@ export default defineComponent({
   color: #ECECEC;
 }
 
-.functionality .v-img {
-  max-width: 24px;
-}
-
-#title {
+.emoji {
   font-size: 30px;
-  margin: 0px;
 }
 
 #lower-part {

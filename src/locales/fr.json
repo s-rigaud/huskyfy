@@ -74,12 +74,30 @@
 		"about": "En apprendre plus sur ce site",
 		"connect": "Se connecter à Spotify",
 		"header": "Découvrez de nouvelles fonctionnalités avec vos playlists Spotify",
-		"functionality1": "Découvrez les genres musicaux que vous écoutez le plus souvent",
-		"functionality2": "Créez de nouvelles playlists en séparant vos playlists par genre",
-		"functionality3": "Dupliquez et partager vos playlists facilement",
-		"functionality4": "Filtrez et analysez vos playlists en fonction de la popularité des artistes ou des genres musicaux",
-		"functionality5": "Triez vos playlists en fonction des genres ou des artistes les plus populaires",
-		"functionality6": "Enregistrez des images contenant toutes les informations de vos playlists"
+		"functionality1": {
+			"text": "Découvrez les genres musicaux que vous écoutez le plus souvent",
+			"emoji": "🎧"
+		},
+		"functionality2": {
+			"text": "Créez de nouvelles playlists en séparant vos playlists par genre",
+			"emoji": "🚀"
+		},
+		"functionality3": {
+			"text": "Dupliquez et partager vos playlists facilement",
+			"emoji": "🔀"
+		},
+		"functionality4": {
+			"text": "Filtrez et analysez vos playlists en fonction de la popularité des artistes ou des genres musicaux",
+			"emoji": "🔮"
+		},
+		"functionality5": {
+			"text": "Triez vos playlists en fonction des genres ou des artistes les plus populaires",
+			"emoji": "📊"
+		},
+		"functionality6": {
+			"text": "Enregistrez des images contenant toutes les informations de vos playlists",
+			"emoji": "🖼️"
+		}
 	},
 	"navbar": {
 		"logout": "Déconnexion"
@@ -165,7 +183,9 @@
 			"keyword": {
 				"and": "et",
 				"or": "ou"
-			}
+			},
+			"try-now": "Essayez !",
+			"not-fully-loaded": "Tous les titres ne sont pas chargés, vous filtrez seulement une partie de la playlist"
 		},
 		"indie": "🌴 Artiste Indé | 🌴 Artistes Indés",
 		"name": "titres",

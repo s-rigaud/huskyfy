@@ -38,7 +38,7 @@ html {
 */
 
 .rainbow-text {
-    background: linear-gradient(180deg, var(--text-color) 20%, var(--link-color) 51%, var(--text-color) 86%);
+    background: linear-gradient(165deg, var(--text-color) 20%, var(--link-color) 51%, var(--text-color) 86%);
     background-size: 100%;
     background-repeat: repeat;
     -webkit-background-clip: text;
@@ -47,7 +47,7 @@ html {
 }
 
 .rainbow-v-btn {
-    background: linear-gradient(180deg, var(--text-color) 20%, var(--link-color) 51%, var(--text-color) 86%) !important;
+    background: linear-gradient(165deg, var(--text-color) 20%, var(--link-color) 51%, var(--text-color) 86%) !important;
 }
 
 .black-highlight {

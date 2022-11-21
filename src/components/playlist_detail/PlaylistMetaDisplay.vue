@@ -88,7 +88,7 @@ import { defineComponent, StyleValue, toRef } from 'vue'
 
 import ActionDrawer from '@/components/playlist_detail/ActionDrawer.vue'
 import IndieChart, { HIGHEST_VALUE_COLOR, LOWEST_VALUE_COLOR } from '@/components/playlist_detail/IndieChart.vue'
-import { getAverageColor } from '@/services/colors'
+import { getAverageColor } from '@/utils/colors'
 import { MY_MUSIC_PLAYLIST_ID, usePlaylistsStore } from '@/stores/playlists'
 import { useUserStore } from '@/stores/user'
 

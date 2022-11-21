@@ -135,7 +135,7 @@ export default defineComponent({
       required: true
     }
   },
-  setup (props) {
+  setup(props) {
     const playlistsStore = usePlaylistsStore()
     const currentUserUsername = useUserStore().username
 
@@ -151,17 +151,17 @@ export default defineComponent({
   },
   watch: {
     // Have to use this to synchronise props as I can't use props as VModel
-    open (newValue: boolean) {
+    open(newValue: boolean) {
       this.isOpen = newValue
       this.updateImagePreview()
     },
-    isOpen (newValue: boolean) {
+    isOpen(newValue: boolean) {
       !newValue && this.$emit('onClose')
     },
-    generateImageSize () { this.updateImagePreview() },
-    generateImageDisplayTitle () { this.updateImagePreview() },
-    generateImageDisplayStats () { this.updateImagePreview() },
-    isDeleteModalOpen (newValue: boolean) {
+    generateImageSize() { this.updateImagePreview() },
+    generateImageDisplayTitle() { this.updateImagePreview() },
+    generateImageDisplayStats() { this.updateImagePreview() },
+    isDeleteModalOpen(newValue: boolean) {
       // 💩 Dirty code
       // 1. Using ref return the Vuetify button instance which is not easily focusable
       // 2. As the modal is injected into the DOM, we need to wait some time before being able to select the element
@@ -169,11 +169,11 @@ export default defineComponent({
         const deleteButton = (document.getElementById('validateDeletionButton') as HTMLButtonElement)
         deleteButton.focus()
       },
-      500
+        500
       )
     }
   },
-  data () {
+  data() {
     return {
       isOpen: false,
       isDeleteModalOpen: false,
@@ -189,19 +189,19 @@ export default defineComponent({
     }
   },
   computed: {
-    isNotMyMusicPlaylist (): boolean {
+    isNotMyMusicPlaylist(): boolean {
       return this.playlist.id !== MY_MUSIC_PLAYLIST_ID
     },
-    starImage (): string {
+    starImage(): string {
       return require('@/assets/stars.jpg')
     },
-    userOwnsPlaylist (): boolean {
+    userOwnsPlaylist(): boolean {
       return this.currentUserUsername === this.playlist.owner.display_name
     },
-    spotifyOwnsPlaylist (): boolean {
+    spotifyOwnsPlaylist(): boolean {
       return this.playlist.owner.id === 'spotify'
     },
-    ticks (): { 0?: '2x2', 1?: '3x3', 2?: '4x4' } {
+    ticks(): { 0?: '2x2', 1?: '3x3', 2?: '4x4' } {
       const trackNumber = this.playlistsStore.getTopArtists(this.playlistId).length
       const ticks: { 0?: '2x2', 1?: '3x3', 2?: '4x4' } = {}
       if (trackNumber >= 4) ticks[0] = '2x2'
@@ -209,22 +209,22 @@ export default defineComponent({
       if (trackNumber >= 16) ticks[2] = '4x4'
       return ticks
     },
-    maxTick (): number {
+    maxTick(): number {
       return Object.keys(this.ticks).length - 1
     },
-    allTracksLoaded (): boolean {
+    allTracksLoaded(): boolean {
       return this.playlist.tracks.length === this.playlist.total
     },
-    canCreateExportImage (): boolean {
+    canCreateExportImage(): boolean {
       return this.playlist.tracks.length >= 4 && this.playlistsStore.getTopGenres(this.playlistId).length >= 4
     }
   },
   methods: {
-    startDuplicationProcess () {
+    startDuplicationProcess() {
       this.isOpen = false
       this.startDuplication = true
     },
-    updateImagePreview () {
+    updateImagePreview() {
       if (!this.canCreateExportImage) return
 
       makeImage(
@@ -235,32 +235,32 @@ export default defineComponent({
         (dataUrl: string) => { this.imagePreview = dataUrl }
       )
     },
-    async updatePlaylistPrivacy (isPublic: boolean) {
+    async updatePlaylistPrivacy(isPublic: boolean) {
       await this.playlistsStore.updatePlaylistPrivacy(
         this.playlistId,
         isPublic
       )
       this.isOpen = false
     },
-    async sortPlaylistTracksByGenres () {
+    async sortPlaylistTracksByGenres() {
       await this.playlistsStore.sortPlaylistTracksByGenres(
         this.playlistId
       )
       this.$emit('onSortEnd')
     },
-    async sortPlaylistTracksByArtistTrackInPlaylist () {
+    async sortPlaylistTracksByArtistTrackInPlaylist() {
       await this.playlistsStore.sortPlaylistTracksByArtistTrackInPlaylist(
         this.playlistId
       )
       this.$emit('onSortEnd')
     },
-    async sortPlaylistTracksByArtistName () {
+    async sortPlaylistTracksByArtistName() {
       await this.playlistsStore.sortPlaylistTracksByArtistName(
         this.playlistId
       )
       this.$emit('onSortEnd')
     },
-    async exportArtistPreview () {
+    async exportArtistPreview() {
       makeImage(
         this.playlistId,
         ([2, 3, 4] as GridSize[])[this.generateImageSize],
@@ -269,7 +269,7 @@ export default defineComponent({
         (dataUrl: string) => { downloadImage(dataUrl, this.playlist.name) }
       )
     },
-    async unfollowPlaylist () {
+    async unfollowPlaylist() {
       this.isDeleteModalOpen = false
       this.waitingForDeletion = true
       const toDeletePlaylistId = this.playlistId
@@ -287,13 +287,20 @@ export default defineComponent({
   min-width: max(25%, 300px);
 }
 
+#sliders {
+  display: flex;
+  flex-direction: row;
+}
+
 /* Image styling part */
 #drawer .v-slider__container {
   width: 90%;
 }
 
 #drawer .generate-image-switch {
+  width: 124px;
   height: 30px;
+
   margin-left: 10px;
 }
 
@@ -310,6 +317,7 @@ export default defineComponent({
   align-items: center;
   flex-direction: column;
 }
+
 
 #live-image-preview {
   margin: 0px 5px;

@@ -8,8 +8,6 @@
 ## Feedbacks
 
 - [ ] ✨🎨 "Enrichir" in app
-- [ ] 🎨 Add badge on create new playlist button
-- [ ] 🎨 Add subline to say that whole playlist is not ready if not fully loaded
 
 ## Firefox UI
 

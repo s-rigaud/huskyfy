@@ -34,7 +34,7 @@
 import { ApexOptions } from 'apexcharts'
 import { defineComponent } from 'vue'
 
-import { getAverageColor } from '@/services/colors'
+import { getAverageColor } from '@/utils/colors'
 
 export const LOWEST_VALUE_COLOR = '#f35800'
 export const HIGHEST_VALUE_COLOR = '#21f92e'

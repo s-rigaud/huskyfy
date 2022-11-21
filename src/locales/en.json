@@ -74,12 +74,30 @@
         "about": "Learn more about this website",
         "connect": "Log in with Spotify",
         "header": "Interact with Spotify playlists smoothly",
-        "functionality1": "Discover the music genres you listen most of the time",
-        "functionality2": "Create new playlists by splitting your playlists by genre",
-        "functionality3": "Duplicate and share your playlists easily",
-        "functionality4": "Filter and analyze your playlists according to the popularity of artists or music genres",
-        "functionality5": "Sort your playlists according to the most popular genres or artists",
-        "functionality6": "Save images containing all the information about your playlists"
+        "functionality1": {
+            "text": "Discover the music genres you listen most of the time",
+            "emoji": "🎧"
+        },
+        "functionality2": {
+            "text": "Create new playlists by splitting your playlists by genre",
+            "emoji": "🚀"
+        },
+        "functionality3": {
+            "text": "Duplicate and share your playlists easily",
+            "emoji": "🔀"
+        },
+        "functionality4": {
+            "text": "Filter and analyze your playlists according to the popularity of artists or music genres",
+            "emoji": "🔮"
+        },
+        "functionality5": {
+            "text": "Sort your playlists according to the most popular genres or artists",
+            "emoji": "📊"
+        },
+        "functionality6": {
+            "text": "Save images containing all the information about your playlists",
+            "emoji": "🖼️"
+        }
     },
     "navbar": {
         "logout": "Sign out"
@@ -162,7 +180,9 @@
             "keyword": {
                 "and": "and",
                 "or": "or"
-            }
+            },
+            "try-now": "Try now !",
+            "not-fully-loaded": "All tracks are not loaded, you are only filtering a part of the playlist"
         },
         "indie": "🌴 Indie artist | 🌴 Indie artists",
         "name": "tracks",
