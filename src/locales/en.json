@@ -100,7 +100,7 @@
         }
     },
     "navbar": {
-        "logout": "Sign out"
+        "change-account": "Change account"
     },
     "page-title": {
         "about": "About",

@@ -100,7 +100,7 @@
 		}
 	},
 	"navbar": {
-		"logout": "Déconnexion"
+		"change-account": "Changer de compte"
 	},
 	"not-found": {
 		"404": "Page non trouvée"

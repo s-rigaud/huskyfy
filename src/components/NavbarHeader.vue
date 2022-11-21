@@ -5,21 +5,35 @@
     <router-link id="logo-link" to="/explore">
       <v-img id="logo" src="@/assets/Huskyfy.png" alt="Huskyfy logo"></v-img>
     </router-link>
+
     <v-spacer></v-spacer>
 
-    <!-- Right part -->
-    <div id="user-info">
-      <h3 id="profile-name" class="rainbow-text"> {{ userStore.username }} </h3>
-      <v-avatar id="profile-picture">
-        <v-img rel="preconnect" :src="userStore.profilePicture" alt="Profile picture"></v-img>
-      </v-avatar>
-    </div>
+    <v-menu offset="12" transition="slide-y-transition">
+      <template v-slot:activator="{ props }">
+        <div id="user-info" v-bind="props">
+          <h3 id="profile-name" class="rainbow-text"> {{ userStore.username }} </h3>
+          <v-avatar id="profile-picture">
+            <v-img rel="preconnect" :src="userStore.profilePicture" alt="Profile picture"></v-img>
+          </v-avatar>
+        </div>
+      </template>
+
+      <v-list id="disconnect-container">
+        <v-list-item id="disconnect" link @click="disconnect" prepend-icon="mdi-logout">
+          {{ $t('navbar.change-account') }}
+        </v-list-item>
+      </v-list>
+    </v-menu>
+
   </v-app-bar>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
 
+import router, { ROUTE_NAME_LOGIN } from '@/router'
+import { useAuthStore } from '@/stores/auth'
+import { usePlaylistsStore } from '@/stores/playlists'
 import { useUserStore } from '@/stores/user'
 
 export default defineComponent({
@@ -34,6 +48,14 @@ export default defineComponent({
       const DEFAULT_PICTURE: string = require("@/assets/no-user.png")
       return this.userStore.profilePicture || DEFAULT_PICTURE
     }
+  },
+  methods: {
+    disconnect () {
+      this.userStore.reset()
+      useAuthStore().reset()
+      usePlaylistsStore().reset()
+      router.push({ name: ROUTE_NAME_LOGIN })
+    }
   }
 })
 </script>
@@ -42,6 +64,8 @@ export default defineComponent({
   padding: 0 !important;
   height: 64px;
 
+  /* In front of Vuetify menu default z-index -> 2000 */
+  z-index: 2001;
   font-family: 'Righteous', Helvetica, Sans-serif;
   cursor: default;
   color: var(--text-color) !important;
@@ -67,6 +91,8 @@ export default defineComponent({
 
   display: flex;
   align-items: center;
+
+  cursor: pointer;
 }
 
 #profile-name {
@@ -76,5 +102,13 @@ export default defineComponent({
 
 #profile-picture {
   align-items: initial;
+}
+
+#disconnect-container {
+  border-radius: 0px 0px 5px 5px;
+}
+
+#disconnect.v-list-item:hover>.v-list-item__overlay {
+  opacity: 0.2;
 }
 </style>
