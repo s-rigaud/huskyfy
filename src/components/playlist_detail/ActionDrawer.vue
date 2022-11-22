@@ -300,7 +300,7 @@ export default defineComponent({
 }
 
 #drawer .generate-image-switch {
-  width: 124px;
+  width: 150px;
   height: 30px;
 
   margin-left: 10px;

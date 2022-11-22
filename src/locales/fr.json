@@ -167,7 +167,7 @@
 		}
 	},
 	"track": {
-		"_generic-name": "titre",
+		"_generic-name": "titre | titre | titres",
 		"all-tracks": "Tous les titres",
 		"exclusive-filter": "Tous les filtres doivent apparaître sur le titre",
 		"inclusive-filter": "Au moins un des filtres doit apparaître sur le titre",

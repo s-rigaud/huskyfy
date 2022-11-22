@@ -209,7 +209,8 @@ export default defineComponent({
   margin: 5px 0px;
 
   flex-shrink: 0;
-  background: radial-gradient(circle,      var(--primary-color) 80%,      var(--text-color) 100%);
+  background: radial-gradient(circle, var(--primary-color) 80%, #F3920099 100%);
+  border: 1px #F3920099 solid;
 }
 
 #playlist-meta {

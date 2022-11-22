@@ -1,5 +1,5 @@
 <template>
-  <v-card flat @click="displayDetails" class="playlist-card">
+  <v-card @click="displayDetails" class="playlist-card" elevation="10">
     <v-img rel="preconnect" :src="images[0].url" alt="Playlist cover" lazy-src='@/assets/default_cover.jpg' cover>
     </v-img>
     <v-card-title>
@@ -26,6 +26,10 @@ export default defineComponent({
     },
     images: {
       type: Array as PropType<SpotifyImage[]>,
+      required: true
+    },
+    trackCount: {
+      type: Number,
       required: true
     }
   },
@@ -61,19 +65,20 @@ export default defineComponent({
   margin: 0px 3px 15px 3px;
   padding: 10px 10px 0px 10px;
 
-  color: var(--text-color) !important;
-  background-color: initial;
-
   display: flex;
   flex-direction: column;
 
+  color: var(--text-color) !important;
+  background-color: initial;
+  overflow: unset;
+  opacity: 0;
+
   animation: playlist-append 500ms linear;
   animation-fill-mode: forwards;
-  opacity: 0;
 }
 
 .playlist-card:hover {
-  outline: 1px white solid;
+  outline: 1px #F3920099 solid;
 }
 
 .playlist-card .card-title {
@@ -90,7 +95,7 @@ export default defineComponent({
 }
 
 .playlist-card:hover .v-img__img--cover {
-  filter: brightness(0.8);
+  filter: brightness(1.15);
 }
 
 .playlist-card .v-card-title {
@@ -101,8 +106,9 @@ export default defineComponent({
 }
 
 .playlist-card .v-card__overlay {
-  opacity: 0.1;
-  background-color: gray;
+  opacity: 0.3;
+  background: radial-gradient(circle, var(--primary-color) 40%, #F39200 100%);
+
   transition: 0.5s opacity ease;
 }
 

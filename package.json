@@ -1,12 +1,16 @@
 {
   "name": "huskyfy",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "fix": "vue-cli-service lint --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/s-rigaud/huskyfy.git"
   },
   "dependencies": {
     "@mdi/font": "7.0.96",

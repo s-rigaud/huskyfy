@@ -78,6 +78,7 @@
         <a href="https://github.com/s-rigaud" target="_blank" rel="noopener">
           <v-img width="70" src='@/assets/github.png' alt="Github Image"></v-img>
         </a>
+        <p style="color: white; margin: 0px 15px;">Version {{ version }}</p>
       </div>
     </div>
   </div>
@@ -86,9 +87,13 @@
 <script lang="ts">
 import confetti from 'canvas-confetti'
 import { defineComponent } from 'vue'
+import { version } from '../../package.json'
 
 export default defineComponent({
   name: 'AboutView',
+  setup () {
+    return { version }
+  },
   methods: {
     openMyMusicOnSpotify () {
       window.location.href = process.env.VUE_APP_BASE_SERVER_URL + '/playlist/my-music'
@@ -241,6 +246,10 @@ h1 {
   font-size: large;
 }
 
+h2+h2 {
+  margin-left: 5px;
+}
+
 p {
   color: lightgray;
   margin-bottom: 30px;
@@ -257,6 +266,13 @@ a:hover {
 
 #indie-chip {
   margin-bottom: 20px;
+}
+
+#github-icon {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
 
 #github-icon .v-img {

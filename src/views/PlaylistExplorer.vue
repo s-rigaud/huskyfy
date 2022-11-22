@@ -4,7 +4,7 @@
   <div id="full-page">
     <div id="playlists">
       <PlaylistCard v-for="playlist in playlistsStore.playlists" :key="playlist.id" :id="playlist.id"
-        :name="formatName(playlist)" :images="playlist.images" />
+        :name="formatName(playlist)" :images="playlist.images" :track-count="playlist.total" />
       <v-progress-circular v-if="!playlistLoaded" :size="70" :width="7" color="var(--text-color)" indeterminate>
       </v-progress-circular>
     </div>

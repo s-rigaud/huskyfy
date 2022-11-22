@@ -635,7 +635,12 @@ export default defineComponent({
   height: 100%;
   margin: 5px 0px;
 
-  background: radial-gradient(circle, var(--primary-color) 90%, #F9B621AA 100%);
+  border: 1px #F9B621AA solid;
+  background: linear-gradient(0deg,
+      #F9B621AA 0%,
+      var(--primary-color) 3%,
+      var(--primary-color) 97%,
+      #F9B621AA 100%);
   border-radius: 5px;
 }
 
