@@ -2,10 +2,10 @@
 
 - [ ] 🚧 Fix other Github branch for reordering playlist
 - [ ] 🚧 Back to last page when Spotify API token needs refresh
+- [ ] 🚧 Add a huskyfy.fr to Netlify and add default locale to fr
+- [ ] :SEO: Update title, meta, canonical links and description
 
 ## Feedbacks
-
-- [ ] ✨🎨 "Enrichir" in app
 
 ## Firefox UI
 
@@ -26,5 +26,5 @@
 2. [X] Read Spotify design recommendation
 3. [X] Set project as public
 4. [X] Ask Spotify to be officially open
-5. [ ] Release and ask for fast feedbacks
+5. [X] Release and ask for fast feedbacks
 6. [ ] Add Huskyfy to ProductHunt

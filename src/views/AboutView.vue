@@ -87,6 +87,7 @@
 <script lang="ts">
 import confetti from 'canvas-confetti'
 import { defineComponent } from 'vue'
+
 import { version } from '../../package.json'
 
 export default defineComponent({
@@ -145,7 +146,7 @@ export default defineComponent({
         return Math.random() * (max - min) + min
       }
 
-      const interval = setInterval(function () {
+      const interval: ReturnType<typeof setInterval> = setInterval(() => {
         const timeLeft = animationEnd - Date.now()
 
         if (timeLeft <= 0) {
