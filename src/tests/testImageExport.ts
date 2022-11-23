@@ -1,5 +1,5 @@
 import { SpotifyArtist, SpotifyTrack } from '@/api/spotify/types/entities'
-import { makeImage, GridSize, downloadImage } from '@/services/playlistImageMaker'
+import { downloadImage, GridSize, makeImage } from '@/services/playlistImageMaker'
 import { usePlaylistsStore } from '@/stores/playlists'
 import { range } from '@/utils/functions'
 
@@ -18,19 +18,23 @@ export const testImageGenerationGeneratePlenty = () => {
   const empiricPopularityBreakpoints = range(0, 101, 25)
   const empiricPlaylistTitleLength = range(3, 40, 7)
 
-  let imageNumber = 0
   for (const gridSize of availableGridSizes) {
     for (const indiePopularity of empiricPopularityBreakpoints) {
       for (const playlistTitleLength of empiricPlaylistTitleLength) {
         const playlistsStore = usePlaylistsStore()
 
-        const playlistId = `test-image-${imageNumber}`
+        const playlistId = [
+          'test-image',
+          `size:${gridSize}x${gridSize}`,
+          `indiePercentage:${indiePopularity}`,
+          `playlistTitleLength:${playlistTitleLength}`
+        ].join('-')
         playlistsStore.playlists[playlistId] = {
           offset: 0,
           total: 0,
           collaborative: false,
-          description: `test-image-${imageNumber}`,
-          id: `test-image-${imageNumber}`,
+          description: playlistId,
+          id: playlistId,
           name: generateRandomString(playlistTitleLength),
           owner: {
             display_name: '',
@@ -55,12 +59,11 @@ export const testImageGenerationGeneratePlenty = () => {
           gridSize,
           true,
           true,
-          (dataUrl) => {
-            downloadImage(dataUrl, `test-image-${imageNumber}`)
+          (rawImageData: string) => {
+            downloadImage(rawImageData, playlistId)
             delete playlistsStore.playlists[playlistId]
           }
         )
-        imageNumber += 1
       }
     }
   }

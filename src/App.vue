@@ -22,7 +22,7 @@ import { defineComponent } from 'vue'
 
 import FooterComponent from '@/components/FooterComponent.vue'
 import NavbarComponent from '@/components/NavbarHeader.vue'
-import NotificationProvider from './components/NotificationProvider.vue'
+import NotificationProvider from '@/components/NotificationProvider.vue'
 
 export default defineComponent({
   name: 'App',

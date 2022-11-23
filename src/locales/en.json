@@ -55,7 +55,7 @@
     },
     "drawer": {
         "update-playlist": "Update playlist",
-        "reorder-playlist": "Reorder the playlist according to the",
+        "reorder-playlist": "Reorder the playlist according to",
         "reorder-by-genre": "Most present genres",
         "reorder-by-artist-pop": "Most present artists",
         "reorder-by-artist-name": "Names of the artists",

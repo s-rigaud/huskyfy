@@ -21,7 +21,7 @@ export const makeImage = (
   size: GridSize,
   showTitle: boolean,
   showStats: boolean,
-  callback: { (dataUrl: string): void; }
+  callback: { (rawImageData: string): void; }
 ): string | void => {
   const playlistsStore = usePlaylistsStore()
   const playlist = playlistsStore.playlists[playlistId]
@@ -46,9 +46,9 @@ export const makeImage = (
         imageLoadCounter++
 
         if (imageLoadCounter === images.length) {
-          const dataUrl = createCanvas(artistNames, images, playlist, size, showTitle, showStats)
+          const rawImageData = createCanvas(artistNames, images, playlist, size, showTitle, showStats)
           // Had to use callback as HtmlImageElement.onload is asynchronous and can't be awaited
-          callback(dataUrl)
+          callback(rawImageData)
         }
       }
     )

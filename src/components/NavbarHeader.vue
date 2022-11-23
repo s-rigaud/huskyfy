@@ -70,6 +70,7 @@ export default defineComponent({
   cursor: default;
   color: var(--text-color) !important;
   background-color: var(--primary-color) !important;
+  outline: 2px var(--text-color) solid;
 }
 
 #app-bar .v-toolbar__content {

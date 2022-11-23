@@ -19,7 +19,7 @@
 
       <!-- 1.2 Duplicate playlist -->
       <v-list-item v-if='allTracksLoaded' @click="startDuplicationProcess">
-        <v-list-item-title>{{ $t("playlist.duplicate.button") }}</v-list-item-title>
+        <v-list-item-title>{{ $t("playlist.duplicate.button") }} 🔀</v-list-item-title>
       </v-list-item>
 
       <!-- 1.3 Playlist deletion -->
@@ -50,7 +50,7 @@
         </v-card>
       </v-dialog>
 
-      <v-divider></v-divider>
+      <v-divider color="grey"></v-divider>
 
       <div v-if="userOwnsPlaylist && allTracksLoaded">
         <v-list-subheader> {{ $t('drawer.reorder-playlist') }}</v-list-subheader>
@@ -68,7 +68,7 @@
         </v-list-item>
       </div>
 
-      <v-divider></v-divider>
+      <v-divider color="grey"></v-divider>
 
       <!-- (At least 4 tracks to download image) -->
       <div v-if="playlist.tracks.length >= 4 && playlistsStore.getTopGenres(playlistId).length >= 4">
@@ -205,7 +205,7 @@ export default defineComponent({
     },
     ticks (): { 0?: '2x2', 1?: '3x3', 2?: '4x4' } {
       const trackNumber = this.playlistsStore.getTopArtists(this.playlistId).length
-      const ticks: { 0?: '2x2', 1?: '3x3', 2?: '4x4' } = {}
+      const ticks: Record<number, string> = {}
       if (trackNumber >= 4) ticks[0] = '2x2'
       if (trackNumber >= 9) ticks[1] = '3x3'
       if (trackNumber >= 16) ticks[2] = '4x4'
@@ -234,7 +234,7 @@ export default defineComponent({
         ([2, 3, 4] as GridSize[])[this.generateImageSize],
         this.generateImageDisplayTitle,
         this.generateImageDisplayStats,
-        (dataUrl: string) => { this.imagePreview = dataUrl }
+        (rawImageData: string) => { this.imagePreview = rawImageData }
       )
     },
     async updatePlaylistPrivacy (isPublic: boolean) {
@@ -268,7 +268,7 @@ export default defineComponent({
         ([2, 3, 4] as GridSize[])[this.generateImageSize],
         this.generateImageDisplayTitle,
         this.generateImageDisplayStats,
-        (dataUrl: string) => { downloadImage(dataUrl, this.playlist.name) }
+        (rawImageData: string) => { downloadImage(rawImageData, this.playlist.name) }
       )
     },
     async unfollowPlaylist () {

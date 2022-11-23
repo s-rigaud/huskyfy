@@ -2,7 +2,7 @@
 
 - [ ] 🚧 Fix other Github branch for reordering playlist
 - [ ] 🚧 Back to last page when Spotify API token needs refresh
-- [ ] 🚧 Add a huskyfy.fr to Netlify and add default locale to fr
+- [ ] 🚧 Add a huskyfy.fr to Netlify => wait for DNS to propagate, redeploy, see if error fixed (actually having https in path variable but not secure), put app to Google console, create new sitemap
 - [ ] :SEO: Update title, meta, canonical links and description
 
 ## Feedbacks
@@ -19,12 +19,11 @@
 - [ ] 🎨 Add v-skeleton-loader for PlaylistCard
 - [ ] 🎨 Add v-slide-group for "genre-chips"
 
+## Advertisement plan.
 
-## Release requirements
-
-1. [X] Check frontend playlist
-2. [X] Read Spotify design recommendation
-3. [X] Set project as public
-4. [X] Ask Spotify to be officially open
-5. [X] Release and ask for fast feedbacks
-6. [ ] Add Huskyfy to ProductHunt
+1. [ ] Add product to Product Hunt
+2. [ ] Find better catch phrases to use
+3. [ ] Improve page description (meta etc) for Google search bot
+4. [ ] Spread the word on LinkedIn
+5. [ ] Spread the word on Discord (NaN, Vuetify, Vue Land)
+6. [ ] Ask Spotify to add the website link on their developer site
