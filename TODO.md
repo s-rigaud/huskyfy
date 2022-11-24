@@ -2,7 +2,7 @@
 
 - [ ] 🚧 Fix other Github branch for reordering playlist
 - [ ] 🚧 Back to last page when Spotify API token needs refresh
-- [ ] 🚧 Add a huskyfy.fr to Netlify => wait for DNS to propagate, redeploy, see if error fixed (actually having https in path variable but not secure), put app to Google console, create new sitemap
+- [ ] 🚧 Add a huskyfy.fr => put app to Google console, create new sitemap
 - [ ] :SEO: Update title, meta, canonical links and description
 
 ## Feedbacks
