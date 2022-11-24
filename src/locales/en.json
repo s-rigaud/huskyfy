@@ -106,8 +106,7 @@
         "about": "About",
         "explore": "Explore",
         "login": "Login",
-        "playlist": "Playlist",
-        "duplicate-my-music": "Duplicate My Music playlist"
+        "playlist": "Playlist"
     },
     "playlist": {
         "you": "you",

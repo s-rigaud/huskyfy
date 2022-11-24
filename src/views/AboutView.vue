@@ -87,12 +87,20 @@
 <script lang="ts">
 import confetti from 'canvas-confetti'
 import { defineComponent } from 'vue'
+import { useMeta } from 'vue-meta'
 
+import { t } from '@/i18n'
 import { version } from '../../package.json'
 
 export default defineComponent({
   name: 'AboutView',
   setup () {
+    useMeta({
+      title: t('page-title.about'),
+      link: [
+        { rel: 'canonical', href: `https://${process.env.VUE_APP_BASE_SERVER_URL}/about` }
+      ]
+    })
     return { version }
   },
   methods: {

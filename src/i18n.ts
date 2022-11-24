@@ -10,13 +10,14 @@ const messages = {
   fr: { ...fr, $vuetify: 'fr' }
 }
 
-const locale: Locale = localStorage.getItem('locale') || process.env.VUE_APP_I18N_LOCALE || 'en'
+const currentLocale: Locale = localStorage.getItem('locale') || process.env.VUE_APP_I18N_LOCALE || 'en'
 const fallbackLocale: FallbackLocale = process.env.VUE_APP_I18N_FALLBACK_LOCALE || 'en'
 
 export const i18n = createI18n<[MessageSchema], 'fr' | 'en'>({
-  locale,
+  locale: currentLocale,
   fallbackLocale,
   messages
 })
 export const t = i18n.global.t
 export const tc = i18n.global.tc
+export const locale = i18n.global.locale

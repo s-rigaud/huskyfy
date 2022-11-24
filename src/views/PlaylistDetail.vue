@@ -177,6 +177,7 @@
 <script lang="ts">
 import { storeToRefs } from 'pinia'
 import { defineComponent, StyleValue, toRef } from 'vue'
+import { useMeta } from 'vue-meta'
 
 import { SpotifyArtist, SpotifyTrack } from '@/api/spotify/types/entities'
 import DuplicatorPopup from '@/components/playlist_detail/DuplicatorPopup.vue'
@@ -227,6 +228,10 @@ export default defineComponent({
     const playlist = toRef(playlists.value, props.playlistId)
 
     const { downloadPlaylistTracks } = playlistsStore
+
+    useMeta({
+      title: playlist.value.name
+    })
 
     return {
       playlistsStore,

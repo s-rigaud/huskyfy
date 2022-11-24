@@ -109,8 +109,7 @@
 		"about": "A propos",
 		"explore": "Explore",
 		"login": "Login",
-		"playlist": "Playlist",
-		"duplicate-my-music": "Dupliquer ma playlist favorite"
+		"playlist": "Playlist"
 	},
 	"playlist": {
 		"you": "vous",

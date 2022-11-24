@@ -1,10 +1,14 @@
 <template>
   <!-- All the app encapsulated -->
   <v-app>
-    <!-- Navbar -->
+    <metainfo>
+      <template v-slot:title="{ content }">
+        {{ content ? `${content} - Hylectrif` : `Hylectrif` }}
+      </template>
+    </metainfo>
+
     <NavbarComponent />
 
-    <!-- Main view with routing -->
     <v-main id="main">
       <v-container id="container" fluid>
         <NotificationProvider />
@@ -12,21 +16,29 @@
       </v-container>
     </v-main>
 
-    <!-- Footer -->
     <FooterComponent />
   </v-app>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { useMeta } from 'vue-meta'
 
 import FooterComponent from '@/components/FooterComponent.vue'
 import NavbarComponent from '@/components/NavbarHeader.vue'
 import NotificationProvider from '@/components/NotificationProvider.vue'
+import { locale } from '@/i18n'
 
 export default defineComponent({
   name: 'App',
   components: { NavbarComponent, NotificationProvider, FooterComponent },
+  setup () {
+    useMeta({
+      htmlAttrs: {
+        lang: locale
+      }
+    })
+  },
   created () {
     document.documentElement.lang = this.$i18n.locale
   },

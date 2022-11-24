@@ -2,7 +2,7 @@
   <section>
     <h1 class="rainbow-text title-404">{{ $t('404.title.part1') }}</h1>
     <h2 class="title-404"><span class="rainbow-text">{{ $t('404.title.part2') }}</span>😕</h2>
-    <v-btn @click="backToPreviousPage" class="rainbow-v-btn" append-icon="mdi-map-search-outline">
+    <v-btn id="back-button" @click="backToPreviousPage" class="rainbow-v-btn" append-icon="mdi-map-search-outline">
       {{ $t('404.button') }}
     </v-btn>
   </section>
@@ -10,10 +10,17 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { useMeta } from 'vue-meta'
 
 export default defineComponent({
   name: 'NotFound404',
-  computed: {
+  setup () {
+    useMeta({
+      title: '404',
+      link: [
+        { rel: 'canonical', href: `https://${process.env.VUE_APP_BASE_SERVER_URL}/404` }
+      ]
+    })
   },
   methods: {
     backToPreviousPage () {
@@ -46,5 +53,9 @@ h2 {
 
   font-size: xx-large;
   display: block;
+}
+
+#back-button {
+  color: var(--primary-color);
 }
 </style>

@@ -34,13 +34,23 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { useMeta } from 'vue-meta'
 
 import api from '@/api'
 import LocaleSelector from '@/components/LocaleSelector.vue'
+import { t } from '@/i18n'
 
 export default defineComponent({
   name: 'LoginView',
   components: { LocaleSelector },
+  setup () {
+    useMeta({
+      title: t('page-title.login'),
+      link: [
+        { rel: 'canonical', href: `https://${process.env.VUE_APP_BASE_SERVER_URL}/login` }
+      ]
+    })
+  },
   methods: {
     async accessOAuthPage () {
       window.location.href = await api.spotify.auth.getOAuthUrl()

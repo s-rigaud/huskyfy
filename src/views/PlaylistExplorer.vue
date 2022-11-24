@@ -18,10 +18,12 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { useMeta } from 'vue-meta'
 
 import { SpotifyPlaylist } from '@/api/spotify/types/entities'
 import HuskyfyBanner from '@/components/HuskyfyBanner.vue'
 import PlaylistCard from '@/components/PlaylistCard.vue'
+import { t } from '@/i18n'
 import { MY_MUSIC_PLAYLIST_ID, usePlaylistsStore } from '@/stores/playlists'
 
 export default defineComponent({
@@ -31,6 +33,12 @@ export default defineComponent({
     PlaylistCard
   },
   setup () {
+    useMeta({
+      title: t('page-title.explore'),
+      link: [
+        { rel: 'canonical', href: `https://${process.env.VUE_APP_BASE_SERVER_URL}/explore` }
+      ]
+    })
     const playlistsStore = usePlaylistsStore()
     return { playlistsStore }
   },

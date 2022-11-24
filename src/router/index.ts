@@ -3,7 +3,6 @@ import { t } from '@/i18n'
 
 import { useAuthStore } from '@/stores/auth'
 import { NotificationType, useNotificationsStore } from '@/stores/notifications'
-import { usePlaylistsStore } from '@/stores/playlists'
 import { useUserStore } from '@/stores/user'
 
 import AboutView from '@/views/AboutView.vue'
@@ -97,20 +96,6 @@ router.beforeEach(async function (to, from, next) {
     next({ name: 'Explore' })
   } else {
     next()
-  }
-})
-
-router.afterEach((to) => {
-  const translationKey = to.path.split('/')[1]
-  if (translationKey !== 'playlist') {
-    if (t(`page-title.${translationKey}`) === `page-title.${translationKey}`) {
-      document.title = '404 - Huskyfy'
-    } else {
-      document.title = t(`page-title.${translationKey}`) + ' - Huskyfy'
-    }
-  } else {
-    const playlistName = usePlaylistsStore().playlists[(to.params.playlistId as string)].name
-    document.title = `${playlistName} - Huskyfy`
   }
 })
 

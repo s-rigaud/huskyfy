@@ -1,3 +1,4 @@
+import { locale } from '@/i18n'
 import { RemovableRef, useStorage } from '@vueuse/core'
 import { defineStore } from 'pinia'
 
@@ -16,7 +17,7 @@ export const useUserStore = defineStore('user', {
     username: useStorage('username', ''),
     profilePicture: useStorage('profilePicture', ''),
     connected: useStorage('connected', false),
-    locale: useStorage('locale', 'en')
+    locale: useStorage('locale', locale)
   } as UserState),
   actions: {
     reset () {
