@@ -2,9 +2,7 @@
 
 - [ ] 🚧 Fix other Github branch for reordering playlist
 - [ ] 🚧 Back to last page when Spotify API token needs refresh
-- [ ] 🚧 Add a huskyfy.fr => put app to Google console, create new sitemap
-- [ ] :SEO: Update title, meta, canonical links and description
-
+- [ ] :SEO: Master Google SEO (right now / is indexed with 'activate JS' which is bad. I only want /login and /about to appear). About desfription and name is fine but /login doesn't seem indexed :/
 ## Feedbacks
 
 ## Firefox UI
@@ -23,7 +21,7 @@
 
 1. [ ] Add product to Product Hunt
 2. [ ] Find better catch phrases to use
-3. [ ] Improve page description (meta etc) for Google search bot
+3. [X] Improve page description (meta etc) for Google search bot
 4. [ ] Spread the word on LinkedIn
 5. [ ] Spread the word on Discord (NaN, Vuetify, Vue Land)
 6. [ ] Ask Spotify to add the website link on their developer site

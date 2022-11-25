@@ -14,6 +14,7 @@
         "indie": "🌴"
     },
     "about": {
+        "website-description": "Right now, it is not possible to create sub-playlists, filtering by track genres or artists, on Spotify. But this is possible on Huskyfy !",
         "connection": {
             "title": "Spotify connection and account access  ",
             "content": "This website is using well designed Spotify OAuth2 access account which allow the website to access your data safely. There is no data stored in any server so you are totally safe when browsing or exiting the website without signing out."

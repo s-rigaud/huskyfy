@@ -27,16 +27,23 @@ import { useMeta } from 'vue-meta'
 import FooterComponent from '@/components/FooterComponent.vue'
 import NavbarComponent from '@/components/NavbarHeader.vue'
 import NotificationProvider from '@/components/NotificationProvider.vue'
-import { locale } from '@/i18n'
+import { locale, t } from '@/i18n'
 
 export default defineComponent({
   name: 'App',
   components: { NavbarComponent, NotificationProvider, FooterComponent },
   setup () {
+    const DESCRIPTION = t('about.website-description')
     useMeta({
       htmlAttrs: {
         lang: locale
-      }
+      },
+      og: {
+        description: DESCRIPTION
+      },
+      meta: [
+        { name: 'description', content: DESCRIPTION }
+      ]
     })
   },
   created () {

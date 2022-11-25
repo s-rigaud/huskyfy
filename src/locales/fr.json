@@ -14,6 +14,7 @@
 		"indie": "🌴"
 	},
 	"about": {
+		"website-description": "Divisez et créez de nouvelles playlists sur Spotify en fonction de vos genres musicaux ou de vos artistes préférés !",
 		"connection": {
 			"title": "Connexion et accès au compte Spotify  ",
 			"content": "Huskyfy utilise la méthode sécurisée OAuth2 avec PKCE fournie par Spotify qui permet d'accéder à vos données Spotify en toute sécurité. Aucune donnée n'est stockée sur un serveur, vous êtes donc totalement en sécurité lorsque vous naviguez ou quittez le site sans vous déconnecter."
