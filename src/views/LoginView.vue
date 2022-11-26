@@ -47,7 +47,7 @@ export default defineComponent({
     useMeta({
       title: t('page-title.login'),
       link: [
-        { rel: 'canonical', href: `https://${process.env.VUE_APP_BASE_SERVER_URL}/login` }
+        { rel: 'canonical', href: `${process.env.VUE_APP_BASE_SERVER_URL}/login` }
       ]
     })
   },
@@ -67,27 +67,27 @@ export default defineComponent({
   bottom: 0;
   padding: 12px;
 
-  background: url("../../public/home-background.webp");
-  background-size: cover;
-  background-position: 50%;
-  z-index: 1;
-
   display: flex;
   flex-direction: column;
   align-content: center;
   align-items: center;
   text-align: center;
+
+  background: url("../../public/home-background.webp");
+  background-size: cover;
+  background-position: 50%;
+  z-index: 1;
 }
 
 #upper-part {
+  width: min(100%, 650px);
+  height: max(15%, 90px);
+  margin-top: 15px;
+
   display: inline-flex;
   flex-wrap: wrap;
   justify-content: flex-end;
   align-items: center;
-
-  width: min(100%, 650px);
-  height: max(15%, 90px);
-  margin-top: 15px;
 }
 
 #title {
@@ -106,12 +106,12 @@ export default defineComponent({
   margin-top: 20px;
   padding: 15px;
 
-  border-radius: 15px;
-  background-color: rgba(0, 0, 0, 0.8);
-
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+
+  border-radius: 15px;
+  background-color: rgba(0, 0, 0, 0.8);
 }
 
 #functionalities {
@@ -158,9 +158,9 @@ export default defineComponent({
 
 #lower-part>a {
   width: max-content;
-
   position: absolute;
   bottom: 3%;
+
   font-size: large;
 }
 
@@ -168,6 +168,7 @@ export default defineComponent({
   position: absolute;
   bottom: 0%;
   right: 0%;
+
   z-index: 1;
 }
 
@@ -176,13 +177,13 @@ export default defineComponent({
 }
 
 #connect-button {
+  position: absolute;
+  bottom: 8%;
+
   font-size: larger;
   text-transform: none;
   letter-spacing: 0;
   color: black !important;
-
-  position: absolute;
-  bottom: 8%;
 }
 
 #connect-button:hover {

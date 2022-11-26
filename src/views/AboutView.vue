@@ -98,14 +98,14 @@ export default defineComponent({
     useMeta({
       title: t('page-title.about'),
       link: [
-        { rel: 'canonical', href: `https://${process.env.VUE_APP_BASE_SERVER_URL}/about` }
+        { rel: 'canonical', href: `${process.env.VUE_APP_BASE_SERVER_URL}/about` }
       ]
     })
     return { version }
   },
   methods: {
     openMyMusicOnSpotify () {
-      window.location.href = process.env.VUE_APP_BASE_SERVER_URL + '/playlist/my-music'
+      window.location.href = `${process.env.VUE_APP_BASE_SERVER_URL}/playlist/my-music`
     },
     drawStars () {
       const indieChip = (document.getElementById('indie-chip') as HTMLElement)

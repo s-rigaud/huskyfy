@@ -41,9 +41,7 @@ export default defineComponent({
       og: {
         description: DESCRIPTION
       },
-      meta: [
-        { name: 'description', content: DESCRIPTION }
-      ]
+      description: DESCRIPTION
     })
   },
   created () {
