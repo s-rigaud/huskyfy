@@ -3,7 +3,7 @@
   <v-app>
     <metainfo>
       <template v-slot:title="{ content }">
-        {{ content ? `${content} - Hylectrif` : `Hylectrif` }}
+        {{ content ? `${content} - Huskyfy` : `Huskyfy` }}
       </template>
     </metainfo>
 
@@ -43,9 +43,6 @@ export default defineComponent({
       },
       description: DESCRIPTION
     })
-  },
-  created () {
-    document.documentElement.lang = this.$i18n.locale
   },
   data () {
     return {

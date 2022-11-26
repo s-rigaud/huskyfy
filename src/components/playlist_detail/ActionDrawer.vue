@@ -203,7 +203,7 @@ export default defineComponent({
     spotifyOwnsPlaylist (): boolean {
       return this.playlist.owner.id === 'spotify'
     },
-    ticks (): { 0?: '2x2', 1?: '3x3', 2?: '4x4' } {
+    ticks (): Record<number, string> {
       const trackNumber = this.playlistsStore.getTopArtists(this.playlistId).length
       const ticks: Record<number, string> = {}
       if (trackNumber >= 4) ticks[0] = '2x2'
@@ -287,6 +287,10 @@ export default defineComponent({
   /* More than Vuetify default z-index for snackbar (2000) */
   z-index: 3000 !important;
   min-width: max(25%, 300px);
+}
+
+#main-content .v-navigation-drawer__scrim {
+  opacity: 0.5;
 }
 
 #sliders {

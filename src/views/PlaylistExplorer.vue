@@ -36,7 +36,7 @@ export default defineComponent({
     useMeta({
       title: t('page-title.explore'),
       link: [
-        { rel: 'canonical', href: `https://${process.env.VUE_APP_BASE_SERVER_URL}/explore` }
+        { rel: 'canonical', href: `${process.env.VUE_APP_BASE_SERVER_URL}/explore` }
       ]
     })
     const playlistsStore = usePlaylistsStore()

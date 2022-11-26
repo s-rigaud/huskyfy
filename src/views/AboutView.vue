@@ -105,7 +105,7 @@ import { version } from '../../package.json'
 
 export default defineComponent({
   name: 'AboutView',
-  setup() {
+  setup () {
     useMeta({
       title: t('page-title.about'),
       link: [
@@ -115,10 +115,10 @@ export default defineComponent({
     return { version }
   },
   methods: {
-    openMyMusicOnSpotify() {
+    openMyMusicOnSpotify () {
       window.location.href = `${process.env.VUE_APP_BASE_SERVER_URL}/playlist/my-music`
     },
-    drawStars() {
+    drawStars () {
       const indieChip = (document.getElementById('indie-chip') as HTMLElement)
       const rect = indieChip.getBoundingClientRect()
       const origin = {
@@ -136,7 +136,7 @@ export default defineComponent({
         colors: ['FFE400', 'FFBD00', 'E89400', 'FFCA6C', 'FDFFB8']
       }
 
-      function shoot() {
+      function shoot () {
         confetti({
           ...defaults,
           particleCount: 40,
@@ -156,12 +156,12 @@ export default defineComponent({
       setTimeout(shoot, 100)
       setTimeout(shoot, 200)
     },
-    drawFireworks() {
+    drawFireworks () {
       const duration = 1500
       const animationEnd = Date.now() + duration
       const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 }
 
-      function randomInRange(min: number, max: number): number {
+      function randomInRange (min: number, max: number): number {
         return Math.random() * (max - min) + min
       }
 

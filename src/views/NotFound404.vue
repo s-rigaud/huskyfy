@@ -18,7 +18,7 @@ export default defineComponent({
     useMeta({
       title: '404',
       link: [
-        { rel: 'canonical', href: `https://${process.env.VUE_APP_BASE_SERVER_URL}/404` }
+        { rel: 'canonical', href: `${process.env.VUE_APP_BASE_SERVER_URL}/404` }
       ]
     })
   },

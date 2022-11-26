@@ -1,5 +1,5 @@
 <template>
-  <v-snackbar v-for="notification of notificationsStore.notifications" :key="notification" v-model="snackbar"
+  <v-snackbar v-for="notification of notificationsStore.notifications" :key="notification.message" v-model="snackbar"
     timeout="5000" :color="getColor(notification.type)" class="notification-snackbar">
     {{ notification.message }}
     <v-icon :icon="getIcon(notification.type)"></v-icon>
