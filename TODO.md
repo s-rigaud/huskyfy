@@ -21,7 +21,8 @@
 
 1. [ ] Add product to Product Hunt
 2. [ ] Find better catch phrases to use
-3. [X] Improve page description (meta etc) for Google search bot
+3. [ ] Improve page description (meta etc) for Google search bot
 4. [ ] Spread the word on LinkedIn
-5. [ ] Spread the word on Discord (NaN, Vuetify, Vue Land)
-6. [ ] Ask Spotify to add the website link on their developer site
+5. [ ] Wikipédia article
+6. [ ] Spread the word on Discord (NaN, Vuetify, Vue Land)
+7. [ ] Ask Spotify to add the website link on their developer site
