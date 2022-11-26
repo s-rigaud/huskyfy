@@ -39,9 +39,9 @@
       <p>
         {{ $t("about.expose-liked-songs.content.part1") }} {{ $t("_emojis.collaborative") }}
         <br />
-        <span style="cursor: pointer; color: var(--link-color)" @click="openMyMusicOnSpotify">
-          {{ $t("about.expose-liked-songs.content.part2") }}
-          <v-img id="my-song-img" width="20" src='@/assets/my-music.jpeg' alt="My Music playlist"></v-img>
+        <span id="open-my-music" @click="openMyMusicOnSpotify">
+          {{ $t("about.expose-liked-songs.content.part2") }}<v-img id="my-song-img" width="20"
+            src='@/assets/my-music.jpeg' alt="My Music playlist"></v-img>
         </span>
       </p>
 
@@ -69,16 +69,27 @@
       <p>
         {{ $t("about.copyright.content") }}
         <a href="https://www.flaticon.com/fr/icones-gratuites/husky-siberien" title="husky sibérien icônes"
-          target="_blank" rel="noopener">
-          FlatIcon.com
-        </a>
+          target="_blank" rel="noopener">FlatIcon.com</a>.
       </p>
 
       <div id="github-icon">
-        <a href="https://github.com/s-rigaud" target="_blank" rel="noopener">
-          <v-img width="70" src='@/assets/github.png' alt="Github Image"></v-img>
-        </a>
-        <p style="color: white; margin: 0px 15px;">Version {{ version }}</p>
+        <div>
+          <v-img width="70" src='@/assets/large-logo-circle.png' alt="Github Image"></v-img>
+          <p style="color: var(--text-color); margin: 0px 15px;">Huskyfy version {{ version }}</p>
+        </div>
+        <div>
+          <a href="https://github.com/s-rigaud" target="_blank" rel="noopener" style="color: white !important;">
+            <v-img width="70" src='@/assets/github.png' alt="Github Image"></v-img>
+            <p style="color: white; margin: 0px 15px;">@s-rigaud</p>
+          </a>
+        </div>
+        <div>
+          <a href="https://twitter.com/HuskyfyWebsite/with_replies" target="_blank" rel="noopener"
+            style="color: #55ADEE !important;">
+            <v-img width="70" src='@/assets/twitter.png' alt="Twitter Image"></v-img>
+            <p style="color: #55ADEE; margin: 0px 15px;">@HuskyfyWebsite</p>
+          </a>
+        </div>
       </div>
     </div>
   </div>
@@ -94,7 +105,7 @@ import { version } from '../../package.json'
 
 export default defineComponent({
   name: 'AboutView',
-  setup () {
+  setup() {
     useMeta({
       title: t('page-title.about'),
       link: [
@@ -104,10 +115,10 @@ export default defineComponent({
     return { version }
   },
   methods: {
-    openMyMusicOnSpotify () {
+    openMyMusicOnSpotify() {
       window.location.href = `${process.env.VUE_APP_BASE_SERVER_URL}/playlist/my-music`
     },
-    drawStars () {
+    drawStars() {
       const indieChip = (document.getElementById('indie-chip') as HTMLElement)
       const rect = indieChip.getBoundingClientRect()
       const origin = {
@@ -125,7 +136,7 @@ export default defineComponent({
         colors: ['FFE400', 'FFBD00', 'E89400', 'FFCA6C', 'FDFFB8']
       }
 
-      function shoot () {
+      function shoot() {
         confetti({
           ...defaults,
           particleCount: 40,
@@ -145,12 +156,12 @@ export default defineComponent({
       setTimeout(shoot, 100)
       setTimeout(shoot, 200)
     },
-    drawFireworks () {
+    drawFireworks() {
       const duration = 1500
       const animationEnd = Date.now() + duration
       const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 }
 
-      function randomInRange (min: number, max: number): number {
+      function randomInRange(min: number, max: number): number {
         return Math.random() * (max - min) + min
       }
 
@@ -240,6 +251,7 @@ export default defineComponent({
 #my-song-img {
   display: inline-block;
   top: 5px;
+  margin-left: 5px;
 }
 
 h1 {
@@ -278,14 +290,25 @@ a:hover {
 }
 
 #github-icon {
+  margin: 50px;
+
   display: flex;
   flex-direction: row;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-end;
+  justify-content: space-around;
 }
 
 #github-icon .v-img {
   margin: auto;
+}
+
+#open-my-music {
+  cursor: pointer;
+  color: var(--link-color);
+}
+
+#open-my-music:hover {
+  text-decoration: underline;
 }
 
 @media only screen and (min-width: 768px) {
