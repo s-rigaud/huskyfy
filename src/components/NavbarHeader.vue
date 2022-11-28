@@ -8,7 +8,7 @@
 
     <v-spacer></v-spacer>
 
-    <v-menu offset="12" transition="slide-y-transition">
+    <v-menu offset="14" transition="slide-y-transition">
       <template v-slot:activator="{ props }">
         <div id="user-info" v-bind="props">
           <h3 id="profile-name" class="rainbow-text"> {{ userStore.username }} </h3>

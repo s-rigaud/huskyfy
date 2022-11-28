@@ -39,14 +39,14 @@
                   <v-select v-model="selectedGenres" :label="$t('track.filters.genres')"
                     :items="playlistsStore.getTopGenres(playlistId)" item-title="cap_name" item-value="name"
                     variant="outlined" density="compact" multiple class="filter-select"
-                    :menu-props="{ 'max-height': '250px' }">
+                    :menu-props="{ 'maxHeight': '250px' }">
                   </v-select>
                 </div>
 
                 <div id="artist-filter">
                   <v-select v-model="selectedArtists" :label="$t('track.filters.artists')" :items="getSortedArtists()"
                     item-title="name" variant="outlined" density="compact" multiple return-object
-                    :menu-props="{ 'max-height': '250px' }">
+                    :menu-props="{ 'maxHeight': '250px' }">
                     <template v-slot:selection="{ item, index }: SlotProps">
                       <v-chip v-if="index < 2" variant="outlined">
                         <v-avatar>
