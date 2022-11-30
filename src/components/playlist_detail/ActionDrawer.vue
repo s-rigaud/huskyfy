@@ -73,8 +73,9 @@
       <!-- (At least 4 tracks to download image) -->
       <div v-if="playlist.tracks.length >= 4 && playlistsStore.getTopGenres(playlistId).length >= 4">
         <!-- 3. Export Image -->
-        <v-list-subheader> {{ $t('drawer.export-image') }}</v-list-subheader>
-
+        <v-badge id="export-image-badge" color="red" dot>
+          <v-list-subheader> {{ $t('drawer.export-image') }}</v-list-subheader>
+        </v-badge>
         <v-img id="live-image-preview" :src="imagePreview" lazy-src='@/assets/loading-image-preview.jpg'>
           <template v-slot:placeholder>
             <div class="d-flex align-center justify-center fill-height">
@@ -167,11 +168,13 @@ export default defineComponent({
       // 💩 Dirty code
       // 1. Using ref return the Vuetify button instance which is not easily focusable
       // 2. As the modal is injected into the DOM, we need to wait some time before being able to select the element
-      newValue && setTimeout(() => {
-        const deleteButton = (document.getElementById('validateDeletionButton') as HTMLButtonElement)
-        deleteButton.focus()
-      },
-      500
+      // 3. nextTick does not work
+      newValue && setTimeout(
+        () => {
+          const deleteButton = (document.getElementById('validateDeletionButton') as HTMLButtonElement)
+          deleteButton.focus()
+        },
+        500
       )
     }
   },
@@ -322,6 +325,11 @@ export default defineComponent({
   display: flex;
   align-items: center;
   flex-direction: column;
+}
+
+#export-image-badge .v-badge__badge {
+  bottom: calc(100% - 16px) !important;
+  left: calc(100% - 15px) !important;
 }
 
 #live-image-preview {

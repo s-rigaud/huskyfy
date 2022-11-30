@@ -74,8 +74,11 @@
 
       <div id="github-icon">
         <div>
-          <v-img width="70" src='@/assets/large-logo-circle.png' alt="Github Image"></v-img>
-          <p style="color: var(--text-color); margin: 0px 15px;">Huskyfy version {{ version }}</p>
+          <a href="https://github.com/s-rigaud/huskyfy" target="_blank" rel="noopener"
+            style="color: var(--text-color) !important;">
+            <v-img width="70" src='@/assets/large-logo-circle.png' alt="Huskyfy Image"></v-img>
+            <p style="color: var(--text-color); margin: 0px 15px;">Huskyfy version {{ version }}</p>
+          </a>
         </div>
         <div>
           <a href="https://github.com/s-rigaud" target="_blank" rel="noopener" style="color: white !important;">
