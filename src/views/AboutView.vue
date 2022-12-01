@@ -104,7 +104,7 @@ import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 
 import { t } from '@/i18n'
-import { version } from '../../package.json'
+import packageInfo from '../../package.json'
 
 export default defineComponent({
   name: 'AboutView',
@@ -115,7 +115,7 @@ export default defineComponent({
         { rel: 'canonical', href: `${process.env.VUE_APP_BASE_SERVER_URL}/about` }
       ]
     })
-    return { version }
+    return { version: packageInfo.version }
   },
   methods: {
     openMyMusicOnSpotify () {

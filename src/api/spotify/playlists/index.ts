@@ -78,7 +78,7 @@ export default {
     getPictureContentFromURL(coverUrl, uploadImage)
   },
   // Unfollow a specific playlist
-  unfollowPlaylist (playlistId: string) {
+  unfollowPlaylist (playlistId: string): Promise<AxiosResponse<null, null>> {
     return request.delete(`playlists/${playlistId}/followers`)
   },
   // Add multiple tracks to an existing playlist
@@ -93,10 +93,10 @@ export default {
     return data?.data.snapshot_id
   },
   // Update playlist privacy, the playlist is either public or private
-  updatePlaylistPrivacy (playlistId: string, isPublic: boolean) {
+  updatePlaylistPrivacy (playlistId: string, isPublic: boolean): Promise<AxiosResponse<null, null>> {
     return request.put(`/playlists/${playlistId}`, { public: isPublic })
   },
-  updatePlaylistName (playlistId: string, name: string) {
+  updatePlaylistName (playlistId: string, name: string): Promise<AxiosResponse<null, null>> {
     return request.put(`/playlists/${playlistId}`, { name })
   },
   async deleteTracks (playlistId: string, playlistTracks: SpotifyTrack[]) {
@@ -109,5 +109,13 @@ export default {
     for (const tracks of chunkArray(formattedTracks, 100)) {
       await request.delete(`/playlists/${playlistId}/tracks`, { data: { tracks } })
     }
+  },
+  async tracksAreLiked (trackIds: string[]): Promise<boolean[]> {
+    const fullResponse: boolean[] = []
+    for (const trackIdChunk of chunkArray(trackIds, 50)) {
+      const { data } = await request.get('/me/tracks/contains', { params: { ids: trackIdChunk.join(',') } })
+      fullResponse.push(...data)
+    }
+    return fullResponse
   }
 }

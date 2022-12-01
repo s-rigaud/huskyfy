@@ -523,6 +523,14 @@ export const usePlaylistsStore = defineStore('playlists', {
       }
 
       return filteredGenres.sort()
+    },
+    async tracksAreLiked (tracks: SpotifyTrack[]): Promise<Record<string, boolean>> {
+      const data = await api.spotify.playlists.tracksAreLiked(tracks.map(t => t.id))
+      const trackPreferences: Record<string, boolean> = {}
+      for (let i = 0; i < data.length; i++) {
+        trackPreferences[tracks[i].id] = data[i]
+      }
+      return trackPreferences
     }
   }
 })

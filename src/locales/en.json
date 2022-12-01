@@ -176,6 +176,10 @@
             "name": "Filters",
             "no-filter": "No filter",
             "popular": "🔥 Popular",
+            "preference": "Liked songs",
+            "only-liked": "❤️",
+            "only-not-liked": "💔",
+            "no-valid-tracks": "No track left after filtering",
             "popularity": "Popularity",
             "keyword": {
                 "and": "and",

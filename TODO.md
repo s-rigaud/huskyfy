@@ -2,7 +2,10 @@
 
 - [ ] 🚧 Fix other Github branch for reordering playlist
 - [ ] 🚧 Back to last page when Spotify API token needs refresh
-- [ ] :SEO: Master Google SEO (right now / is indexed with 'activate JS' which is bad. I only want /login and /about to appear). About desfription and name is fine but /login doesn't seem indexed :/
+- [ ] ✨ Handle episode
+- [ ] 🚧 'Popular' artist in playlist name even in French
+- [ ] 🚧 Fix v-list / div order PlaylistDetail.vue -> #tracks
+
 ## Feedbacks
 
 ## Firefox UI

@@ -20,7 +20,7 @@ request.interceptors.request.use(function (config) {
 
 request.interceptors.response.use(response => {
   // Log every request
-  // console.info(response)
+  // console.log(response)
   return response
 }, async (error) => {
   const { status = 500 } = error.response
