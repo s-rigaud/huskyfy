@@ -268,6 +268,7 @@ export default defineComponent({
   async mounted () {
     this.TRACK_REQUEST_LIMIT = API_TRACK_LIMIT * 3
     if (this.playlist.id === MY_MUSIC_PLAYLIST_ID) {
+      // Ensure to retrieve real track count for special endpoint
       await this.playlistsStore.refreshMyMusicTotalTrack()
     }
     await this.loadFirstTracks()

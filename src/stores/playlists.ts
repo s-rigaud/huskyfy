@@ -191,11 +191,12 @@ export const usePlaylistsStore = defineStore('playlists', {
     },
     softReset (playlistIdToSave?: string) {
       // Delete every track already saved. Mainly useful to ensure max capacity of localStorage
-      console.log('Deleting all known tracks to save space on localeStorage')
+      console.log('Deleting all known tracks to save space on localStorage')
 
       const playlistIds = Object.keys(this.playlists).filter(id => id !== playlistIdToSave)
       for (const playlistId of playlistIds) {
         this.playlists[playlistId].tracks = []
+        this.playlists[playlistId].offset = 0
       }
     },
     // Retrieve playlists for user
