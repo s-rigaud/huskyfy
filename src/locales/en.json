@@ -164,7 +164,7 @@
         }
     },
     "track": {
-        "_generic-name": "track",
+        "_generic-name": "track | track | tracks",
         "all-tracks": "All playlist tracks",
         "exclusive-filter": "All the tags should be present on track",
         "inclusive-filter": "At least one of the tags should be present on track",

@@ -3,7 +3,6 @@
 - [ ] ✨ Handle episodes
 - [ ] ✨ Local tracks
 - [ ] 🚀 Use v-lazy to improve performances for big playlists
-- [ ] 🚧 Fix v-list / div order PlaylistDetail.vue -> #tracks
 - [ ] 🚧 Fix emoji in rainbow-color
 - [ ] 🚧 Fix other Github branch for reordering playlist
 - [ ] 🚧 Back to last page when Spotify API token needs refresh
