@@ -83,8 +83,8 @@ const createCanvas = (
   canvas.width = 400
   canvas.height = (
     IMAGE_BLOCK_HEIGHT +
-    ((showTitle) ? TITLE_HEIGHT : 0) +
-    ((showStats) ? STATS_HEIGHT : 0)
+    (showTitle ? TITLE_HEIGHT : 0) +
+    (showStats ? STATS_HEIGHT : 0)
   )
 
   const ctx = (canvas.getContext('2d') as CanvasRenderingContext2D)

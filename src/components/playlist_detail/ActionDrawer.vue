@@ -90,12 +90,12 @@
         <div id="sliders">
           <v-switch v-model="generateImageDisplayTitle" color="var(--text-color)" class="generate-image-switch">
             <template v-slot:label>
-              <p :class="(generateImageDisplayTitle) ? 'rainbow-text' : ''">{{ $t('drawer.image-display-title') }}</p>
+              <p :class="generateImageDisplayTitle ? 'rainbow-text' : ''">{{ $t('drawer.image-display-title') }}</p>
             </template>
           </v-switch>
           <v-switch v-model="generateImageDisplayStats" color="var(--text-color)" class="generate-image-switch">
             <template v-slot:label>
-              <p :class="(generateImageDisplayStats) ? 'rainbow-text' : ''">{{ $t('drawer.image-display-stats') }}</p>
+              <p :class="generateImageDisplayStats ? 'rainbow-text' : ''">{{ $t('drawer.image-display-stats') }}</p>
             </template>
           </v-switch>
         </div>

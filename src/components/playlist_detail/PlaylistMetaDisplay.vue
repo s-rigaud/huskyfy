@@ -260,6 +260,12 @@ export default defineComponent({
 }
 
 /* Title v-select hidden second bar */
+#title-container input {
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
 #title-container .v-input {
   flex-grow: 0;
 }

@@ -47,10 +47,10 @@ export default defineComponent({
   },
   computed: {
     color (): string {
-      return (this.isLoaded) ? 'green' : 'black'
+      return this.isLoaded ? 'green' : 'black'
     },
     timeout (): number {
-      return (this.isLoaded) ? 3000 : -1
+      return this.isLoaded ? 3000 : -1
     }
   },
   methods: {
