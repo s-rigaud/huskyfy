@@ -39,7 +39,9 @@
         </v-chip>
       </div>
     </div>
-    <v-list-item-subtitle v-else> {{ $t("track.no-genre") }}</v-list-item-subtitle>
+    <v-list-item-subtitle v-else style="min-height: 20px;">
+      {{ $t("track.no-genre") }}
+    </v-list-item-subtitle>
   </v-list-item>
 </template>
 

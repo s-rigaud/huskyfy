@@ -110,6 +110,12 @@
         "playlist": "Playlist"
     },
     "playlist": {
+        "contains-episodes": "Episodes",
+        "contains-episodes-explanations": "Episodes are not handled by Huskyfy",
+        "contains-local-tracks": "Local tracks",
+        "contains-local-tracks-explanations": "Local tracks are not handled by Huskyfy",
+        "contains-duplicated-tracks": "Duplicated tracks",
+        "contains-duplicated-tracks-explanations": "Duplicated tracks can lead to unexpected behavior in Huskyfy as it alters the real diversity of artists and genres",
         "you": "you",
         "collaborative": "Collaborative playlist",
         "created-by": "Created by",

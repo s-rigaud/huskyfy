@@ -42,6 +42,7 @@ export default {
       params: {
         limit,
         offset,
+        additional_types: 'track,episode',
         fields: 'items(track(id,name,type,uri,duration_ms,album.images,artists(id, name, uri, followers, images, genres)),is_local),total,limit,offset'
       }
     })

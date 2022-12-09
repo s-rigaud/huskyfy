@@ -123,8 +123,13 @@ interface _BasePlaylistAttributes {
 
 export interface SpotifyPlaylist extends _BasePlaylistAttributes {
     tracks: SpotifyTrack[];
-    offset?: number;
     total: number;
+
+    // Only used by Huskyfy
+    offset: number;
+    containsEpisodes: boolean;
+    containsLocalTracks: boolean;
+    containsDuplicatedTracks: boolean;
 }
 
 export interface SimplifiedSpotifyPlaylist extends _BasePlaylistAttributes {

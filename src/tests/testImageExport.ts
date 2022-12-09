@@ -51,6 +51,9 @@ export const testImageGenerationGeneratePlenty = () => {
           type: '',
           uri: '',
           images: [],
+          containsEpisodes: false,
+          containsLocalTracks: false,
+          containsDuplicatedTracks: false,
 
           tracks: createFakeTracks(gridSize, indiePopularity)
         }

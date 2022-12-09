@@ -52,7 +52,7 @@
 		}
 	},
 	"api": {
-		"refresh-succeeded": "Connexion à l'API de Spotify réussie"
+		"refresh-succeeded": "Connexion à Spotify réussie"
 	},
 	"drawer": {
 		"update-playlist": "Mettre à jour la playlist",
@@ -113,6 +113,12 @@
 		"playlist": "Playlist"
 	},
 	"playlist": {
+		"contains-episodes": "Episodes",
+		"contains-episodes-explanations": "Les épisodes ne sont pas affichés",
+		"contains-local-tracks": "Titres locaux",
+		"contains-local-tracks-explanations": "Les titres locaux ne sont pas affichés",
+		"contains-duplicated-tracks": "Titres en double",
+		"contains-duplicated-tracks-explanations": "Les titres en double peuvent altérer le comportement d'Huskyfy puisque leur utilisation fausse la diversité des artistes et des genres",
 		"you": "vous",
 		"collaborative": "Playlist collaborative",
 		"created-by": "Créée par",

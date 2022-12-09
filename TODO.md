@@ -1,7 +1,5 @@
 # TODO
 
-- [ ] ✨ Handle episodes
-- [ ] ✨ Local tracks
 - [ ] 🚀 Use v-lazy to improve performances for big playlists
 - [ ] 🚧 Fix emoji in rainbow-color
 - [ ] 🚧 Fix other Github branch for reordering playlist

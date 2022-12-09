@@ -14,7 +14,35 @@
             :append-inner-icon="nameUpdatedInAPI && playlist.name === playlistNameText ? 'mdi-check-circle-outline' : ''">
           </v-text-field>
           <h4 v-else id="simplified-title" class="rainbow-text">{{ playlist.name }}</h4>
-          <p> {{ getTextFromVisibility }} </p>
+          <div id="visibility-and-meta">
+            <p> {{ getTextFromVisibility }} </p>
+            <v-tooltip :text="$t('playlist.contains-episodes-explanations')" class="rainbow-tooltip" location="bottom">
+              <template v-slot:activator="{ props }">
+                <v-chip v-if="playlistContainsEpisodes" prepend-icon="mdi-alert" color="#f1c40f" size="small"
+                  variant="elevated" v-bind="props" link>
+                  {{ $t('playlist.contains-episodes') }}
+                </v-chip>
+              </template>
+            </v-tooltip>
+            <v-tooltip :text="$t('playlist.contains-local-tracks-explanations')" class="rainbow-tooltip"
+              location="bottom">
+              <template v-slot:activator="{ props }">
+                <v-chip v-if="playlistContainsLocalTracks" prepend-icon="mdi-alert" color="#f1c40f" size="small"
+                  variant="elevated" v-bind="props" link>
+                  {{ $t('playlist.contains-local-tracks') }}
+                </v-chip>
+              </template>
+            </v-tooltip>
+            <v-tooltip :text="$t('playlist.contains-duplicated-tracks-explanations')" class="rainbow-tooltip"
+              location="bottom">
+              <template v-slot:activator="{ props }">
+                <v-chip v-if="playlistContainsDuplicatedTracks" prepend-icon="mdi-alert" color="#f1c40f" size="small"
+                  variant="elevated" v-bind="props" link>
+                  {{ $t('playlist.contains-duplicated-tracks') }}
+                </v-chip>
+              </template>
+            </v-tooltip>
+          </div>
           <p id="playlist-owner">
             {{ $t("playlist.created-by") }}
             <span id="playlist-owner-name" @click.stop="openPlaylistOwnerSpotifyProfile">
@@ -82,7 +110,7 @@
 </template>
 
 <script lang="ts">
-import _ from 'lodash'
+import { debounce, DebouncedFunc } from 'lodash'
 import { storeToRefs } from 'pinia'
 import { defineComponent, StyleValue, toRef } from 'vue'
 
@@ -130,12 +158,12 @@ export default defineComponent({
       displayBurgerMenuBadge: 'block',
       playlistNameText: '',
 
-      debouncedUpdateNameFunction: (null as _.DebouncedFunc<() => Promise<void>> | null),
+      updatePlaylistNameDebounced: (null as DebouncedFunc<() => Promise<void>> | null),
       nameUpdatedInAPI: false
     }
   },
   beforeMount () {
-    this.debouncedUpdateNameFunction = _.debounce(
+    this.updatePlaylistNameDebounced = debounce(
       async () => {
         await this.playlistsStore.updatePlaylistName(this.playlistId, this.playlistNameText)
         this.nameUpdatedInAPI = true
@@ -179,6 +207,15 @@ export default defineComponent({
     },
     isMyMusicPlaylist (): boolean {
       return this.playlist.id === MY_MUSIC_PLAYLIST_ID
+    },
+    playlistContainsLocalTracks (): boolean {
+      return this.playlist.containsLocalTracks
+    },
+    playlistContainsEpisodes (): boolean {
+      return this.playlist.containsEpisodes
+    },
+    playlistContainsDuplicatedTracks (): boolean {
+      return this.playlist.containsDuplicatedTracks
     }
   },
   methods: {
@@ -197,7 +234,7 @@ export default defineComponent({
       if (newValue !== this.playlist.name && newValue) {
         this.nameUpdatedInAPI = false
         // eslint-disable-next-line
-        this.debouncedUpdateNameFunction!()
+        this.updatePlaylistNameDebounced!()
       }
     }
   }
@@ -293,6 +330,17 @@ export default defineComponent({
 
   color: var(--text-color);
   cursor: pointer;
+}
+
+#visibility-and-meta {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+#visibility-and-meta>*+* {
+  margin-left: 5px;
 }
 
 #playlist-owner {

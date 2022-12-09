@@ -122,7 +122,8 @@ export default defineComponent({
       window.location.href = `${process.env.VUE_APP_BASE_SERVER_URL}/playlist/my-music`
     },
     drawStars () {
-      const indieChip = (document.getElementById('indie-chip') as HTMLElement)
+      // eslint-disable-next-line
+      const indieChip = document.getElementById('indie-chip')!
       const rect = indieChip.getBoundingClientRect()
       const origin = {
         x: (rect.left + rect.right) / 2 / window.innerWidth,
