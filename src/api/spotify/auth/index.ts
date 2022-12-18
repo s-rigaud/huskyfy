@@ -19,6 +19,9 @@ const SCOPES = [
   'playlist-modify-public',
   'playlist-modify-private',
   'ugc-image-upload'
+
+  // SDK (listening to the song)
+  // 'streaming'
 ].join(' ')
 
 const generateRandomString = (length: number): string => {

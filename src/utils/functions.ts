@@ -2,8 +2,8 @@
 // Chunk list into smaller lists
 // May not be optimized
 // ([1, 2, 3, 4], chunkSize=2) => [[1, 2], [3, 4]]
-export const chunkArray = <T>(array: Array<T>, chunkSize: number): Array<Array<T>> => {
-  const results: Array<Array<T>> = []
+export const chunkArray = <T>(array: T[], chunkSize: number): T[][] => {
+  const results: T[][] = []
   const copyArray = [...array]
   while (copyArray.length) {
     results.push(copyArray.splice(0, chunkSize))

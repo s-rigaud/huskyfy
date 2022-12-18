@@ -4,7 +4,7 @@
 - [ ] 🚧 Fix emoji in rainbow-color
 - [ ] 🚧 Fix other Github branch for reordering playlist
 - [ ] 🚧 Back to last page when Spotify API token needs refresh
-
+- [ ] ✨ Implement Spotify SDK to be able to listen to tracks (https://developer.spotify.com/documentation/web-playback-sdk/reference/)
 ## Feedbacks
 
 ## Firefox UI

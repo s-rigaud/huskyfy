@@ -101,10 +101,10 @@ export const usePlaylistsStore = defineStore('playlists', {
         }
 
         // Use mapping object to sort result in DESC order and returns the top n
-        let sortedArtists = (Object.keys(artistCount).map((label) => [
+        let sortedArtists: [string, ArtistCount][] = Object.keys(artistCount).map((label) => [
           label,
           artistCount[label]
-        ]) as [string, ArtistCount][])
+        ])
 
         sortedArtists.sort((a, b) => {
           return b[1].count - a[1].count

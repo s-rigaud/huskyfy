@@ -3,7 +3,7 @@
     <v-img rel="preconnect" :src="images[0].url" alt="Playlist cover" lazy-src='@/assets/default_cover.jpg' cover>
     </v-img>
     <v-card-title>
-      <p class="text-truncate rainbow-text card-title"> {{ name }} </p>
+      <p class="text-truncate card-title"> {{ name }} </p>
     </v-card-title>
   </v-card>
 </template>
