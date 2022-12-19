@@ -1,10 +1,7 @@
 <template>
   <v-navigation-drawer id="drawer" v-model="isOpen" temporary location="right" :image='starImage' elevation="20">
     <v-list>
-      <v-list-subheader v-if="
-      ((userOwnsPlaylist || spotifyOwnsPlaylist) && !playlist.collaborative && isNotMyMusicPlaylist)
-      || allTracksLoaded
-      || isNotMyMusicPlaylist">
+      <v-list-subheader v-if="canUpdatePlaylistName">
         {{ $t('drawer.update-playlist') }}
       </v-list-subheader>
       <!-- 1.1 Update playlist privacy -->
@@ -222,6 +219,11 @@ export default defineComponent({
     },
     canCreateExportImage (): boolean {
       return this.playlist.tracks.length >= 4 && this.playlistsStore.getTopGenres(this.playlistId).length >= 4
+    },
+    canUpdatePlaylistName (): boolean {
+      return ((this.userOwnsPlaylist || this.spotifyOwnsPlaylist) && !this.playlist.collaborative && this.isNotMyMusicPlaylist) ||
+        this.allTracksLoaded ||
+        this.isNotMyMusicPlaylist
     }
   },
   methods: {
@@ -241,16 +243,11 @@ export default defineComponent({
       )
     },
     async updatePlaylistPrivacy (isPublic: boolean) {
-      await this.playlistsStore.updatePlaylistPrivacy(
-        this.playlistId,
-        isPublic
-      )
+      await this.playlistsStore.updatePlaylistPrivacy(this.playlistId, isPublic)
       this.isOpen = false
     },
     async sortPlaylistTracksByGenres () {
-      await this.playlistsStore.sortPlaylistTracksByGenres(
-        this.playlistId
-      )
+      await this.playlistsStore.sortPlaylistTracksByGenres(this.playlistId)
       this.$emit('onSortEnd')
     },
     async sortPlaylistTracksByArtistTrackInPlaylist () {

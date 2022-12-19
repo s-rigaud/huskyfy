@@ -55,9 +55,9 @@ export default defineComponent({
   },
   methods: {
     async loadMorePlaylists () {
-      const response = await this.playlistsStore.getUserPlaylists(this.offset)
-      this.playlistTotal = response.total
-      this.offset = response.offset
+      const { total, offset } = await this.playlistsStore.getUserPlaylists(this.offset)
+      this.playlistTotal = total
+      this.offset = offset
     }
   },
   data () {

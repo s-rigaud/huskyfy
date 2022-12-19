@@ -20,10 +20,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
+import { defineComponent, PropType, toRef } from 'vue'
 
 import { SpotifyTrack } from '@/api/spotify/types/entities'
 import { usePlaylistsStore } from '@/stores/playlists'
+import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   name: 'DuplicatorPopup',
@@ -42,9 +43,14 @@ export default defineComponent({
       required: true
     }
   },
-  setup () {
+  setup (props) {
     const playlistsStore = usePlaylistsStore()
-    return { playlistsStore }
+
+    // Shorthand
+    const { playlists } = storeToRefs(playlistsStore)
+    const playlist = toRef(playlists.value, props.playlistId)
+
+    return { playlistsStore, playlist }
   },
   async created () {
     await this.createNewPlaylist()
@@ -68,13 +74,10 @@ export default defineComponent({
 
       this.loadingText = this.$t('playlist.new.cover')
       this.loadingPercentage = 33
-      await this.playlistsStore.updatePlaylistCover(
-        newPlaylistId,
-        this.playlistsStore.playlists[this.playlistId].images[0].url
-      )
+      await this.playlistsStore.updatePlaylistCover(newPlaylistId, this.playlist.images[0].url)
 
       // If newTracks is empty that means we have to duplicate all the tracks
-      const tracksToAdd = this.newTracks.length ? this.newTracks : this.playlistsStore.playlists[this.playlistId].tracks
+      const tracksToAdd = this.newTracks.length ? this.newTracks : this.playlist.tracks
 
       this.loadingText = this.$t('playlist.new.tracks')
       this.loadingPercentage = 66
@@ -91,17 +94,17 @@ export default defineComponent({
       window.location.href = `/playlist/${this.newPlaylistId}`
     },
     getNewPlaylistName (): string {
-      const basePlaylist = this.playlistsStore.playlists[this.playlistId]
+      const { name } = this.playlist
       let newPlaylistName: string
       if (this.filterTag) {
-        newPlaylistName = `${basePlaylist.name} [${this.filterTag}]`
+        newPlaylistName = `${name} [${this.filterTag}]`
       } else {
-        newPlaylistName = `${this.$t('playlist.duplicate.copy-of')} ${basePlaylist.name}`
+        newPlaylistName = `${this.$t('playlist.duplicate.copy-of')} ${name}`
       }
       return newPlaylistName
     },
     getNewPlaylistDescription (): string {
-      const basePlaylist = this.playlistsStore.playlists[this.playlistId]
+      const { name } = this.playlist
       const tag = this.filterTag ? `[${this.filterTag}]` : ''
 
       const now = new Date()
@@ -112,7 +115,7 @@ export default defineComponent({
 
       return [
         this.$t('playlist.duplicate.copy-of'),
-        basePlaylist.name, tag,
+        name, tag,
         '•', formattedDate,
         '•', this.$t('playlist.duplicate.created-by')
       ].join(' ')

@@ -1,4 +1,5 @@
 import { SpotifyArtist, SpotifyTrack } from '@/api/spotify/types/entities'
+import { i18n, messages } from '@/i18n'
 import { downloadImage, GridSize, makeImage } from '@/services/playlistImageMaker'
 import { usePlaylistsStore } from '@/stores/playlists'
 import { range } from '@/utils/functions'
@@ -15,58 +16,63 @@ const generateRandomString = (length: number): string => {
 
 export const testImageGenerationGeneratePlenty = () => {
   const availableGridSizes: GridSize[] = [2, 3, 4]
+  const availableLocales: (keyof typeof messages)[] = ['en', 'fr']
   const empiricPopularityBreakpoints = range(0, 101, 25)
   const empiricPlaylistTitleLength = range(3, 40, 7)
 
-  for (const gridSize of availableGridSizes) {
-    for (const indiePopularity of empiricPopularityBreakpoints) {
-      for (const playlistTitleLength of empiricPlaylistTitleLength) {
-        const playlistsStore = usePlaylistsStore()
+  for (const locale of availableLocales) {
+    i18n.global.locale = locale
 
-        const playlistId = [
-          'test-image',
-          `size:${gridSize}x${gridSize}`,
-          `indiePercentage:${indiePopularity}`,
-          `playlistTitleLength:${playlistTitleLength}`
-        ].join('-')
-        playlistsStore.playlists[playlistId] = {
-          offset: 0,
-          total: 0,
-          collaborative: false,
-          description: playlistId,
-          id: playlistId,
-          name: generateRandomString(playlistTitleLength),
-          owner: {
-            display_name: '',
+    for (const gridSize of availableGridSizes) {
+      for (const indiePopularity of empiricPopularityBreakpoints) {
+        for (const playlistTitleLength of empiricPlaylistTitleLength) {
+          const playlistsStore = usePlaylistsStore()
+
+          const playlistId = [
+            'test-image',
+            `size:${gridSize}x${gridSize}`,
+            `indiePercentage:${indiePopularity}`,
+            `playlistTitleLength:${playlistTitleLength}`
+          ].join('-')
+          playlistsStore.playlists[playlistId] = {
+            offset: 0,
+            total: 0,
+            collaborative: false,
+            description: playlistId,
+            id: playlistId,
+            name: generateRandomString(playlistTitleLength),
+            owner: {
+              display_name: '',
+              external_urls: { spotify: '' },
+              href: '',
+              id: '',
+              type: '',
+              uri: ''
+            },
+            public: true,
+            snapshot_id: 'snapshot_id',
             external_urls: { spotify: '' },
             href: '',
-            id: '',
             type: '',
-            uri: ''
-          },
-          public: true,
-          snapshot_id: 'snapshot_id',
-          external_urls: { spotify: '' },
-          href: '',
-          type: '',
-          uri: '',
-          images: [],
-          containsEpisodes: false,
-          containsLocalTracks: false,
-          containsDuplicatedTracks: false,
+            uri: '',
+            images: [],
+            containsEpisodes: false,
+            containsLocalTracks: false,
+            containsDuplicatedTracks: false,
 
-          tracks: createFakeTracks(gridSize, indiePopularity)
-        }
-        makeImage(
-          playlistId,
-          gridSize,
-          true,
-          true,
-          (rawImageData: string) => {
-            downloadImage(rawImageData, playlistId)
-            delete playlistsStore.playlists[playlistId]
+            tracks: createFakeTracks(gridSize, indiePopularity)
           }
-        )
+          makeImage(
+            playlistId,
+            gridSize,
+            true,
+            true,
+            (rawImageData: string) => {
+              downloadImage(rawImageData, playlistId)
+              delete playlistsStore.playlists[playlistId]
+            }
+          )
+        }
       }
     }
   }

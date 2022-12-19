@@ -35,9 +35,7 @@ const generateRandomString = (length: number): string => {
 }
 
 const sha256 = async (plain: string): Promise<ArrayBuffer> => {
-  const encoder = new TextEncoder()
-  const data = encoder.encode(plain)
-
+  const data = new TextEncoder().encode(plain)
   return window.crypto.subtle.digest('SHA-256', data)
 }
 

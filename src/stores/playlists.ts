@@ -212,12 +212,12 @@ export const usePlaylistsStore = defineStore('playlists', {
         this.softReset()
       }
 
-      const response = await api.spotify.playlists.getUserPlaylists(
+      const { data } = await api.spotify.playlists.getUserPlaylists(
         MAX_PLAYLISTS_LIMIT,
         offset
       )
       offset += MAX_PLAYLISTS_LIMIT
-      const playlists = response.data.items
+      const playlists = data.items
       playlists.unshift(this.getLikedSongPlaylist(username))
 
       // Update existing playlist or create it
@@ -262,7 +262,7 @@ export const usePlaylistsStore = defineStore('playlists', {
 
       return {
         offset,
-        total: response.data.total
+        total: data.total
       }
     },
     // Delete cached playlists deleted by user
@@ -442,7 +442,8 @@ export const usePlaylistsStore = defineStore('playlists', {
         newPlaylistId,
         trackURIs
       )
-      this.playlists[newPlaylistId].snapshot_id = lastSnapshotId
+      // eslint-disable-next-line
+      this.playlists[newPlaylistId].snapshot_id = lastSnapshotId!
       this.playlists[newPlaylistId].tracks.push(...tracks)
       this.playlists[newPlaylistId].offset = trackURIs.length
       this.playlists[newPlaylistId].total = trackURIs.length

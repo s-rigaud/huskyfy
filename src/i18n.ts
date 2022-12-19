@@ -5,10 +5,10 @@ import fr from '@/locales/fr.json'
 
 type MessageSchema = typeof en
 
-const messages = {
+export const messages = ({
   en: { ...en, $vuetify: 'en' },
   fr: { ...fr, $vuetify: 'fr' }
-}
+} as const)
 
 const currentLocale: Locale = localStorage.getItem('locale') || process.env.VUE_APP_I18N_LOCALE || 'en'
 const fallbackLocale: FallbackLocale = process.env.VUE_APP_I18N_FALLBACK_LOCALE || 'en'

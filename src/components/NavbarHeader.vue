@@ -36,6 +36,7 @@ import { useAuthStore } from '@/stores/auth'
 import { usePlaylistsStore } from '@/stores/playlists'
 import { useUserStore } from '@/stores/user'
 import { useNotificationsStore } from '@/stores/notifications'
+import { useSDKStore } from '@/stores/spotifySDK'
 
 export default defineComponent({
   name: 'NavbarHeader',
@@ -56,6 +57,7 @@ export default defineComponent({
       useAuthStore().reset()
       usePlaylistsStore().reset()
       useNotificationsStore().reset()
+      useSDKStore().$reset()
 
       router.push({ name: ROUTE_NAME_LOGIN })
     }

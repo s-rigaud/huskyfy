@@ -398,9 +398,9 @@ export default defineComponent({
       this.filteredTracks = newFilteredTracks
       this.processFilterUpdate = false
     },
-    addTracksConserveUnicity (filteredTracks: SpotifyTrack[], validTracks: SpotifyTrack[]) {
+    addTracksConserveUnicity (filteredTracks: SpotifyTrack[], newFilteredTracks: SpotifyTrack[]) {
       const alreadyKnownTrackIds = filteredTracks.map(t => t.id)
-      const tracksToAdd = validTracks.filter(t => !alreadyKnownTrackIds.includes(t.id))
+      const tracksToAdd = newFilteredTracks.filter(t => !alreadyKnownTrackIds.includes(t.id))
       filteredTracks.push(...tracksToAdd)
     },
     resetFilters () {

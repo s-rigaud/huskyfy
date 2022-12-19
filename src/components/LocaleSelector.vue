@@ -28,22 +28,20 @@ export default defineComponent({
   computed: {
     sortedLocales (): string[] {
       // Set current locale first (preselected option)
-      let locales: string[] = this.$i18n.availableLocales
-      const currentLocale: string = this.$i18n.locale
+      let locales = this.$i18n.availableLocales
+      const currentLocale = this.$i18n.locale
       locales = locales.filter((l) => l !== currentLocale)
       locales.unshift(currentLocale)
       return locales
     },
     currentLocaleIcon (): string {
       return this.getIconForLocale(this.$i18n.locale)
-    },
-    getIconForLocale () {
-      return (locale: string): string => {
-        return require(`@/assets/${locale}.png`)
-      }
     }
   },
   methods: {
+    getIconForLocale (locale: string): string {
+      return require(`@/assets/${locale}.png`)
+    },
     updateLocale (event: Event) {
       // Recursively retrieve list-item as the event can occur in child nodes
       let node = (event.target as HTMLElement)

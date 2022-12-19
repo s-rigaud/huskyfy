@@ -174,11 +174,12 @@ export default defineComponent({
   },
   computed: {
     getTextFromVisibility (): string {
-      if (this.playlist.collaborative) {
-        return this.$t('playlist.collaborative') + ' ' + this.$t('_emojis.collaborative')
-      }
-      if (this.playlist.public) return this.$t('playlist.public') + ' ' + this.$t('_emojis.public')
-      return this.$t('playlist.private') + ' ' + this.$t('_emojis.private')
+      let visibility: string
+      if (this.playlist.collaborative) visibility = 'collaborative'
+      else if (this.playlist.public) visibility = 'public'
+      else visibility = 'private'
+
+      return this.$t(`playlist.${visibility}`) + ' ' + this.$t(`_emojis.${visibility}`)
     },
     usernameToDisplay (): string {
       const playlistCreator = this.playlist.owner.display_name

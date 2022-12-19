@@ -55,7 +55,7 @@ const router = createRouter({
 
 // eslint-disable-next-line
 const DEFAULT_USER_PICTURE = (require('@/assets/no-user.png') as string)
-router.beforeEach(async function (to, from, next) {
+router.beforeEach(async function (to, _, next) {
   const authStore = useAuthStore()
 
   // Intercept and autolog user when code is received
@@ -73,8 +73,7 @@ router.beforeEach(async function (to, from, next) {
     await api.spotify.auth.requestFirstAccessToken()
 
     // Getting user info
-    const response = await api.spotify.users.getUserProfile()
-    const data = response.data
+    const { data } = await api.spotify.users.getUserProfile()
     const userPicture = data.images[0]?.url || DEFAULT_USER_PICTURE
     useUserStore().$patch({
       id: data.id,

@@ -11,7 +11,7 @@ interface Callback {
   (base64cover: string): void;
 }
 
-// Legacy code not optimized used to gather Spotify cover img in base64
+// Legacy code not optimized used to gather Spotify cover image content in base64
 const getPictureContentFromURL = (url: string, uploadCallback: Callback) => {
   const xhRequest = new XMLHttpRequest()
   xhRequest.onload = function () {
@@ -84,14 +84,19 @@ export default {
   },
   // Add multiple tracks to an existing playlist
   // LIMIT is 100 tracks
-  async addTracksToPlaylist (playlistId: string, trackIds: string[]): Promise<string> {
-    let data = null
+  async addTracksToPlaylist (playlistId: string, trackIds: string[]): Promise<string | undefined> {
+    interface AddTrackResponse {
+      snapshot_id: string
+    }
+
+    let response: AxiosResponse<AddTrackResponse, AddTrackResponse> | null = null
     for (const trackBucket of chunkArray(trackIds, 100)) {
-      data = await request.post(`/playlists/${playlistId}/tracks`, {
+      response = await request.post(`/playlists/${playlistId}/tracks`, {
         uris: trackBucket
       })
     }
-    return data?.data.snapshot_id
+    // Return last snapshotId
+    return response?.data.snapshot_id
   },
   // Update playlist privacy, the playlist is either public or private
   updatePlaylistPrivacy (playlistId: string, isPublic: boolean): Promise<AxiosResponse<null, null>> {
