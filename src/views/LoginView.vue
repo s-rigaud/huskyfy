@@ -2,26 +2,57 @@
   <!-- Login view with a large background and a simple button -->
   <div id="login">
     <div id="upper-part">
-      <v-img id="logo" rel="preconnect" src='@/assets/Huskyfy.png' alt="Huskyfy"></v-img>
+      <v-img
+        id="logo"
+        rel="preconnect"
+        src="@/assets/Huskyfy.png"
+        alt="Huskyfy"
+      />
     </div>
 
     <div id="hero">
-      <h1 id="title" class="rainbow-text">{{ $t("login.header") }}</h1>
+      <h1
+        id="title"
+        class="rainbow-text"
+      >
+        {{ $t("login.header") }}
+      </h1>
       <div id="functionalities">
-        <div v-for="n in 6" :key="n" class="functionality">
-          <p class="emoji"> {{ $t(`login.functionality${n}.emoji`) }}</p>
+        <div
+          v-for="n in 6"
+          :key="n"
+          class="functionality"
+        >
+          <p class="emoji">
+            {{ $t(`login.functionality${n}.emoji`) }}
+          </p>
           <h4>{{ $t(`login.functionality${n}.text`) }}</h4>
         </div>
       </div>
     </div>
 
     <div id="lower-part">
-      <v-btn id="connect-button" @click="accessOAuthPage" rounded class="rainbow-v-btn" size="large">
+      <v-btn
+        id="connect-button"
+        rounded
+        class="rainbow-v-btn"
+        size="large"
+        @click="accessOAuthPage"
+      >
         {{ $t("login.connect") }}
-        <v-icon right light style="padding-top: 5px;"> mdi-account-circle </v-icon>
+        <v-icon
+          right
+          light
+          style="padding-top: 5px;"
+        >
+          mdi-account-circle
+        </v-icon>
       </v-btn>
 
-      <router-link to="/about" id="link-about">
+      <router-link
+        id="link-about"
+        to="/about"
+      >
         {{ $t("login.about") }}
       </router-link>
     </div>

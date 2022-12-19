@@ -1,43 +1,97 @@
 <template>
-  <v-card id="playlist-card" v-if="playlistId">
+  <v-card
+    v-if="playlistId"
+    id="playlist-card"
+  >
     <div id="playlist-meta">
       <div id="playlist-meta-left">
-        <div id="playlist-image" @click.self="openPlaylistOnSpotify">
-          <v-img v-bind:src="playlist.images[0].url" lazy-src='@/assets/default_cover.jpg' alt="Cover image" cover
-            rel="preconnect" width="90">
-          </v-img>
+        <div
+          id="playlist-image"
+          @click.self="openPlaylistOnSpotify"
+        >
+          <v-img
+            :src="playlist.images[0].url"
+            lazy-src="@/assets/default_cover.jpg"
+            alt="Cover image"
+            cover
+            rel="preconnect"
+            width="90"
+          />
         </div>
         <div id="title-container">
-          <v-text-field v-model="playlistNameText" v-if="userOwnsPlaylist && !isMyMusicPlaylist" id="playlist-name"
-            :label="$t('playlist.name')" variant="outlined" color="var(--text-color)" density="compact"
+          <v-text-field
+            v-if="userOwnsPlaylist && !isMyMusicPlaylist"
+            id="playlist-name"
+            v-model="playlistNameText"
+            :label="$t('playlist.name')"
+            variant="outlined"
+            color="var(--text-color)"
+            density="compact"
             :loading="playlist.name !== playlistNameText && !nameUpdatedInAPI"
-            :append-inner-icon="nameUpdatedInAPI && playlist.name === playlistNameText ? 'mdi-check-circle-outline' : ''">
-          </v-text-field>
-          <h4 v-else id="simplified-title" class="rainbow-text">{{ playlist.name }}</h4>
+            :append-inner-icon="nameUpdatedInAPI && playlist.name === playlistNameText ? 'mdi-check-circle-outline' : ''"
+          />
+          <h4
+            v-else
+            id="simplified-title"
+            class="rainbow-text"
+          >
+            {{ playlist.name }}
+          </h4>
           <div id="visibility-and-meta">
             <p> {{ getTextFromVisibility }} </p>
-            <v-tooltip :text="$t('playlist.contains-episodes-explanations')" class="rainbow-tooltip" location="bottom">
-              <template v-slot:activator="{ props }">
-                <v-chip v-if="playlistContainsEpisodes" prepend-icon="mdi-alert" color="#f1c40f" size="small"
-                  variant="elevated" v-bind="props" link>
+            <v-tooltip
+              :text="$t('playlist.contains-episodes-explanations')"
+              class="rainbow-tooltip"
+              location="bottom"
+            >
+              <template #activator="{ props }">
+                <v-chip
+                  v-if="playlistContainsEpisodes"
+                  prepend-icon="mdi-alert"
+                  color="#f1c40f"
+                  size="small"
+                  variant="elevated"
+                  v-bind="props"
+                  link
+                >
                   {{ $t('playlist.contains-episodes') }}
                 </v-chip>
               </template>
             </v-tooltip>
-            <v-tooltip :text="$t('playlist.contains-local-tracks-explanations')" class="rainbow-tooltip"
-              location="bottom">
-              <template v-slot:activator="{ props }">
-                <v-chip v-if="playlistContainsLocalTracks" prepend-icon="mdi-alert" color="#f1c40f" size="small"
-                  variant="elevated" v-bind="props" link>
+            <v-tooltip
+              :text="$t('playlist.contains-local-tracks-explanations')"
+              class="rainbow-tooltip"
+              location="bottom"
+            >
+              <template #activator="{ props }">
+                <v-chip
+                  v-if="playlistContainsLocalTracks"
+                  prepend-icon="mdi-alert"
+                  color="#f1c40f"
+                  size="small"
+                  variant="elevated"
+                  v-bind="props"
+                  link
+                >
                   {{ $t('playlist.contains-local-tracks') }}
                 </v-chip>
               </template>
             </v-tooltip>
-            <v-tooltip :text="$t('playlist.contains-duplicated-tracks-explanations')" class="rainbow-tooltip"
-              location="bottom">
-              <template v-slot:activator="{ props }">
-                <v-chip v-if="playlistContainsDuplicatedTracks" prepend-icon="mdi-alert" color="#f1c40f" size="small"
-                  variant="elevated" v-bind="props" link>
+            <v-tooltip
+              :text="$t('playlist.contains-duplicated-tracks-explanations')"
+              class="rainbow-tooltip"
+              location="bottom"
+            >
+              <template #activator="{ props }">
+                <v-chip
+                  v-if="playlistContainsDuplicatedTracks"
+                  prepend-icon="mdi-alert"
+                  color="#f1c40f"
+                  size="small"
+                  variant="elevated"
+                  v-bind="props"
+                  link
+                >
                   {{ $t('playlist.contains-duplicated-tracks') }}
                 </v-chip>
               </template>
@@ -45,29 +99,55 @@
           </div>
           <p id="playlist-owner">
             {{ $t("playlist.created-by") }}
-            <span id="playlist-owner-name" @click.stop="openPlaylistOwnerSpotifyProfile">
+            <span
+              id="playlist-owner-name"
+              @click.stop="openPlaylistOwnerSpotifyProfile"
+            >
               {{ usernameToDisplay }}
             </span>
           </p>
-          <p v-if="allTracksLoaded" id="percentage-row">
+          <p
+            v-if="allTracksLoaded"
+            id="percentage-row"
+          >
             <span class="rainbow-text">{{ $t("playlist.indie-score-text") }}</span>
             <!-- Only if all tracks are loaded -->
-            <span :style="colorForPercentage" style="margin: 0px 5px;" class="black-highlight">
+            <span
+              :style="colorForPercentage"
+              style="margin: 0px 5px;"
+              class="black-highlight"
+            >
               {{ ` ${indiePercentage}` }} %
             </span>
-            <v-tooltip :text="$t('playlist.explanation-indie-score')" class="rainbow-tooltip">
-              <template v-slot:activator="{ props }">
-                <v-btn id="help-indie-percentage" v-bind="props">
-                  <v-icon size="x-small">mdi-help</v-icon>
+            <v-tooltip
+              :text="$t('playlist.explanation-indie-score')"
+              class="rainbow-tooltip"
+            >
+              <template #activator="{ props }">
+                <v-btn
+                  id="help-indie-percentage"
+                  v-bind="props"
+                >
+                  <v-icon size="x-small">
+                    mdi-help
+                  </v-icon>
                 </v-btn>
               </template>
             </v-tooltip>
           </p>
         </div>
       </div>
-      <v-tooltip :text="$t('playlist.explanation-indie-score')" class="rainbow-tooltip" location="bottom">
-        <template v-slot:activator="{ props }">
-          <IndieChart v-bind="props" :indie-percentage="indiePercentage" class="playlist-meta-middle" />
+      <v-tooltip
+        :text="$t('playlist.explanation-indie-score')"
+        class="rainbow-tooltip"
+        location="bottom"
+      >
+        <template #activator="{ props }">
+          <IndieChart
+            v-bind="props"
+            :indie-percentage="indiePercentage"
+            class="playlist-meta-middle"
+          />
         </template>
       </v-tooltip>
       <div id="playlist-meta-right">
@@ -86,27 +166,58 @@
       </div>
     </div>
     <v-card-text id="playlist-description">
-      <p v-if="formattedDescription"> {{ formattedDescription }} </p>
-      <p v-else class="font-italic"> {{ $t('playlist.no-description') }} </p>
+      <p v-if="formattedDescription">
+        {{ formattedDescription }}
+      </p>
+      <p
+        v-else
+        class="font-italic"
+      >
+        {{ $t('playlist.no-description') }}
+      </p>
     </v-card-text>
 
-    <v-badge id="burger-button-badge" color="red" dot>
-      <v-icon id="burger-button" @click="() => { drawer = !drawer; displayBurgerMenuBadge = 'none' }" icon="mdi-menu"
-        color="var(--text-color)" size="x-large" class="highlight-icon">
-      </v-icon>
+    <v-badge
+      id="burger-button-badge"
+      color="red"
+      dot
+    >
+      <v-icon
+        id="burger-button"
+        icon="mdi-menu"
+        color="var(--text-color)"
+        size="x-large"
+        class="highlight-icon"
+        @click="() => { drawer = !drawer; displayBurgerMenuBadge = 'none' }"
+      />
     </v-badge>
 
-    <v-tooltip location="bottom end" :text="$t('playlist.open-on-spotify')" class="rainbow-tooltip">
-      <template v-slot:activator="{ props }">
-        <v-img id="spotify-logo-meta-small" @click="openPlaylistOnSpotify" src="@/assets/spotify.png" alt="Spotify Logo"
-          rel="preconnect" width="40" v-bind="props" class="highlight-icon">
-        </v-img>
+    <v-tooltip
+      location="bottom end"
+      :text="$t('playlist.open-on-spotify')"
+      class="rainbow-tooltip"
+    >
+      <template #activator="{ props }">
+        <v-img
+          id="spotify-logo-meta-small"
+          src="@/assets/spotify.png"
+          alt="Spotify Logo"
+          rel="preconnect"
+          width="40"
+          v-bind="props"
+          class="highlight-icon"
+          @click="openPlaylistOnSpotify"
+        />
       </template>
     </v-tooltip>
   </v-card>
 
-  <ActionDrawer :open="drawer" :playlistId="playlistId" @on-close="drawer = false"
-    @on-sort-end="() => { $emit('playlistUpdated'); drawer = false }" />
+  <ActionDrawer
+    :open="drawer"
+    :playlist-id="playlistId"
+    @on-close="drawer = false"
+    @on-sort-end="() => { $emit('playlistUpdated'); drawer = false }"
+  />
 </template>
 
 <script lang="ts">
@@ -126,7 +237,6 @@ export default defineComponent({
     ActionDrawer,
     IndieChart
   },
-  emits: ['playlistUpdated'],
   props: {
     playlistId: {
       type: String,
@@ -137,6 +247,7 @@ export default defineComponent({
       required: true
     }
   },
+  emits: ['playlistUpdated'],
   setup (props) {
     const playlistsStore = usePlaylistsStore()
 
@@ -161,16 +272,6 @@ export default defineComponent({
       updatePlaylistNameDebounced: (null as DebouncedFunc<() => Promise<void>> | null),
       nameUpdatedInAPI: false
     }
-  },
-  beforeMount () {
-    this.updatePlaylistNameDebounced = debounce(
-      async () => {
-        await this.playlistsStore.updatePlaylistName(this.playlistId, this.playlistNameText)
-        this.nameUpdatedInAPI = true
-      },
-      2000
-    )
-    this.playlistNameText = this.playlist.name
   },
   computed: {
     getTextFromVisibility (): string {
@@ -219,6 +320,25 @@ export default defineComponent({
       return this.playlist.containsDuplicatedTracks
     }
   },
+  watch: {
+    playlistNameText (newValue: string) {
+      if (newValue !== this.playlist.name && newValue) {
+        this.nameUpdatedInAPI = false
+        // eslint-disable-next-line
+        this.updatePlaylistNameDebounced!()
+      }
+    }
+  },
+  beforeMount () {
+    this.updatePlaylistNameDebounced = debounce(
+      async () => {
+        await this.playlistsStore.updatePlaylistName(this.playlistId, this.playlistNameText)
+        this.nameUpdatedInAPI = true
+      },
+      2000
+    )
+    this.playlistNameText = this.playlist.name
+  },
   methods: {
     openPlaylistOnSpotify () {
       window.location.href = this.playlist.uri
@@ -228,15 +348,6 @@ export default defineComponent({
     },
     getPlaylistDuration (): string {
       return this.playlistsStore.getPlaylistFullLength(this.playlistId)
-    }
-  },
-  watch: {
-    playlistNameText (newValue: string) {
-      if (newValue !== this.playlist.name && newValue) {
-        this.nameUpdatedInAPI = false
-        // eslint-disable-next-line
-        this.updatePlaylistNameDebounced!()
-      }
     }
   }
 })

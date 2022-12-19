@@ -1,21 +1,37 @@
 <template>
   <!-- Ask the user if he really want to load all the tracks for a huge playlist (> 150 tracks) -->
   <!-- This allow to lazy load playlist tracks -->
-  <v-snackbar id="load-more-snackbar" v-model="ALWAYS_TRUE" :timeout="timeout" :color="color">
-    <div id="ask-and-load" v-if="!isLoaded">
+  <v-snackbar
+    id="load-more-snackbar"
+    v-model="ALWAYS_TRUE"
+    :timeout="timeout"
+    :color="color"
+  >
+    <div
+      v-if="!isLoaded"
+      id="ask-and-load"
+    >
       <div id="loading-create-new-playlist">
         <p class="rainbow-text">
           {{ $t("playlist.load-more-warning", { limit: trackRequestLimit }) }}
         </p>
       </div>
-      <v-btn id="load-more-button" @click="loadAllTracks" class="rainbow-v-btn" :loading="waitingForResponse">
+      <v-btn
+        id="load-more-button"
+        class="rainbow-v-btn"
+        :loading="waitingForResponse"
+        @click="loadAllTracks"
+      >
         {{ $t("playlist.load-more-button") }}
       </v-btn>
     </div>
 
-    <div id="loaded" v-else>
+    <div
+      v-else
+      id="loaded"
+    >
       {{ $t("playlist.fully-loaded") }}
-      <v-icon icon="mdi-checkbox-marked-circle"></v-icon>
+      <v-icon icon="mdi-checkbox-marked-circle" />
     </div>
   </v-snackbar>
 </template>
@@ -45,6 +61,14 @@ export default defineComponent({
 
     return { downloadPlaylistTracks, playlistsStore }
   },
+  data () {
+    return {
+      ALWAYS_TRUE: (true as const),
+
+      isLoaded: false,
+      waitingForResponse: false
+    }
+  },
   computed: {
     color (): string {
       return this.isLoaded ? 'green' : 'black'
@@ -64,14 +88,6 @@ export default defineComponent({
       this.waitingForResponse = false
       this.isLoaded = true
       this.$emit('allTracksLoaded')
-    }
-  },
-  data () {
-    return {
-      ALWAYS_TRUE: (true as const),
-
-      isLoaded: false,
-      waitingForResponse: false
     }
   }
 })

@@ -1,30 +1,60 @@
 <template>
   <!-- Navbar -->
-  <v-app-bar id="app-bar" flat v-if="$router.currentRoute.value.path !== '/login'">
+  <v-app-bar
+    v-if="$router.currentRoute.value.path !== '/login'"
+    id="app-bar"
+    flat
+  >
     <!-- Left part -->
-    <router-link id="logo-link" to="/explore">
-      <v-img id="logo" src="@/assets/Huskyfy.png" alt="Huskyfy logo"></v-img>
+    <router-link
+      id="logo-link"
+      to="/explore"
+    >
+      <v-img
+        id="logo"
+        src="@/assets/Huskyfy.png"
+        alt="Huskyfy logo"
+      />
     </router-link>
 
-    <v-spacer></v-spacer>
+    <v-spacer />
 
-    <v-menu offset="14" transition="slide-y-transition">
-      <template v-slot:activator="{ props }">
-        <div id="user-info" v-bind="props">
-          <h3 id="profile-name" class="rainbow-text"> {{ userStore.username }} </h3>
+    <v-menu
+      offset="14"
+      transition="slide-y-transition"
+    >
+      <template #activator="{ props }">
+        <div
+          id="user-info"
+          v-bind="props"
+        >
+          <h3
+            id="profile-name"
+            class="rainbow-text"
+          >
+            {{ userStore.username }}
+          </h3>
           <v-avatar id="profile-picture">
-            <v-img rel="preconnect" :src="userStore.profilePicture" alt="Profile picture"></v-img>
+            <v-img
+              rel="preconnect"
+              :src="userStore.profilePicture"
+              alt="Profile picture"
+            />
           </v-avatar>
         </div>
       </template>
 
       <v-list id="disconnect-container">
-        <v-list-item id="disconnect" link @click="disconnect" prepend-icon="mdi-logout">
+        <v-list-item
+          id="disconnect"
+          link
+          prepend-icon="mdi-logout"
+          @click="disconnect"
+        >
           {{ $t('navbar.change-account') }}
         </v-list-item>
       </v-list>
     </v-menu>
-
   </v-app-bar>
 </template>
 

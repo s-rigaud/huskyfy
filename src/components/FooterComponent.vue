@@ -1,19 +1,37 @@
 <template>
   <!-- Footer with simple links at the bottom of the page -->
-  <v-footer id="footer" v-if="userStore.connected">
-    <v-row justify="center" no-gutters>
+  <v-footer
+    v-if="userStore.connected"
+    id="footer"
+  >
+    <v-row
+      justify="center"
+      no-gutters
+    >
       <router-link to="/explore">
-        <v-btn variant="text"> Home </v-btn>
+        <v-btn variant="text">
+          {{ $t('page-title.explore') }}
+        </v-btn>
       </router-link>
       <router-link to="/about">
-        <v-btn variant="text"> About </v-btn>
+        <v-btn variant="text">
+          {{ $t('page-title.about') }}
+        </v-btn>
       </router-link>
 
       <!-- Created with ♥ -->
-      <v-col class="primary lighten-2 py-4 text-center white--text" cols="12">
+      <v-col
+        class="primary lighten-2 py-4 text-center white--text"
+        cols="12"
+      >
         <strong>
           {{ new Date().getFullYear() }} - {{ $t("footer.built") }}
-          <a id="github-link" href="https://github.com/s-rigaud" target="_blank" rel="noopener">
+          <a
+            id="github-link"
+            href="https://github.com/s-rigaud"
+            target="_blank"
+            rel="noopener"
+          >
             Hylectrif
           </a>
         </strong>

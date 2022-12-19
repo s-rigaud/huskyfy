@@ -1,20 +1,43 @@
 <template>
   <!-- Layer on top to follow steps of playlist duplication -->
-  <v-snackbar v-model="snackbarVisible" id="duplicate-snackbar" :timeout="timeout" elevation="24"
-    color="var(--primary-color)">
-    <div id="loading-create-new-playlist" v-if="loadingPercentage > 0">
-      <v-progress-circular :model-value="loadingPercentage" color="var(--text-color)">
-      </v-progress-circular>
-      <p class="rainbow-text">{{ loadingPercentage }}% - {{ loadingText }}</p>
+  <v-snackbar
+    id="duplicate-snackbar"
+    v-model="snackbarVisible"
+    :timeout="timeout"
+    elevation="24"
+    color="var(--primary-color)"
+  >
+    <div
+      v-if="loadingPercentage > 0"
+      id="loading-create-new-playlist"
+    >
+      <v-progress-circular
+        id="duplication-progress"
+        :model-value="loadingPercentage"
+        color="var(--text-color)"
+      />
+      <p class="rainbow-text">
+        {{ loadingPercentage }}% - {{ loadingText }}
+      </p>
     </div>
 
-    <v-btn id="get-to-new-playlist" class="rainbow-v-btn" :loading="newPlaylistId === ''"
-      @click="displayNewPlaylistDetails">
+    <v-btn
+      id="get-to-new-playlist"
+      class="rainbow-v-btn"
+      :loading="newPlaylistId === ''"
+      @click="displayNewPlaylistDetails"
+    >
       {{ $t("playlist.next") }}
     </v-btn>
 
-    <template v-slot:actions>
-      <v-btn color="red" variant="text" @click="snackbarVisible = false">X</v-btn>
+    <template #actions>
+      <v-btn
+        color="red"
+        variant="text"
+        @click="snackbarVisible = false"
+      >
+        X
+      </v-btn>
     </template>
   </v-snackbar>
 </template>
@@ -28,7 +51,6 @@ import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   name: 'DuplicatorPopup',
-  emits: ['onEnd'],
   props: {
     playlistId: {
       type: String,
@@ -43,6 +65,7 @@ export default defineComponent({
       required: true
     }
   },
+  emits: ['onEnd'],
   setup (props) {
     const playlistsStore = usePlaylistsStore()
 
@@ -52,13 +75,33 @@ export default defineComponent({
 
     return { playlistsStore, playlist }
   },
-  async created () {
-    await this.createNewPlaylist()
+  data () {
+    return {
+      loadingPercentage: 0,
+      loadingText: '',
+
+      newPlaylistId: '',
+
+      snackbarVisible: true
+    }
   },
   computed: {
     timeout (): number {
       return this.loadingPercentage === 100 ? 10_000 : -1
     }
+  },
+  watch: {
+    snackbarVisible (newValue: boolean) {
+      if (newValue === false) {
+        this.loadingPercentage = 0
+        this.loadingText = ''
+        this.newPlaylistId = ''
+        this.$emit('onEnd')
+      }
+    }
+  },
+  async created () {
+    await this.createNewPlaylist()
   },
   methods: {
     async createNewPlaylist () {
@@ -86,7 +129,7 @@ export default defineComponent({
         tracksToAdd
       )
 
-      this.loadingText = this.$t('playlist.new.done')
+      this.loadingText = this.$t('playlist.new.done') + ' ✓'
       this.loadingPercentage = 100
       this.newPlaylistId = newPlaylistId
     },
@@ -120,26 +163,6 @@ export default defineComponent({
         '•', this.$t('playlist.duplicate.created-by')
       ].join(' ')
     }
-  },
-  data () {
-    return {
-      loadingPercentage: 0,
-      loadingText: '',
-
-      newPlaylistId: '',
-
-      snackbarVisible: true
-    }
-  },
-  watch: {
-    snackbarVisible (newValue: boolean) {
-      if (newValue === false) {
-        this.loadingPercentage = 0
-        this.loadingText = ''
-        this.newPlaylistId = ''
-        this.$emit('onEnd')
-      }
-    }
   }
 })
 </script>
@@ -151,6 +174,10 @@ export default defineComponent({
   flex-direction: row;
   justify-content: center;
   align-items: center;
+}
+
+#duplication-progress {
+  margin-left: 5px;
 }
 
 #duplicate-snackbar .v-snackbar__wrapper {

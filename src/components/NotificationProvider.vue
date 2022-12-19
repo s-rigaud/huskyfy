@@ -1,8 +1,14 @@
 <template>
-  <v-snackbar v-for="notification of notificationsStore.notifications" :key="notification.message" v-model="snackbar"
-    timeout="5000" :color="getColor(notification.type)" class="notification-snackbar">
+  <v-snackbar
+    v-for="notification of notificationsStore.notifications"
+    :key="notification.message"
+    v-model="snackbar"
+    timeout="5000"
+    :color="getColor(notification.type)"
+    class="notification-snackbar"
+  >
     {{ notification.message }}
-    <v-icon :icon="getIcon(notification.type)"></v-icon>
+    <v-icon :icon="getIcon(notification.type)" />
   </v-snackbar>
 </template>
 
@@ -22,6 +28,12 @@ export default defineComponent({
       snackbar: true
     }
   },
+  watch: {
+    snackbar () {
+      // When snackbar is closing
+      this.notificationsStore.reset()
+    }
+  },
   methods: {
     getColor (type: NotificationType): string {
       if (type === NotificationType.success) return 'green'
@@ -34,12 +46,6 @@ export default defineComponent({
       if (type === NotificationType.warning) return 'mdi-alert'
       if (type === NotificationType.error) return 'mdi-alert-octagon'
       return 'mdi-menu'
-    }
-  },
-  watch: {
-    snackbar () {
-      // When snackbar is closing
-      this.notificationsStore.reset()
     }
   }
 })

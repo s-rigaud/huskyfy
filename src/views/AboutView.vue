@@ -3,56 +3,91 @@
   <div id="about-content">
     <div id="text">
       <div id="main-title">
-        <v-img id="main-title-image" width="60" src='@/assets/large-logo-circle.png' alt="Huskyfy Image"></v-img>
-        <h1 class="rainbow-text">{{ $t("about.description.title") }}</h1>
+        <v-img
+          id="main-title-image"
+          width="60"
+          src="@/assets/large-logo-circle.png"
+          alt="Huskyfy Image"
+        />
+        <h1 class="rainbow-text">
+          {{ $t("about.description.title") }}
+        </h1>
       </div>
       <p style="margin-bottom: 0">
         {{ $t("about.description.content.part1") }}
-        <span style="color: var(--link-color); cursor: pointer;" @mouseover="drawFireworks">
+        <span
+          style="color: var(--link-color); cursor: pointer;"
+          @mouseover="drawFireworks"
+        >
           Huskyfy !
         </span>
         {{ $t("about.description.content.part2") }}
       </p>
-      <v-chip id="indie-chip" :text="$t('track.indie')" color="green" label text-color="white" size="large"
-        @click="drawStars">
-      </v-chip>
+      <v-chip
+        id="indie-chip"
+        :text="$t('track.indie')"
+        color="green"
+        label
+        text-color="white"
+        size="large"
+        @click="drawStars"
+      />
 
       <div class="subtitle">
-        <h2 class="rainbow-text">{{ $t("about.connection.title") }}</h2>
+        <h2 class="rainbow-text">
+          {{ $t("about.connection.title") }}
+        </h2>
         <h2>🔒</h2>
       </div>
-      <v-divider></v-divider>
+      <v-divider />
       <p>{{ $t("about.connection.content") }} </p>
 
       <div class="subtitle">
-        <h2 class="rainbow-text">{{ $t("about.process.title") }}</h2>
+        <h2 class="rainbow-text">
+          {{ $t("about.process.title") }}
+        </h2>
         <h2>💻</h2>
       </div>
-      <v-divider></v-divider>
+      <v-divider />
       <p> {{ $t("about.process.content") }}</p>
 
       <div class="subtitle">
-        <h2 class="rainbow-text">{{ $t("about.expose-liked-songs.title") }}</h2>
+        <h2 class="rainbow-text">
+          {{ $t("about.expose-liked-songs.title") }}
+        </h2>
         <h2>{{ $t("_emojis.public") }}</h2>
       </div>
-      <v-divider></v-divider>
+      <v-divider />
       <p>
         {{ $t("about.expose-liked-songs.content.part1") }} {{ $t("_emojis.collaborative") }}
-        <br />
-        <span id="open-my-music" @click="openMyMusicOnSpotify">
-          {{ $t("about.expose-liked-songs.content.part2") }}<v-img id="my-song-img" width="20"
-            src='@/assets/my-music.jpeg' alt="My Music playlist"></v-img>
+        <br>
+        <span
+          id="open-my-music"
+          @click="openMyMusicOnSpotify"
+        >
+          {{ $t("about.expose-liked-songs.content.part2") }}<v-img
+            id="my-song-img"
+            width="20"
+            src="@/assets/my-music.jpeg"
+            alt="My Music playlist"
+          />
         </span>
       </p>
 
       <div class="subtitle">
-        <h2 class="rainbow-text">{{ $t("about.creator.title") }}</h2>
+        <h2 class="rainbow-text">
+          {{ $t("about.creator.title") }}
+        </h2>
         <h2>😃</h2>
       </div>
-      <v-divider></v-divider>
+      <v-divider />
       <p>
         {{ $t("about.creator.content.part1") }}
-        <a href="https://github.com/s-rigaud" target="_blank" rel="noopener">
+        <a
+          href="https://github.com/s-rigaud"
+          target="_blank"
+          rel="noopener"
+        >
           {{ $t("about.creator.content.part2") }}
         </a>
         {{ $t("about.creator.content.part3") }}
@@ -62,34 +97,70 @@
       </p>
 
       <div class="subtitle">
-        <h2 class="rainbow-text">{{ $t("about.copyright.title") }}</h2>
-        <h2 class="rainbow-text" style="margin-left: 5px">©️</h2>
+        <h2 class="rainbow-text">
+          {{ $t("about.copyright.title") }}
+        </h2>
+        <h2
+          class="rainbow-text"
+          style="margin-left: 5px"
+        >
+          ©️
+        </h2>
       </div>
-      <v-divider></v-divider>
+      <v-divider />
       <p>
         {{ $t("about.copyright.content") }}
-        <a href="https://www.flaticon.com/fr/icones-gratuites/husky-siberien" title="husky sibérien icônes"
-          target="_blank" rel="noopener">FlatIcon.com</a>.
+        <a
+          href="https://www.flaticon.com/fr/icones-gratuites/husky-siberien"
+          title="husky sibérien icônes"
+          target="_blank"
+          rel="noopener"
+        >FlatIcon.com</a>.
       </p>
 
       <div id="github-icon">
         <div>
-          <a href="https://github.com/s-rigaud/huskyfy" target="_blank" rel="noopener"
-            style="color: var(--text-color) !important;">
-            <v-img width="70" src='@/assets/large-logo-circle.png' alt="Huskyfy Image"></v-img>
+          <a
+            href="https://github.com/s-rigaud/huskyfy"
+            target="_blank"
+            rel="noopener"
+            style="color: var(--text-color) !important;"
+          >
+            <v-img
+              width="70"
+              src="@/assets/large-logo-circle.png"
+              alt="Huskyfy Image"
+            />
             <p style="color: var(--text-color); margin: 0px 15px;">Huskyfy version {{ version }}</p>
           </a>
         </div>
         <div>
-          <a href="https://github.com/s-rigaud" target="_blank" rel="noopener" style="color: white !important;">
-            <v-img width="70" src='@/assets/github.png' alt="Github Image"></v-img>
+          <a
+            href="https://github.com/s-rigaud"
+            target="_blank"
+            rel="noopener"
+            style="color: white !important;"
+          >
+            <v-img
+              width="70"
+              src="@/assets/github.png"
+              alt="Github Image"
+            />
             <p style="color: white; margin: 0px 15px;">@s-rigaud</p>
           </a>
         </div>
         <div>
-          <a href="https://twitter.com/HuskyfyWebsite/with_replies" target="_blank" rel="noopener"
-            style="color: #55ADEE !important;">
-            <v-img width="70" src='@/assets/twitter.png' alt="Twitter Image"></v-img>
+          <a
+            href="https://twitter.com/HuskyfyWebsite/with_replies"
+            target="_blank"
+            rel="noopener"
+            style="color: #55ADEE !important;"
+          >
+            <v-img
+              width="70"
+              src="@/assets/twitter.png"
+              alt="Twitter Image"
+            />
             <p style="color: #55ADEE; margin: 0px 15px;">@HuskyfyWebsite</p>
           </a>
         </div>

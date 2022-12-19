@@ -1,27 +1,46 @@
 <template>
-  <v-navigation-drawer id="drawer" v-model="isOpen" temporary location="right" :image='starImage' elevation="20">
+  <v-navigation-drawer
+    id="drawer"
+    v-model="isOpen"
+    temporary
+    location="right"
+    :image="starImage"
+    elevation="20"
+  >
     <v-list>
       <v-list-subheader v-if="canUpdatePlaylistName">
         {{ $t('drawer.update-playlist') }}
       </v-list-subheader>
       <!-- 1.1 Update playlist privacy -->
       <div v-if="(userOwnsPlaylist || spotifyOwnsPlaylist) && !playlist.collaborative && isNotMyMusicPlaylist">
-        <v-list-item v-if="playlist.public" @click="() => updatePlaylistPrivacy(false)">
+        <v-list-item
+          v-if="playlist.public"
+          @click="() => updatePlaylistPrivacy(false)"
+        >
           <v-list-item-title>{{ $t("playlist.set-private") }} {{ $t("_emojis.private") }}</v-list-item-title>
         </v-list-item>
-        <v-list-item v-else @click="() => updatePlaylistPrivacy(true)">
+        <v-list-item
+          v-else
+          @click="() => updatePlaylistPrivacy(true)"
+        >
           <v-list-item-title>{{ $t("playlist.set-public") }} {{ $t("_emojis.public") }}</v-list-item-title>
         </v-list-item>
       </div>
 
       <!-- 1.2 Duplicate playlist -->
-      <v-list-item v-if='allTracksLoaded' @click="startDuplicationProcess">
+      <v-list-item
+        v-if="allTracksLoaded"
+        @click="startDuplicationProcess"
+      >
         <v-list-item-title>{{ $t("playlist.duplicate.button") }} 🔀</v-list-item-title>
       </v-list-item>
 
       <!-- 1.3 Playlist deletion -->
-      <v-dialog v-if="isNotMyMusicPlaylist" v-model="isDeleteModalOpen">
-        <template v-slot:activator="{ props }">
+      <v-dialog
+        v-if="isNotMyMusicPlaylist"
+        v-model="isDeleteModalOpen"
+      >
+        <template #activator="{ props }">
           <v-list-item v-bind="props">
             <v-list-item-title>{{ $t("playlist.unfollow") }}</v-list-item-title>
           </v-list-item>
@@ -35,19 +54,26 @@
             {{ $t('playlist.delete.confirm-message') }}
           </v-card-text>
           <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="var(--text-color)" @click="isDeleteModalOpen = false">
+            <v-spacer />
+            <v-btn
+              color="var(--text-color)"
+              @click="isDeleteModalOpen = false"
+            >
               {{ $t('playlist.delete.disagree') }}
             </v-btn>
-            <v-btn id="validateDeletionButton" :loading="waitingForDeletion" class="rainbow-v-btn font-weight-bold"
-              @click="unfollowPlaylist">
+            <v-btn
+              id="validateDeletionButton"
+              :loading="waitingForDeletion"
+              class="rainbow-v-btn font-weight-bold"
+              @click="unfollowPlaylist"
+            >
               {{ $t('playlist.delete.agree') }}
             </v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
 
-      <v-divider color="grey"></v-divider>
+      <v-divider color="grey" />
 
       <div v-if="userOwnsPlaylist && allTracksLoaded">
         <v-list-subheader> {{ $t('drawer.reorder-playlist') }}</v-list-subheader>
@@ -65,39 +91,76 @@
         </v-list-item>
       </div>
 
-      <v-divider color="grey"></v-divider>
+      <v-divider color="grey" />
 
       <!-- (At least 4 tracks to download image) -->
       <div v-if="playlist.tracks.length >= 4 && playlistsStore.getTopGenres(playlistId).length >= 4">
         <!-- 3. Export Image -->
-        <v-badge id="export-image-badge" color="red" dot>
+        <v-badge
+          id="export-image-badge"
+          color="red"
+          dot
+        >
           <v-list-subheader> {{ $t('drawer.export-image') }}</v-list-subheader>
         </v-badge>
-        <v-img id="live-image-preview" :src="imagePreview" lazy-src='@/assets/loading-image-preview.jpg'>
-          <template v-slot:placeholder>
+        <v-img
+          id="live-image-preview"
+          :src="imagePreview"
+          lazy-src="@/assets/loading-image-preview.jpg"
+        >
+          <template #placeholder>
             <div class="d-flex align-center justify-center fill-height">
-              <v-progress-circular indeterminate color="var(--text-color)"></v-progress-circular>
+              <v-progress-circular
+                indeterminate
+                color="var(--text-color)"
+              />
             </div>
           </template>
         </v-img>
-        <v-slider v-if="maxTick > 0" :ticks="ticks" :max="maxTick" step="1" show-ticks="always" tick-size="4"
-          color="var(--text-color)" prepend-icon="mdi-arrange-send-to-back" v-model="generateImageSize" @touchstart.stop
-          id="generate-image-size-slider">
-        </v-slider>
+        <v-slider
+          v-if="maxTick > 0"
+          id="generate-image-size-slider"
+          v-model="generateImageSize"
+          :ticks="ticks"
+          :max="maxTick"
+          step="1"
+          show-ticks="always"
+          tick-size="4"
+          color="var(--text-color)"
+          prepend-icon="mdi-arrange-send-to-back"
+          @touchstart.stop
+        />
         <div id="sliders">
-          <v-switch v-model="generateImageDisplayTitle" color="var(--text-color)" class="generate-image-switch">
-            <template v-slot:label>
-              <p :class="generateImageDisplayTitle ? 'rainbow-text' : ''">{{ $t('drawer.image-display-title') }}</p>
+          <v-switch
+            v-model="generateImageDisplayTitle"
+            color="var(--text-color)"
+            class="generate-image-switch"
+          >
+            <template #label>
+              <p :class="generateImageDisplayTitle ? 'rainbow-text' : ''">
+                {{ $t('drawer.image-display-title') }}
+              </p>
             </template>
           </v-switch>
-          <v-switch v-model="generateImageDisplayStats" color="var(--text-color)" class="generate-image-switch">
-            <template v-slot:label>
-              <p :class="generateImageDisplayStats ? 'rainbow-text' : ''">{{ $t('drawer.image-display-stats') }}</p>
+          <v-switch
+            v-model="generateImageDisplayStats"
+            color="var(--text-color)"
+            class="generate-image-switch"
+          >
+            <template #label>
+              <p :class="generateImageDisplayStats ? 'rainbow-text' : ''">
+                {{ $t('drawer.image-display-stats') }}
+              </p>
             </template>
           </v-switch>
         </div>
         <div id="generate-image-button">
-          <v-btn @click="exportArtistPreview" class="rainbow-v-btn">{{ $t("playlist.export-preview") }}</v-btn>
+          <v-btn
+            class="rainbow-v-btn"
+            @click="exportArtistPreview"
+          >
+            {{ $t("playlist.export-preview") }}
+          </v-btn>
         </div>
       </div>
       <div v-else>
@@ -105,12 +168,16 @@
           {{ $t('drawer.not-enough-data') }}
         </v-list-subheader>
       </div>
-
     </v-list>
   </v-navigation-drawer>
 
-  <DuplicatorPopup v-if="startDuplication" :playlistId="playlist.id" :new-tracks="[]" :filter-tag="''"
-    @on-end="startDuplication = false" />
+  <DuplicatorPopup
+    v-if="startDuplication"
+    :playlist-id="playlist.id"
+    :new-tracks="[]"
+    :filter-tag="''"
+    @on-end="startDuplication = false"
+  />
 </template>
 <script lang="ts">
 import { storeToRefs } from 'pinia'
@@ -124,7 +191,6 @@ import { useUserStore } from '@/stores/user'
 export default defineComponent({
   name: 'ActionDrawer',
   components: { DuplicatorPopup },
-  emits: ['onClose', 'onSortEnd'],
   props: {
     open: {
       type: Boolean,
@@ -135,6 +201,7 @@ export default defineComponent({
       required: true
     }
   },
+  emits: ['onClose', 'onSortEnd'],
   setup (props) {
     const playlistsStore = usePlaylistsStore()
     const currentUserUsername = useUserStore().username
@@ -147,32 +214,6 @@ export default defineComponent({
       playlistsStore,
       playlist,
       currentUserUsername
-    }
-  },
-  watch: {
-    // Have to use this to synchronise props as I can't use props as VModel
-    open (newValue: boolean) {
-      this.isOpen = newValue
-      this.updateImagePreview()
-    },
-    isOpen (newValue: boolean) {
-      !newValue && this.$emit('onClose')
-    },
-    generateImageSize () { this.updateImagePreview() },
-    generateImageDisplayTitle () { this.updateImagePreview() },
-    generateImageDisplayStats () { this.updateImagePreview() },
-    isDeleteModalOpen (newValue: boolean) {
-      // 💩 Dirty code
-      // 1. Using ref return the Vuetify button instance which is not easily focusable
-      // 2. As the modal is injected into the DOM, we need to wait some time before being able to select the element
-      // 3. nextTick does not work
-      newValue && setTimeout(
-        () => {
-          const deleteButton = (document.getElementById('validateDeletionButton') as HTMLButtonElement)
-          deleteButton.focus()
-        },
-        500
-      )
     }
   },
   data () {
@@ -224,6 +265,32 @@ export default defineComponent({
       return ((this.userOwnsPlaylist || this.spotifyOwnsPlaylist) && !this.playlist.collaborative && this.isNotMyMusicPlaylist) ||
         this.allTracksLoaded ||
         this.isNotMyMusicPlaylist
+    }
+  },
+  watch: {
+    // Have to use this to synchronise props as I can't use props as VModel
+    open (newValue: boolean) {
+      this.isOpen = newValue
+      this.updateImagePreview()
+    },
+    isOpen (newValue: boolean) {
+      !newValue && this.$emit('onClose')
+    },
+    generateImageSize () { this.updateImagePreview() },
+    generateImageDisplayTitle () { this.updateImagePreview() },
+    generateImageDisplayStats () { this.updateImagePreview() },
+    isDeleteModalOpen (newValue: boolean) {
+      // 💩 Dirty code
+      // 1. Using ref return the Vuetify button instance which is not easily focusable
+      // 2. As the modal is injected into the DOM, we need to wait some time before being able to select the element
+      // 3. nextTick does not work
+      newValue && setTimeout(
+        () => {
+          const deleteButton = (document.getElementById('validateDeletionButton') as HTMLButtonElement)
+          deleteButton.focus()
+        },
+        500
+      )
     }
   },
   methods: {

@@ -1,7 +1,15 @@
 <template>
-  <div id="chart-container" ref="container">
+  <div
+    id="chart-container"
+    ref="container"
+  >
     <h3>Top {{ genres.length }} Genres</h3>
-    <apexchart type="donut" :width="width" :options="chartOptions" :series="series"></apexchart>
+    <apexchart
+      type="donut"
+      :width="width"
+      :options="chartOptions"
+      :series="series"
+    />
   </div>
 </template>
 
@@ -17,22 +25,6 @@ export default defineComponent({
     genres: {
       type: Array as PropType<Genre[]>,
       required: true
-    }
-  },
-  mounted () {
-    const observer = new ResizeObserver(entries => {
-      entries.forEach(entry => {
-        const cr = entry.contentRect
-        this.width = (cr.width > 500) ? 500 : cr.width
-      })
-    })
-
-    observer.observe((this.$refs.container as HTMLDivElement))
-  },
-  watch: {
-    genres (newValue: Genre[]) {
-      this.series = newValue.map((genre) => genre.count)
-      this.chartOptions.labels = newValue.map((genre) => genre.cap_name)
     }
   },
   data () {
@@ -96,6 +88,22 @@ export default defineComponent({
         }
       } as ApexOptions)
     }
+  },
+  watch: {
+    genres (newValue: Genre[]) {
+      this.series = newValue.map((genre) => genre.count)
+      this.chartOptions.labels = newValue.map((genre) => genre.cap_name)
+    }
+  },
+  mounted () {
+    const observer = new ResizeObserver(entries => {
+      entries.forEach(entry => {
+        const cr = entry.contentRect
+        this.width = (cr.width > 500) ? 500 : cr.width
+      })
+    })
+
+    observer.observe((this.$refs.container as HTMLDivElement))
   }
 })
 </script>

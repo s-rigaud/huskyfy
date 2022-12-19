@@ -2,7 +2,7 @@
   <!-- All the app encapsulated -->
   <v-app>
     <metainfo>
-      <template v-slot:title="{ content }">
+      <template #title="{ content }">
         {{ content ? `${content} - Huskyfy` : `Huskyfy` }}
       </template>
     </metainfo>
@@ -10,7 +10,10 @@
     <NavbarComponent />
 
     <v-main id="main">
-      <v-container id="container" fluid>
+      <v-container
+        id="container"
+        fluid
+      >
         <NotificationProvider />
         <router-view />
       </v-container>

@@ -1,14 +1,33 @@
 <template>
-  <v-menu open-on-hover transition="fade-transition">
-    <template v-slot:activator="{ props }">
-      <v-btn class="select-btn rainbow-v-btn" v-bind="props">
-        <v-img :src="currentLocaleIcon" alt="Country flag" width="50"></v-img>
+  <v-menu
+    open-on-hover
+    transition="fade-transition"
+  >
+    <template #activator="{ props }">
+      <v-btn
+        class="select-btn rainbow-v-btn"
+        v-bind="props"
+      >
+        <v-img
+          :src="currentLocaleIcon"
+          alt="Country flag"
+          width="50"
+        />
       </v-btn>
     </template>
     <v-list id="locale-list">
-      <v-list-item class="locale-item" v-for="(locale, index) in sortedLocales" :key="index" :item-value="locale"
-        @click="updateLocale">
-        <v-img width="50" :src="getIconForLocale(locale)" :alt="locale"></v-img>
+      <v-list-item
+        v-for="(locale, index) in sortedLocales"
+        :key="index"
+        class="locale-item"
+        :item-value="locale"
+        @click="updateLocale"
+      >
+        <v-img
+          width="50"
+          :src="getIconForLocale(locale)"
+          :alt="locale"
+        />
       </v-list-item>
     </v-list>
   </v-menu>

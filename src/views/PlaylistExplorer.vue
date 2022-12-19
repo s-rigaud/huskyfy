@@ -3,14 +3,28 @@
   <HuskyfyBanner />
   <div id="full-page">
     <div id="playlists">
-      <PlaylistCard v-for="playlist in playlistsStore.playlists" :key="playlist.id" :id="playlist.id"
-        :name="formatName(playlist)" :images="playlist.images" :track-count="playlist.total" />
-      <v-progress-circular v-if="!playlistLoaded" :size="70" :width="7" color="var(--text-color)" indeterminate>
-      </v-progress-circular>
+      <PlaylistCard
+        v-for="playlist in playlistsStore.playlists"
+        :id="playlist.id"
+        :key="playlist.id"
+        :name="formatName(playlist)"
+        :images="playlist.images"
+        :track-count="playlist.total"
+      />
+      <v-progress-circular
+        v-if="!playlistLoaded"
+        :size="70"
+        :width="7"
+        color="var(--text-color)"
+        indeterminate
+      />
     </div>
 
-    <v-btn v-if="Object.keys(playlistsStore.playlists).length < playlistTotal && playlistLoaded" class="rainbow-v-btn"
-      @click="loadMorePlaylists">
+    <v-btn
+      v-if="Object.keys(playlistsStore.playlists).length < playlistTotal && playlistLoaded"
+      class="rainbow-v-btn"
+      @click="loadMorePlaylists"
+    >
       {{ $t("playlist.load-more-playlists") }}
     </v-btn>
   </div>
@@ -42,6 +56,13 @@ export default defineComponent({
     const playlistsStore = usePlaylistsStore()
     return { playlistsStore }
   },
+  data () {
+    return {
+      playlistTotal: 0,
+      offset: 0,
+      playlistLoaded: false
+    }
+  },
   computed: {
     formatName () {
       return (playlist: SpotifyPlaylist): string => {
@@ -58,13 +79,6 @@ export default defineComponent({
       const { total, offset } = await this.playlistsStore.getUserPlaylists(this.offset)
       this.playlistTotal = total
       this.offset = offset
-    }
-  },
-  data () {
-    return {
-      playlistTotal: 0,
-      offset: 0,
-      playlistLoaded: false
     }
   }
 })

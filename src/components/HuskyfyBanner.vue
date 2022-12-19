@@ -1,7 +1,15 @@
 <template>
   <div id="main-banner">
-    <h1 id="main-title" class="rainbow-text">{{ $t('playlist.explorer-title') }}</h1>
-    <img :src="starImg" alt="Stars" />
+    <h1
+      id="main-title"
+      class="rainbow-text"
+    >
+      {{ $t('playlist.explorer-title') }}
+    </h1>
+    <img
+      :src="starImg"
+      alt="Stars"
+    >
   </div>
 </template>
 

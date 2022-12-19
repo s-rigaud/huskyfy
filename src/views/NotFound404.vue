@@ -1,8 +1,17 @@
 <template>
   <section>
-    <h1 class="rainbow-text title-404">{{ $t('404.title.part1') }}</h1>
-    <h2 class="title-404"><span class="rainbow-text">{{ $t('404.title.part2') }}</span>😕</h2>
-    <v-btn id="back-button" @click="backToPreviousPage" class="rainbow-v-btn" append-icon="mdi-map-search-outline">
+    <h1 class="rainbow-text title-404">
+      {{ $t('404.title.part1') }}
+    </h1>
+    <h2 class="title-404">
+      <span class="rainbow-text">{{ $t('404.title.part2') }}</span>😕
+    </h2>
+    <v-btn
+      id="back-button"
+      class="rainbow-v-btn"
+      append-icon="mdi-map-search-outline"
+      @click="backToPreviousPage"
+    >
       {{ $t('404.button') }}
     </v-btn>
   </section>

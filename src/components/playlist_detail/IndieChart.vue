@@ -1,34 +1,18 @@
 <template>
   <div id="genre-chart-container">
-    <apexchart type="radialBar" :options="chartOptions" :series="series"></apexchart>
-    <p id="genre-chart-subtitle" :style="{ 'color': currentAverageColor }">
+    <apexchart
+      type="radialBar"
+      :options="chartOptions"
+      :series="series"
+    />
+    <p
+      id="genre-chart-subtitle"
+      :style="{ 'color': currentAverageColor }"
+    >
       {{ $t("playlist.indie-score-text") }}
     </p>
   </div>
 </template>
-
-<style>
-#genre-chart-container {
-  display: flex !important;
-  flex-direction: column;
-  align-items: center;
-}
-
-#genre-chart-container .vue-apexcharts {
-  min-height: 55px !important;
-  height: 55px !important;
-}
-
-#genre-chart-container .apexcharts-canvas {
-  height: 50px !important;
-}
-
-#genre-chart-subtitle {
-  margin-top: 20px;
-
-  color: var(--text-color)
-}
-</style>
 
 <script lang="ts">
 import { ApexOptions } from 'apexcharts'
@@ -45,37 +29,6 @@ export default defineComponent({
     indiePercentage: {
       type: Number,
       required: true
-    }
-  },
-  computed: {
-    currentAverageColor (): string {
-      return getAverageColor(LOWEST_VALUE_COLOR, HIGHEST_VALUE_COLOR, this.indiePercentage)
-    }
-  },
-  methods: {
-    updateChart (indiePercentage: number) {
-      this.series = [indiePercentage]
-      const averageColor = getAverageColor(LOWEST_VALUE_COLOR, HIGHEST_VALUE_COLOR, indiePercentage)
-      this.chartOptions = {
-        ...this.chartOptions,
-        ...{
-          colors: [averageColor],
-          plotOptions: {
-            radialBar: {
-              dataLabels: {
-                value: {
-                  color: averageColor
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  },
-  watch: {
-    indiePercentage (newValue: number) {
-      this.updateChart(newValue)
     }
   },
   data () {
@@ -140,6 +93,60 @@ export default defineComponent({
         }
       } as ApexOptions)
     }
+  },
+  computed: {
+    currentAverageColor (): string {
+      return getAverageColor(LOWEST_VALUE_COLOR, HIGHEST_VALUE_COLOR, this.indiePercentage)
+    }
+  },
+  watch: {
+    indiePercentage (newValue: number) {
+      this.updateChart(newValue)
+    }
+  },
+  methods: {
+    updateChart (indiePercentage: number) {
+      this.series = [indiePercentage]
+      const averageColor = getAverageColor(LOWEST_VALUE_COLOR, HIGHEST_VALUE_COLOR, indiePercentage)
+      this.chartOptions = {
+        ...this.chartOptions,
+        ...{
+          colors: [averageColor],
+          plotOptions: {
+            radialBar: {
+              dataLabels: {
+                value: {
+                  color: averageColor
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   }
 })
 </script>
+
+<style>
+#genre-chart-container {
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+}
+
+#genre-chart-container .vue-apexcharts {
+  min-height: 55px !important;
+  height: 55px !important;
+}
+
+#genre-chart-container .apexcharts-canvas {
+  height: 50px !important;
+}
+
+#genre-chart-subtitle {
+  margin-top: 20px;
+
+  color: var(--text-color)
+}
+</style>
