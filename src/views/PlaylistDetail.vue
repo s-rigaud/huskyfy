@@ -76,7 +76,7 @@
                     :menu-props="{ 'maxHeight': '250px' }"
                   />
                 </div>
-                <div id="artist-filter">
+                <div id="artist-select">
                   <v-select
                     v-model="selectedArtists"
                     :label="$t('track.filters.artists')"
@@ -116,10 +116,9 @@
 
               <div id="filters-and-reset">
                 <div id="filtering-chips">
-                  <div>
+                  <div v-if="selectedPopularity !== NO_POPULARITY">
                     <v-scale-transition>
                       <v-chip
-                        v-if="selectedPopularity !== NO_POPULARITY"
                         :text="getTextForPopularity(selectedPopularity)"
                         closable
                         variant="elevated"
@@ -129,10 +128,9 @@
                     </v-scale-transition>
                   </div>
 
-                  <div>
+                  <div v-if="(selectedLovedTracks !== NO_PREFERENCE)">
                     <v-scale-transition>
                       <v-chip
-                        v-if="(selectedLovedTracks !== NO_PREFERENCE)"
                         :text="getTextForPreference(selectedLovedTracks)"
                         closable
                         variant="elevated"
@@ -162,6 +160,7 @@
 
                   <div v-if="selectedArtists.length > 0">
                     <transition-group
+                      id="test"
                       name="scale-transition"
                       tag="v-chip"
                     >
@@ -461,16 +460,17 @@ export default defineComponent({
         +(this.selectedLovedTracks !== NO_PREFERENCE)
       )
     },
+    filteringKeyword (): string {
+      return this.isFilterExclusive ? this.$t('track.filters.keyword.and') : this.$t('track.filters.keyword.or')
+    },
     filterTag (): string {
-      const keyword = this.isFilterExclusive ? this.$t('track.filters.keyword.and') : this.$t('track.filters.keyword.or')
-
       return ([] as string[])
         .concat((this.selectedPopularity !== NO_POPULARITY) ? [this.getTextForPopularity(this.selectedPopularity)] : [])
         .concat(this.selectedLovedTracks !== NO_PREFERENCE ? [this.getTextForPreference(this.selectedLovedTracks)] : [])
         .concat(this.selectedArtists.map(a => a.name))
         .concat(this.selectedGenres)
         .map(filter => capitalize(filter))
-        .join(` ${keyword} `)
+        .join(` ${this.filteringKeyword} `)
     },
     allTracksLoaded (): boolean {
       return this.playlist.tracks.length === this.playlist.total
@@ -612,14 +612,14 @@ export default defineComponent({
     },
     getSortedArtists (): SpotifyArtist[] {
       // Need to have a set of object in JS ...
-      const alreadyAddedArtistNames: string[] = []
+      const alreadyAddedArtistIds: string[] = []
       const artistsToReturn: SpotifyArtist[] = []
 
       for (const track of this.playlist.tracks) {
         for (const artist of track.artists) {
-          if (!alreadyAddedArtistNames.includes(artist.name)) {
+          if (!alreadyAddedArtistIds.includes(artist.id)) {
             artistsToReturn.push(artist)
-            alreadyAddedArtistNames.push(artist.name)
+            alreadyAddedArtistIds.push(artist.id)
           }
         }
       }
@@ -775,7 +775,15 @@ export default defineComponent({
 }
 
 #filtering-chips>div {
-  margin: 2px 5px;
+  margin: 2px 0px;
+}
+
+#filtering-chips>div+div::before {
+  /* TODO Fix this */
+  /* content: v-bind(filteringKeyword); */
+  content: "&";
+  margin: 0px 5px;
+  padding-top: 3px;
 }
 
 #filtering-chips>div>span {
@@ -806,30 +814,27 @@ export default defineComponent({
   opacity: 0.8;
 }
 
+#popularity-select,
+#loved-track-select {
+  width: min(100%, 150px);
+
+  display: inline-block;
+}
+
 #genre-select {
   width: min(100%, 400px);
 }
 
-#popularity-select {
-  width: min(100%, 150px);
-  display: inline-block;
-}
-
-#loved-track-select {
-  width: min(100%, 150px);
-  display: inline-block;
-}
-
-#artist-filter {
+#artist-select {
   width: min(100%, 400px);
   margin-bottom: 15px;
 }
 
-#artist-filter .v-input {
+#artist-select .v-input {
   max-height: 40px;
 }
 
-#artist-filter .v-input__control {
+#artist-select .v-input__control {
   max-height: 40px;
 }
 
@@ -903,6 +908,10 @@ export default defineComponent({
   align-content: center;
 
   background: none;
+}
+
+#tracks .v-list {
+  padding-bottom: 0;
 }
 
 #no-track-div {

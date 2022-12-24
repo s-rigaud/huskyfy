@@ -2,7 +2,9 @@
 
 - [ ] 🚀 Use v-lazy to improve performances for big playlists
 - [ ] 🚧 Fix other Github branch for reordering playlist
+- [ ] 🚀 Add proper JS comments over the WHOLE app
 - [ ] 🚧 Back to last page when Spotify API token needs refresh
+- [ ] 🚧 Fix filtering keyword not displaying properly in PlaylistDetail between the filter chips
 - [ ] ✨ Implement Spotify SDK to be able to listen to tracks (https://developer.spotify.com/documentation/web-playback-sdk/reference/)
 
 ## Feedbacks

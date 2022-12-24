@@ -1,5 +1,4 @@
 <template>
-  <!-- General page with info about the app -->
   <div id="about-content">
     <div id="text">
       <div id="main-title">
@@ -13,7 +12,7 @@
           {{ $t("about.description.title") }}
         </h1>
       </div>
-      <p style="margin-bottom: 0">
+      <p style="margin-bottom: 5px">
         {{ $t("about.description.content.part1") }}
         <span
           style="color: var(--link-color); cursor: pointer;"
@@ -146,7 +145,7 @@
               src="@/assets/github.png"
               alt="Github Image"
             />
-            <p style="color: white; margin: 0px 15px;">@s-rigaud</p>
+            <p style="color: white; margin: 0px 15px;">@s‑rigaud</p>
           </a>
         </div>
         <div>
@@ -161,7 +160,7 @@
               src="@/assets/twitter.png"
               alt="Twitter Image"
             />
-            <p style="color: #55ADEE; margin: 0px 15px;">@HuskyfyWebsite</p>
+            <p style="color: #55ADEE; margin: 0px 15px;">@Huskyfy Website</p>
           </a>
         </div>
       </div>
@@ -177,6 +176,7 @@ import { useMeta } from 'vue-meta'
 import { t } from '@/i18n'
 import packageInfo from '../../package.json'
 
+// General page with info about the app
 export default defineComponent({
   name: 'AboutView',
   setup () {
@@ -193,6 +193,7 @@ export default defineComponent({
       window.location.href = `${process.env.VUE_APP_BASE_SERVER_URL}/playlist/my-music`
     },
     drawStars () {
+      // TODO use ref=
       // eslint-disable-next-line
       const indieChip = document.getElementById('indie-chip')!
       const rect = indieChip.getBoundingClientRect()
@@ -324,9 +325,10 @@ export default defineComponent({
 }
 
 #my-song-img {
+  margin-left: 5px;
+
   display: inline-block;
   top: 5px;
-  margin-left: 5px;
 }
 
 h1 {
@@ -347,8 +349,9 @@ h2+h2 {
 }
 
 p {
-  color: lightgray;
   margin-bottom: 30px;
+
+  color: lightgray;
 }
 
 a {
@@ -365,12 +368,15 @@ a:hover {
 }
 
 #github-icon {
-  margin: 50px;
-
   display: flex;
+  flex-wrap: nowrap;
   flex-direction: row;
-  align-items: flex-end;
+  align-items: flex-start;
   justify-content: space-around;
+}
+
+#github-icon p {
+  text-align: center;
 }
 
 #github-icon .v-img {
@@ -397,6 +403,12 @@ a:hover {
 
   p {
     font-size: 17px;
+  }
+
+  #github-icon {
+    margin: 50px;
+
+    align-items: flex-end;
   }
 }
 </style>

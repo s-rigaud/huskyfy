@@ -188,8 +188,8 @@
 			"popular": "🔥 Populaire",
 			"preference": "Titres likés",
 			"no-valid-tracks": "Pas de titres correspondant à vos filtres",
-			"only-liked": "❤️",
-			"only-not-liked": "💔",
+			"only-liked": "♥",
+			"only-not-liked": "♡",
 			"popularity": "Popularité",
 			"keyword": {
 				"and": "et",
