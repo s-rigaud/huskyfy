@@ -82,6 +82,10 @@ export default defineComponent({
     }
   },
   methods: {
+    /**
+     * Reset all Pinia stores on disconnection.
+     * Redirect to Login page.
+     */
     disconnect () {
       useUserStore().reset()
       useAuthStore().reset()

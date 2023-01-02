@@ -269,6 +269,10 @@ export default defineComponent({
       displayBurgerMenuBadge: 'block',
       playlistNameText: '',
 
+      /**
+       * Debounced function being call each time the user update the playlist name in the UI.
+       * Once the user stop, an APi call is triggered to sync the playlist name.
+       */
       updatePlaylistNameDebounced: (null as DebouncedFunc<() => Promise<void>> | null),
       nameUpdatedInAPI: false
     }
@@ -322,10 +326,9 @@ export default defineComponent({
   },
   watch: {
     playlistNameText (newValue: string) {
-      if (newValue !== this.playlist.name && newValue) {
+      if (newValue !== this.playlist.name && newValue && this.updatePlaylistNameDebounced) {
         this.nameUpdatedInAPI = false
-        // eslint-disable-next-line
-        this.updatePlaylistNameDebounced!()
+        this.updatePlaylistNameDebounced()
       }
     }
   },

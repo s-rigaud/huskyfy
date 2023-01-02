@@ -9,7 +9,7 @@ export type SDKState = {
     currentTrack: SpotifyTrack | null;
 }
 
-// All infos about the user
+// All info about the user
 export const useSDKStore = defineStore('spotifySDK', {
   state: () => ({
     player: null,

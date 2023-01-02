@@ -78,6 +78,10 @@ export default defineComponent({
     }
   },
   methods: {
+    /**
+     * Download tracks from Spotify API and add them to localStorage.
+     * Then, it emits to notify parent component.
+     */
     async loadAllTracks () {
       this.waitingForResponse = true
       // Arbitrary

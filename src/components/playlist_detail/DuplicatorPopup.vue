@@ -104,6 +104,11 @@ export default defineComponent({
     await this.createNewPlaylist()
   },
   methods: {
+    /**
+     * 1. Create a new blank playlist
+     * 2. Set cover as the cover of the old base playlists
+     * 3. Add tracks to playlist either the filtered tracks or all the tracks of the old base playlist
+     */
     async createNewPlaylist () {
       this.loadingText = this.$t('playlist.new.create')
       this.loadingPercentage = 1
@@ -136,6 +141,9 @@ export default defineComponent({
     displayNewPlaylistDetails () {
       window.location.href = `/playlist/${this.newPlaylistId}`
     },
+    /**
+     * Create a new playlist name according to filters
+     */
     getNewPlaylistName (): string {
       const { name } = this.playlist
       let newPlaylistName: string
@@ -146,6 +154,9 @@ export default defineComponent({
       }
       return newPlaylistName
     },
+    /**
+     * Create a new playlist description according to filters
+     */
     getNewPlaylistDescription (): string {
       const { name } = this.playlist
       const tag = this.filterTag ? `[${this.filterTag}]` : ''

@@ -1,4 +1,6 @@
-// German palette https://flatuicolors.com/palette/de
+/**
+ * German palette https://flatuicolors.com/palette/de
+ */
 const THEME_COLORS = [
   '#fc5c65', '#eb3b5a',
   '#fd9644', '#fa8231',
@@ -12,10 +14,16 @@ const THEME_COLORS = [
   '#778ca3', '#4b6584'
 ]
 const THEME_COLOR_SIZE = THEME_COLORS.length
+/**
+ * Get a random color from a predefined palette.
+ */
 export const getRandomColor = (): string => {
   return THEME_COLORS[Math.floor(Math.random() * THEME_COLOR_SIZE)]
 }
 
+/**
+ * Get the average color given two colors.
+ */
 export const getAverageColor = (color1: string, color2: string, percentage: number): string => {
   const hexToRGB = (color: string): number[] => {
     // eslint-disable-next-line

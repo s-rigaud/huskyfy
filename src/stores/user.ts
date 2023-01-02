@@ -10,7 +10,7 @@ export type UserState = {
   locale: RemovableRef<string>;
 }
 
-// All infos about the user
+// All info about the user
 export const useUserStore = defineStore('user', {
   state: () => ({
     id: useStorage('id', ''),

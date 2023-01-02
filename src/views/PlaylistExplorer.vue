@@ -1,5 +1,4 @@
 <template>
-  <!-- Display all playlists in the Spotify user library -->
   <HuskyfyBanner />
   <div id="full-page">
     <div id="playlists">
@@ -12,7 +11,7 @@
         :track-count="playlist.total"
       />
       <v-progress-circular
-        v-if="!playlistLoaded"
+        v-if="!firstTracksLoaded"
         :size="70"
         :width="7"
         color="var(--text-color)"
@@ -21,7 +20,7 @@
     </div>
 
     <v-btn
-      v-if="Object.keys(playlistsStore.playlists).length < playlistTotal && playlistLoaded"
+      v-if="Object.keys(playlistsStore.playlists).length < playlistTotal && firstTracksLoaded"
       class="rainbow-v-btn"
       @click="loadMorePlaylists"
     >
@@ -40,6 +39,7 @@ import PlaylistCard from '@/components/PlaylistCard.vue'
 import { t } from '@/i18n'
 import { MY_MUSIC_PLAYLIST_ID, usePlaylistsStore } from '@/stores/playlists'
 
+// Display all playlists in the Spotify user library
 export default defineComponent({
   name: 'PlaylistExplorer',
   components: {
@@ -60,7 +60,7 @@ export default defineComponent({
     return {
       playlistTotal: 0,
       offset: 0,
-      playlistLoaded: false
+      firstTracksLoaded: false
     }
   },
   computed: {
@@ -72,7 +72,7 @@ export default defineComponent({
   },
   async created () {
     await this.loadMorePlaylists()
-    this.playlistLoaded = true
+    this.firstTracksLoaded = true
   },
   methods: {
     async loadMorePlaylists () {

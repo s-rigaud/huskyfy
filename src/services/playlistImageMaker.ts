@@ -5,6 +5,11 @@ import { capitalize } from '@/utils/functions'
 
 export type GridSize = 2 | 3 | 4
 
+/**
+ * Display a web browser pop up to allow the user to download a playlist image export
+ * @param url - url for the ressource to be downloaded
+ * @param playlistName - playlist name from the image export
+ */
 export const downloadImage = (url: string, playlistName: string) => {
   const a = document.createElement('a')
   a.download = `${playlistName}.jpg`
@@ -16,6 +21,14 @@ export const downloadImage = (url: string, playlistName: string) => {
   a.remove()
 }
 
+/**
+ * Create an image export base on most popular artists for a playlist
+ * @param playlistId - id of the Spotify playlist
+ * @param size - size of the image grid
+ * @param showTitle - should the playlist title be displayed or not
+ * @param showStats - should the playlist stats be displayed or not
+ * @param callback - callback function called when the image has totally been created
+ */
 export const makeImage = (
   playlistId: string,
   size: GridSize,
@@ -55,6 +68,9 @@ export const makeImage = (
   )
 }
 
+/**
+ * Image creation is made possible by using HTML canvas
+ */
 const createCanvas = (
   artistNames: string[],
   images: HTMLImageElement[],
@@ -99,6 +115,9 @@ const createCanvas = (
   return canvas.toDataURL('image/jpeg', 1)
 }
 
+/**
+ * Adding title row to canvas
+ */
 const addCanvasTitle = (
   ctx: CanvasRenderingContext2D,
   playlistName: string,
@@ -132,6 +151,9 @@ const addCanvasTitle = (
   ctx.fillText(subText, 400 / 2, 47 + gridSize)
 }
 
+/**
+ * Adding artist images to canvas
+ */
 const addCanvasArtistImages = (
   ctx: CanvasRenderingContext2D,
   artistNames: string[],
@@ -167,6 +189,9 @@ const addCanvasArtistImages = (
   }
 }
 
+/**
+ * Adding legend row to canvas. Mainly 4 most present genres and the according %.
+ */
 const addCanvasLegend = (
   ctx: CanvasRenderingContext2D,
   playlistId: string,
@@ -275,7 +300,10 @@ const getEmojiForRank = (rank: number): string => {
   return '🏅'
 }
 
-// From https://stackoverflow.com/questions/1255512
+/**
+ * Draw a rectangle on a canvas
+ * From https://stackoverflow.com/questions/1255512
+ */
 function drawRoundRect (
   ctx: CanvasRenderingContext2D,
   x: number,

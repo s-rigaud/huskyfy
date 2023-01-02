@@ -1,5 +1,4 @@
 <template>
-  <!-- Login view with a large background and a simple button -->
   <div id="login">
     <div id="upper-part">
       <v-img
@@ -71,6 +70,7 @@ import api from '@/api'
 import LocaleSelector from '@/components/LocaleSelector.vue'
 import { t } from '@/i18n'
 
+// Login view with a large background and a simple button
 export default defineComponent({
   name: 'LoginView',
   components: { LocaleSelector },

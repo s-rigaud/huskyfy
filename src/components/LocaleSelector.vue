@@ -45,8 +45,11 @@ export default defineComponent({
     return { userStore }
   },
   computed: {
+    /**
+     * Retrieve list of all available locales.
+     * The current one is set as first for the UI.
+     */
     sortedLocales (): string[] {
-      // Set current locale first (preselected option)
       let locales = this.$i18n.availableLocales
       const currentLocale = this.$i18n.locale
       locales = locales.filter((l) => l !== currentLocale)
@@ -61,6 +64,10 @@ export default defineComponent({
     getIconForLocale (locale: string): string {
       return require(`@/assets/${locale}.png`)
     },
+    /**
+     * Update UI locale for i18n.
+     * All the website instantly update each element without reloading the page.
+     */
     updateLocale (event: Event) {
       // Recursively retrieve list-item as the event can occur in child nodes
       let node = (event.target as HTMLElement)

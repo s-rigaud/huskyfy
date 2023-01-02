@@ -24,6 +24,11 @@ const SCOPES = [
   // 'streaming'
 ].join(' ')
 
+/**
+ * Return a randomly generated string with letters and numbers
+ *
+ * @param length - length of the string to be generated
+ */
 const generateRandomString = (length: number): string => {
   let text = ''
   const possible = 'abcdefghijklmnopqrstuvwxyz123456789'
@@ -34,21 +39,29 @@ const generateRandomString = (length: number): string => {
   return text
 }
 
-const sha256 = async (plain: string): Promise<ArrayBuffer> => {
-  const data = new TextEncoder().encode(plain)
+/**
+ * Encode text to standard SHA256 format
+ */
+const sha256 = async (text: string): Promise<ArrayBuffer> => {
+  const data = new TextEncoder().encode(text)
   return window.crypto.subtle.digest('SHA-256', data)
 }
 
-const base64urlencode = (a: ArrayBuffer): string => {
+/**
+ * Encode text buffer to Base64 format compatible for urls
+ */
+const base64urlencode = (buffer: ArrayBuffer): string => {
   const encoded = btoa(
-    String.fromCharCode.apply(null, [...new Uint8Array(a)])
+    String.fromCharCode.apply(null, [...new Uint8Array(buffer)])
   )
   return encoded.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
 }
 
 export default {
-  // Return Spotify OAuth url
-  // On this url, the user can accept terms and scope and a temporary token is returned
+  /**
+   * Return Spotify OAuth url
+   * By going to this url, the user can accept terms and scope and a temporary token is returned
+   */
   async getOAuthUrl (): Promise<string> {
     const authStore = useAuthStore()
 
@@ -76,7 +89,9 @@ export default {
     return `${BASE_URL}?${QUERY_PARAMS.join('&')}`
   },
 
-  // Request first access token from the previous temporary token received
+  /**
+   * Request first access token from the previous temporary token received
+   */
   async requestFirstAccessToken () {
     const authStore = useAuthStore()
     const data = [
@@ -108,7 +123,9 @@ export default {
     })
   },
 
-  // Refresh new access token
+  /**
+   * Refresh new access token
+   */
   async requestNewAccessToken (): Promise<string | void> {
     console.log('trying to refresh token before retrying call')
 

@@ -95,6 +95,9 @@ export default defineComponent({
     }
   },
   computed: {
+    /**
+     * Get color corresponding to the indie percentage
+     */
     currentAverageColor (): string {
       return getAverageColor(LOWEST_VALUE_COLOR, HIGHEST_VALUE_COLOR, this.indiePercentage)
     }

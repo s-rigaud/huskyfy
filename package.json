@@ -1,6 +1,6 @@
 {
   "name": "huskyfy",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -16,7 +16,7 @@
     "@mdi/font": "7.1.96",
     "@vueuse/core": "^9.9.0",
     "apexcharts": "^3.36.3",
-    "axios": "^1.2.2",
+    "axios": "1.2.1",
     "canvas-confetti": "^1.6.0",
     "core-js": "^3.27.1",
     "pinia": "^2.0.28",

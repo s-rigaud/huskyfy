@@ -17,7 +17,7 @@
 import { ApexOptions } from 'apexcharts'
 import { defineComponent, PropType } from 'vue'
 
-import { Genre } from '@/model'
+import { Genre } from '@/genre'
 
 export default defineComponent({
   name: 'GenreChart',
@@ -50,8 +50,9 @@ export default defineComponent({
             _: string | number | number[],
             opts: { seriesIndex: number, w: { globals: { initialSeries: Record<number, number> } } }
           ): string | number {
-            const number = opts.w.globals.initialSeries[opts.seriesIndex]
-            return number
+            // Set label for pie portions as the genre count
+            const genreCount = opts.w.globals.initialSeries[opts.seriesIndex]
+            return genreCount
           }
         },
 
@@ -90,12 +91,16 @@ export default defineComponent({
     }
   },
   watch: {
+    /**
+     * Force the graph update when provided props is updated
+     */
     genres (newValue: Genre[]) {
       this.series = newValue.map((genre) => genre.count)
       this.chartOptions.labels = newValue.map((genre) => genre.cap_name)
     }
   },
   mounted () {
+    // Update graphic size according the screen width
     const observer = new ResizeObserver(entries => {
       entries.forEach(entry => {
         const cr = entry.contentRect

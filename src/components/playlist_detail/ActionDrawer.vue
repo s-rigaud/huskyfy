@@ -327,6 +327,9 @@ export default defineComponent({
         (rawImageData: string) => { downloadImage(rawImageData, this.playlist.name) }
       )
     },
+    /**
+     * Delete playlist from Spotify account, delete it from localStorage and redirect to main page
+     */
     async unfollowPlaylist () {
       this.isDeleteModalOpen = false
       this.waitingForDeletion = true

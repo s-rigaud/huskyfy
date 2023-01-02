@@ -55,6 +55,10 @@ const router = createRouter({
 
 // eslint-disable-next-line
 const DEFAULT_USER_PICTURE = (require('@/assets/no-user.png') as string)
+
+/**
+ * Intercept and handle routing logic according to parameters and authentification state.
+ */
 router.beforeEach(async function (to, _, next) {
   const authStore = useAuthStore()
 

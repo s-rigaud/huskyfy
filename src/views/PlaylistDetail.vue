@@ -346,25 +346,29 @@ import { storeToRefs } from 'pinia'
 import { defineComponent, toRef } from 'vue'
 import { useMeta } from 'vue-meta'
 
-import { SpotifyArtist, SpotifyTrack } from '@/api/spotify/types/entities'
+import { SpotifyArtist, SpotifyPlaylist, SpotifyTrack } from '@/api/spotify/types/entities'
 import DuplicatorPopup from '@/components/playlist_detail/DuplicatorPopup.vue'
 import GenreChart from '@/components/playlist_detail/GenreChart.vue'
 import LoadMoreTracksPopup from '@/components/playlist_detail/LoadMoreTracksPopup.vue'
 import PlaylistMetaDisplay from '@/components/playlist_detail/PlaylistMetaDisplay.vue'
 import TrackItem from '@/components/playlist_detail/TrackItem.vue'
-import { Genre } from '@/model'
+import { Genre } from '@/genre'
 import { API_TRACK_LIMIT, MY_MUSIC_PLAYLIST_ID, usePlaylistsStore } from '@/stores/playlists'
 import { capitalize } from '@/utils/functions'
 
-// It is used for typing Vuetify select slot props
+/**
+ * It is used for typing Vuetify select slot props
+ */
 // eslint-disable-next-line
 interface SlotProps {
   item: { raw: SpotifyArtist }
   index: number
 }
 
-// Preference are used for filtering
-// It refers to the tracks being in the My Music playlist or not
+/**
+ *  Preference are used for filtering
+ *  It refers to the tracks being in the My Music playlist or not
+ */
 const NO_PREFERENCE = 'All tracks'
 const Preference = ({
   ONLY_LIKED: 'Only liked',
@@ -497,6 +501,9 @@ export default defineComponent({
     },
     async isFilterExclusive () {
       await this.applyFilters()
+    },
+    playlist (newValue: SpotifyPlaylist, oldValue: SpotifyPlaylist) {
+      console.log(newValue, oldValue)
     }
   },
   async mounted () {
@@ -506,6 +513,7 @@ export default defineComponent({
       await this.playlistsStore.refreshMyMusicTotalTrack()
     }
     await this.loadFirstTracks()
+
     this.filteredTracks = this.playlist.tracks
   },
   methods: {
@@ -516,6 +524,7 @@ export default defineComponent({
       // Only asking for the right number of tracks as we already know how many tracks are in the playlist
       const maxLimit = Math.min(this.TRACK_REQUEST_LIMIT, this.playlist.total)
       await this.downloadPlaylistTracks(this.playlistId, maxLimit)
+
       this.isHugePlaylist = this.playlist.total > this.TRACK_REQUEST_LIMIT
       this.playlistLoaded = true
       this.topGenres = this.getTopGenres()
@@ -529,6 +538,9 @@ export default defineComponent({
     getIndiePercentage (): number {
       return this.playlistsStore.getIndiePercentage(this.playlistId)
     },
+    /**
+     * Filters all the tracks according to the filters chosen by the user
+     */
     async applyFilters () {
       this.processFilterUpdate = true
 
@@ -598,6 +610,9 @@ export default defineComponent({
       this.filteredTracks = newFilteredTracks
       this.processFilterUpdate = false
     },
+    /**
+     * Mix two list of Spotify tracks to form a set of all elements
+     */
     addTracksConserveUnicity (filteredTracks: SpotifyTrack[], newFilteredTracks: SpotifyTrack[]) {
       const alreadyKnownTrackIds = filteredTracks.map(t => t.id)
       const tracksToAdd = newFilteredTracks.filter(t => !alreadyKnownTrackIds.includes(t.id))
@@ -661,7 +676,9 @@ export default defineComponent({
         { label: this.$t('track.filters.only-not-liked'), value: Preference.ONLY_NOT_LIKED }
       ]
     },
-    // Returns only top genres sorted by most to least popular
+    /**
+     * Returns only top genres sorted by most to least popular
+     */
     getTopGenres (): Genre[] {
       const limit = (window.innerWidth > 500) ? 25 : 10
       return this.playlistsStore.getTopGenres(this.playlistId, limit)

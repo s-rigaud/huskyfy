@@ -1,4 +1,4 @@
-import axios, { AxiosHeaders } from 'axios'
+import axios from 'axios'
 
 import api from '@/api'
 import { useAuthStore } from '@/stores/auth'
@@ -8,13 +8,14 @@ const request = axios.create({
   baseURL: 'https://api.spotify.com/v1/'
 })
 
-// Add Headers headers on every request when connected
+/**
+ * Add Authorization header on every request when connected
+*/
 request.interceptors.request.use(function (config) {
   const authStore = useAuthStore()
   if (authStore.accessToken) {
-    // TODO Update when this PR will be fixed https://github.com/axios/axios/issues/5416
-    config.headers = { ...config.headers } as AxiosHeaders
-    config.headers.set('Authorization', `Bearer ${authStore.accessToken}`)
+    // eslint-disable-next-line
+    config.headers!.Authorization = `Bearer ${authStore.accessToken}`
   }
   return config
 })
@@ -38,7 +39,7 @@ request.interceptors.response.use(response => {
       return request(config)
     }
   } else {
-    const errorMsg = (error.response?.data?.error?.message || error as string)
+    const errorMsg = (error.response?.data?.error?.message || error) as string
     useNotificationsStore().notifications.push(
       {
         message: `Spotify error when accessing API : ${errorMsg}`,

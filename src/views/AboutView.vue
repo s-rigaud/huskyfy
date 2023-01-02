@@ -16,7 +16,7 @@
         {{ $t("about.description.content.part1") }}
         <span
           style="color: var(--link-color); cursor: pointer;"
-          @mouseover="drawFireworks"
+          @mouseover="drawConfettis"
         >
           Huskyfy !
         </span>
@@ -192,8 +192,11 @@ export default defineComponent({
     openMyMusicOnSpotify () {
       window.location.href = `${process.env.VUE_APP_BASE_SERVER_URL}/playlist/my-music`
     },
+    /**
+     * Draw some stars on the screens with a nice animation
+     * TODO use ref=
+     */
     drawStars () {
-      // TODO use ref=
       // eslint-disable-next-line
       const indieChip = document.getElementById('indie-chip')!
       const rect = indieChip.getBoundingClientRect()
@@ -232,7 +235,10 @@ export default defineComponent({
       setTimeout(shoot, 100)
       setTimeout(shoot, 200)
     },
-    drawFireworks () {
+    /**
+     * Draw some confettis on the screens with a nice animation
+     */
+    drawConfettis () {
       const duration = 1500
       const animationEnd = Date.now() + duration
       const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 }

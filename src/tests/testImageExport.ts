@@ -14,6 +14,9 @@ const generateRandomString = (length: number): string => {
   return text
 }
 
+/**
+ * Export a bunch of different image to test all possible image export configurations.
+ */
 export const testImageGenerationGeneratePlenty = () => {
   const availableGridSizes: GridSize[] = [2, 3, 4]
   const availableLocales: (keyof typeof messages)[] = ['en', 'fr']

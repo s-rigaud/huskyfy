@@ -172,6 +172,9 @@ export default defineComponent({
     this.MAXIMUM_GENRE_DISPLAYED = genreToDisplay
   },
   methods: {
+    /**
+     * ? Might have preferred a CSS :before divider
+     */
     addCommaDivider (artistName: string, index: number): string {
       return (index === this.artists.length - 1) ? artistName : `${artistName},`
     },
