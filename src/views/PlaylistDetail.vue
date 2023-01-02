@@ -343,7 +343,7 @@
 
 <script lang="ts">
 import { storeToRefs } from 'pinia'
-import { defineComponent, StyleValue, toRef } from 'vue'
+import { defineComponent, toRef } from 'vue'
 import { useMeta } from 'vue-meta'
 
 import { SpotifyArtist, SpotifyTrack } from '@/api/spotify/types/entities'
@@ -451,7 +451,7 @@ export default defineComponent({
     generalTitle (): string {
       return this.filterTag || this.$t('track.all-tracks')
     },
-    toButtonOpacity (): StyleValue {
+    toButtonOpacity (): { opacity: number } {
       return { opacity: (this.displayGoTopButton) ? 100 : 0 }
     },
     numberOfActiveFilters (): number {

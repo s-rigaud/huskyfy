@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios, { AxiosHeaders } from 'axios'
 
 import api from '@/api'
 import { useAuthStore } from '@/stores/auth'
@@ -12,8 +12,9 @@ const request = axios.create({
 request.interceptors.request.use(function (config) {
   const authStore = useAuthStore()
   if (authStore.accessToken) {
-    // eslint-disable-next-line
-    config.headers!.Authorization = `Bearer ${authStore.accessToken}`
+    // TODO Update when this PR will be fixed https://github.com/axios/axios/issues/5416
+    config.headers = { ...config.headers } as AxiosHeaders
+    config.headers.set('Authorization', `Bearer ${authStore.accessToken}`)
   }
   return config
 })

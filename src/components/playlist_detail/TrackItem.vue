@@ -106,7 +106,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, StyleValue } from 'vue'
+import { defineComponent, PropType } from 'vue'
 
 import { SpotifyArtist } from '@/api/spotify/types/entities'
 import { usePlaylistsStore } from '@/stores/playlists'
@@ -159,9 +159,8 @@ export default defineComponent({
   },
   computed: {
     // Delay animation so items appear one after another
-    trackAnimationDelay (): StyleValue {
-      const limit = (window.innerWidth > 500) ? 20 : 10
-      const delay = (this.trackIndex < limit) ? `${300 * this.trackIndex}ms` : '0ms'
+    trackAnimationDelay (): { 'animation-delay': string } {
+      const delay = (this.trackIndex < 10) ? `${300 * this.trackIndex}ms` : '0ms'
       return { 'animation-delay': delay }
     }
   },
@@ -176,7 +175,7 @@ export default defineComponent({
     addCommaDivider (artistName: string, index: number): string {
       return (index === this.artists.length - 1) ? artistName : `${artistName},`
     },
-    getGenreAnimationDelay (index: number): StyleValue {
+    getGenreAnimationDelay (index: number): { 'animation-delay': string } {
       return { 'animation-delay': `${index * 400}ms` }
     },
     openTrackOnSpotify () {
