@@ -18,6 +18,7 @@ import { ApexOptions } from 'apexcharts'
 import { defineComponent, PropType } from 'vue'
 
 import { Genre } from '@/genre'
+import { usePlaylistsStore } from '@/stores/playlists'
 
 export default defineComponent({
   name: 'GenreChart',
@@ -27,11 +28,17 @@ export default defineComponent({
       required: true
     }
   },
+  setup (props) {
+    const playlistsStore = usePlaylistsStore()
+
+    const START_COLORS = props.genres.map(genre => playlistsStore.genreColorMapping[genre.name])
+    return { playlistsStore, START_COLORS }
+  },
   data () {
     // All data needed to customize graph UI and data
     return {
       // random default value as observer overwrite this
-      width: window.innerWidth - 10,
+      width: 380,
 
       // APEXCHART STYLING
       series: this.genres.map((genre) => genre.count),
@@ -69,19 +76,7 @@ export default defineComponent({
           },
           fontSize: '13px'
         },
-        colors: [
-          // German palette https://flatuicolors.com/palette/de
-          '#fc5c65', '#eb3b5a',
-          '#fd9644', '#fa8231',
-          '#fed330', '#f7b731',
-          '#26de81', '#20bf6b',
-          '#2bcbba', '#0fb9b1',
-          '#45aaf2', '#2d98da',
-          '#4b7bec', '#3867d6',
-          '#a55eea', '#8854d0',
-          '#d1d8e0', '#a5b1c2',
-          '#778ca3', '#4b6584'
-        ],
+        colors: (this.START_COLORS as unknown as string[]),
         plotOptions: {
           pie: {
             expandOnClick: false
@@ -94,9 +89,20 @@ export default defineComponent({
     /**
      * Force the graph update when provided props is updated
      */
-    genres (newValue: Genre[]) {
-      this.series = newValue.map((genre) => genre.count)
-      this.chartOptions.labels = newValue.map((genre) => genre.cap_name)
+    genres (newGenres: Genre[]) {
+      console.error('updated', newGenres)
+
+      this.series = newGenres.map((genre) => genre.count)
+      this.chartOptions = {
+        ...this.chartOptions,
+        labels: newGenres.map(genre => genre.cap_name),
+        colors: this.getColorsForGenres(newGenres),
+        ...{
+          chart: {
+            width: this.width
+          }
+        }
+      }
     }
   },
   mounted () {
@@ -109,6 +115,12 @@ export default defineComponent({
     })
 
     observer.observe((this.$refs.container as HTMLDivElement))
+  },
+  methods: {
+    getColorsForGenres (genres: Genre[]): string[] {
+      const colorMapping = this.playlistsStore.genreColorMapping
+      return genres.map(genre => colorMapping[genre.name])
+    }
   }
 })
 </script>

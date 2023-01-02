@@ -11,12 +11,12 @@ import { capitalize, getDefaultMap, range } from '@/utils/functions'
 
 // Order matters as only first match will be used (trap before rap, ...)
 // Sorting in length descending order to avoid this
-const COMMON_GENRES = ([
+const COMMON_GENRES = [
   'alternative', 'death metal', 'electropop', 'reggaeton', 'pop rock', 'hip hop',
   'electro', 'dubstep', 'mellow', 'reggae', 'drill', 'grime', 'house', 'indie',
-  'psych', 'swing', 'metal', 'lo-fi', 'dance', 'rock', 'jazz', 'trap', 'soul',
-  'funk', 'pop', 'r&b', 'rap', 'edm'
-] as const)
+  'psych', 'swing', 'metal', 'lo-fi', 'dance', 'disco', 'punk', 'rock', 'jazz',
+  'trap', 'soul', 'funk', 'pop', 'r&b', 'rap', 'edm'
+] as const
 
 export const MY_MUSIC_PLAYLIST_ID = 'my-music'
 const DEFAULT_MY_MUSIC_PLAYLIST: SimplifiedSpotifyPlaylist = {

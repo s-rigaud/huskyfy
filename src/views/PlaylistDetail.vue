@@ -501,7 +501,7 @@ export default defineComponent({
     },
     async isFilterExclusive () {
       await this.applyFilters()
-    },
+    }
   },
   async mounted () {
     this.TRACK_REQUEST_LIMIT = API_TRACK_LIMIT * 3
@@ -886,12 +886,8 @@ export default defineComponent({
   min-height: 250px;
   margin: 5px 0px;
 
-  border: 1px #F9B621AA solid;
-  background: linear-gradient(0deg,
-      #F9B621AA 0%,
-      var(--primary-color) 3%,
-      var(--primary-color) 97%,
-      #F9B621AA 100%);
+  outline: 1px #F9B621AA solid;
+  background-color: var(--primary-color);
   border-radius: 5px;
 }
 
@@ -900,7 +896,9 @@ export default defineComponent({
   align-items: center;
 
   color: white;
-  border-radius: 5px;
+  border-radius: 5px 5px 0px 0px;
+
+  background: linear-gradient(180deg, #F9B621 0%, #F9B621AA 50%, var(--primary-color) 140%);
 }
 
 #list-title-embedded {

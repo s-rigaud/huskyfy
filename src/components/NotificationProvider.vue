@@ -4,6 +4,7 @@
     :key="notification.message"
     v-model="snackbar"
     timeout="5000"
+    :rounded="getRounded(notification.type)"
     :color="getColor(notification.type)"
     class="notification-snackbar"
   >
@@ -46,6 +47,10 @@ export default defineComponent({
       if (type === NotificationType.warning) return 'mdi-alert'
       if (type === NotificationType.error) return 'mdi-alert-octagon'
       return 'mdi-menu'
+    },
+    getRounded (type: NotificationType): string {
+      if (type === NotificationType.success) return 'pill'
+      return 'none'
     }
   }
 })
@@ -58,5 +63,9 @@ export default defineComponent({
   justify-content: center;
 
   text-align: center;
+}
+
+.notification-snackbar .v-snackbar__content>* {
+  margin-left: 5px;
 }
 </style>

@@ -69,6 +69,7 @@
         :key="genre"
         :text="genre.toUpperCase()"
         label
+        variant="elevated"
         size="small"
         class="genre-chip"
         :style="getGenreAnimationDelay(index)"
@@ -80,6 +81,7 @@
         size="small"
         text="+"
         class="genre-chip"
+        variant="elevated"
         :style="getGenreAnimationDelay(MAXIMUM_GENRE_DISPLAYED)"
         @click.stop="displayAllGenres = true"
       />
@@ -91,6 +93,7 @@
           label
           size="small"
           class="genre-chip"
+          variant="elevated"
           :style="getGenreAnimationDelay(index)"
           :color="getColorForGenre(genre)"
         />
@@ -218,7 +221,7 @@ export default defineComponent({
   to {
     -webkit-transform: translateX(0);
     transform: translateX(0);
-    opacity: 1
+    opacity: 0.9
   }
 }
 
@@ -228,7 +231,6 @@ export default defineComponent({
   opacity: 0;
 
   border-bottom: 1px grey solid;
-  border-radius: 5px;
 
   animation: track-append 200ms linear;
   animation-fill-mode: forwards;
@@ -258,9 +260,12 @@ export default defineComponent({
 
 .track-item .genre-chip {
   margin: 0 5px 2px 0px;
+
+  color: black;
+
+  opacity: 0;
   animation: genres-appear 2000ms linear;
   animation-fill-mode: forwards;
-  opacity: 0;
 }
 
 .track-item .popularity-chip {
