@@ -346,7 +346,7 @@ import { storeToRefs } from 'pinia'
 import { defineComponent, toRef } from 'vue'
 import { useMeta } from 'vue-meta'
 
-import { SpotifyArtist, SpotifyPlaylist, SpotifyTrack } from '@/api/spotify/types/entities'
+import { SpotifyArtist, SpotifyTrack } from '@/api/spotify/types/entities'
 import DuplicatorPopup from '@/components/playlist_detail/DuplicatorPopup.vue'
 import GenreChart from '@/components/playlist_detail/GenreChart.vue'
 import LoadMoreTracksPopup from '@/components/playlist_detail/LoadMoreTracksPopup.vue'
@@ -502,9 +502,6 @@ export default defineComponent({
     async isFilterExclusive () {
       await this.applyFilters()
     },
-    playlist (newValue: SpotifyPlaylist, oldValue: SpotifyPlaylist) {
-      console.log(newValue, oldValue)
-    }
   },
   async mounted () {
     this.TRACK_REQUEST_LIMIT = API_TRACK_LIMIT * 3

@@ -252,7 +252,7 @@ export const usePlaylistsStore = defineStore('playlists', {
         if (cachedPlaylist) {
           // Pop cached tracks if playlist have changed
           if (cachedPlaylist.snapshot_id !== requestPlaylist.snapshot_id) {
-            console.log(`Cache expired for playlist ${requestPlaylist.id}, snapshot id is different`)
+            console.log(`Cache expired for playlist '${requestPlaylist.name}'. Snapshot id is different.`)
             cachedPlaylist.snapshot_id = requestPlaylist.snapshot_id
             cachedPlaylist.offset = 0
             cachedPlaylist.tracks = []

@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@mdi/font": "7.1.96",
-    "@vueuse/core": "^9.9.0",
+    "@vueuse/core": "9.6.0",
     "apexcharts": "^3.36.3",
     "axios": "1.2.1",
     "canvas-confetti": "^1.6.0",
