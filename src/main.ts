@@ -1,18 +1,23 @@
 import { createApp } from 'vue'
 
 import App from '@/App.vue'
-import router from '@/router'
-import { createPinia } from 'pinia'
 import { i18n } from '@/i18n'
 import vuetify from '@/plugins/vuetify'
-import VueApexCharts from 'vue3-apexcharts'
+import router from '@/router'
+import { createPinia } from 'pinia'
 import { createMetaManager } from 'vue-meta'
+import VueApexCharts from 'vue3-apexcharts'
 
-createApp(App)
-  .use(router)
+const app = createApp(App)
+app.use(router)
   .use(createPinia())
   .use(i18n)
   .use(vuetify)
   .use(VueApexCharts)
   .use(createMetaManager())
-  .mount('#app')
+
+app.directive('focus', (el: HTMLElement) => {
+  el.focus()
+})
+
+app.mount('#app')

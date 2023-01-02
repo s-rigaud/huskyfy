@@ -56,15 +56,17 @@
           <v-card-actions>
             <v-spacer />
             <v-btn
+              class="deletion-action-button"
               color="var(--text-color)"
               @click="isDeleteModalOpen = false"
             >
               {{ $t('playlist.delete.disagree') }}
             </v-btn>
             <v-btn
-              id="validateDeletionButton"
+              id="validate-deletion-button"
+              v-focus
               :loading="waitingForDeletion"
-              class="rainbow-v-btn font-weight-bold"
+              class="deletion-action-button rainbow-v-btn font-weight-bold"
               @click="unfollowPlaylist"
             >
               {{ $t('playlist.delete.agree') }}
@@ -77,7 +79,7 @@
 
       <div v-if="userOwnsPlaylist && allTracksLoaded">
         <v-list-subheader> {{ $t('drawer.reorder-playlist') }}</v-list-subheader>
-        <!-- 2.1 Sort by genre -->
+        <!-- 2.1 Sort by genres -->
         <v-list-item @click="sortPlaylistTracksByGenres">
           <v-list-item-title>{{ $t('drawer.reorder-by-genre') }}</v-list-item-title>
         </v-list-item>
@@ -278,20 +280,7 @@ export default defineComponent({
     },
     generateImageSize () { this.updateImagePreview() },
     generateImageDisplayTitle () { this.updateImagePreview() },
-    generateImageDisplayStats () { this.updateImagePreview() },
-    isDeleteModalOpen (newValue: boolean) {
-      // 💩 Dirty code
-      // 1. Using ref return the Vuetify button instance which is not easily focusable
-      // 2. As the modal is injected into the DOM, we need to wait some time before being able to select the element
-      // 3. nextTick does not work
-      newValue && setTimeout(
-        () => {
-          const deleteButton = (document.getElementById('validateDeletionButton') as HTMLButtonElement)
-          deleteButton.focus()
-        },
-        500
-      )
-    }
+    generateImageDisplayStats () { this.updateImagePreview() }
   },
   methods: {
     startDuplicationProcess () {
@@ -431,6 +420,10 @@ export default defineComponent({
 /* Update default opacity for Vuetify hover link effect */
 #drawer .v-list-item:hover>.v-list-item__overlay {
   opacity: calc(0.2 * var(--v-theme-overlay-multiplier));
+}
+
+.deletion-action-button:focus {
+  outline: 1px white solid;
 }
 
 .white-text {

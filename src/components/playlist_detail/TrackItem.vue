@@ -289,6 +289,10 @@ export default defineComponent({
   border-radius: 5px;
 }
 
+.track-item .v-list-item__content {
+  margin-bottom: 5px;
+}
+
 .track-item .second-line {
   margin: 5px 0px;
   display: flex;

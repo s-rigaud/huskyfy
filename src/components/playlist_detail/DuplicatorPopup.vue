@@ -154,7 +154,7 @@ export default defineComponent({
       const day = now.getDate().toString(10).padStart(2, '0')
       const month = (now.getMonth() + 1).toString(10).padStart(2, '0')
       const year = now.getFullYear()
-      const formattedDate = (this.$i18n.locale === 'en') ? `[${month}/${day}/${year}]` : `[${day}/${month}/${year}]`
+      const formattedDate = (this.$i18n.locale === 'en') ? `${month}/${day}/${year}` : `${day}/${month}/${year}`
 
       return [
         this.$t('playlist.duplicate.copy-of'),

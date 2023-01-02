@@ -51,7 +51,7 @@
                 </div>
                 <div id="loved-track-select">
                   <v-select
-                    v-model="selectedLovedTracks"
+                    v-model="selectedPreference"
                     :label="$t('track.filters.preference')"
                     :items="getVSelectTranslatedPreferences()"
                     item-title="label"
@@ -128,14 +128,14 @@
                     </v-scale-transition>
                   </div>
 
-                  <div v-if="(selectedLovedTracks !== NO_PREFERENCE)">
+                  <div v-if="(selectedPreference !== NO_PREFERENCE)">
                     <v-scale-transition>
                       <v-chip
-                        :text="getTextForPreference(selectedLovedTracks)"
+                        :text="getTextForPreference(selectedPreference)"
                         closable
                         variant="elevated"
                         color="black"
-                        @click:close="(selectedLovedTracks = NO_PREFERENCE)"
+                        @click:close="(selectedPreference = NO_PREFERENCE)"
                       />
                     </v-scale-transition>
                   </div>
@@ -363,6 +363,8 @@ interface SlotProps {
   index: number
 }
 
+// Preference are used for filtering
+// It refers to the tracks being in the My Music playlist or not
 const NO_PREFERENCE = 'All tracks'
 const Preference = ({
   ONLY_LIKED: 'Only liked',
@@ -420,11 +422,11 @@ export default defineComponent({
       TRACK_REQUEST_LIMIT: 150,
 
       // Need to use it this way to be able to type hint properly in template tag
-      NO_POPULARITY: (NO_POPULARITY as Popularity),
-      NO_PREFERENCE: (NO_PREFERENCE as Preference),
+      NO_POPULARITY: Popularity.NO_POPULARITY,
+      NO_PREFERENCE: Preference.NO_PREFERENCE,
 
-      selectedPopularity: (NO_POPULARITY as Popularity),
-      selectedLovedTracks: (NO_PREFERENCE as Preference),
+      selectedPopularity: Popularity.NO_POPULARITY,
+      selectedPreference: Preference.NO_PREFERENCE,
       selectedArtists: ([] as SpotifyArtist[]),
       selectedGenres: ([] as string[]),
       isFilterExclusive: true,
@@ -456,8 +458,8 @@ export default defineComponent({
       return (
         this.selectedGenres.length +
         this.selectedArtists.length +
-        +(this.selectedPopularity !== NO_POPULARITY) +
-        +(this.selectedLovedTracks !== NO_PREFERENCE)
+        +(this.selectedPopularity !== Popularity.NO_POPULARITY) +
+        +(this.selectedPreference !== Preference.NO_PREFERENCE)
       )
     },
     filteringKeyword (): string {
@@ -465,8 +467,8 @@ export default defineComponent({
     },
     filterTag (): string {
       return ([] as string[])
-        .concat((this.selectedPopularity !== NO_POPULARITY) ? [this.getTextForPopularity(this.selectedPopularity)] : [])
-        .concat(this.selectedLovedTracks !== NO_PREFERENCE ? [this.getTextForPreference(this.selectedLovedTracks)] : [])
+        .concat((this.selectedPopularity !== Popularity.NO_POPULARITY) ? [this.getTextForPopularity(this.selectedPopularity)] : [])
+        .concat(this.selectedPreference !== Preference.NO_PREFERENCE ? [this.getTextForPreference(this.selectedPreference)] : [])
         .concat(this.selectedArtists.map(a => a.name))
         .concat(this.selectedGenres)
         .map(filter => capitalize(filter))
@@ -480,7 +482,7 @@ export default defineComponent({
     async selectedPopularity () {
       await this.applyFilters()
     },
-    async selectedLovedTracks () {
+    async selectedPreference () {
       await this.applyFilters()
     },
     async selectedArtists (newValue: SpotifyArtist[], oldValue: SpotifyArtist[]) {
@@ -570,7 +572,7 @@ export default defineComponent({
 
       // Filter over popularity
       const popularity = this.selectedPopularity
-      if (popularity !== NO_POPULARITY) {
+      if (popularity !== Popularity.NO_POPULARITY) {
         const popularityFilter = (t: SpotifyTrack) => t.isIndie === (popularity === Popularity.Indie)
 
         if (this.isFilterExclusive) {
@@ -581,8 +583,8 @@ export default defineComponent({
       }
 
       // Filter over preference (if track is in MyMusic playlist or not)
-      const preference = this.selectedLovedTracks
-      if (preference !== NO_PREFERENCE) {
+      const preference = this.selectedPreference
+      if (preference !== Preference.NO_PREFERENCE) {
         const trackPreferences = await this.playlistsStore.tracksAreLiked(newFilteredTracks)
         const preferenceFilter = (t: SpotifyTrack) => trackPreferences[t.id] === (preference === Preference.ONLY_LIKED)
 
@@ -604,7 +606,8 @@ export default defineComponent({
     resetFilters () {
       this.selectedGenres = []
       this.selectedArtists = []
-      this.selectedPopularity = NO_POPULARITY
+      this.selectedPopularity = Popularity.NO_POPULARITY
+      this.selectedPreference = Preference.NO_PREFERENCE
       this.filteredTracks = this.playlist.tracks
     },
     openPlaylistOnSpotify () {
@@ -638,7 +641,7 @@ export default defineComponent({
     },
     getVSelectTranslatedPopularities (): { label: string, value: Popularity }[] {
       return [
-        { label: this.$t('track.filters.no-filter'), value: NO_POPULARITY },
+        { label: this.$t('track.filters.no-filter'), value: Popularity.NO_POPULARITY },
         { label: this.$t('track.filters.indie'), value: Popularity.Indie },
         { label: this.$t('track.filters.popular'), value: Popularity.Popular }
       ]
@@ -653,7 +656,7 @@ export default defineComponent({
     },
     getVSelectTranslatedPreferences (): { label: string, value: Preference }[] {
       return [
-        { label: this.$t('track.filters.no-filter'), value: NO_PREFERENCE },
+        { label: this.$t('track.filters.no-filter'), value: Preference.NO_PREFERENCE },
         { label: this.$t('track.filters.only-liked'), value: Preference.ONLY_LIKED },
         { label: this.$t('track.filters.only-not-liked'), value: Preference.ONLY_NOT_LIKED }
       ]
@@ -911,7 +914,7 @@ export default defineComponent({
 }
 
 #tracks .v-list {
-  padding-bottom: 0;
+  padding: 0;
 }
 
 #no-track-div {
@@ -944,6 +947,10 @@ export default defineComponent({
   position: fixed;
   right: 10px;
   bottom: 125px;
+
+  color: white;
+  z-index: 1;
+
   transition: 0.2s all ease-out;
 }
 

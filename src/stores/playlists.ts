@@ -13,8 +13,9 @@ import { capitalize, getDefaultMap, range } from '@/utils/functions'
 // Sorting in length descending order to avoid this
 const COMMON_GENRES = ([
   'alternative', 'death metal', 'electropop', 'reggaeton', 'pop rock', 'hip hop',
-  'mellow', 'reggae', 'drill', 'grime', 'house', 'indie', 'psych', 'swing', 'metal',
-  'lo-fi', 'dance', 'rock', 'jazz', 'trap', 'soul', 'funk', 'pop', 'r&b', 'rap', 'edm'
+  'electro', 'dubstep', 'mellow', 'reggae', 'drill', 'grime', 'house', 'indie',
+  'psych', 'swing', 'metal', 'lo-fi', 'dance', 'rock', 'jazz', 'trap', 'soul',
+  'funk', 'pop', 'r&b', 'rap', 'edm'
 ] as const)
 
 export const MY_MUSIC_PLAYLIST_ID = 'my-music'

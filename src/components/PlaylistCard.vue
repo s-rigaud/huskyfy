@@ -2,6 +2,7 @@
   <v-card
     class="playlist-card"
     elevation="10"
+    tabindex="0"
     @click="displayDetails"
   >
     <v-img
@@ -89,7 +90,11 @@ export default defineComponent({
 }
 
 .playlist-card:hover {
-  outline: 1px #F3920099 solid;
+  outline: 3px #F3920099 solid;
+}
+
+.playlist-card:focus {
+  outline: 3px #F3920099 solid;
 }
 
 .playlist-card .card-title {

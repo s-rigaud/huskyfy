@@ -109,11 +109,11 @@
           <p
             v-if="allTracksLoaded"
             id="percentage-row"
+            :style="colorForPercentage"
           >
             <span class="rainbow-text">{{ $t("playlist.indie-score-text") }}</span>
             <!-- Only if all tracks are loaded -->
             <span
-              :style="colorForPercentage"
               style="margin: 0px 5px;"
               class="black-highlight"
             >
@@ -223,7 +223,7 @@
 <script lang="ts">
 import { debounce, DebouncedFunc } from 'lodash'
 import { storeToRefs } from 'pinia'
-import { defineComponent, StyleValue, toRef } from 'vue'
+import { defineComponent, toRef } from 'vue'
 
 import ActionDrawer from '@/components/playlist_detail/ActionDrawer.vue'
 import IndieChart, { HIGHEST_VALUE_COLOR, LOWEST_VALUE_COLOR } from '@/components/playlist_detail/IndieChart.vue'
@@ -289,7 +289,7 @@ export default defineComponent({
     allTracksLoaded (): boolean {
       return this.playlist.tracks.length === this.playlist.total
     },
-    colorForPercentage (): StyleValue {
+    colorForPercentage (): { color: string } {
       const color = getAverageColor(LOWEST_VALUE_COLOR, HIGHEST_VALUE_COLOR, this.indiePercentage)
       return { color }
     },
@@ -356,6 +356,7 @@ export default defineComponent({
 #playlist-card {
   width: 100%;
   margin: 5px 0px;
+  padding-bottom: 5px;
 
   flex-shrink: 0;
   background: radial-gradient(circle, var(--primary-color) 80%, #F3920099 100%);
@@ -363,18 +364,21 @@ export default defineComponent({
 }
 
 #playlist-meta {
-  display: flex;
   padding: 10px 10px 0px 10px;
+
+  display: flex;
 }
 
 #playlist-meta-left {
-  display: flex;
   width: 100%;
+
+  display: flex;
 }
 
 #genre-chart-container {
-  display: none !important;
   width: 246px;
+
+  display: none !important;
 }
 
 .playlist-meta-middle {
@@ -396,6 +400,7 @@ export default defineComponent({
 
 #playlist-image {
   margin: 5px 5px 5px -5px;
+
   cursor: pointer;
 }
 
@@ -467,7 +472,9 @@ export default defineComponent({
 }
 
 #playlist-description {
-  padding: 5px 10px;
+  padding: 5px 10px 0px 10px;
+
+  font-size: 14px;
 }
 
 .playlist-metric {
@@ -492,6 +499,7 @@ export default defineComponent({
 
 #help-indie-percentage .v-icon {
   padding: 8px 9px;
+
   color: var(--text-color);
 }
 
@@ -590,6 +598,10 @@ export default defineComponent({
 
   #spotify-logo-meta-small {
     top: 70px;
+  }
+
+  #playlist-description {
+    font-size: 16px;
   }
 }
 </style>
