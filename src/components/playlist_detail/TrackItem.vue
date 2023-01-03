@@ -163,7 +163,7 @@ export default defineComponent({
   computed: {
     // Delay animation so items appear one after another
     trackAnimationDelay (): { 'animation-delay': string } {
-      const delay = (this.trackIndex < 10) ? `${300 * this.trackIndex}ms` : '0ms'
+      const delay = (this.trackIndex < 5) ? `${300 * this.trackIndex}ms` : '0ms'
       return { 'animation-delay': delay }
     }
   },

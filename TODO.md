@@ -9,6 +9,8 @@
 
 ## Feedbacks
 
+- [ ] 🚧 Problem while filtering liked tracks : some tracks are not filtered properly while filtering not liked ones
+
 ## Firefox UI
 
 - [ ] 🎨 No locale image on button

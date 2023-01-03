@@ -103,8 +103,8 @@ export default defineComponent({
     }
   },
   watch: {
-    indiePercentage (newValue: number) {
-      this.updateChart(newValue)
+    indiePercentage (newPercentage: number) {
+      this.updateChart(newPercentage)
     }
   },
   methods: {

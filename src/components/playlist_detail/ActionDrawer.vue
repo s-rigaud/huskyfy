@@ -271,12 +271,12 @@ export default defineComponent({
   },
   watch: {
     // Have to use this to synchronise props as I can't use props as VModel
-    open (newValue: boolean) {
-      this.isOpen = newValue
+    open (isNowOpen: boolean) {
+      this.isOpen = isNowOpen
       this.updateImagePreview()
     },
-    isOpen (newValue: boolean) {
-      !newValue && this.$emit('onClose')
+    isOpen (isNowOpen: boolean) {
+      !isNowOpen && this.$emit('onClose')
     },
     generateImageSize () { this.updateImagePreview() },
     generateImageDisplayTitle () { this.updateImagePreview() },

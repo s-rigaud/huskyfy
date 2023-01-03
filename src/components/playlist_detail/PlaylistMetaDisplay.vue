@@ -111,7 +111,7 @@
             id="percentage-row"
             :style="colorForPercentage"
           >
-            <span class="rainbow-text">{{ $t("playlist.indie-score-text") }}</span>
+            <span>{{ $t("playlist.indie-score-text") }}</span>
             <!-- Only if all tracks are loaded -->
             <span
               style="margin: 0px 5px;"
@@ -126,6 +126,7 @@
               <template #activator="{ props }">
                 <v-btn
                   id="help-indie-percentage"
+                  :style="colorForPercentage"
                   v-bind="props"
                 >
                   <v-icon size="x-small">
@@ -151,16 +152,16 @@
         </template>
       </v-tooltip>
       <div id="playlist-meta-right">
+        <p>
+          <span class="rainbow-text">{{ $t('playlist.total-track-number') }}</span>
+          <span class="playlist-metric">
+            {{ playlistTrackCount.toFixed(0) }}
+          </span>
+        </p>
         <p v-show="allTracksLoaded">
           <span class="rainbow-text">{{ $t('playlist.duration') }}</span>
           <span class="playlist-metric">
             {{ getPlaylistDuration() }}
-          </span>
-        </p>
-        <p>
-          <span class="rainbow-text">{{ $t('playlist.total-track-number') }}</span>
-          <span class="playlist-metric">
-            {{ playlist.total }}
           </span>
         </p>
       </div>
@@ -221,6 +222,7 @@
 </template>
 
 <script lang="ts">
+import gsap from 'gsap'
 import { debounce, DebouncedFunc } from 'lodash'
 import { storeToRefs } from 'pinia'
 import { defineComponent, toRef } from 'vue'
@@ -268,6 +270,10 @@ export default defineComponent({
       drawer: false,
       displayBurgerMenuBadge: 'block',
       playlistNameText: '',
+      /**
+       * Set to 0 to prepare for increment animation
+       */
+      playlistTrackCount: 0,
 
       /**
        * Debounced function being call each time the user update the playlist name in the UI.
@@ -325,8 +331,8 @@ export default defineComponent({
     }
   },
   watch: {
-    playlistNameText (newValue: string) {
-      if (newValue !== this.playlist.name && newValue && this.updatePlaylistNameDebounced) {
+    playlistNameText (currentText: string) {
+      if (currentText && currentText !== this.playlist.name && this.updatePlaylistNameDebounced) {
         this.nameUpdatedInAPI = false
         this.updatePlaylistNameDebounced()
       }
@@ -341,6 +347,9 @@ export default defineComponent({
       2000
     )
     this.playlistNameText = this.playlist.name
+  },
+  mounted () {
+    setTimeout(() => gsap.to(this, { duration: 3, playlistTrackCount: this.playlist.total }), 2000)
   },
   methods: {
     openPlaylistOnSpotify () {
@@ -474,6 +483,10 @@ export default defineComponent({
   text-decoration: underline;
 }
 
+#percentage-row {
+  align-items: center;
+}
+
 #playlist-description {
   padding: 5px 10px 0px 10px;
 
@@ -489,6 +502,9 @@ export default defineComponent({
   height: 23px;
   margin-left: 5px;
   padding: 0;
+
+  position: relative;
+    top: 2px;
 
   border: 2px var(--text-color) solid;
   border-radius: 5px;

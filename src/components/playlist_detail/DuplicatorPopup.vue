@@ -91,13 +91,13 @@ export default defineComponent({
     }
   },
   watch: {
-    snackbarVisible (newValue: boolean) {
-      if (newValue === false) {
-        this.loadingPercentage = 0
-        this.loadingText = ''
-        this.newPlaylistId = ''
-        this.$emit('onEnd')
-      }
+    snackbarVisible (isVisible: boolean) {
+      if (isVisible) return
+
+      this.loadingPercentage = 0
+      this.loadingText = ''
+      this.newPlaylistId = ''
+      this.$emit('onEnd')
     }
   },
   async created () {

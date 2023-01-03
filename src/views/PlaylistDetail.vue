@@ -201,10 +201,11 @@
                     id="create-new-playlist"
                     color="red"
                     :content="$t('track.filters.try-now')"
+                    :value="-1"
                   >
                     <v-btn
                       id="create-new-playlist-btn"
-                      :disabled="filteredTracks.length === 0 || numberOfActiveFilters === 0"
+                      :disabled="!isDuplicationAllowed"
                       rounded="pill"
                       class="rainbow-v-btn"
                       :loading="processFilterUpdate"
@@ -233,7 +234,10 @@
             color="white"
           />
           <div>
-            <h4 id="track-number-title">
+            <h4
+              v-if="playlistLoaded"
+              id="track-number-title"
+            >
               {{ filteredTracks.length }} {{ $tc('track._generic-name', filteredTracks.length) }}
             </h4>
           </div>
@@ -447,6 +451,7 @@ export default defineComponent({
       startDuplication: false,
 
       displayGoTopButton: false,
+      displayDuplicateBadge: 'none',
 
       filteredTracks: ([] as SpotifyTrack[])
     }
@@ -480,6 +485,9 @@ export default defineComponent({
     },
     allTracksLoaded (): boolean {
       return this.playlist.tracks.length === this.playlist.total
+    },
+    isDuplicationAllowed (): boolean {
+      return this.filteredTracks.length > 0 && this.numberOfActiveFilters > 0
     }
   },
   watch: {
@@ -489,18 +497,22 @@ export default defineComponent({
     async selectedPreference () {
       await this.applyFilters()
     },
-    async selectedArtists (newValue: SpotifyArtist[], oldValue: SpotifyArtist[]) {
-      if (oldValue.length !== 0 || newValue.length !== 0) {
+    async selectedArtists (currentArtists: SpotifyArtist[], previousArtists: SpotifyArtist[]) {
+      if (previousArtists.length !== 0 || currentArtists.length !== 0) {
         await this.applyFilters()
       }
     },
-    async selectedGenres (newValue: string[], oldValue: string[]) {
-      if (oldValue.length !== 0 || newValue.length !== 0) {
+    async selectedGenres (currentGenres: string[], previousGenres: string[]) {
+      if (previousGenres.length !== 0 || currentGenres.length !== 0) {
         await this.applyFilters()
       }
     },
     async isFilterExclusive () {
       await this.applyFilters()
+    },
+    isDuplicationAllowed (isAllowed: boolean) {
+      // Toggle UI badge (no clean way in Vuetify API)
+      this.displayDuplicateBadge = isAllowed ? 'block' : 'none'
     }
   },
   async mounted () {
@@ -764,6 +776,13 @@ export default defineComponent({
   flex-direction: column;
 }
 
+#selectors {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
 #stats-panel-content {
   border: 2px var(--text-color) solid;
 }
@@ -870,6 +889,8 @@ export default defineComponent({
 }
 
 #create-new-playlist .v-badge__badge {
+  display: v-bind(displayDuplicateBadge);
+
   bottom: calc(100% - 8px) !important;
   left: calc(100% - 60px) !important;
 }
@@ -984,12 +1005,6 @@ export default defineComponent({
 }
 
 @media only screen and (min-width: 768px) {
-  #selectors {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-  }
-
   #scroll-top-button {
     width: 60px;
     height: 60px;
