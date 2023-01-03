@@ -9,13 +9,7 @@
 
 ## Feedbacks
 
-- [ ] 🚧 Problem while filtering liked tracks : some tracks are not filtered properly while filtering not liked ones
-
-## Firefox UI
-
-- [ ] 🎨 No locale image on button
-- [ ] 🎨 No green snackbar when playlist full loaded
-- [ ] 🎨 No spinner on Firefox (on button + large ones)
+- [ ] 🚧 Problem while filtering liked tracks : some tracks are not filtered properly while filtering not liked ones (==> Spotify API bug)
 
 ## Vuetify 3.1
 
@@ -32,3 +26,5 @@
 5. [ ] Wikipédia article
 6. [X] Spread the word on Discord (NaN, Vuetify, Vue Land)
 7. [ ] Ask Spotify to add the website link on their developer site
+8. [ ] Youtube video
+9. [ ] Tech and tips subreddit

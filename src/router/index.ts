@@ -7,11 +7,11 @@ import { useUserStore } from '@/stores/user'
 
 import AboutView from '@/views/AboutView.vue'
 import LoginView from '@/views/LoginView.vue'
-import NotFound404 from '@/views/NotFound404.vue'
-import PlaylistDetail from '@/views/PlaylistDetail.vue'
 import PlaylistExplorer from '@/views/PlaylistExplorer.vue'
 
 import { createRouter, createWebHistory } from 'vue-router'
+const PlaylistDetail = () => import('./views/PlaylistDetail.vue')
+const NotFound404 = () => import('./views/NotFound404.vue')
 
 export const ROUTE_NAME_LOGIN = 'Login'
 const routes = [

@@ -141,35 +141,29 @@
                   </div>
 
                   <div v-if="selectedGenres.length > 0">
-                    <transition-group
-                      name="scale-transition"
-                      tag="v-chip"
-                    >
+                    <TransitionGroup name="chips">
                       <v-chip
                         v-for="genre in selectedGenres"
                         :key="genre"
                         :text="genre.toUpperCase()"
                         closable
                         :color="getColorForGenre(genre)"
-                        variant="outlined"
-                        prepend-icon="mdi-chart-bar-stacked"
+                        variant="elevated"
+                        class="genre-filter-chip"
                         @click:close="selectedGenres = selectedGenres.filter(g => g !== genre)"
                       />
-                    </transition-group>
+                    </TransitionGroup>
                   </div>
 
                   <div v-if="selectedArtists.length > 0">
-                    <transition-group
-                      id="test"
-                      name="scale-transition"
-                      tag="v-chip"
-                    >
+                    <TransitionGroup name="chips">
                       <v-chip
                         v-for="artist in selectedArtists"
                         :key="artist.name"
                         closable
                         color="yellow"
-                        variant="outlined"
+                        variant="elevated"
+                        class="artist-filter-chip"
                         @click:close="selectedArtists = selectedArtists.filter(a => a.id != artist.id)"
                       >
                         <v-avatar left>
@@ -177,7 +171,7 @@
                         </v-avatar>
                         {{ artist.name }}
                       </v-chip>
-                    </transition-group>
+                    </TransitionGroup>
                   </div>
                 </div>
 
@@ -433,8 +427,8 @@ export default defineComponent({
       NO_POPULARITY: Popularity.NO_POPULARITY,
       NO_PREFERENCE: Preference.NO_PREFERENCE,
 
-      selectedPopularity: Popularity.NO_POPULARITY,
-      selectedPreference: Preference.NO_PREFERENCE,
+      selectedPopularity: (Popularity.NO_POPULARITY as Popularity),
+      selectedPreference: (Preference.NO_PREFERENCE as Preference),
       selectedArtists: ([] as SpotifyArtist[]),
       selectedGenres: ([] as string[]),
       isFilterExclusive: true,
@@ -826,6 +820,14 @@ export default defineComponent({
   margin: 1px;
 }
 
+#filtering-chips .genre-filter-chip {
+  color: black;
+}
+
+#filtering-chips .artist-filter-chip {
+  opacity: 0.9;
+}
+
 #filters-and-reset .v-switch {
   width: fit-content;
 
@@ -985,6 +987,17 @@ export default defineComponent({
   z-index: 1;
 
   transition: 0.2s all ease-out;
+}
+
+/* Transitions */
+.chips-enter-active,
+.chips-leave-active {
+  transition: all 0.2s ease;
+}
+
+.chips-enter-from,
+.chips-leave-to {
+  opacity: 0;
 }
 
 /* Main generic spinner while loading*/
