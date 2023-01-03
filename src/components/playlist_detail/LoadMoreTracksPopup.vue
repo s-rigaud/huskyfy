@@ -3,7 +3,7 @@
   <!-- This allow to lazy load playlist tracks -->
   <v-snackbar
     id="load-more-snackbar"
-    v-model="ALWAYS_TRUE"
+    v-model="isVisible"
     :timeout="timeout"
     :color="color"
   >
@@ -63,7 +63,7 @@ export default defineComponent({
   },
   data () {
     return {
-      ALWAYS_TRUE: (true as const),
+      isVisible: true,
 
       isLoaded: false,
       waitingForResponse: false

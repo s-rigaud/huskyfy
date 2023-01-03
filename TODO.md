@@ -1,15 +1,13 @@
 # TODO
 
-- [ ] 🚀 Use v-lazy to improve performances for big playlists
 - [ ] 🚧 Fix other Github branch for reordering playlist
-- [ ] 🚀 Add proper JS comments over the WHOLE app
 - [ ] 🚧 Back to last page when Spotify API token needs refresh
-- [ ] 🚧 Fix filtering keyword not displaying properly in PlaylistDetail between the filter chips
+- [ ] 🚧 Set v-lazy margin around content to load before entering the viewport (intersection observer params)
 - [ ] ✨ Implement Spotify SDK to be able to listen to tracks (https://developer.spotify.com/documentation/web-playback-sdk/reference/)
+- [ ] 🖼️ Skeleton loader for TrackItem and PlaylistCard
+- [ ] 🖼️ Horizontal slider for TrackItem genre chips
 
 ## Feedbacks
-
-- [ ] 🚧 Problem while filtering liked tracks : some tracks are not filtered properly while filtering not liked ones (==> Spotify API bug)
 
 ## Vuetify 3.1
 
@@ -28,3 +26,9 @@
 7. [ ] Ask Spotify to add the website link on their developer site
 8. [ ] Youtube video
 9. [ ] Tech and tips subreddit
+
+## NPM package issues
+
+* **axios 1.2.2** ==> A lot of TS definition moves, need to wait for a proper migration guide to update (introdces multiple changes and bug in the project)
+
+* **@vueuse/core 9.9.0** ==> Change the way reactive works, can do not trigger update for reactive object using Pinia state

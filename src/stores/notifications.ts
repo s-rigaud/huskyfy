@@ -1,12 +1,12 @@
 import { RemovableRef, useStorage } from '@vueuse/core'
 import { defineStore } from 'pinia'
 
-export const NotificationType = ({
+export const NotificationType = {
   info: 'info',
   success: 'success',
   warning: 'warning',
   error: 'error'
-} as const)
+} as const
 export type NotificationType = typeof NotificationType[keyof typeof NotificationType]
 
 type Notification = {

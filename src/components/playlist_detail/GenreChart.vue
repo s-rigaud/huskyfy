@@ -43,7 +43,7 @@ export default defineComponent({
       // APEXCHART STYLING
       series: this.genres.map((genre) => genre.count),
 
-      chartOptions: ({
+      chartOptions: {
         chart: {
           width: 380,
           type: 'donut'
@@ -82,7 +82,7 @@ export default defineComponent({
             expandOnClick: false
           }
         }
-      } as ApexOptions)
+      } as ApexOptions
     }
   },
   watch: {
@@ -90,8 +90,6 @@ export default defineComponent({
      * Force the graph update when provided props is updated
      */
     genres (newGenres: Genre[]) {
-      console.error('updated', newGenres)
-
       this.series = newGenres.map((genre) => genre.count)
       this.chartOptions = {
         ...this.chartOptions,
@@ -114,7 +112,7 @@ export default defineComponent({
       })
     })
 
-    observer.observe((this.$refs.container as HTMLDivElement))
+    observer.observe(this.$refs.container as HTMLDivElement)
   },
   methods: {
     getColorsForGenres (genres: Genre[]): string[] {

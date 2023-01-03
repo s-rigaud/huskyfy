@@ -1,111 +1,117 @@
 <template>
-  <v-list-item
-    class="track-item"
-    :style="trackAnimationDelay"
-    link
-    @click="openTrackOnSpotify"
+  <v-lazy
+    v-model="isActive"
+    min-height="100"
+    transition="fade-transition"
   >
-    <template #prepend>
-      <p class="track-index">
-        {{ trackIndex + 1 }}
-      </p>
-      <v-avatar
-        class="ma-3 track-image"
-        size="90"
-        rounded="0"
-      >
-        <v-img
-          rel="preconnect"
-          :src="image"
-          lazy-src="@/assets/default_cover.jpg"
-          alt="Cover image"
-          :option="{ rootMargin: '0px 100px 0px 0px' }"
-        />
-      </v-avatar>
-    </template>
-
-    <v-list-item-title class="rainbow-text text-h6">
-      {{ name }}
-    </v-list-item-title>
-    <div class="second-line">
-      <div
-        v-for="(artist, index) in artists"
-        :key="artist.id"
-        class="artist-names"
-        @click.stop="openArtistOnSpotify(artist)"
-      >
-        <v-list-item-subtitle
-          v-ripple.stop
-          class="artist-name text-truncate"
-        >
-          {{ addCommaDivider(artist.name, index) }}
-        </v-list-item-subtitle>
-      </div>
-      <v-chip
-        v-if="isIndie"
-        :text="$tc('track.indie', artists.length)"
-        color="green"
-        label
-        text-color="white"
-        size="small"
-        class="popularity-chip"
-      />
-      <v-chip
-        v-else
-        :text="$tc('track.popular', artists.length)"
-        color="cyan"
-        label
-        size="small"
-        class="popularity-chip"
-      />
-    </div>
-
-    <div
-      v-if="genres.length > 0"
-      class="chips"
+    <v-list-item
+      class="track-item"
+      :style="trackAnimationDelay"
+      link
+      @click="openTrackOnSpotify"
     >
-      <v-chip
-        v-for="(genre, index) in genres.slice(0, MAXIMUM_GENRE_DISPLAYED)"
-        :key="genre"
-        :text="genre.toUpperCase()"
-        label
-        variant="elevated"
-        size="small"
-        class="genre-chip"
-        :style="getGenreAnimationDelay(index)"
-        :color="getColorForGenre(genre)"
-      />
-      <v-chip
-        v-if="genres.length > MAXIMUM_GENRE_DISPLAYED && !displayAllGenres"
-        label
-        size="small"
-        text="+"
-        class="genre-chip"
-        variant="elevated"
-        :style="getGenreAnimationDelay(MAXIMUM_GENRE_DISPLAYED)"
-        @click.stop="displayAllGenres = true"
-      />
-      <div v-if="displayAllGenres">
+      <template #prepend>
+        <p class="track-index">
+          {{ trackIndex + 1 }}
+        </p>
+        <v-avatar
+          class="ma-3 track-image"
+          size="90"
+          rounded="0"
+        >
+          <v-img
+            rel="preconnect"
+            :src="image"
+            lazy-src="@/assets/default_cover.jpg"
+            alt="Cover image"
+            :option="{ rootMargin: '0px 100px 0px 0px' }"
+          />
+        </v-avatar>
+      </template>
+
+      <v-list-item-title class="rainbow-text text-h6">
+        {{ name }}
+      </v-list-item-title>
+      <div class="second-line">
+        <div
+          v-for="(artist, index) in artists"
+          :key="artist.id"
+          class="artist-names"
+          @click.stop="openArtistOnSpotify(artist)"
+        >
+          <v-list-item-subtitle
+            v-ripple.stop
+            class="artist-name text-truncate"
+          >
+            {{ addCommaDivider(artist.name, index) }}
+          </v-list-item-subtitle>
+        </div>
         <v-chip
-          v-for="(genre, index) in genres.slice(MAXIMUM_GENRE_DISPLAYED)"
+          v-if="isIndie"
+          :text="$tc('track.indie', artists.length)"
+          color="green"
+          label
+          text-color="white"
+          size="small"
+          class="popularity-chip"
+        />
+        <v-chip
+          v-else
+          :text="$tc('track.popular', artists.length)"
+          color="cyan"
+          label
+          size="small"
+          class="popularity-chip"
+        />
+      </div>
+
+      <div
+        v-if="genres.length > 0"
+        class="chips"
+      >
+        <v-chip
+          v-for="(genre, index) in genres.slice(0, genresToDisplayCount)"
           :key="genre"
           :text="genre.toUpperCase()"
           label
+          variant="elevated"
           size="small"
           class="genre-chip"
-          variant="elevated"
           :style="getGenreAnimationDelay(index)"
           :color="getColorForGenre(genre)"
         />
+        <v-chip
+          v-if="genres.length > genresToDisplayCount && !displayAllGenres"
+          label
+          size="small"
+          text="+"
+          class="genre-chip"
+          variant="elevated"
+          :style="getGenreAnimationDelay(genresToDisplayCount)"
+          @click.stop="displayAllGenres = true"
+        />
+        <div v-if="displayAllGenres">
+          <v-chip
+            v-for="(genre, index) in genres.slice(genresToDisplayCount)"
+            :key="genre"
+            :text="genre.toUpperCase()"
+            label
+            size="small"
+            class="genre-chip"
+            variant="elevated"
+            :style="getGenreAnimationDelay(index)"
+            :color="getColorForGenre(genre)"
+          />
+        </div>
       </div>
-    </div>
-    <v-list-item-subtitle
-      v-else
-      style="min-height: 20px;"
-    >
-      {{ $t("track.no-genre") }}
-    </v-list-item-subtitle>
-  </v-list-item>
+      <v-list-item-subtitle
+        v-else
+        style="min-height: 20px;"
+      >
+        {{ $t("track.no-genre") }}
+      </v-list-item-subtitle>
+    </v-list-item>
+  </v-lazy>
 </template>
 
 <script lang="ts">
@@ -157,7 +163,8 @@ export default defineComponent({
   data () {
     return {
       displayAllGenres: false,
-      MAXIMUM_GENRE_DISPLAYED: 2
+      genresToDisplayCount: 2,
+      isActive: false
     }
   },
   computed: {
@@ -167,12 +174,17 @@ export default defineComponent({
       return { 'animation-delay': delay }
     }
   },
+  watch: {
+    isActive (newValue: boolean) {
+      console.log(newValue)
+    }
+  },
   mounted () {
     let genreToDisplay = 2
     if (window.innerWidth > 900) genreToDisplay = 8
     else if (window.innerWidth > 700) genreToDisplay = 6
     else if (window.innerWidth > 500) genreToDisplay = 4
-    this.MAXIMUM_GENRE_DISPLAYED = genreToDisplay
+    this.genresToDisplayCount = genreToDisplay
   },
   methods: {
     /**

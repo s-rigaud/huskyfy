@@ -368,20 +368,20 @@ interface SlotProps {
  *  It refers to the tracks being in the My Music playlist or not
  */
 const NO_PREFERENCE = 'All tracks'
-const Preference = ({
+const Preference = {
   ONLY_LIKED: 'Only liked',
   ONLY_NOT_LIKED: 'Only not liked',
   NO_PREFERENCE
-} as const)
+} as const
 // eslint-disable-next-line
 type Preference = typeof Preference[keyof typeof Preference]
 
 const NO_POPULARITY = 'No filter'
-const Popularity = ({
+const Popularity = {
   Indie: 'Indie',
   Popular: 'Popular',
   NO_POPULARITY
-} as const)
+} as const
 // eslint-disable-next-line
 type Popularity = typeof Popularity[keyof typeof Popularity]
 
@@ -427,8 +427,8 @@ export default defineComponent({
       NO_POPULARITY: Popularity.NO_POPULARITY,
       NO_PREFERENCE: Preference.NO_PREFERENCE,
 
-      selectedPopularity: (Popularity.NO_POPULARITY as Popularity),
-      selectedPreference: (Preference.NO_PREFERENCE as Preference),
+      selectedPopularity: Popularity.NO_POPULARITY as Popularity,
+      selectedPreference: Preference.NO_PREFERENCE as Preference,
       selectedArtists: ([] as SpotifyArtist[]),
       selectedGenres: ([] as string[]),
       isFilterExclusive: true,

@@ -139,7 +139,10 @@
             class="generate-image-switch"
           >
             <template #label>
-              <p :class="generateImageDisplayTitle ? 'rainbow-text' : ''">
+              <p
+                :style="generateImageDisplayStats ? { color: 'orange' } : {}"
+                class="black-highlight"
+              >
                 {{ $t('drawer.image-display-title') }}
               </p>
             </template>
@@ -150,7 +153,10 @@
             class="generate-image-switch"
           >
             <template #label>
-              <p :class="generateImageDisplayStats ? 'rainbow-text' : ''">
+              <p
+                :style="generateImageDisplayStats ? { color: 'orange' } : {}"
+                class="black-highlight"
+              >
                 {{ $t('drawer.image-display-stats') }}
               </p>
             </template>
@@ -364,7 +370,7 @@ export default defineComponent({
 
 #drawer .generate-image-switch {
   width: 150px;
-  height: 30px;
+  height: 50px;
 
   margin-left: 10px;
 }

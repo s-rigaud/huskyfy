@@ -35,7 +35,7 @@ export default defineComponent({
     // All data needed to customize graph UI and data
     return {
       series: [this.indiePercentage],
-      chartOptions: ({
+      chartOptions: {
         chart: {
           type: 'radialBar',
           offsetY: 0,
@@ -91,7 +91,7 @@ export default defineComponent({
             stops: [-0]
           }
         }
-      } as ApexOptions)
+      } as ApexOptions
     }
   },
   computed: {

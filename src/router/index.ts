@@ -1,3 +1,5 @@
+import { createRouter, createWebHistory } from 'vue-router'
+
 import api from '@/api'
 import { t } from '@/i18n'
 
@@ -9,9 +11,8 @@ import AboutView from '@/views/AboutView.vue'
 import LoginView from '@/views/LoginView.vue'
 import PlaylistExplorer from '@/views/PlaylistExplorer.vue'
 
-import { createRouter, createWebHistory } from 'vue-router'
-const PlaylistDetail = () => import('./views/PlaylistDetail.vue')
-const NotFound404 = () => import('./views/NotFound404.vue')
+const PlaylistDetail = () => import('@/views/PlaylistDetail.vue')
+const NotFound404 = () => import('@/views/NotFound404.vue')
 
 export const ROUTE_NAME_LOGIN = 'Login'
 const routes = [
@@ -54,7 +55,7 @@ const router = createRouter({
 })
 
 // eslint-disable-next-line
-const DEFAULT_USER_PICTURE = (require('@/assets/no-user.png') as string)
+const DEFAULT_USER_PICTURE = require('@/assets/no-user.png') as string
 
 /**
  * Intercept and handle routing logic according to parameters and authentification state.

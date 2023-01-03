@@ -3,8 +3,8 @@ import axios, { AxiosResponse } from 'axios'
 import { useAuthStore } from '@/stores/auth'
 import { SpotifyAuthResponse } from '../types/responses'
 
-const CLIENT_ID: string = (process.env.VUE_APP_SPOTIFY_CLIENT_ID as string)
-const CLIENT_SECRET: string = (process.env.VUE_APP_SPOTIFY_CLIENT_SECRET as string)
+const CLIENT_ID: string = process.env.VUE_APP_SPOTIFY_CLIENT_ID as string
+const CLIENT_SECRET: string = process.env.VUE_APP_SPOTIFY_CLIENT_SECRET as string
 
 const ENCODED_CREDENTIALS = btoa(`${CLIENT_ID}:${CLIENT_SECRET}`)
 const REDIRECT_URL = `${process.env.VUE_APP_BASE_SERVER_URL}/login`
