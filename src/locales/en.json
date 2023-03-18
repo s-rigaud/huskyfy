@@ -143,7 +143,7 @@
         "fully-loaded": "All artists, tracks and genres have been retrieved",
         "load-more-button": "Load all tracks",
         "load-more-playlists": "Load more playlists",
-        "load-more-warning": "Your playlist has more than {limit} tracks, do you want to load all of them ?",
+        "load-more-warning": "Your playlist has more than {limit} tracks, do you want to load the full playlist ({total} tracks) ?",
         "new": {
             "cover": "Updating playlist cover",
             "create": "Creating new playlist",
@@ -181,11 +181,11 @@
             "genres": "Genres",
             "indie": "🌴 Indie",
             "name": "Filters",
-            "no-filter": "No filter",
+            "no-filter": "All",
             "popular": "🔥 Popular",
             "preference": "Liked songs",
-            "only-liked": "♥",
-            "only-not-liked": "♡",
+            "only-liked": "Liked ♥",
+            "only-not-liked": "Not liked ♡",
             "no-valid-tracks": "No track left after filtering",
             "popularity": "Popularity",
             "keyword": {

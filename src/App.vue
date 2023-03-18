@@ -33,6 +33,32 @@ import NavbarComponent from '@/components/NavbarHeader.vue'
 import NotificationProvider from '@/components/NotificationProvider.vue'
 import { locale, t } from '@/i18n'
 
+export default defineComponent({
+  name: 'App',
+  components: { NavbarComponent, NotificationProvider, FooterComponent },
+  setup () {
+    // vue-meta
+    const DESCRIPTION = t('about.website-description')
+    useMeta({
+      htmlAttrs: {
+        lang: locale
+      },
+      og: {
+        description: DESCRIPTION
+      },
+      description: DESCRIPTION
+    })
+
+    // Spotify SDK
+    instantiateSpotifySDK()
+  },
+  data () {
+    return {
+      snackbar: true
+    }
+  }
+})
+
 const instantiateSpotifySDK = () => {
   const script = document.createElement('script')
   script.src = 'https://sdk.scdn.co/spotify-player.js'
@@ -74,32 +100,6 @@ const instantiateSpotifySDK = () => {
     */
   }
 }
-
-export default defineComponent({
-  name: 'App',
-  components: { NavbarComponent, NotificationProvider, FooterComponent },
-  setup () {
-    // vue-meta
-    const DESCRIPTION = t('about.website-description')
-    useMeta({
-      htmlAttrs: {
-        lang: locale
-      },
-      og: {
-        description: DESCRIPTION
-      },
-      description: DESCRIPTION
-    })
-
-    // Spotify SDK
-    instantiateSpotifySDK()
-  },
-  data () {
-    return {
-      snackbar: true
-    }
-  }
-})
 </script>
 <style scoped>
 @font-face {

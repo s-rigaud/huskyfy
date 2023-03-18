@@ -106,7 +106,7 @@ export default defineComponent({
   flex-direction: row;
   flex-wrap: wrap;
   align-content: stretch;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: stretch;
 }
 </style>

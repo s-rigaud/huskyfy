@@ -1,16 +1,9 @@
 <template>
   <!-- Description of all the playlist with all the tracks and filters -->
-  <div
-    v-if="playlist && playlist.total > 0"
-    id="playlist-detail"
-    v-scroll="onScroll"
-  >
+  <div v-if="playlist && playlist.total > 0" id="playlist-detail" v-scroll="onScroll">
     <div id="main-content">
-      <PlaylistMetaDisplay
-        :playlist-id="playlistId"
-        :indie-percentage="indiePercentage"
-        @playlist-updated="resetFilters"
-      />
+      <PlaylistMetaDisplay :playlist-id="playlistId" :indie-percentage="indiePercentage"
+        @playlist-updated="resetFilters" />
 
       <v-expansion-panels variant="accordion">
         <v-expansion-panel>
@@ -25,10 +18,7 @@
         </v-expansion-panel>
 
         <v-expansion-panel>
-          <v-expansion-panel-title
-            id="filter-panel-title"
-            color="var(--link-color)"
-          >
+          <v-expansion-panel-title id="filter-panel-title" color="var(--link-color)">
             <div class="d-flex justify-start">
               Filters
             </div>
@@ -38,75 +28,34 @@
             <div id="filters">
               <div id="selectors">
                 <div id="popularity-select">
-                  <v-select
-                    v-model="selectedPopularity"
-                    :label="$t('track.filters.popularity')"
-                    :items="getVSelectTranslatedPopularities()"
-                    item-title="label"
-                    item-value="value"
-                    variant="outlined"
-                    density="compact"
-                    class="filter-select"
-                  />
+                  <v-select v-model="selectedPopularity" :label="$t('track.filters.popularity')"
+                    :items="getVSelectTranslatedPopularities()" item-title="label" item-value="value" variant="outlined"
+                    density="compact" class="filter-select" />
                 </div>
                 <div id="loved-track-select">
-                  <v-select
-                    v-model="selectedPreference"
-                    :label="$t('track.filters.preference')"
-                    :items="getVSelectTranslatedPreferences()"
-                    item-title="label"
-                    item-value="value"
-                    variant="outlined"
-                    density="compact"
-                    class="filter-select"
-                  />
+                  <v-select v-model="selectedPreference" :label="$t('track.filters.preference')"
+                    :items="getVSelectTranslatedPreferences()" item-title="label" item-value="value" variant="outlined"
+                    density="compact" class="filter-select" />
                 </div>
 
                 <div id="genre-select">
-                  <v-select
-                    v-model="selectedGenres"
-                    :label="$t('track.filters.genres')"
-                    :items="playlistsStore.getTopGenres(playlistId)"
-                    item-title="cap_name"
-                    item-value="name"
-                    variant="outlined"
-                    density="compact"
-                    multiple
-                    class="filter-select"
-                    :menu-props="{ 'maxHeight': '250px' }"
-                  />
+                  <v-select v-model="selectedGenres" :label="$t('track.filters.genres')"
+                    :items="playlistsStore.getTopGenres(playlistId)" item-title="cap_name" item-value="name"
+                    variant="outlined" density="compact" multiple class="filter-select"
+                    :menu-props="{ 'maxHeight': '250px' }" />
                 </div>
                 <div id="artist-select">
-                  <v-select
-                    v-model="selectedArtists"
-                    :label="$t('track.filters.artists')"
-                    :items="getSortedArtists()"
-                    item-title="name"
-                    variant="outlined"
-                    density="compact"
-                    multiple
-                    return-object
-                    :menu-props="{ 'maxHeight': '250px' }"
-                  >
+                  <v-select v-model="selectedArtists" :label="$t('track.filters.artists')" :items="getSortedArtists()"
+                    item-title="name" variant="outlined" density="compact" multiple return-object
+                    :menu-props="{ 'maxHeight': '250px' }">
                     <template #selection="{ item, index }: SlotProps">
-                      <v-chip
-                        v-if="index < 2"
-                        variant="outlined"
-                      >
+                      <v-chip v-if="index < 2" variant="outlined">
                         <v-avatar>
-                          <v-img
-                            rel="preconnect"
-                            width="20"
-                            :src="item.raw.images[0].url"
-                            alt="Spotify artist cover"
-                          />
+                          <v-img rel="preconnect" width="20" :src="item.raw.images[0].url" alt="Spotify artist cover" />
                         </v-avatar>
                         <span>{{ item.raw.name }}</span>
                       </v-chip>
-                      <span
-                        v-if="index === 2"
-                        class="text-grey text-caption align-self-center"
-                      >
+                      <span v-if="index === 2" class="text-grey text-caption align-self-center">
                         (+{{ selectedArtists.length - 2 }} {{ $tc('track.other', selectedArtists.length - 2) }})
                       </span>
                     </template>
@@ -118,54 +67,32 @@
                 <div id="filtering-chips">
                   <div v-if="selectedPopularity !== NO_POPULARITY">
                     <v-scale-transition>
-                      <v-chip
-                        :text="getTextForPopularity(selectedPopularity)"
-                        closable
-                        variant="elevated"
+                      <v-chip :text="getTextForPopularity(selectedPopularity)" closable variant="elevated"
                         :color="getColorForPopularity(selectedPopularity)"
-                        @click:close="selectedPopularity = NO_POPULARITY"
-                      />
+                        @click:close="selectedPopularity = NO_POPULARITY" />
                     </v-scale-transition>
                   </div>
 
                   <div v-if="(selectedPreference !== NO_PREFERENCE)">
                     <v-scale-transition>
-                      <v-chip
-                        :text="getTextForPreference(selectedPreference)"
-                        closable
-                        variant="elevated"
-                        color="black"
-                        @click:close="(selectedPreference = NO_PREFERENCE)"
-                      />
+                      <v-chip :text="getTextForPreference(selectedPreference)" closable variant="elevated" color="black"
+                        @click:close="(selectedPreference = NO_PREFERENCE)" />
                     </v-scale-transition>
                   </div>
 
                   <div v-if="selectedGenres.length > 0">
                     <TransitionGroup name="chips">
-                      <v-chip
-                        v-for="genre in selectedGenres"
-                        :key="genre"
-                        :text="genre.toUpperCase()"
-                        closable
-                        :color="getColorForGenre(genre)"
-                        variant="elevated"
-                        class="genre-filter-chip"
-                        @click:close="selectedGenres = selectedGenres.filter(g => g !== genre)"
-                      />
+                      <v-chip v-for="genre in selectedGenres" :key="genre" :text="genre.toUpperCase()" closable
+                        :color="getColorForGenre(genre)" variant="elevated" class="genre-filter-chip"
+                        @click:close="selectedGenres = selectedGenres.filter(g => g !== genre)" />
                     </TransitionGroup>
                   </div>
 
                   <div v-if="selectedArtists.length > 0">
                     <TransitionGroup name="chips">
-                      <v-chip
-                        v-for="artist in selectedArtists"
-                        :key="artist.name"
-                        closable
-                        color="yellow"
-                        variant="elevated"
-                        class="artist-filter-chip"
-                        @click:close="selectedArtists = selectedArtists.filter(a => a.id != artist.id)"
-                      >
+                      <v-chip v-for="artist in selectedArtists" :key="artist.name" closable color="yellow"
+                        variant="elevated" class="artist-filter-chip"
+                        @click:close="selectedArtists = selectedArtists.filter(a => a.id != artist.id)">
                         <v-avatar left>
                           <v-img :src="getArtistImage(artist)" />
                         </v-avatar>
@@ -177,34 +104,17 @@
 
                 <div>
                   <v-fade-transition>
-                    <v-switch
-                      v-model="isFilterExclusive"
-                      :disabled="numberOfActiveFilters <= 1"
+                    <v-switch v-model="isFilterExclusive" :disabled="numberOfActiveFilters <= 1"
                       color="var(--text-color)"
-                      :label="$t(`track.${isFilterExclusive ? 'exclusive' : 'inclusive'}-filter`)"
-                    />
+                      :label="$t(`track.${isFilterExclusive ? 'exclusive' : 'inclusive'}-filter`)" />
                   </v-fade-transition>
 
-                  <p
-                    v-if="!allTracksLoaded"
-                    id="warning-not-fully-loaded"
-                  >
+                  <p v-if="!allTracksLoaded" id="warning-not-fully-loaded">
                     ⚠️ {{ $t('track.filters.not-fully-loaded') }} ⚠️
                   </p>
-                  <v-badge
-                    id="create-new-playlist"
-                    color="red"
-                    :content="$t('track.filters.try-now')"
-                    :value="-1"
-                  >
-                    <v-btn
-                      id="create-new-playlist-btn"
-                      :disabled="!isDuplicationAllowed"
-                      rounded="pill"
-                      class="rainbow-v-btn"
-                      :loading="processFilterUpdate"
-                      @click="startDuplication = true"
-                    >
+                  <v-badge id="create-new-playlist" color="red" :content="$t('track.filters.try-now')" :value="-1">
+                    <v-btn id="create-new-playlist-btn" :disabled="!isDuplicationAllowed" rounded="pill"
+                      class="rainbow-v-btn" :loading="processFilterUpdate" @click="startDuplication = true">
                       {{ $t("playlist.duplicate.only-with-filter") }}
                     </v-btn>
                   </v-badge>
@@ -221,51 +131,22 @@
           <div id="list-title-embedded">
             <h2>{{ generalTitle }}</h2>
           </div>
-          <v-divider
-            class="mx-4"
-            vertical
-            thickness="0.5"
-            color="white"
-          />
-          <div>
-            <h4
-              v-if="playlistLoaded"
-              id="track-number-title"
-            >
+          <v-divider class="mx-4" vertical thickness="0.5" color="white" />
+          <div id="playlist-track-count-embedded">
+            <h4 v-if="playlistLoaded" id="track-number-title">
               {{ filteredTracks.length }} {{ $tc('track._generic-name', filteredTracks.length) }}
             </h4>
           </div>
         </div>
-        <v-divider
-          thickness="0.5"
-          color="white"
-        />
+        <v-divider thickness="0.5" color="white" />
 
-        <div
-          v-if="playlistLoaded"
-          id="tracks"
-        >
-          <v-list
-            v-if="filteredTracks.length >= 1"
-            style="width: 100%;"
-          >
-            <TrackItem
-              v-for="(track, index) in filteredTracks"
-              :id="track.id"
-              :key="track.id"
-              :name="track.name"
-              :image="track.album.images[0]?.url"
-              :artists="track.artists"
-              :genres="track.genres"
-              :is-indie="track.isIndie"
-              :track-u-r-i="track.uri"
-              :track-index="index"
-            />
+        <div v-if="playlistLoaded" id="tracks">
+          <v-list v-if="filteredTracks.length >= 1" style="width: 100%;">
+            <TrackItem v-for="(track, index) in filteredTracks" :id="track.id" :key="track.id" :name="track.name"
+              :image="track.album.images[0]?.url" :artists="track.artists" :genres="track.genres"
+              :is-indie="track.isIndie" :track-u-r-i="track.uri" :track-index="index" />
           </v-list>
-          <div
-            v-else
-            id="no-track-div"
-          >
+          <div v-else id="no-track-div">
             <p id="no-valid-tracks">
               {{ $t('track.filters.no-valid-tracks') }}
             </p>
@@ -273,70 +154,33 @@
         </div>
 
         <!-- Download loader -->
-        <div
-          v-else
-          id="spinner-block"
-        >
-          <v-progress-circular
-            id="waiting-spinner"
-            :size="70"
-            :width="7"
-            color="var(--text-color)"
-            indeterminate
-          />
+        <div v-else id="spinner-block">
+          <v-progress-circular id="waiting-spinner" :size="70" :width="7" color="var(--text-color)" indeterminate />
         </div>
       </section>
 
-      <v-btn
-        id="scroll-top-button"
-        class="rainbow-v-btn"
-        icon
-        :style="toButtonOpacity"
-        @click="scrollTop"
-      >
+      <v-btn id="scroll-top-button" class="rainbow-v-btn" icon :style="toButtonOpacity" @click="scrollTop">
         <v-icon>mdi-apple-keyboard-control</v-icon>
       </v-btn>
     </div>
 
     <!-- Load more tracks to lazy-load all of them -->
-    <LoadMoreTracksPopup
-      v-if="isHugePlaylist && playlist.tracks.length < playlist.total"
-      :playlist="playlist"
-      :track-request-limit="TRACK_REQUEST_LIMIT"
-      @all-tracks-loaded="() => { resetFilters(); refreshStats() }"
-    />
+    <LoadMoreTracksPopup v-if="isHugePlaylist && playlist.tracks.length < playlist.total" :playlist="playlist"
+      :track-request-limit="TRACK_REQUEST_LIMIT" @all-tracks-loaded="() => { resetFilters(); refreshStats() }" />
   </div>
 
   <!-- No tracks in the playlist -->
-  <div
-    v-else
-    id="no-tracks"
-  >
+  <div v-else id="no-tracks">
     <h1>{{ $t("playlist.no-tracks-title") }}</h1>
     <h2>{{ $t("playlist.no-tracks-subtitle") }}</h2>
-    <v-btn
-      id="open-spotify"
-      variant="outlined"
-      rounded="pill"
-      size="x-large"
-      @click="openPlaylistOnSpotify"
-    >
+    <v-btn id="open-spotify" variant="outlined" rounded="pill" size="x-large" @click="openPlaylistOnSpotify">
       {{ $t("playlist.open-on-spotify") }}
-      <v-img
-        width="25"
-        src="@/assets/spotify.png"
-        alt="Spotify Logo"
-      />
+      <v-img width="25" src="@/assets/spotify.png" alt="Spotify Logo" />
     </v-btn>
   </div>
 
-  <DuplicatorPopup
-    v-if="startDuplication"
-    :playlist-id="playlist.id"
-    :new-tracks="filteredTracks"
-    :filter-tag="filterTag"
-    @on-end="startDuplication = false"
-  />
+  <DuplicatorPopup v-if="startDuplication" :playlist-id="playlist.id" :new-tracks="filteredTracks"
+    :filter-tag="filterTag" @on-end="startDuplication = false" />
 </template>
 
 <script lang="ts">
@@ -400,7 +244,7 @@ export default defineComponent({
       required: true
     }
   },
-  setup (props) {
+  setup(props) {
     const playlistsStore = usePlaylistsStore()
 
     // Shorthand
@@ -419,7 +263,7 @@ export default defineComponent({
       downloadPlaylistTracks
     }
   },
-  data () {
+  data() {
     return {
       TRACK_REQUEST_LIMIT: 150,
 
@@ -451,13 +295,13 @@ export default defineComponent({
     }
   },
   computed: {
-    generalTitle (): string {
+    generalTitle(): string {
       return this.filterTag || this.$t('track.all-tracks')
     },
-    toButtonOpacity (): { opacity: number } {
+    toButtonOpacity(): { opacity: number } {
       return { opacity: (this.displayGoTopButton) ? 100 : 0 }
     },
-    numberOfActiveFilters (): number {
+    numberOfActiveFilters(): number {
       return (
         this.selectedGenres.length +
         this.selectedArtists.length +
@@ -465,10 +309,10 @@ export default defineComponent({
         +(this.selectedPreference !== Preference.NO_PREFERENCE)
       )
     },
-    filteringKeyword (): string {
+    filteringKeyword(): string {
       return this.isFilterExclusive ? this.$t('track.filters.keyword.and') : this.$t('track.filters.keyword.or')
     },
-    filterTag (): string {
+    filterTag(): string {
       return ([] as string[])
         .concat((this.selectedPopularity !== Popularity.NO_POPULARITY) ? [this.getTextForPopularity(this.selectedPopularity)] : [])
         .concat(this.selectedPreference !== Preference.NO_PREFERENCE ? [this.getTextForPreference(this.selectedPreference)] : [])
@@ -477,39 +321,39 @@ export default defineComponent({
         .map(filter => capitalize(filter))
         .join(` ${this.filteringKeyword} `)
     },
-    allTracksLoaded (): boolean {
+    allTracksLoaded(): boolean {
       return this.playlist.tracks.length === this.playlist.total
     },
-    isDuplicationAllowed (): boolean {
+    isDuplicationAllowed(): boolean {
       return this.filteredTracks.length > 0 && this.numberOfActiveFilters > 0
     }
   },
   watch: {
-    async selectedPopularity () {
+    async selectedPopularity() {
       await this.applyFilters()
     },
-    async selectedPreference () {
+    async selectedPreference() {
       await this.applyFilters()
     },
-    async selectedArtists (currentArtists: SpotifyArtist[], previousArtists: SpotifyArtist[]) {
+    async selectedArtists(currentArtists: SpotifyArtist[], previousArtists: SpotifyArtist[]) {
       if (previousArtists.length !== 0 || currentArtists.length !== 0) {
         await this.applyFilters()
       }
     },
-    async selectedGenres (currentGenres: string[], previousGenres: string[]) {
+    async selectedGenres(currentGenres: string[], previousGenres: string[]) {
       if (previousGenres.length !== 0 || currentGenres.length !== 0) {
         await this.applyFilters()
       }
     },
-    async isFilterExclusive () {
+    async isFilterExclusive() {
       await this.applyFilters()
     },
-    isDuplicationAllowed (isAllowed: boolean) {
+    isDuplicationAllowed(isAllowed: boolean) {
       // Toggle UI badge (no clean way in Vuetify API)
       this.displayDuplicateBadge = isAllowed ? 'block' : 'none'
     }
   },
-  async mounted () {
+  async mounted() {
     this.TRACK_REQUEST_LIMIT = API_TRACK_LIMIT * 3
     if (this.playlist.id === MY_MUSIC_PLAYLIST_ID) {
       // Ensure to retrieve real track count for special endpoint
@@ -520,10 +364,10 @@ export default defineComponent({
     this.filteredTracks = this.playlist.tracks
   },
   methods: {
-    onScroll () {
+    onScroll() {
       this.displayGoTopButton = (window.scrollY > 100)
     },
-    async loadFirstTracks () {
+    async loadFirstTracks() {
       // Only asking for the right number of tracks as we already know how many tracks are in the playlist
       const maxLimit = Math.min(this.TRACK_REQUEST_LIMIT, this.playlist.total)
       await this.downloadPlaylistTracks(this.playlistId, maxLimit)
@@ -534,17 +378,17 @@ export default defineComponent({
       this.indiePercentage = this.getIndiePercentage()
       this.resetFilters()
     },
-    refreshStats () {
+    refreshStats() {
       this.topGenres = this.getTopGenres()
       this.indiePercentage = this.getIndiePercentage()
     },
-    getIndiePercentage (): number {
+    getIndiePercentage(): number {
       return this.playlistsStore.getIndiePercentage(this.playlistId)
     },
     /**
      * Filters all the tracks according to the filters chosen by the user
      */
-    async applyFilters () {
+    async applyFilters() {
       this.processFilterUpdate = true
 
       if (this.numberOfActiveFilters === 0) {
@@ -616,22 +460,22 @@ export default defineComponent({
     /**
      * Mix two list of Spotify tracks to form a set of all elements
      */
-    addTracksConserveUnicity (filteredTracks: SpotifyTrack[], newFilteredTracks: SpotifyTrack[]) {
+    addTracksConserveUnicity(filteredTracks: SpotifyTrack[], newFilteredTracks: SpotifyTrack[]) {
       const alreadyKnownTrackIds = filteredTracks.map(t => t.id)
       const tracksToAdd = newFilteredTracks.filter(t => !alreadyKnownTrackIds.includes(t.id))
       filteredTracks.push(...tracksToAdd)
     },
-    resetFilters () {
+    resetFilters() {
       this.selectedGenres = []
       this.selectedArtists = []
       this.selectedPopularity = Popularity.NO_POPULARITY
       this.selectedPreference = Preference.NO_PREFERENCE
       this.filteredTracks = this.playlist.tracks
     },
-    openPlaylistOnSpotify () {
+    openPlaylistOnSpotify() {
       window.location.href = this.playlist.uri
     },
-    getSortedArtists (): SpotifyArtist[] {
+    getSortedArtists(): SpotifyArtist[] {
       // Need to have a set of object in JS ...
       const alreadyAddedArtistIds: string[] = []
       const artistsToReturn: SpotifyArtist[] = []
@@ -646,10 +490,10 @@ export default defineComponent({
       }
       return artistsToReturn.sort((a1, a2) => a1.name.localeCompare(a2.name))
     },
-    scrollTop () {
+    scrollTop() {
       window.scrollTo({ top: 0, behavior: 'smooth' })
     },
-    getTextForPopularity (popularity: Popularity): string {
+    getTextForPopularity(popularity: Popularity): string {
       const allPopularities: Record<Popularity, string> = {
         Indie: this.$t('track.filters.indie'),
         Popular: this.$t('track.filters.popular'),
@@ -657,14 +501,14 @@ export default defineComponent({
       }
       return allPopularities[popularity]
     },
-    getVSelectTranslatedPopularities (): { label: string, value: Popularity }[] {
+    getVSelectTranslatedPopularities(): { label: string, value: Popularity }[] {
       return [
         { label: this.$t('track.filters.no-filter'), value: Popularity.NO_POPULARITY },
         { label: this.$t('track.filters.indie'), value: Popularity.Indie },
         { label: this.$t('track.filters.popular'), value: Popularity.Popular }
       ]
     },
-    getTextForPreference (preference: Preference): string {
+    getTextForPreference(preference: Preference): string {
       const allPreference: Record<Preference, string> = {
         'All tracks': this.$t('track.filters.no-filter'),
         'Only liked': this.$t('track.filters.only-liked'),
@@ -672,7 +516,7 @@ export default defineComponent({
       }
       return allPreference[preference]
     },
-    getVSelectTranslatedPreferences (): { label: string, value: Preference }[] {
+    getVSelectTranslatedPreferences(): { label: string, value: Preference }[] {
       return [
         { label: this.$t('track.filters.no-filter'), value: Preference.NO_PREFERENCE },
         { label: this.$t('track.filters.only-liked'), value: Preference.ONLY_LIKED },
@@ -682,19 +526,19 @@ export default defineComponent({
     /**
      * Returns only top genres sorted by most to least popular
      */
-    getTopGenres (): Genre[] {
+    getTopGenres(): Genre[] {
       const limit = (window.innerWidth > 500) ? 25 : 10
       return this.playlistsStore.getTopGenres(this.playlistId, limit)
     },
-    getColorForPopularity (popularity: Popularity): string {
+    getColorForPopularity(popularity: Popularity): string {
       if (popularity === Popularity.Indie) return 'green'
       if (popularity === Popularity.Popular) return 'red'
       return '#ddd'
     },
-    getColorForGenre (genre: string): string {
+    getColorForGenre(genre: string): string {
       return this.playlistsStore.genreColorMapping[genre]
     },
-    getArtistImage (artist: SpotifyArtist): string {
+    getArtistImage(artist: SpotifyArtist): string {
       return artist.images[0]?.url || require('@/assets/no-user.png')
     }
   }
@@ -927,6 +771,10 @@ export default defineComponent({
 #list-title-embedded {
   width: 100%;
   padding-left: 10px;
+}
+
+#playlist-track-count-embedded {
+  min-width: 70px;
 }
 
 #track-number-title {

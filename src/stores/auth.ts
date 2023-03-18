@@ -13,12 +13,12 @@ type AuthState = {
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    stateAuthorizationCode: useStorage('stateAuthorizationCode', ''),
-    temporaryToken: useStorage('temporaryToken', ''),
-    accessToken: useStorage('accessToken', ''),
-    refreshToken: useStorage('refreshToken', ''),
-    codeVerifier: useStorage('codeVerifier', ''),
-    secretCodeChallenge: useStorage('secretCodeChallenge', '')
+    stateAuthorizationCode: useStorage('auth.stateAuthorizationCode', ''),
+    temporaryToken: useStorage('auth.temporaryToken', ''),
+    accessToken: useStorage('auth.accessToken', ''),
+    refreshToken: useStorage('auth.refreshToken', ''),
+    codeVerifier: useStorage('auth.codeVerifier', ''),
+    secretCodeChallenge: useStorage('auth.secretCodeChallenge', '')
   } as AuthState),
   actions: {
     reset () {

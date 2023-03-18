@@ -13,11 +13,11 @@ export type UserState = {
 // All info about the user
 export const useUserStore = defineStore('user', {
   state: () => ({
-    id: useStorage('id', ''),
-    username: useStorage('username', ''),
-    profilePicture: useStorage('profilePicture', ''),
-    connected: useStorage('connected', false),
-    locale: useStorage('locale', locale)
+    id: useStorage('user.id', ''),
+    username: useStorage('user.username', ''),
+    profilePicture: useStorage('user.profilePicture', ''),
+    connected: useStorage('user.connected', false),
+    locale: useStorage('user.locale', locale)
   } as UserState),
   actions: {
     reset () {

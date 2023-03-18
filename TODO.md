@@ -29,6 +29,6 @@
 
 ## NPM package issues
 
-* **axios 1.2.2** ==> A lot of TS definition moves, need to wait for a proper migration guide to update (introdces multiple changes and bug in the project)
+* **axios 1.2.2** ==> A lot of TS definition moves, need to wait for a proper migration guide to update (introduces multiple changes and bug in the project)
 
 * **@vueuse/core 9.9.0** ==> Change the way reactive works, can do not trigger update for reactive object using Pinia state

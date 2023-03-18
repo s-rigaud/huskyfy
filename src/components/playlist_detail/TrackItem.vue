@@ -1,31 +1,13 @@
 <template>
-  <v-lazy
-    v-model="isActive"
-    min-height="100"
-    transition="fade-transition"
-  >
-    <v-list-item
-      class="track-item"
-      :style="trackAnimationDelay"
-      link
-      @click="openTrackOnSpotify"
-    >
+  <v-lazy min-height="100" transition="fade-transition" :options="{ root: root, rootMargin: '150px' }">
+    <v-list-item class="track-item" :style="trackAnimationDelay" link @click="openTrackOnSpotify">
       <template #prepend>
         <p class="track-index">
           {{ trackIndex + 1 }}
         </p>
-        <v-avatar
-          class="ma-3 track-image"
-          size="90"
-          rounded="0"
-        >
-          <v-img
-            rel="preconnect"
-            :src="image"
-            lazy-src="@/assets/default_cover.jpg"
-            alt="Cover image"
-            :option="{ rootMargin: '0px 100px 0px 0px' }"
-          />
+        <v-avatar class="ma-3 track-image" size="90" rounded="0">
+          <v-img rel="preconnect" :src="image" lazy-src="@/assets/default_cover.jpg" alt="Cover image"
+            :option="{ rootMargin: '0px 100px 0px 0px' }" />
         </v-avatar>
       </template>
 
@@ -33,81 +15,32 @@
         {{ name }}
       </v-list-item-title>
       <div class="second-line">
-        <div
-          v-for="(artist, index) in artists"
-          :key="artist.id"
-          class="artist-names"
-          @click.stop="openArtistOnSpotify(artist)"
-        >
-          <v-list-item-subtitle
-            v-ripple.stop
-            class="artist-name text-truncate"
-          >
+        <div v-for="(artist, index) in artists" :key="artist.id" class="artist-names"
+          @click.stop="openArtistOnSpotify(artist)">
+          <v-list-item-subtitle v-ripple.stop class="artist-name text-truncate">
             {{ addCommaDivider(artist.name, index) }}
           </v-list-item-subtitle>
         </div>
-        <v-chip
-          v-if="isIndie"
-          :text="$tc('track.indie', artists.length)"
-          color="green"
-          label
-          text-color="white"
-          size="small"
-          class="popularity-chip"
-        />
-        <v-chip
-          v-else
-          :text="$tc('track.popular', artists.length)"
-          color="cyan"
-          label
-          size="small"
-          class="popularity-chip"
-        />
+        <v-chip v-if="isIndie" :text="$tc('track.indie', artists.length)" color="green" label text-color="white"
+          size="small" class="popularity-chip" />
+        <v-chip v-else :text="$tc('track.popular', artists.length)" color="cyan" label size="small"
+          class="popularity-chip" />
       </div>
 
-      <div
-        v-if="genres.length > 0"
-        class="chips"
-      >
-        <v-chip
-          v-for="(genre, index) in genres.slice(0, genresToDisplayCount)"
-          :key="genre"
-          :text="genre.toUpperCase()"
-          label
-          variant="elevated"
-          size="small"
-          class="genre-chip"
-          :style="getGenreAnimationDelay(index)"
-          :color="getColorForGenre(genre)"
-        />
-        <v-chip
-          v-if="genres.length > genresToDisplayCount && !displayAllGenres"
-          label
-          size="small"
-          text="+"
-          class="genre-chip"
-          variant="elevated"
-          :style="getGenreAnimationDelay(genresToDisplayCount)"
-          @click.stop="displayAllGenres = true"
-        />
+      <div v-if="genres.length > 0" class="chips">
+        <v-chip v-for="(genre, index) in genres.slice(0, genresToDisplayCount)" :key="genre" :text="genre.toUpperCase()"
+          label variant="elevated" size="small" class="genre-chip" :style="getGenreAnimationDelay(index)"
+          :color="getColorForGenre(genre)" />
+        <v-chip v-if="genres.length > genresToDisplayCount && !displayAllGenres" label size="small" text="+"
+          class="genre-chip" variant="elevated" :style="getGenreAnimationDelay(genresToDisplayCount)"
+          @click.stop="displayAllGenres = true" />
         <div v-if="displayAllGenres">
-          <v-chip
-            v-for="(genre, index) in genres.slice(genresToDisplayCount)"
-            :key="genre"
-            :text="genre.toUpperCase()"
-            label
-            size="small"
-            class="genre-chip"
-            variant="elevated"
-            :style="getGenreAnimationDelay(index)"
-            :color="getColorForGenre(genre)"
-          />
+          <v-chip v-for="(genre, index) in genres.slice(genresToDisplayCount)" :key="genre" :text="genre.toUpperCase()"
+            label size="small" class="genre-chip" variant="elevated" :style="getGenreAnimationDelay(index)"
+            :color="getColorForGenre(genre)" />
         </div>
       </div>
-      <v-list-item-subtitle
-        v-else
-        style="min-height: 20px;"
-      >
+      <v-list-item-subtitle v-else style="min-height: 20px;">
         {{ $t("track.no-genre") }}
       </v-list-item-subtitle>
     </v-list-item>
@@ -156,30 +89,25 @@ export default defineComponent({
       required: true
     }
   },
-  setup () {
+  setup() {
     const playlistsStore = usePlaylistsStore()
     return { playlistsStore }
   },
-  data () {
+  data() {
     return {
       displayAllGenres: false,
       genresToDisplayCount: 2,
-      isActive: false
+      root: document.getElementById("")
     }
   },
   computed: {
     // Delay animation so items appear one after another
-    trackAnimationDelay (): { 'animation-delay': string } {
+    trackAnimationDelay(): { 'animation-delay': string } {
       const delay = (this.trackIndex < 5) ? `${300 * this.trackIndex}ms` : '0ms'
       return { 'animation-delay': delay }
     }
   },
-  watch: {
-    isActive (newValue: boolean) {
-      console.log(newValue)
-    }
-  },
-  mounted () {
+  mounted() {
     let genreToDisplay = 2
     if (window.innerWidth > 900) genreToDisplay = 8
     else if (window.innerWidth > 700) genreToDisplay = 6
@@ -190,19 +118,19 @@ export default defineComponent({
     /**
      * ? Might have preferred a CSS :before divider
      */
-    addCommaDivider (artistName: string, index: number): string {
+    addCommaDivider(artistName: string, index: number): string {
       return (index === this.artists.length - 1) ? artistName : `${artistName},`
     },
-    getGenreAnimationDelay (index: number): { 'animation-delay': string } {
+    getGenreAnimationDelay(index: number): { 'animation-delay': string } {
       return { 'animation-delay': `${index * 400}ms` }
     },
-    openTrackOnSpotify () {
+    openTrackOnSpotify() {
       window.location.href = this.trackURI
     },
-    openArtistOnSpotify (artist: SpotifyArtist) {
+    openArtistOnSpotify(artist: SpotifyArtist) {
       window.location.href = artist.uri
     },
-    getColorForGenre (genre: string): string {
+    getColorForGenre(genre: string): string {
       return this.playlistsStore.genreColorMapping[genre]
     }
   }
