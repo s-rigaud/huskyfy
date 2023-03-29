@@ -1,43 +1,97 @@
 <template>
-  <v-card v-if="playlistId" id="playlist-card">
+  <v-card
+    v-if="playlistId"
+    id="playlist-card"
+  >
     <div id="playlist-meta">
       <div id="playlist-meta-left">
-        <div id="playlist-image" @click="openPlaylistOnSpotify">
-          <v-img :src="playlist.images[0].url" lazy-src="@/assets/default_cover.jpg" alt="Cover image" cover
-            rel="preconnect" width="90" />
+        <div
+          id="playlist-image"
+          @click="openPlaylistOnSpotify"
+        >
+          <v-img
+            :src="playlist.images[0].url"
+            lazy-src="@/assets/default_cover.jpg"
+            alt="Cover image"
+            cover
+            rel="preconnect"
+            width="90"
+          />
         </div>
         <div id="title-container">
-          <v-text-field v-if="userOwnsPlaylist && !isMyMusicPlaylist" id="playlist-name" v-model="playlistNameText"
-            :label="$t('playlist.name')" variant="outlined" color="var(--text-color)" density="compact"
+          <v-text-field
+            v-if="userOwnsPlaylist && !isMyMusicPlaylist"
+            id="playlist-name"
+            v-model="playlistNameText"
+            :label="$t('playlist.name')"
+            variant="outlined"
+            color="var(--text-color)"
+            density="compact"
             :loading="playlist.name !== playlistNameText && !nameUpdatedInAPI"
-            :append-inner-icon="nameUpdatedInAPI && playlist.name === playlistNameText ? 'mdi-check-circle-outline' : ''" />
-          <h4 v-else id="simplified-title" class="rainbow-text">
+            :append-inner-icon="nameUpdatedInAPI && playlist.name === playlistNameText ? 'mdi-check-circle-outline' : ''"
+          />
+          <h4
+            v-else
+            id="simplified-title"
+            class="rainbow-text"
+          >
             {{ playlist.name }}
           </h4>
           <div id="visibility-and-meta">
             <p> {{ getTextFromVisibility }} </p>
-            <v-tooltip :text="$t('playlist.contains-episodes-explanations')" class="rainbow-tooltip" location="bottom">
+            <v-tooltip
+              :text="$t('playlist.contains-episodes-explanations')"
+              class="rainbow-tooltip"
+              location="bottom"
+            >
               <template #activator="{ props }">
-                <v-chip v-if="playlistContainsEpisodes" prepend-icon="mdi-alert" color="#f1c40f" size="small"
-                  variant="elevated" v-bind="props" link>
+                <v-chip
+                  v-if="playlistContainsEpisodes"
+                  prepend-icon="mdi-alert"
+                  color="#f1c40f"
+                  size="small"
+                  variant="elevated"
+                  v-bind="props"
+                  link
+                >
                   {{ $t('playlist.contains-episodes') }}
                 </v-chip>
               </template>
             </v-tooltip>
-            <v-tooltip :text="$t('playlist.contains-local-tracks-explanations')" class="rainbow-tooltip"
-              location="bottom">
+            <v-tooltip
+              :text="$t('playlist.contains-local-tracks-explanations')"
+              class="rainbow-tooltip"
+              location="bottom"
+            >
               <template #activator="{ props }">
-                <v-chip v-if="playlistContainsLocalTracks" prepend-icon="mdi-alert" color="#f1c40f" size="small"
-                  variant="elevated" v-bind="props" link>
+                <v-chip
+                  v-if="playlistContainsLocalTracks"
+                  prepend-icon="mdi-alert"
+                  color="#f1c40f"
+                  size="small"
+                  variant="elevated"
+                  v-bind="props"
+                  link
+                >
                   {{ $t('playlist.contains-local-tracks') }}
                 </v-chip>
               </template>
             </v-tooltip>
-            <v-tooltip :text="$t('playlist.contains-duplicated-tracks-explanations')" class="rainbow-tooltip"
-              location="bottom">
+            <v-tooltip
+              :text="$t('playlist.contains-duplicated-tracks-explanations')"
+              class="rainbow-tooltip"
+              location="bottom"
+            >
               <template #activator="{ props }">
-                <v-chip v-if="playlistContainsDuplicatedTracks" prepend-icon="mdi-alert" color="#f1c40f" size="small"
-                  variant="elevated" v-bind="props" link>
+                <v-chip
+                  v-if="playlistContainsDuplicatedTracks"
+                  prepend-icon="mdi-alert"
+                  color="#f1c40f"
+                  size="small"
+                  variant="elevated"
+                  v-bind="props"
+                  link
+                >
                   {{ $t('playlist.contains-duplicated-tracks') }}
                 </v-chip>
               </template>
@@ -45,19 +99,36 @@
           </div>
           <p id="playlist-owner">
             {{ $t("playlist.created-by") }}
-            <span id="playlist-owner-name" @click.stop="openPlaylistOwnerSpotifyProfile">
+            <span
+              id="playlist-owner-name"
+              @click.stop="openPlaylistOwnerSpotifyProfile"
+            >
               {{ usernameToDisplay }}
             </span>
           </p>
-          <p v-if="allTracksLoaded" id="percentage-row" :style="colorForPercentage">
+          <p
+            v-if="allTracksLoaded"
+            id="percentage-row"
+            :style="colorForPercentage"
+          >
             <span>{{ $t("playlist.indie-score-text") }}</span>
             <!-- Only if all tracks are loaded -->
-            <span style="margin: 0px 5px;" class="black-highlight">
+            <span
+              style="margin: 0px 5px;"
+              class="black-highlight"
+            >
               {{ ` ${indiePercentage}` }} %
             </span>
-            <v-tooltip :text="$t('playlist.explanation-indie-score')" class="rainbow-tooltip">
+            <v-tooltip
+              :text="$t('playlist.explanation-indie-score')"
+              class="rainbow-tooltip"
+            >
               <template #activator="{ props }">
-                <v-btn id="help-indie-percentage" :style="colorForPercentage" v-bind="props">
+                <v-btn
+                  id="help-indie-percentage"
+                  :style="colorForPercentage"
+                  v-bind="props"
+                >
                   <v-icon size="x-small">
                     mdi-help
                   </v-icon>
@@ -67,9 +138,17 @@
           </p>
         </div>
       </div>
-      <v-tooltip :text="$t('playlist.explanation-indie-score')" class="rainbow-tooltip" location="bottom">
+      <v-tooltip
+        :text="$t('playlist.explanation-indie-score')"
+        class="rainbow-tooltip"
+        location="bottom"
+      >
         <template #activator="{ props }">
-          <IndieChart v-bind="props" :indie-percentage="indiePercentage" class="playlist-meta-middle" />
+          <IndieChart
+            v-bind="props"
+            :indie-percentage="indiePercentage"
+            class="playlist-meta-middle"
+          />
         </template>
       </v-tooltip>
       <div id="playlist-meta-right">
@@ -91,26 +170,55 @@
       <p v-if="formattedDescription">
         {{ formattedDescription }}
       </p>
-      <p v-else class="font-italic">
+      <p
+        v-else
+        class="font-italic"
+      >
         {{ $t('playlist.no-description') }}
       </p>
     </v-card-text>
 
-    <v-badge id="burger-button-badge" color="red" dot>
-      <v-icon id="burger-button" icon="mdi-menu" color="var(--text-color)" size="x-large" class="highlight-icon"
-        @click="() => { drawer = !drawer; displayBurgerMenuBadge = 'none' }" />
+    <v-badge
+      id="burger-button-badge"
+      color="red"
+      dot
+    >
+      <v-icon
+        id="burger-button"
+        icon="mdi-menu"
+        color="var(--text-color)"
+        size="x-large"
+        class="highlight-icon"
+        @click="() => { drawer = !drawer; displayBurgerMenuBadge = 'none' }"
+      />
     </v-badge>
 
-    <v-tooltip location="bottom end" :text="$t('playlist.open-on-spotify')" class="rainbow-tooltip">
+    <v-tooltip
+      location="bottom end"
+      :text="$t('playlist.open-on-spotify')"
+      class="rainbow-tooltip"
+    >
       <template #activator="{ props }">
-        <v-img id="spotify-logo-meta-small" src="@/assets/spotify.png" alt="Spotify Logo" rel="preconnect" width="40"
-          v-bind="props" class="highlight-icon" @click="openPlaylistOnSpotify" />
+        <v-img
+          id="spotify-logo-meta-small"
+          src="@/assets/spotify.png"
+          alt="Spotify Logo"
+          rel="preconnect"
+          width="40"
+          v-bind="props"
+          class="highlight-icon"
+          @click="openPlaylistOnSpotify"
+        />
       </template>
     </v-tooltip>
   </v-card>
 
-  <ActionDrawer :open="drawer" :playlist-id="playlistId" @on-close="drawer = false"
-    @on-sort-end="() => { $emit('playlistUpdated'); drawer = false }" />
+  <ActionDrawer
+    :open="drawer"
+    :playlist-id="playlistId"
+    @on-close="drawer = false"
+    @on-sort-end="() => { $emit('playlistUpdated'); drawer = false }"
+  />
 </template>
 
 <script lang="ts">
@@ -142,7 +250,7 @@ export default defineComponent({
     }
   },
   emits: ['playlistUpdated'],
-  setup(props) {
+  setup (props) {
     const playlistsStore = usePlaylistsStore()
 
     // Shorthand
@@ -157,7 +265,7 @@ export default defineComponent({
       currentUserUsername
     }
   },
-  data() {
+  data () {
     return {
       drawer: false,
       displayBurgerMenuBadge: 'block',
@@ -176,7 +284,7 @@ export default defineComponent({
     }
   },
   computed: {
-    getTextFromVisibility(): string {
+    getTextFromVisibility (): string {
       let visibility: string
       if (this.playlist.collaborative) visibility = 'collaborative'
       else if (this.playlist.public) visibility = 'public'
@@ -184,18 +292,18 @@ export default defineComponent({
 
       return this.$t(`playlist.${visibility}`) + ' ' + this.$t(`_emojis.${visibility}`)
     },
-    usernameToDisplay(): string {
+    usernameToDisplay (): string {
       const playlistCreator = this.playlist.owner.display_name
       return this.currentUserUsername === playlistCreator ? this.$t('playlist.you') : playlistCreator
     },
-    allTracksLoaded(): boolean {
+    allTracksLoaded (): boolean {
       return this.playlist.tracks.length === this.playlist.total
     },
-    colorForPercentage(): { color: string } {
+    colorForPercentage (): { color: string } {
       const color = getAverageColor(LOWEST_VALUE_COLOR, HIGHEST_VALUE_COLOR, this.indiePercentage)
       return { color }
     },
-    formattedDescription(): string {
+    formattedDescription (): string {
       return (
         this.playlist.description
           // Remove html markups from content
@@ -206,31 +314,31 @@ export default defineComponent({
           .replace(/&#x2F;/ig, '/')
       )
     },
-    userOwnsPlaylist(): boolean {
+    userOwnsPlaylist (): boolean {
       return this.currentUserUsername === this.playlist.owner.display_name
     },
-    isMyMusicPlaylist(): boolean {
+    isMyMusicPlaylist (): boolean {
       return this.playlist.id === MY_MUSIC_PLAYLIST_ID
     },
-    playlistContainsLocalTracks(): boolean {
+    playlistContainsLocalTracks (): boolean {
       return this.playlist.containsLocalTracks
     },
-    playlistContainsEpisodes(): boolean {
+    playlistContainsEpisodes (): boolean {
       return this.playlist.containsEpisodes
     },
-    playlistContainsDuplicatedTracks(): boolean {
+    playlistContainsDuplicatedTracks (): boolean {
       return this.playlist.containsDuplicatedTracks
     }
   },
   watch: {
-    playlistNameText(currentText: string) {
+    playlistNameText (currentText: string) {
       if (currentText && currentText !== this.playlist.name && this.updatePlaylistNameDebounced) {
         this.nameUpdatedInAPI = false
         this.updatePlaylistNameDebounced()
       }
     }
   },
-  beforeMount() {
+  beforeMount () {
     this.updatePlaylistNameDebounced = debounce(
       async () => {
         await this.playlistsStore.updatePlaylistName(this.playlistId, this.playlistNameText)
@@ -240,17 +348,17 @@ export default defineComponent({
     )
     this.playlistNameText = this.playlist.name
   },
-  mounted() {
+  mounted () {
     setTimeout(() => gsap.to(this, { duration: 3, playlistTrackCount: this.playlist.total }), 2000)
   },
   methods: {
-    openPlaylistOnSpotify() {
+    openPlaylistOnSpotify () {
       window.location.href = this.playlist.uri
     },
-    openPlaylistOwnerSpotifyProfile() {
+    openPlaylistOwnerSpotifyProfile () {
       window.location.href = this.playlist.owner.uri
     },
-    getPlaylistDuration(): string {
+    getPlaylistDuration (): string {
       return this.playlistsStore.getPlaylistFullLength(this.playlistId)
     }
   }

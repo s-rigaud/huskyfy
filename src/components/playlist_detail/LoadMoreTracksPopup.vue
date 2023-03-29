@@ -1,19 +1,35 @@
 <template>
   <!-- Ask the user if he really want to load all the tracks for a huge playlist (> 150 tracks) -->
   <!-- This allow to lazy load playlist tracks -->
-  <v-snackbar id="load-more-snackbar" v-model="isVisible" :timeout="timeout" :color="color">
-    <div v-if="!isLoaded" id="ask-and-load">
+  <v-snackbar
+    id="load-more-snackbar"
+    v-model="isVisible"
+    :timeout="timeout"
+    :color="color"
+  >
+    <div
+      v-if="!isLoaded"
+      id="ask-and-load"
+    >
       <div id="loading-create-new-playlist">
         <p class="rainbow-text">
           {{ $t("playlist.load-more-warning", { limit: playlist.offset, total: playlist.total }) }}
         </p>
       </div>
-      <v-btn id="load-more-button" class="rainbow-v-btn" :loading="waitingForResponse" @click="loadAllTracks">
+      <v-btn
+        id="load-more-button"
+        class="rainbow-v-btn"
+        :loading="waitingForResponse"
+        @click="loadAllTracks"
+      >
         {{ $t("playlist.load-more-button") }}
       </v-btn>
     </div>
 
-    <div v-else id="loaded">
+    <div
+      v-else
+      id="loaded"
+    >
       {{ $t("playlist.fully-loaded") }}
       <v-icon icon="mdi-checkbox-marked-circle" />
     </div>
@@ -39,13 +55,13 @@ export default defineComponent({
     }
   },
   emits: ['allTracksLoaded'],
-  setup() {
+  setup () {
     const playlistsStore = usePlaylistsStore()
     const { downloadPlaylistTracks } = playlistsStore
 
     return { downloadPlaylistTracks, playlistsStore }
   },
-  data() {
+  data () {
     return {
       isVisible: true,
 
@@ -54,10 +70,10 @@ export default defineComponent({
     }
   },
   computed: {
-    color(): string {
+    color (): string {
       return this.isLoaded ? 'green' : 'black'
     },
-    timeout(): number {
+    timeout (): number {
       return this.isLoaded ? 3000 : -1
     }
   },
@@ -66,7 +82,7 @@ export default defineComponent({
      * Download tracks from Spotify API and add them to localStorage.
      * Then, it emits to notify parent component.
      */
-    async loadAllTracks() {
+    async loadAllTracks () {
       this.waitingForResponse = true
       // Arbitrary
       if (this.playlist.total > 500) {

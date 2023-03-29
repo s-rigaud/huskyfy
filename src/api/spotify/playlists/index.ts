@@ -32,7 +32,7 @@ export default {
   /**
    *  Retrieve playlists from the current logged user
    */
-  getUserPlaylists(limit: number, offset: number): Promise<AxiosResponse<SpotifyGetPlaylistResponse, SpotifyGetPlaylistResponse>> {
+  getUserPlaylists (limit: number, offset: number): Promise<AxiosResponse<SpotifyGetPlaylistResponse, SpotifyGetPlaylistResponse>> {
     return request.get('me/playlists', {
       params: {
         limit,
@@ -43,7 +43,7 @@ export default {
   /**
    * Return tracks for a playlist
    */
-  getPlaylistTracks(playlistId: string, limit: number, offset: number): Promise<AxiosResponse<SpotifyTrackResponse, SpotifyTrackResponse>> {
+  getPlaylistTracks (playlistId: string, limit: number, offset: number): Promise<AxiosResponse<SpotifyTrackResponse, SpotifyTrackResponse>> {
     return request.get(`playlists/${playlistId}/tracks`, {
       params: {
         limit,
@@ -56,7 +56,7 @@ export default {
   /**
    * Return tracks from the special "Your music" playlist
    */
-  async getUserSavedTracks(limit: number, offset: number): Promise<AxiosResponse<SpotifyTrackResponse, SpotifyTrackResponse>> {
+  async getUserSavedTracks (limit: number, offset: number): Promise<AxiosResponse<SpotifyTrackResponse, SpotifyTrackResponse>> {
     return await request.get('me/tracks', {
       params: {
         limit,
@@ -67,7 +67,7 @@ export default {
   /**
    * Create new empty playlist
    */
-  async createPlaylist(name: string, description: string, public_: boolean, collaborative: boolean): Promise<AxiosResponse<SimplifiedSpotifyPlaylist, SimplifiedSpotifyPlaylist>> {
+  async createPlaylist (name: string, description: string, public_: boolean, collaborative: boolean): Promise<AxiosResponse<SimplifiedSpotifyPlaylist, SimplifiedSpotifyPlaylist>> {
     const userStore = useUserStore()
     const userId = userStore.id
 
@@ -81,7 +81,7 @@ export default {
   /**
    * Add new cover to a playlist
    */
-  updatePlaylistCover(playlistId: string, coverUrl: string) {
+  updatePlaylistCover (playlistId: string, coverUrl: string) {
     const uploadImage: Callback = (base64cover: string) => {
       const bytesNoMetadata = base64cover.split(',')[1]
       request.put(`playlists/${playlistId}/images`, bytesNoMetadata, {
@@ -93,7 +93,7 @@ export default {
   /**
    * Unfollow a specific playlist
    */
-  unfollowPlaylist(playlistId: string): Promise<AxiosResponse<null, null>> {
+  unfollowPlaylist (playlistId: string): Promise<AxiosResponse<null, null>> {
     return request.delete(`playlists/${playlistId}/followers`)
   },
   /**
@@ -101,7 +101,7 @@ export default {
    * ! API limit is 100 tracks per request
    * @returns last snapshot id
    */
-  async addTracksToPlaylist(playlistId: string, trackIds: string[]): Promise<string | undefined> {
+  async addTracksToPlaylist (playlistId: string, trackIds: string[]): Promise<string | undefined> {
     let response: AxiosResponse<{ snapshot_id: string }, { snapshot_id: string }> | null = null
 
     for (const trackBucket of chunkArray(trackIds, 100)) {
@@ -114,20 +114,20 @@ export default {
   /**
    * Update playlist privacy, the playlist is either public or private
    */
-  updatePlaylistPrivacy(playlistId: string, isPublic: boolean): Promise<AxiosResponse<null, null>> {
+  updatePlaylistPrivacy (playlistId: string, isPublic: boolean): Promise<AxiosResponse<null, null>> {
     return request.put(`/playlists/${playlistId}`, { public: isPublic })
   },
   /**
    * Update playlist name
    */
-  updatePlaylistName(playlistId: string, name: string): Promise<AxiosResponse<null, null>> {
+  updatePlaylistName (playlistId: string, name: string): Promise<AxiosResponse<null, null>> {
     return request.put(`/playlists/${playlistId}`, { name })
   },
   /**
    * Delete all specified tracks from a playlist
    * ! API limit is 100 tracks per request
    */
-  async deleteTracks(playlistId: string, playlistTracks: SpotifyTrack[]) {
+  async deleteTracks (playlistId: string, playlistTracks: SpotifyTrack[]) {
     const formattedTracks = []
     for (const track of playlistTracks) {
       formattedTracks.push({ uri: track.uri })
@@ -141,7 +141,7 @@ export default {
    * Returns if given Spotify track ids are 'liked' (in the special My Music Spotify Playlist)
    * @returns for each provided track ids if the id is in the playlist as a boolean
    */
-  async tracksAreLiked(trackIds: string[]): Promise<boolean[]> {
+  async tracksAreLiked (trackIds: string[]): Promise<boolean[]> {
     const fullResponse: boolean[] = []
     for (const trackIdChunk of chunkArray(trackIds, 50)) {
       const { data } = await request.get('/me/tracks/contains', { params: { ids: trackIdChunk.join(',') } })

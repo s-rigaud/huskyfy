@@ -3,7 +3,7 @@
     v-for="notification of notificationsStore.notifications"
     :key="notification.message"
     v-model="snackbar"
-    timeout="5000"
+    timeout="3000"
     :rounded="getRounded(notification.type)"
     :color="getColor(notification.type)"
     class="notification-snackbar"

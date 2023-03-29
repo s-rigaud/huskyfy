@@ -2,7 +2,6 @@
 
 - [ ] 🚧 Fix other Github branch for reordering playlist
 - [ ] 🚧 Back to last page when Spotify API token needs refresh
-- [ ] 🚧 Set v-lazy margin around content to load before entering the viewport (intersection observer params)
 - [ ] ✨ Implement Spotify SDK to be able to listen to tracks (https://developer.spotify.com/documentation/web-playback-sdk/reference/)
 - [ ] 🖼️ Skeleton loader for TrackItem and PlaylistCard
 - [ ] 🖼️ Horizontal slider for TrackItem genre chips

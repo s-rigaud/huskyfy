@@ -1,25 +1,38 @@
 <template>
-  <v-card class="playlist-card" elevation="10" tabindex="0" @click="displayDetails">
-    <v-tooltip :text="name" location="bottom" class="name-tooltip">
-      <template v-slot:activator="{ props }">
-        <v-img v-bind="props" rel="preconnect" :src="images[0].url" alt="Playlist cover"
-          lazy-src="@/assets/default_cover.jpg" cover />
+  <v-card
+    class="playlist-card"
+    elevation="10"
+    tabindex="0"
+    @click="displayDetails"
+  >
+    <v-img
+      rel="preconnect"
+      :src="images[0].url"
+      alt="Playlist cover"
+      lazy-src="@/assets/default_cover.jpg"
+      cover
+    />
+
+    <v-tooltip
+      :text="name"
+      location="bottom"
+      class="name-tooltip"
+    >
+      <template #activator="{ props }">
         <v-card-title v-bind="props">
           <p class="text-truncate card-title">
             {{ name }}
           </p>
         </v-card-title>
-
       </template>
     </v-tooltip>
-
   </v-card>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue';
+import { defineComponent, PropType } from 'vue'
 
-import { SpotifyImage } from '@/api/spotify/types/entities';
+import { SpotifyImage } from '@/api/spotify/types/entities'
 
 export default defineComponent({
   name: 'PlaylistCard',
@@ -42,7 +55,7 @@ export default defineComponent({
     }
   },
   methods: {
-    displayDetails() {
+    displayDetails () {
       this.$router.push({
         name: 'Explore playlist',
         params: { playlistId: this.id }
