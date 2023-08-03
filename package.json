@@ -13,25 +13,25 @@
     "url": "git+https://github.com/s-rigaud/huskyfy.git"
   },
   "dependencies": {
-    "@mdi/font": "7.1.96",
+    "@mdi/font": "7.2.96",
     "@vueuse/core": "9.6.0",
-    "apexcharts": "^3.37.1",
+    "apexcharts": "^3.41.1",
     "axios": "1.2.1",
     "canvas-confetti": "^1.6.0",
     "core-js": "^3.27.1",
-    "gsap": "^3.11.5",
-    "pinia": "^2.0.33",
-    "vue": "^3.2.47",
+    "gsap": "^3.12.2",
+    "pinia": "^2.1.6",
+    "vue": "^3.3.4",
     "vue-i18n": "^9.2.2",
     "vue-meta": "^3.0.0-alpha.8",
-    "vue-router": "^4.1.6",
-    "vue3-apexcharts": "^1.4.1",
-    "vuetify": "3.1.12"
+    "vue-router": "^4.2.4",
+    "vue3-apexcharts": "^1.4.4",
+    "vuetify": "3.3.11"
   },
   "devDependencies": {
     "@types/canvas-confetti": "^1.6.0",
     "@types/crypto-js": "^4.1.1",
-    "@types/lodash": "^4.14.191",
+    "@types/lodash": "^4.14.196",
     "@typescript-eslint/eslint-plugin": "^5.47.1",
     "@typescript-eslint/parser": "^5.47.1",
     "@vue/cli-plugin-babel": "~5.0.8",
@@ -51,7 +51,7 @@
     "lodash": "^4.17.21",
     "typescript": "~4.9.4",
     "vue-cli-plugin-vuetify": "~2.5.8",
-    "vue-types": "^5.0.2",
-    "webpack-plugin-vuetify": "^2.0.0"
+    "vue-types": "^5.1.1",
+    "webpack-plugin-vuetify": "^2.0.1"
   }
 }
