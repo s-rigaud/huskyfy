@@ -7,41 +7,34 @@ import { useAuthStore } from '@/stores/auth'
 import { NotificationType, useNotificationsStore } from '@/stores/notifications'
 import { useUserStore } from '@/stores/user'
 
-import AboutView from '@/views/AboutView.vue'
-import LoginView from '@/views/LoginView.vue'
-import PlaylistExplorer from '@/views/PlaylistExplorer.vue'
-
-const PlaylistDetail = () => import('@/views/PlaylistDetail.vue')
-const NotFound404 = () => import('@/views/NotFound404.vue')
-
 export const ROUTE_NAME_LOGIN = 'Login'
 const routes = [
   { path: '/', redirect: '/explore' },
   {
     path: '/login',
     name: ROUTE_NAME_LOGIN,
-    component: LoginView
+    component: () => import('../views/LoginView.vue')
   },
   {
     path: '/explore',
     name: 'Explore',
-    component: PlaylistExplorer
+    component: () => import('../views/PlaylistExplorer.vue')
   },
   {
     path: '/playlist/:playlistId',
     name: 'Explore playlist',
-    component: PlaylistDetail,
+    component: () => import('../views/PlaylistDetail.vue'),
     props: true
   },
   {
     path: '/about',
     name: 'About',
-    component: AboutView
+    component: () => import('../views/AboutView.vue'),
   },
   {
     path: '/:pathMatch(.*)*',
     name: '404',
-    component: NotFound404
+    component: () => import('../views/NotFound404.vue'),
   }
 ]
 

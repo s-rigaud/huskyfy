@@ -18,6 +18,4 @@ export const i18n = createI18n<[MessageSchema], 'fr' | 'en'>({
   fallbackLocale,
   messages
 })
-export const t = i18n.global.t
-export const tc = i18n.global.tc
-export const locale = i18n.global.locale
+export const { t, tc, locale } = i18n.global
