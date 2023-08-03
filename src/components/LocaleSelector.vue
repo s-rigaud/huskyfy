@@ -1,69 +1,89 @@
 <template>
-  <v-menu open-on-hover transition="fade-transition">
+  <v-menu
+    open-on-hover
+    transition="fade-transition"
+  >
     <template #activator="{ props }">
-      <v-btn class="select-btn rainbow-v-btn" v-bind="props">
-        <v-img :src="currentLocaleIcon" alt="Country flag" width="50" />
+      <v-btn
+        class="select-btn rainbow-v-btn"
+        v-bind="props"
+      >
+        <v-img
+          :src="currentLocaleIcon"
+          alt="Country flag"
+          width="50"
+        />
       </v-btn>
     </template>
     <v-list id="locale-list">
-      <v-list-item v-for="(locale, index) in sortedLocales" :key="index" class="locale-item" :item-value="locale"
-        @click="updateLocale">
-        <v-img width="50" :src="getIconForLocale(locale)" :alt="locale" />
+      <v-list-item
+        v-for="(locale, index) in sortedLocales"
+        :key="index"
+        :item-value="locale"
+        class="locale-item"
+        @click="updateLocale"
+      >
+        <v-img
+          :alt="locale"
+          :src="getIconForLocale(locale)"
+          width="50"
+        />
       </v-list-item>
     </v-list>
   </v-menu>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
 
+import { i18n, locale } from '@/i18n'
 import { useUserStore } from '@/stores/user'
+import { computed } from 'vue'
 
-export default defineComponent({
-  name: 'LocaleSelector',
-  setup() {
-    const userStore = useUserStore()
-    return { userStore }
-  },
-  computed: {
-    /**
-     * Retrieve list of all available locales.
-     * The current one is set as first for the UI.
-     */
-    sortedLocales(): string[] {
-      let locales = this.$i18n.availableLocales
-      const currentLocale = this.$i18n.locale
-      locales = locales.filter((l) => l !== currentLocale)
-      locales.unshift(currentLocale)
-      return locales
-    },
-    currentLocaleIcon(): string {
-      return this.getIconForLocale(this.$i18n.locale as "en" | "fr")
-    }
-  },
-  methods: {
-    getIconForLocale(locale: "en" | "fr"): string {
-      return {
-        en: new URL('./../assets/en.png', import.meta.url).href,
-        fr: new URL('./../assets/fr.png', import.meta.url).href
-      }[locale]
-    },
-    /**
-     * Update UI locale for i18n.
-     * All the website instantly update each element without reloading the page.
-     */
-    updateLocale(event: Event) {
-      // Recursively retrieve list-item as the event can occur in child nodes
-      let node = event.target as HTMLElement
-      while (!node.getAttribute('item-value')) {
-        node = node.parentNode as HTMLElement
-      }
-      const locale = (node.getAttribute('item-value') as string)
-      this.$i18n.locale = locale
-      this.userStore.locale = locale
-    }
-  }
+enum HandledLocale {
+  FR = 'fr',
+  EN = 'en',
+}
+
+const userStore = useUserStore()
+
+/**
+ * Retrieve list of all available locales.
+ * The current one is set as first for the UI.
+ */
+const sortedLocales = computed((): HandledLocale[] => {
+  let locales = i18n.global.availableLocales as HandledLocale[]
+  const currentLocale = locale
+  locales = locales.filter((l) => l !== currentLocale)
+  locales.unshift(currentLocale as HandledLocale)
+  return locales
 })
+
+const currentLocaleIcon = computed((): string => {
+  return getIconForLocale(locale as HandledLocale)
+})
+
+const getIconForLocale = (locale: HandledLocale): string => {
+  return {
+    en: new URL('./../assets/en.png', import.meta.url).href,
+    fr: new URL('./../assets/fr.png', import.meta.url).href
+  }[locale]
+}
+
+/**
+ * Update UI locale for i18n.
+ * All the website instantly update each element without reloading the page.
+ */
+const updateLocale = (event: Event) => {
+  // Recursively retrieve list-item as the event can occur in child nodes
+  let node = event.target as HTMLElement
+  while (!node.getAttribute('item-value')) {
+    node = node.parentNode as HTMLElement
+  }
+  const newLocale = (node.getAttribute('item-value') as string)
+  i18n.global.locale = newLocale
+  userStore.locale = newLocale
+}
+
 </script>
 <style scoped>
 #locale-list {

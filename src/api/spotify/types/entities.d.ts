@@ -16,16 +16,16 @@ export interface SpotifyImage {
 }
 
 interface SpotifyExplicitContent {
-    // eslint-disable-next-line
+
     filter_enabled: boolean;
-    // eslint-disable-next-line
+
     filter_locked: boolean;
 }
 
 interface SpotifyOwner {
-    // eslint-disable-next-line
+
     display_name: string;
-    // eslint-disable-next-line
+
     external_urls: SpotifyExternalUrls;
     href: string;
     id: string;
@@ -45,11 +45,11 @@ export interface SpotifyArtist {
 
 // Profile Model
 export interface SpotifyProfile {
-    // eslint-disable-next-line
+
     display_name: string;
-    // eslint-disable-next-line
+
     explicit_content: SpotifyExplicitContent;
-    // eslint-disable-next-line
+
     external_urls: SpotifyExternalUrls;
     followers: SpotifyFollowers;
     href: string;
@@ -70,10 +70,10 @@ export interface SpotifyTrack {
     album: SpotifyAlbum;
     artists: SpotifyArtist[];
     id: string;
-    // eslint-disable-next-line
+
     is_local: boolean;
     name: string;
-    // eslint-disable-next-line
+
     preview_url: string;
     track: boolean;
     type: string;
@@ -87,7 +87,7 @@ export interface SpotifyTrack {
 
 // Spotify API Track embedded with metadata
 export interface SpotifyTrackMetadata {
-    // eslint-disable-next-line
+
     is_local: boolean;
     track: SpotifyTrack;
 }
@@ -109,12 +109,12 @@ interface _BasePlaylistAttributes {
     images: SpotifyImage[];
     name: string;
     owner: SpotifyOwner;
-    // eslint-disable-next-line
+
     primary_color?: string;
     public: boolean;
-    // eslint-disable-next-line
+
     snapshot_id: string;
-    // eslint-disable-next-line
+
     external_urls: SpotifyExternalUrls;
     href: string;
     type: string;

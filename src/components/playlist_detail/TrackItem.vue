@@ -1,11 +1,11 @@
 <template>
   <v-lazy
-    min-height="100"
     :options="{ rootMargin: '400px' }"
+    min-height="100"
   >
     <v-list-item
-      class="track-item"
       :style="trackAnimationDelay"
+      class="track-item"
       link
       @click="openTrackOnSpotify"
     >
@@ -14,17 +14,17 @@
           {{ trackIndex + 1 }}
         </p>
         <v-avatar
-          class="ma-3 track-image"
-          size="90"
-          rounded="0"
           :options="{ rootMargin: '400px' }"
+          class="ma-3 track-image"
+          rounded="0"
+          size="90"
         >
           <v-img
-            rel="preconnect"
-            :src="image"
-            lazy-src="@/assets/default_cover.jpg"
-            alt="Cover image"
             :options="{ rootMargin: '400px' }"
+            :src="image"
+            alt="Cover image"
+            lazy-src="@/assets/default_cover.jpg"
+            rel="preconnect"
           />
         </v-avatar>
       </template>
@@ -49,19 +49,19 @@
         <v-chip
           v-if="isIndie"
           :text="$tc('track.indie', artists.length)"
+          class="popularity-chip"
           color="green"
           label
-          text-color="white"
           size="small"
-          class="popularity-chip"
+          text-color="white"
         />
         <v-chip
           v-else
           :text="$tc('track.popular', artists.length)"
+          class="popularity-chip"
           color="cyan"
           label
           size="small"
-          class="popularity-chip"
         />
       </div>
 
@@ -72,35 +72,35 @@
         <v-chip
           v-for="(genre, index) in genres.slice(0, genresToDisplayCount)"
           :key="genre"
-          :text="genre.toUpperCase()"
-          label
-          variant="elevated"
-          size="small"
-          class="genre-chip"
-          :style="getGenreAnimationDelay(index)"
           :color="getColorForGenre(genre)"
+          :style="getGenreAnimationDelay(index)"
+          :text="genre.toUpperCase()"
+          class="genre-chip"
+          label
+          size="small"
+          variant="elevated"
         />
         <v-chip
           v-if="genres.length > genresToDisplayCount && !displayAllGenres"
+          :style="getGenreAnimationDelay(genresToDisplayCount)"
+          class="genre-chip"
           label
           size="small"
           text="+"
-          class="genre-chip"
           variant="elevated"
-          :style="getGenreAnimationDelay(genresToDisplayCount)"
           @click.stop="displayAllGenres = true"
         />
         <div v-if="displayAllGenres">
           <v-chip
             v-for="(genre, index) in genres.slice(genresToDisplayCount)"
             :key="genre"
+            :color="getColorForGenre(genre)"
+            :style="getGenreAnimationDelay(index)"
             :text="genre.toUpperCase()"
+            class="genre-chip"
             label
             size="small"
-            class="genre-chip"
             variant="elevated"
-            :style="getGenreAnimationDelay(index)"
-            :color="getColorForGenre(genre)"
           />
         </div>
       </div>
@@ -114,94 +114,87 @@
   </v-lazy>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType } from 'vue'
+<script setup lang="ts">
+import { PropType, ref, computed, onBeforeMount } from 'vue'
 
 import { SpotifyArtist } from '@/api/spotify/types/entities'
 import { usePlaylistsStore } from '@/stores/playlists'
 
-export default defineComponent({
-  name: 'TrackItem',
-  props: {
-    id: {
-      type: String,
-      required: true
-    },
-    name: {
-      type: String,
-      required: true
-    },
-    image: {
-      type: String,
-      required: true
-    },
-    artists: {
-      type: Array as PropType<SpotifyArtist[]>,
-      required: true
-    },
-    genres: {
-      type: Array as PropType<string[]>,
-      required: true
-    },
-    isIndie: {
-      type: Boolean,
-      required: true
-    },
-    trackURI: {
-      type: String,
-      required: true
-    },
-    trackIndex: {
-      type: Number,
-      required: true
-    }
+const playlistsStore = usePlaylistsStore()
+
+const props = defineProps({
+  id: {
+    type: String,
+    required: true
   },
-  setup () {
-    const playlistsStore = usePlaylistsStore()
-    return { playlistsStore }
+  name: {
+    type: String,
+    required: true
   },
-  data () {
-    return {
-      displayAllGenres: false,
-      genresToDisplayCount: 2
-    }
+  image: {
+    type: String,
+    required: true
   },
-  computed: {
-    // Delay animation so items appear one after another
-    trackAnimationDelay (): { 'animation-delay': string } {
-      const delay = (this.trackIndex < 5) ? `${300 * this.trackIndex}ms` : '0ms'
-      return { 'animation-delay': delay }
-    }
+  artists: {
+    type: Array as PropType<SpotifyArtist[]>,
+    required: true
   },
-  mounted () {
-    let genreToDisplay = 2
-    if (window.innerWidth > 900) genreToDisplay = 8
-    else if (window.innerWidth > 700) genreToDisplay = 6
-    else if (window.innerWidth > 500) genreToDisplay = 4
-    this.genresToDisplayCount = genreToDisplay
+  genres: {
+    type: Array as PropType<string[]>,
+    required: true
   },
-  methods: {
-    /**
-     * ? Might have preferred a CSS :before divider
-     */
-    addCommaDivider (artistName: string, index: number): string {
-      return (index === this.artists.length - 1) ? artistName : `${artistName},`
-    },
-    getGenreAnimationDelay (index: number): { 'animation-delay': string } {
-      return { 'animation-delay': `${index * 400}ms` }
-    },
-    openTrackOnSpotify () {
-      window.location.href = this.trackURI
-    },
-    openArtistOnSpotify (artist: SpotifyArtist) {
-      window.location.href = artist.uri
-    },
-    getColorForGenre (genre: string): string {
-      return this.playlistsStore.genreColorMapping[genre]
-    }
+  isIndie: {
+    type: Boolean,
+    required: true
+  },
+  trackURI: {
+    type: String,
+    required: true
+  },
+  trackIndex: {
+    type: Number,
+    required: true
   }
 })
+
+const displayAllGenres = ref(false)
+const genresToDisplayCount = ref(2)
+
+// Delay animation so items appear one after another
+const trackAnimationDelay = computed((): { 'animation-delay': string } => {
+  const delay = (props.trackIndex < 5) ? `${300 * props.trackIndex}ms` : '0ms'
+  return { 'animation-delay': delay }
+})
+
+onBeforeMount(() => {
+  let genreToDisplay = 2
+  if (window.innerWidth > 900) genreToDisplay = 8
+  else if (window.innerWidth > 700) genreToDisplay = 6
+  else if (window.innerWidth > 500) genreToDisplay = 4
+  genresToDisplayCount.value = genreToDisplay
+})
+
+const addCommaDivider = (artistName: string, index: number): string => {
+  return (index === props.artists.length - 1) ? artistName : `${artistName},`
+}
+
+const getGenreAnimationDelay = (index: number): { 'animation-delay': string } => {
+  return { 'animation-delay': `${index * 400}ms` }
+}
+
+const openTrackOnSpotify = () => {
+  window.location.href = props.trackURI
+}
+
+const openArtistOnSpotify = (artist: SpotifyArtist) => {
+  window.location.href = artist.uri
+}
+
+const getColorForGenre = (genre: string): string => {
+  return playlistsStore.genreColorMapping[genre]
+}
 </script>
+
 <style>
 @keyframes track-append {
   from {

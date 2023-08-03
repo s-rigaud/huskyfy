@@ -5,10 +5,10 @@
   >
     <h3>Top {{ genres.length }} Genres</h3>
     <apexchart
-      type="donut"
-      :width="width"
       :options="chartOptions"
       :series="series"
+      :width="width"
+      type="donut"
     />
   </div>
 </template>
@@ -58,8 +58,7 @@ export default defineComponent({
             opts: { seriesIndex: number, w: { globals: { initialSeries: Record<number, number> } } }
           ): string | number {
             // Set label for pie portions as the genre count
-            const genreCount = opts.w.globals.initialSeries[opts.seriesIndex]
-            return genreCount
+            return opts.w.globals.initialSeries[opts.seriesIndex]
           }
         },
 

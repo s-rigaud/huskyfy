@@ -8,23 +8,23 @@
       no-gutters
     >
       <router-link
-        to="/explore"
         class="footer-link"
+        to="/explore"
       >
         <v-btn
-          variant="text"
           tabindex="-1"
+          variant="text"
         >
           {{ $t('page-title.explore') }}
         </v-btn>
       </router-link>
       <router-link
-        to="/about"
         class="footer-link"
+        to="/about"
       >
         <v-btn
-          variant="text"
           tabindex="-1"
+          variant="text"
         >
           {{ $t('page-title.about') }}
         </v-btn>
@@ -39,8 +39,8 @@
           <a
             id="github-link"
             href="https://github.com/s-rigaud"
-            target="_blank"
             rel="noopener"
+            target="_blank"
           >
             Hylectrif
           </a>
@@ -50,20 +50,12 @@
   </v-footer>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-
+<script setup lang="ts">
 import { useUserStore } from '@/stores/user'
 
-// Footer with simple links at the bottom of the page
-export default defineComponent({
-  name: 'FooterComponent',
-  setup () {
-    const userStore = useUserStore()
-    return { userStore }
-  }
-})
+const userStore = useUserStore()
 </script>
+
 <style scoped>
 #footer {
   max-height: 100px;

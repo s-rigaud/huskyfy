@@ -62,7 +62,7 @@ export default {
    * Return Spotify OAuth url
    * By going to this url, the user can accept terms and scope and a temporary token is returned
    */
-  async getOAuthUrl(): Promise<string> {
+  async getOAuthUrl (): Promise<string> {
     const authStore = useAuthStore()
 
     const STATE_AUTHORIZATION_CODE = generateRandomString(15)
@@ -92,7 +92,7 @@ export default {
   /**
    * Request first access token from the previous temporary token received
    */
-  async requestFirstAccessToken() {
+  async requestFirstAccessToken () {
     const authStore = useAuthStore()
     const data = [
       'grant_type=authorization_code',
@@ -126,7 +126,7 @@ export default {
   /**
    * Refresh new access token
    */
-  async requestNewAccessToken(): Promise<string | void> {
+  async requestNewAccessToken (): Promise<string | void> {
     console.log('trying to refresh token before retrying call')
 
     /*  const authStore = useAuthStore()

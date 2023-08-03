@@ -1,4 +1,3 @@
-
 /**
  *  Chunk list into smaller lists
  * @example ([1, 2, 3, 4], chunkSize=2) => [[1, 2], [3, 4]]

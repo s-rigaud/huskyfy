@@ -2,20 +2,35 @@
   <div id="about-content">
     <div id="text">
       <div id="main-title">
-        <v-img id="main-title-image" width="60" src="@/assets/large-logo-circle.png" alt="Huskyfy Image" />
+        <v-img
+          id="main-title-image"
+          alt="Huskyfy Image"
+          src="@/assets/large-logo-circle.png"
+          width="60"
+        />
         <h1 class="rainbow-text">
           {{ $t("about.description.title") }}
         </h1>
       </div>
       <p style="margin-bottom: 5px">
         {{ $t("about.description.content.part1") }}
-        <span style="color: var(--link-color); cursor: pointer;" @mouseover="drawConfettis">
+        <span
+          style="color: var(--link-color); cursor: pointer;"
+          @mouseover="drawConfettis"
+        >
           Huskyfy !
         </span>
         {{ $t("about.description.content.part2") }}
       </p>
-      <v-chip id="indie-chip" :text="$t('track.indie')" color="green" label text-color="white" size="large"
-        @click="drawStars" />
+      <v-chip
+        id="indie-chip"
+        :text="$t('track.indie')"
+        color="green"
+        label
+        size="large"
+        text-color="white"
+        @click="drawStars"
+      />
 
       <div class="subtitle">
         <h2 class="rainbow-text">
@@ -45,9 +60,17 @@
       <p>
         {{ $t("about.expose-liked-songs.content.part1") }} {{ $t("_emojis.collaborative") }}
         <br>
-        <span id="open-my-music" @click="openMyMusicOnSpotify">
-          {{ $t("about.expose-liked-songs.content.part2") }}<v-img id="my-song-img" width="20"
-            src="@/assets/my-music.jpeg" alt="My Music playlist" />
+        <span
+          id="open-my-music"
+          @click="openMyMusicOnSpotify"
+        >
+          {{ $t("about.expose-liked-songs.content.part2") }}
+          <v-img
+            id="my-song-img"
+            alt="My Music playlist"
+            src="@/assets/my-music.jpeg"
+            width="20"
+          />
         </span>
       </p>
 
@@ -60,7 +83,11 @@
       <v-divider />
       <p>
         {{ $t("about.creator.content.part1") }}
-        <a href="https://github.com/s-rigaud" target="_blank" rel="noopener">
+        <a
+          href="https://github.com/s-rigaud"
+          rel="noopener"
+          target="_blank"
+        >
           {{ $t("about.creator.content.part2") }}
         </a>
         {{ $t("about.creator.content.part3") }}
@@ -73,35 +100,69 @@
         <h2 class="rainbow-text">
           {{ $t("about.copyright.title") }}
         </h2>
-        <h2 class="rainbow-text" style="margin-left: 5px">
+        <h2
+          class="rainbow-text"
+          style="margin-left: 5px"
+        >
           ©️
         </h2>
       </div>
       <v-divider />
       <p>
         {{ $t("about.copyright.content") }}
-        <a href="https://www.flaticon.com/fr/icones-gratuites/husky-siberien" title="husky sibérien icônes"
-          target="_blank" rel="noopener">FlatIcon.com</a>.
+        <a
+          href="https://www.flaticon.com/fr/icones-gratuites/husky-siberien"
+          rel="noopener"
+          target="_blank"
+          title="husky sibérien icônes"
+        >
+          FlatIcon.com
+        </a>.
       </p>
 
       <div id="github-icon">
         <div>
-          <a href="https://github.com/s-rigaud/huskyfy" target="_blank" rel="noopener"
-            style="color: var(--text-color) !important;">
-            <v-img width="70" src="@/assets/large-logo-circle.png" alt="Huskyfy Image" />
+          <a
+            href="https://github.com/s-rigaud/huskyfy"
+            rel="noopener"
+            style="color: var(--text-color) !important;"
+            target="_blank"
+          >
+            <v-img
+              alt="Huskyfy Image"
+              src="@/assets/large-logo-circle.png"
+              width="70"
+            />
             <p style="color: var(--text-color); margin: 0px 15px;">Huskyfy version {{ version }}</p>
           </a>
         </div>
         <div>
-          <a href="https://github.com/s-rigaud" target="_blank" rel="noopener" style="color: white !important;">
-            <v-img width="70" src="@/assets/github.png" alt="Github Image" />
+          <a
+            href="https://github.com/s-rigaud"
+            rel="noopener"
+            style="color: white !important;"
+            target="_blank"
+          >
+            <v-img
+              alt="Github Image"
+              src="@/assets/github.png"
+              width="70"
+            />
             <p style="color: white; margin: 0px 15px;">@s‑rigaud</p>
           </a>
         </div>
         <div>
-          <a href="https://twitter.com/HuskyfyWebsite/with_replies" target="_blank" rel="noopener"
-            style="color: #55ADEE !important;">
-            <v-img width="70" src="@/assets/twitter.png" alt="Twitter Image" />
+          <a
+            href="https://twitter.com/HuskyfyWebsite/with_replies"
+            rel="noopener"
+            style="color: #55ADEE !important;"
+            target="_blank"
+          >
+            <v-img
+              alt="Twitter Image"
+              src="@/assets/twitter.png"
+              width="70"
+            />
             <p style="color: #55ADEE; margin: 0px 15px;">@Huskyfy Website</p>
           </a>
         </div>
@@ -110,101 +171,94 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import confetti from 'canvas-confetti'
-import { defineComponent } from 'vue'
 import { useMeta } from 'vue-meta'
 
 import { t } from '@/i18n'
-import packageInfo from '../../package.json'
 
-// General page with info about the app
-export default defineComponent({
-  name: 'AboutView',
-  setup() {
-    useMeta({
-      title: t('page-title.about'),
-      link: [
-        { rel: 'canonical', href: `${import.meta.env.VITE_APP_BASE_SERVER_URL}/about` }
-      ]
-    })
-    return { version: packageInfo.version }
-  },
-  methods: {
-    openMyMusicOnSpotify() {
-      window.location.href = `${import.meta.env.VITE_APP_BASE_SERVER_URL}/playlist/my-music`
-    },
-    /**
-     * Draw some stars on the screens with a nice animation
-     * TODO use ref=
-     */
-    drawStars() {
-      // eslint-disable-next-line
-      const indieChip = document.getElementById('indie-chip')!
-      const rect = indieChip.getBoundingClientRect()
-      const origin = {
-        x: (rect.left + rect.right) / 2 / window.innerWidth,
-        y: (rect.top + rect.bottom) / 2 / window.innerHeight
-      }
-      const defaults = {
-        spread: 360,
-        ticks: 50,
-        gravity: 0,
-        decay: 0.94,
-        startVelocity: 30,
-        shapes: ['star'],
-        origin,
-        colors: ['FFE400', 'FFBD00', 'E89400', 'FFCA6C', 'FDFFB8']
-      }
-
-      function shoot() {
-        confetti({
-          ...defaults,
-          particleCount: 40,
-          scalar: 1.2,
-          shapes: ['star']
-        })
-
-        confetti({
-          ...defaults,
-          particleCount: 10,
-          scalar: 0.75,
-          shapes: ['circle']
-        })
-      }
-
-      setTimeout(shoot, 0)
-      setTimeout(shoot, 100)
-      setTimeout(shoot, 200)
-    },
-    /**
-     * Draw some confettis on the screens with a nice animation
-     */
-    drawConfettis() {
-      const duration = 1500
-      const animationEnd = Date.now() + duration
-      const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 }
-
-      function randomInRange(min: number, max: number): number {
-        return Math.random() * (max - min) + min
-      }
-
-      const interval: ReturnType<typeof setInterval> = setInterval(() => {
-        const timeLeft = animationEnd - Date.now()
-
-        if (timeLeft <= 0) {
-          return clearInterval(interval)
-        }
-
-        const particleCount = 50 * (timeLeft / duration)
-        // since particles fall down, start a bit higher than random
-        confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }))
-        confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }))
-      }, 250)
-    }
-  }
+const BASE_SERVER_URL = import.meta.env.VITE_APP_BASE_SERVER_URL
+useMeta({
+  title: t('page-title.about'),
+  link: [
+    { rel: 'canonical', href: `${BASE_SERVER_URL}/about` }
+  ]
 })
+
+const openMyMusicOnSpotify = () => {
+  window.location.href = `${BASE_SERVER_URL}/playlist/my-music`
+}
+
+/**
+ * Draw some stars on the screens with a nice animation
+ * TODO use ref=
+ */
+const drawStars = () => {
+  const indieChip = document.getElementById('indie-chip') as HTMLElement
+  const rect = indieChip.getBoundingClientRect()
+  const origin = {
+    x: (rect.left + rect.right) / 2 / window.innerWidth,
+    y: (rect.top + rect.bottom) / 2 / window.innerHeight
+  }
+  const defaults = {
+    spread: 360,
+    ticks: 50,
+    gravity: 0,
+    decay: 0.94,
+    startVelocity: 30,
+    shapes: ['star'],
+    origin,
+    colors: ['FFE400', 'FFBD00', 'E89400', 'FFCA6C', 'FDFFB8']
+  }
+
+  const shoot = () => {
+    confetti({
+      ...defaults,
+      particleCount: 40,
+      scalar: 1.2,
+      shapes: ['star']
+    })
+
+    confetti({
+      ...defaults,
+      particleCount: 10,
+      scalar: 0.75,
+      shapes: ['circle']
+    })
+  }
+
+  setTimeout(shoot, 0)
+  setTimeout(shoot, 100)
+  setTimeout(shoot, 200)
+}
+
+/**
+ * Draw some confettis on the screens with a nice animation
+ */
+const drawConfettis = () => {
+  const duration = 1500
+  const animationEnd = Date.now() + duration
+  const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 }
+
+  const randomInRange = (min: number, max: number): number => {
+    return Math.random() * (max - min) + min
+  }
+
+  const interval: ReturnType<typeof setInterval> = setInterval(() => {
+    const timeLeft = animationEnd - Date.now()
+
+    if (timeLeft <= 0) {
+      return clearInterval(interval)
+    }
+
+    const particleCount = 50 * (timeLeft / duration)
+    // since particles fall down, start a bit higher than random
+    confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }))
+    confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }))
+  }, 250)
+}
 </script>
+
 <style scoped>
 #about-content {
   width: 100%;

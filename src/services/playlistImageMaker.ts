@@ -103,8 +103,7 @@ const createCanvas = (
     (showStats ? STATS_HEIGHT : 0)
   )
 
-  // eslint-disable-next-line
-  const ctx = canvas.getContext('2d')!
+  const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
   ctx.fillStyle = '#000'
   ctx.fillRect(0, 0, canvas.width, canvas.height)
 

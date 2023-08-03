@@ -2,10 +2,10 @@
   <v-navigation-drawer
     id="drawer"
     v-model="isOpen"
-    temporary
-    location="right"
     :image="starImage"
     elevation="20"
+    location="right"
+    temporary
   >
     <v-list>
       <v-list-subheader v-if="canUpdatePlaylistName">
@@ -64,8 +64,8 @@
             </v-btn>
             <v-btn
               id="validate-deletion-button"
-              v-focus
               :loading="waitingForDeletion"
+              v-focus
               class="deletion-action-button rainbow-v-btn font-weight-bold"
               @click="unfollowPlaylist"
             >
@@ -113,8 +113,8 @@
           <template #placeholder>
             <div class="d-flex align-center justify-center fill-height">
               <v-progress-circular
-                indeterminate
                 color="var(--text-color)"
+                indeterminate
               />
             </div>
           </template>
@@ -123,20 +123,20 @@
           v-if="maxTick > 0"
           id="generate-image-size-slider"
           v-model="generateImageSize"
-          :ticks="ticks"
           :max="maxTick"
-          step="1"
-          show-ticks="always"
-          tick-size="4"
+          :ticks="ticks"
           color="var(--text-color)"
           prepend-icon="mdi-arrange-send-to-back"
+          show-ticks="always"
+          step="1"
+          tick-size="4"
           @touchstart.stop
         />
         <div id="sliders">
           <v-switch
             v-model="generateImageDisplayTitle"
-            color="var(--text-color)"
             class="generate-image-switch"
+            color="var(--text-color)"
           >
             <template #label>
               <p
@@ -149,8 +149,8 @@
           </v-switch>
           <v-switch
             v-model="generateImageDisplayStats"
-            color="var(--text-color)"
             class="generate-image-switch"
+            color="var(--text-color)"
           >
             <template #label>
               <p
@@ -181,9 +181,9 @@
 
   <DuplicatorPopup
     v-if="startDuplication"
-    :playlist-id="playlist.id"
-    :new-tracks="[]"
     :filter-tag="''"
+    :new-tracks="[]"
+    :playlist-id="playlist.id"
     @on-end="startDuplication = false"
   />
 </template>

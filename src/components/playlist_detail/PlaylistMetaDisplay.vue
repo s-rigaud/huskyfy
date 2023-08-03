@@ -11,9 +11,9 @@
         >
           <v-img
             :src="playlist.images[0].url"
-            lazy-src="@/assets/default_cover.jpg"
             alt="Cover image"
             cover
+            lazy-src="@/assets/default_cover.jpg"
             rel="preconnect"
             width="90"
           />
@@ -23,12 +23,12 @@
             v-if="userOwnsPlaylist && !isMyMusicPlaylist"
             id="playlist-name"
             v-model="playlistNameText"
+            :append-inner-icon="nameUpdatedInAPI && playlist.name === playlistNameText ? 'mdi-check-circle-outline' : ''"
             :label="$t('playlist.name')"
-            variant="outlined"
+            :loading="playlist.name !== playlistNameText && !nameUpdatedInAPI"
             color="var(--text-color)"
             density="compact"
-            :loading="playlist.name !== playlistNameText && !nameUpdatedInAPI"
-            :append-inner-icon="nameUpdatedInAPI && playlist.name === playlistNameText ? 'mdi-check-circle-outline' : ''"
+            variant="outlined"
           />
           <h4
             v-else
@@ -47,12 +47,12 @@
               <template #activator="{ props }">
                 <v-chip
                   v-if="playlistContainsEpisodes"
-                  prepend-icon="mdi-alert"
                   color="#f1c40f"
-                  size="small"
-                  variant="elevated"
                   v-bind="props"
                   link
+                  prepend-icon="mdi-alert"
+                  size="small"
+                  variant="elevated"
                 >
                   {{ $t('playlist.contains-episodes') }}
                 </v-chip>
@@ -66,12 +66,12 @@
               <template #activator="{ props }">
                 <v-chip
                   v-if="playlistContainsLocalTracks"
-                  prepend-icon="mdi-alert"
                   color="#f1c40f"
-                  size="small"
-                  variant="elevated"
                   v-bind="props"
                   link
+                  prepend-icon="mdi-alert"
+                  size="small"
+                  variant="elevated"
                 >
                   {{ $t('playlist.contains-local-tracks') }}
                 </v-chip>
@@ -85,12 +85,12 @@
               <template #activator="{ props }">
                 <v-chip
                   v-if="playlistContainsDuplicatedTracks"
-                  prepend-icon="mdi-alert"
                   color="#f1c40f"
-                  size="small"
-                  variant="elevated"
                   v-bind="props"
                   link
+                  prepend-icon="mdi-alert"
+                  size="small"
+                  variant="elevated"
                 >
                   {{ $t('playlist.contains-duplicated-tracks') }}
                 </v-chip>
@@ -114,8 +114,8 @@
             <span>{{ $t("playlist.indie-score-text") }}</span>
             <!-- Only if all tracks are loaded -->
             <span
-              style="margin: 0px 5px;"
               class="black-highlight"
+              style="margin: 0px 5px;"
             >
               {{ ` ${indiePercentage}` }} %
             </span>
@@ -185,28 +185,28 @@
     >
       <v-icon
         id="burger-button"
-        icon="mdi-menu"
-        color="var(--text-color)"
-        size="x-large"
         class="highlight-icon"
+        color="var(--text-color)"
+        icon="mdi-menu"
+        size="x-large"
         @click="() => { drawer = !drawer; displayBurgerMenuBadge = 'none' }"
       />
     </v-badge>
 
     <v-tooltip
-      location="bottom end"
       :text="$t('playlist.open-on-spotify')"
       class="rainbow-tooltip"
+      location="bottom end"
     >
       <template #activator="{ props }">
         <v-img
           id="spotify-logo-meta-small"
-          src="@/assets/spotify.png"
           alt="Spotify Logo"
-          rel="preconnect"
-          width="40"
           v-bind="props"
           class="highlight-icon"
+          rel="preconnect"
+          src="@/assets/spotify.png"
+          width="40"
           @click="openPlaylistOnSpotify"
         />
       </template>

@@ -1,9 +1,9 @@
 <template>
   <div id="genre-chart-container">
     <apexchart
-      type="radialBar"
       :options="chartOptions"
       :series="series"
+      type="radialBar"
     />
     <p
       id="genre-chart-subtitle"

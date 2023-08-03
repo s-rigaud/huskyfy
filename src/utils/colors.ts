@@ -26,8 +26,7 @@ export const getRandomColor = (): string => {
  */
 export const getAverageColor = (color1: string, color2: string, percentage: number): string => {
   const hexToRGB = (color: string): number[] => {
-    // eslint-disable-next-line
-    return color.replace('#', '').match(/.{1,2}/g)!.map(hex => parseInt(hex, 16))
+    return (color.replace('#', '').match(/.{1,2}/g) as RegExpMatchArray).map(hex => parseInt(hex, 16))
   }
   const rgbToHex = (rgb: number[]): string => {
     return (

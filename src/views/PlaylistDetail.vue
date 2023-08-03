@@ -7,8 +7,8 @@
   >
     <div id="main-content">
       <PlaylistMetaDisplay
-        :playlist-id="playlistId"
         :indie-percentage="indiePercentage"
+        :playlist-id="playlistId"
         @playlist-updated="resetFilters"
       />
 
@@ -40,71 +40,71 @@
                 <div id="popularity-select">
                   <v-select
                     v-model="selectedPopularity"
-                    :label="$t('track.filters.popularity')"
                     :items="getVSelectTranslatedPopularities()"
+                    :label="$t('track.filters.popularity')"
+                    class="filter-select"
+                    density="compact"
                     item-title="label"
                     item-value="value"
                     variant="outlined"
-                    density="compact"
-                    class="filter-select"
                   />
                 </div>
                 <div id="loved-track-select">
                   <v-select
                     v-model="selectedPreference"
-                    :label="$t('track.filters.preference')"
                     :items="getVSelectTranslatedPreferences()"
+                    :label="$t('track.filters.preference')"
+                    class="filter-select"
+                    density="compact"
                     item-title="label"
                     item-value="value"
                     variant="outlined"
-                    density="compact"
-                    class="filter-select"
                   />
                 </div>
 
                 <div id="genre-select">
                   <v-select
                     v-model="selectedGenres"
-                    :label="$t('track.filters.genres')"
                     :items="playlistsStore.getTopGenres(playlistId)"
+                    :label="$t('track.filters.genres')"
+                    :menu-props="{ 'maxHeight': '250px' }"
+                    class="filter-select"
+                    density="compact"
                     item-title="cap_name"
                     item-value="name"
-                    variant="outlined"
-                    density="compact"
                     multiple
-                    class="filter-select"
-                    :menu-props="{ 'maxHeight': '250px' }"
+                    variant="outlined"
                   />
                 </div>
                 <div id="artist-select">
                   <v-select
                     v-model="selectedArtists"
-                    :label="$t('track.filters.artists')"
                     :items="getSortedArtists()"
-                    item-title="name"
-                    variant="outlined"
+                    :label="$t('track.filters.artists')"
+                    :menu-props="{ 'maxHeight': '250px' }"
                     density="compact"
+                    item-title="name"
                     multiple
                     return-object
-                    :menu-props="{ 'maxHeight': '250px' }"
+                    variant="outlined"
                   >
                     <template #selection="{ item, index }: SlotProps">
                       <v-chip
-                        v-if="index < 2"
+                        v-if=" index < 2 "
                         variant="outlined"
                       >
                         <v-avatar>
                           <v-img
+                            :src=" item.raw.images[0].url "
+                            alt="Spotify artist cover"
                             rel="preconnect"
                             width="20"
-                            :src="item.raw.images[0].url"
-                            alt="Spotify artist cover"
                           />
                         </v-avatar>
                         <span>{{ item.raw.name }}</span>
                       </v-chip>
                       <span
-                        v-if="index === 2"
+                        v-if=" index === 2 "
                         class="text-grey text-caption align-self-center"
                       >
                         (+{{ selectedArtists.length - 2 }} {{ $tc('track.other', selectedArtists.length - 2) }})
@@ -116,58 +116,58 @@
 
               <div id="filters-and-reset">
                 <div id="filtering-chips">
-                  <div v-if="selectedPopularity !== NO_POPULARITY">
+                  <div v-if=" selectedPopularity !== NO_POPULARITY ">
                     <v-scale-transition>
                       <v-chip
-                        :text="getTextForPopularity(selectedPopularity)"
+                        :color=" getColorForPopularity(selectedPopularity) "
+                        :text=" getTextForPopularity(selectedPopularity) "
                         closable
                         variant="elevated"
-                        :color="getColorForPopularity(selectedPopularity)"
                         @click:close="selectedPopularity = NO_POPULARITY"
                       />
                     </v-scale-transition>
                   </div>
 
-                  <div v-if="(selectedPreference !== NO_PREFERENCE)">
+                  <div v-if=" (selectedPreference !== NO_PREFERENCE) ">
                     <v-scale-transition>
                       <v-chip
-                        :text="getTextForPreference(selectedPreference)"
+                        :text=" getTextForPreference(selectedPreference) "
                         closable
-                        variant="elevated"
                         color="black"
+                        variant="elevated"
                         @click:close="(selectedPreference = NO_PREFERENCE)"
                       />
                     </v-scale-transition>
                   </div>
 
-                  <div v-if="selectedGenres.length > 0">
+                  <div v-if=" selectedGenres.length > 0 ">
                     <TransitionGroup name="chips">
                       <v-chip
-                        v-for="genre in selectedGenres"
-                        :key="genre"
-                        :text="genre.toUpperCase()"
-                        closable
-                        :color="getColorForGenre(genre)"
-                        variant="elevated"
+                        v-for=" genre in selectedGenres "
+                        :key=" genre "
+                        :color=" getColorForGenre(genre) "
+                        :text=" genre.toUpperCase() "
                         class="genre-filter-chip"
+                        closable
+                        variant="elevated"
                         @click:close="selectedGenres = selectedGenres.filter(g => g !== genre)"
                       />
                     </TransitionGroup>
                   </div>
 
-                  <div v-if="selectedArtists.length > 0">
+                  <div v-if=" selectedArtists.length > 0 ">
                     <TransitionGroup name="chips">
                       <v-chip
-                        v-for="artist in selectedArtists"
-                        :key="artist.name"
+                        v-for=" artist in selectedArtists "
+                        :key=" artist.name "
+                        class="artist-filter-chip"
                         closable
                         color="yellow"
                         variant="elevated"
-                        class="artist-filter-chip"
                         @click:close="selectedArtists = selectedArtists.filter(a => a.id != artist.id)"
                       >
                         <v-avatar left>
-                          <v-img :src="getArtistImage(artist)" />
+                          <v-img :src=" getArtistImage(artist) " />
                         </v-avatar>
                         {{ artist.name }}
                       </v-chip>
@@ -178,31 +178,31 @@
                 <div>
                   <v-fade-transition>
                     <v-switch
-                      v-model="isFilterExclusive"
-                      :disabled="numberOfActiveFilters <= 1"
+                      v-model=" isFilterExclusive "
+                      :disabled=" numberOfActiveFilters <= 1 "
+                      :label=" $t(`track.${isFilterExclusive ? 'exclusive' : 'inclusive'}-filter`) "
                       color="var(--text-color)"
-                      :label="$t(`track.${isFilterExclusive ? 'exclusive' : 'inclusive'}-filter`)"
                     />
                   </v-fade-transition>
 
                   <p
-                    v-if="!allTracksLoaded"
+                    v-if=" !allTracksLoaded "
                     id="warning-not-fully-loaded"
                   >
                     ⚠️ {{ $t('track.filters.not-fully-loaded') }} ⚠️
                   </p>
                   <v-badge
                     id="create-new-playlist"
+                    :content=" $t('track.filters.try-now') "
+                    :value=" -1 "
                     color="red"
-                    :content="$t('track.filters.try-now')"
-                    :value="-1"
                   >
                     <v-btn
                       id="create-new-playlist-btn"
-                      :disabled="!isDuplicationAllowed"
-                      rounded="pill"
+                      :disabled=" !isDuplicationAllowed "
+                      :loading=" processFilterUpdate "
                       class="rainbow-v-btn"
-                      :loading="processFilterUpdate"
+                      rounded="pill"
                       @click="startDuplication = true"
                     >
                       {{ $t("playlist.duplicate.only-with-filter") }}
@@ -223,13 +223,13 @@
           </div>
           <v-divider
             class="mx-4"
-            vertical
-            thickness="0.5"
             color="white"
+            thickness="0.5"
+            vertical
           />
           <div id="playlist-track-count-embedded">
             <h4
-              v-if="playlistLoaded"
+              v-if=" playlistLoaded "
               id="track-number-title"
             >
               {{ filteredTracks.length }} {{ $tc('track._generic-name', filteredTracks.length) }}
@@ -237,29 +237,29 @@
           </div>
         </div>
         <v-divider
-          thickness="0.5"
           color="white"
+          thickness="0.5"
         />
 
         <div
-          v-if="playlistLoaded"
+          v-if=" playlistLoaded "
           id="tracks"
         >
           <v-list
-            v-if="filteredTracks.length >= 1"
+            v-if=" filteredTracks.length >= 1 "
             style="width: 100%;"
           >
             <TrackItem
-              v-for="(track, index) in filteredTracks"
-              :id="track.id"
-              :key="track.id"
-              :name="track.name"
-              :image="track.album.images[0]?.url"
-              :artists="track.artists"
-              :genres="track.genres"
-              :is-indie="track.isIndie"
-              :track-u-r-i="track.uri"
-              :track-index="index"
+              v-for="( track, index ) in filteredTracks "
+              :id=" track.id "
+              :key=" track.id "
+              :artists=" track.artists "
+              :genres=" track.genres "
+              :image=" track.album.images[0]?.url "
+              :is-indie=" track.isIndie "
+              :name=" track.name "
+              :track-index=" index "
+              :track-u-r-i=" track.uri "
             />
           </v-list>
           <div
@@ -279,8 +279,8 @@
         >
           <v-progress-circular
             id="waiting-spinner"
-            :size="70"
-            :width="7"
+            :size=" 70 "
+            :width=" 7 "
             color="var(--text-color)"
             indeterminate
           />
@@ -289,10 +289,10 @@
 
       <v-btn
         id="scroll-top-button"
+        :style=" toButtonOpacity "
         class="rainbow-v-btn"
         icon
-        :style="toButtonOpacity"
-        @click="scrollTop"
+        @click=" scrollTop "
       >
         <v-icon>mdi-apple-keyboard-control</v-icon>
       </v-btn>
@@ -300,10 +300,10 @@
 
     <!-- Load more tracks to lazy-load all of them -->
     <LoadMoreTracksPopup
-      v-if="isHugePlaylist && playlist.tracks.length < playlist.total"
-      :playlist="playlist"
-      :track-request-limit="TRACK_REQUEST_LIMIT"
-      @all-tracks-loaded="() => { resetFilters(); refreshStats() }"
+      v-if=" isHugePlaylist && playlist.tracks.length < playlist.total "
+      :playlist=" playlist "
+      :track-request-limit=" TRACK_REQUEST_LIMIT "
+      @all-tracks-loaded=" () => { resetFilters(); refreshStats() } "
     />
   </div>
 
@@ -316,25 +316,25 @@
     <h2>{{ $t("playlist.no-tracks-subtitle") }}</h2>
     <v-btn
       id="open-spotify"
-      variant="outlined"
       rounded="pill"
       size="x-large"
-      @click="openPlaylistOnSpotify"
+      variant="outlined"
+      @click=" openPlaylistOnSpotify "
     >
       {{ $t("playlist.open-on-spotify") }}
       <v-img
-        width="25"
-        src="@/assets/spotify.png"
         alt="Spotify Logo"
+        src="@/assets/spotify.png"
+        width="25"
       />
     </v-btn>
   </div>
 
   <DuplicatorPopup
-    v-if="startDuplication"
-    :playlist-id="playlist.id"
-    :new-tracks="filteredTracks"
-    :filter-tag="filterTag"
+    v-if=" startDuplication "
+    :filter-tag=" filterTag "
+    :new-tracks=" filteredTracks "
+    :playlist-id=" playlist.id "
     @on-end="startDuplication = false"
   />
 </template>
@@ -357,7 +357,7 @@ import { capitalize } from '@/utils/functions'
 /**
  * It is used for typing Vuetify select slot props
  */
-// eslint-disable-next-line
+
 interface SlotProps {
   item: { raw: SpotifyArtist }
   index: number
@@ -373,7 +373,7 @@ const Preference = {
   ONLY_NOT_LIKED: 'Only not liked',
   NO_PREFERENCE
 } as const
-// eslint-disable-next-line
+
 type Preference = typeof Preference[keyof typeof Preference]
 
 const NO_POPULARITY = 'No filter'
@@ -382,7 +382,7 @@ const Popularity = {
   Popular: 'Popular',
   NO_POPULARITY
 } as const
-// eslint-disable-next-line
+
 type Popularity = typeof Popularity[keyof typeof Popularity]
 
 export default defineComponent({

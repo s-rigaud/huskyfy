@@ -66,7 +66,6 @@ const instantiateSpotifySDK = () => {
 
   document.body.appendChild(script)
 
-  // eslint-disable-next-line
   const w = window as any as WindowWithSDK
   w.onSpotifyWebPlaybackSDKReady = () => {
     /*

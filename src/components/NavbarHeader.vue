@@ -12,8 +12,8 @@
     >
       <v-img
         id="logo"
-        src="@/assets/Huskyfy.png"
         alt="Huskyfy logo"
+        src="@/assets/Huskyfy.png"
       />
     </router-link>
 
@@ -36,9 +36,9 @@
           </h3>
           <v-avatar id="profile-picture">
             <v-img
-              rel="preconnect"
               :src="userStore.profilePicture"
               alt="Profile picture"
+              rel="preconnect"
             />
           </v-avatar>
         </div>
@@ -58,45 +58,30 @@
   </v-app-bar>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-
+<script setup lang="ts">
 import router, { ROUTE_NAME_LOGIN } from '@/router'
 import { useAuthStore } from '@/stores/auth'
-import { usePlaylistsStore } from '@/stores/playlists'
-import { useUserStore } from '@/stores/user'
 import { useNotificationsStore } from '@/stores/notifications'
+import { usePlaylistsStore } from '@/stores/playlists'
 import { useSDKStore } from '@/stores/spotifySDK'
+import { useUserStore } from '@/stores/user'
 
-export default defineComponent({
-  name: 'NavbarHeader',
-  setup () {
-    const userStore = useUserStore()
-    return { userStore }
-  },
-  computed: {
-    profilePictureOrDefault (): string {
-      // eslint-disable-next-line
-      const DEFAULT_PICTURE = new URL('./../assets/no-user.png', import.meta.url).href
-      return this.userStore.profilePicture || DEFAULT_PICTURE
-    }
-  },
-  methods: {
-    /**
-     * Reset all Pinia stores on disconnection.
-     * Redirect to Login page.
-     */
-    disconnect () {
-      useUserStore().reset()
-      useAuthStore().reset()
-      usePlaylistsStore().reset()
-      useNotificationsStore().reset()
-      useSDKStore().$reset()
+const userStore = useUserStore()
 
-      router.push({ name: ROUTE_NAME_LOGIN })
-    }
-  }
-})
+/**
+ * Reset all Pinia stores on disconnection.
+ * Redirect to Login page.
+ */
+const disconnect = () => {
+  useUserStore().reset()
+  useAuthStore().reset()
+  usePlaylistsStore().reset()
+  useNotificationsStore().reset()
+  useSDKStore().$reset()
+
+  router.push({ name: ROUTE_NAME_LOGIN })
+}
+
 </script>
 <style>
 #app-bar {

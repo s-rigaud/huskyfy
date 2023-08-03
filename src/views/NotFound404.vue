@@ -6,33 +6,34 @@
     <h2 class="title-404">
       <span class="rainbow-text">{{ $t('404.title.part2') }}</span>😕
     </h2>
-    <v-btn id="back-button" class="rainbow-v-btn" append-icon="mdi-map-search-outline" @click="backToPreviousPage">
+    <v-btn
+      id="back-button"
+      append-icon="mdi-map-search-outline"
+      class="rainbow-v-btn"
+      @click="backToPreviousPage"
+    >
       {{ $t('404.button') }}
     </v-btn>
   </section>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
 import { useMeta } from 'vue-meta'
+import { useRouter } from 'vue-router'
+const router = useRouter()
 
-export default defineComponent({
-  name: 'NotFound404',
-  setup() {
-    useMeta({
-      title: '404',
-      link: [
-        { rel: 'canonical', href: `${import.meta.env.VITE_APP_BASE_SERVER_URL}/404` }
-      ]
-    })
-  },
-  methods: {
-    backToPreviousPage() {
-      this.$router.go(-1)
-    }
-  }
+useMeta({
+  title: '404',
+  link: [
+    { rel: 'canonical', href: `${import.meta.env.VITE_APP_BASE_SERVER_URL}/404` }
+  ]
 })
+
+const backToPreviousPage = () => {
+  router.go(-1)
+}
 </script>
+
 <style scoped>
 section {
   height: 100%;

@@ -4,8 +4,8 @@
   <v-snackbar
     id="load-more-snackbar"
     v-model="isVisible"
-    :timeout="timeout"
     :color="color"
+    :timeout="timeout"
   >
     <div
       v-if="!isLoaded"
@@ -18,8 +18,8 @@
       </div>
       <v-btn
         id="load-more-button"
-        class="rainbow-v-btn"
         :loading="waitingForResponse"
+        class="rainbow-v-btn"
         @click="loadAllTracks"
       >
         {{ $t("playlist.load-more-button") }}
@@ -36,66 +36,57 @@
   </v-snackbar>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType } from 'vue'
+<script setup lang="ts">
+import { PropType, computed, ref } from 'vue'
 
 import { SpotifyPlaylist } from '@/api/spotify/types/entities'
 import { usePlaylistsStore } from '@/stores/playlists'
 
-export default defineComponent({
-  name: 'LoadMoreTracksPopup',
-  props: {
-    playlist: {
-      type: Object as PropType<SpotifyPlaylist>,
-      required: true
-    },
-    trackRequestLimit: {
-      type: Number,
-      required: true
-    }
+const props = defineProps({
+  playlist: {
+    type: Object as PropType<SpotifyPlaylist>,
+    required: true
   },
-  emits: ['allTracksLoaded'],
-  setup () {
-    const playlistsStore = usePlaylistsStore()
-    const { downloadPlaylistTracks } = playlistsStore
-
-    return { downloadPlaylistTracks, playlistsStore }
-  },
-  data () {
-    return {
-      isVisible: true,
-
-      isLoaded: false,
-      waitingForResponse: false
-    }
-  },
-  computed: {
-    color (): string {
-      return this.isLoaded ? 'green' : 'black'
-    },
-    timeout (): number {
-      return this.isLoaded ? 3000 : -1
-    }
-  },
-  methods: {
-    /**
-     * Download tracks from Spotify API and add them to localStorage.
-     * Then, it emits to notify parent component.
-     */
-    async loadAllTracks () {
-      this.waitingForResponse = true
-      // Arbitrary
-      if (this.playlist.total > 500) {
-        this.playlistsStore.softReset(this.playlist.id)
-      }
-      await this.downloadPlaylistTracks(this.playlist.id, this.playlist.total)
-      this.waitingForResponse = false
-      this.isLoaded = true
-      this.$emit('allTracksLoaded')
-    }
+  trackRequestLimit: {
+    type: Number,
+    required: true
   }
 })
+const emit = defineEmits(['allTracksLoaded'])
+
+const playlistsStore = usePlaylistsStore()
+const { downloadPlaylistTracks } = playlistsStore
+
+const isVisible = ref(true)
+
+const isLoaded = ref(false)
+const waitingForResponse = ref(false)
+
+const color = computed((): string => {
+  return isLoaded.value ? 'green' : 'black'
+})
+
+const timeout = computed((): number => {
+  return isLoaded.value ? 3000 : -1
+})
+
+/**
+ * Download tracks from Spotify API and add them to localStorage.
+ * Then, it emits to notify parent component.
+ */
+const loadAllTracks = async () => {
+  waitingForResponse.value = true
+  // Arbitrary
+  if (props.playlist.total > 500) {
+    playlistsStore.softReset(props.playlist.id)
+  }
+  await downloadPlaylistTracks(props.playlist.id, props.playlist.total)
+  waitingForResponse.value = false
+  isLoaded.value = true
+  emit('allTracksLoaded')
+}
 </script>
+
 <style>
 #load-more-button {
   width: 100%;

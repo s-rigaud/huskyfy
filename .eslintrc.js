@@ -12,12 +12,16 @@ module.exports = {
 
     // PLUGINS
     'plugin:vue/vue3-recommended',
-    'plugin:@intlify/vue-i18n/recommended'
+    'plugin:@intlify/vue-i18n/recommended',
+    'plugin:sonarjs/recommended'
   ],
   parserOptions: {
     ecmaVersion: 'latest'
   },
   rules: {
+    'no-var': 'error',
+    'no-unused-vars': 'error',
+    'no-empty': 'error',
     'vue/attributes-order': [
       'error',
       {

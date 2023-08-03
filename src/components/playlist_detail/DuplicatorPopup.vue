@@ -4,8 +4,8 @@
     id="duplicate-snackbar"
     v-model="snackbarVisible"
     :timeout="timeout"
-    elevation="24"
     color="var(--primary-color)"
+    elevation="24"
   >
     <div
       v-if="loadingPercentage > 0"
@@ -23,8 +23,8 @@
 
     <v-btn
       id="get-to-new-playlist"
-      class="rainbow-v-btn"
       :loading="newPlaylistId === ''"
+      class="rainbow-v-btn"
       @click="displayNewPlaylistDetails"
     >
       {{ $t("playlist.next") }}

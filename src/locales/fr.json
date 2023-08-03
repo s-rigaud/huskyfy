@@ -1,204 +1,203 @@
 {
-	"404": {
-		"title": {
-			"part1": "Vous êtes perdus ! ",
-			"part2": "C'est bien une page 404"
-		},
-		"button": "Revenir à la page précédente"
-	},
-	"_emojis": {
-		"public": "📣",
-		"collaborative": "👪",
-		"private": "🔒",
-		"popular": "🔥",
-		"indie": "🌴"
-	},
-	"about": {
-		"website-description": "Divisez et créez de nouvelles playlists sur Spotify en fonction de vos genres musicaux ou de vos artistes préférés !",
-		"connection": {
-			"title": "Connexion et accès au compte Spotify  ",
-			"content": "Huskyfy utilise la méthode sécurisée OAuth2 avec PKCE fournie par Spotify qui permet d'accéder à vos données Spotify en toute sécurité. Aucune donnée n'est stockée sur un serveur, vous êtes donc totalement en sécurité lorsque vous naviguez ou quittez le site sans vous déconnecter."
-		},
-		"creator": {
-			"title": "Créateur  ",
-			"content": {
-				"part1": "Ce site a été",
-				"part2": " créé par moi",
-				"part3": "comme un projet personnel pendant mes études. J'espère que vous le trouverez utile ! Si vous trouvez un bug ou si vous voulez de nouvelles fonctionnalités,",
-				"part4": "n'hésitez pas me joindre ici"
-			}
-		},
-		"description": {
-			"title": "Huskyfy playlist manager",
-			"content": {
-				"part1": "Huskyfy est un site web qui vise à fournir de nouvelles fonctionnalités en manipulant des playlists Spotify. Actuellement, il n'est pas possible de créer des sous-playlists sur Spotify en filtrant par genres musicaux ou par artistes. Maintenant c'est possible avec ",
-				"part2": "De plus, les artistes indépendants ne sont pas toujours mis en avant sur la plateforme, c'est pourquoi Huskyfy essaie de les valoriser."
-			}
-		},
-		"expose-liked-songs": {
-			"title": "Rendre publique sa playlist Titres Likées",
-			"content": {
-				"part1": "C'est malheureusement impossible de rendre publique sa playlist de titres likés sur Spotify. Heureusement si vous cherchez à le faire vous pouvez utiliser Huskyfy. Il vous suffit de dupliquer votre playlist, de rendre la nouvelle playlist publique puis de partager la nouvelle playlist avec tous vos amis",
-				"part2": "Cliquez ici pour vous rendre directement sur votre playlist de titres likées"
-			}
-		},
-		"process": {
-			"title": "Comment ça marche ?",
-			"content": "Huskyfy utilise l'API de Spotify pour rassembler les données sur les artistes, les genres et les titres de vos playlists. L'application essaie ensuite de fournir une interface agréable pour vous permettre de filtrer et de créer facilement de nouvelles playlists à partir de celles déjà existantes."
-		},
-		"copyright": {
-			"title": "Copyright",
-			"content": "Le logo d'Huskyfy et d'autres images proviennent du site "
-		}
-	},
-	"api": {
-		"refresh-succeeded": "Connexion à Spotify réussie"
-	},
-	"drawer": {
-		"update-playlist": "Mettre à jour la playlist",
-		"reorder-playlist": "Réordonner la playlist en fonction",
-		"reorder-by-genre": "Des genres",
-		"reorder-by-artist-pop": "Des artistes les plus présents",
-		"reorder-by-artist-name": "Des noms d'artistes",
-		"export-image": "Exporter un récap",
-		"image-display-title": "Afficher le titre",
-		"image-display-stats": "Afficher les stats",
-		"not-enough-data": "Pas assez d'artistes ou de genres différents pour créer une image"
-	},
-	"footer": {
-		"built": "Créé avec ♥ par"
-	},
-	"generating-picture": {
-		"subtitle": "{count} artistes les plus présents dans la playlist"
-	},
-	"login": {
-		"about": "En apprendre plus sur ce site",
-		"connect": "Se connecter à Spotify",
-		"header": "Découvrez de nouvelles fonctionnalités avec vos playlists Spotify",
-		"functionality1": {
-			"text": "Découvrez les genres musicaux que vous écoutez le plus souvent",
-			"emoji": "🎧"
-		},
-		"functionality2": {
-			"text": "Créez de nouvelles playlists en séparant vos playlists par genre",
-			"emoji": "🚀"
-		},
-		"functionality3": {
-			"text": "Dupliquez et partager vos playlists facilement",
-			"emoji": "🔀"
-		},
-		"functionality4": {
-			"text": "Filtrez et analysez vos playlists en fonction de la popularité des artistes ou des genres musicaux",
-			"emoji": "🔮"
-		},
-		"functionality5": {
-			"text": "Triez vos playlists en fonction des genres ou des artistes les plus populaires",
-			"emoji": "📊"
-		},
-		"functionality6": {
-			"text": "Enregistrez des images contenant toutes les informations de vos playlists",
-			"emoji": "🖼️"
-		}
-	},
-	"navbar": {
-		"change-account": "Changer de compte"
-	},
-
-	"page-title": {
-		"about": "A propos",
-		"explore": "Explore",
-		"login": "Login",
-		"playlist": "Playlist"
-	},
-	"playlist": {
-		"contains-episodes": "Episodes",
-		"contains-episodes-explanations": "Les épisodes ne sont pas affichés",
-		"contains-local-tracks": "Titres locaux",
-		"contains-local-tracks-explanations": "Les titres locaux ne sont pas affichés",
-		"contains-duplicated-tracks": "Titres en double",
-		"contains-duplicated-tracks-explanations": "Les titres en double peuvent altérer le comportement d'Huskyfy puisque leur utilisation fausse la diversité des artistes et des genres",
-		"you": "vous",
-		"collaborative": "Playlist collaborative",
-		"created-by": "Créée par",
-		"name": "Nom de la playlist",
-		"delete": {
-			"agree": "Supprimer 🗑️",
-			"confirm-message": "Voulez vous vraiment supprimer cette playlist de votre bibliothèque ?",
-			"delete": "Supprimer ",
-			"disagree": "Annuler"
-		},
-		"indie-score-text": "Score indé",
-		"duration": "Durée",
-		"no-description": "Pas de description",
-		"total-track-number": "Nombre total de titres",
-		"duplicate": {
-			"button": "Dupliquer la playlist ",
-			"copy-of": "Copie de",
-			"created-by": "créée avec Huskyfy 🐺",
-			"tooltip": "Créer une nouvelle playlist avec tous les titres actuellement sélectionnés",
-			"only-with-filter": "Créer une nouvelle playlist avec les titres sélectionnés"
-		},
-		"explanation-indie-score": "% de titres faits par des artistes avec moins de 500 000 auditeurs mensuels",
-		"explorer-title": "Cliquez sur votre playlist préférée pour commencer à explorer",
-		"export-preview": "Sauvegarder un aperçu 🖼️",
-		"fully-loaded": "Tous les artistes, les titres et les genres ont pu être récupérés",
-		"load-more-button": "Charger tous les titres",
-		"load-more-playlists": "Charger plus de playlists",
-		"load-more-warning": "Votre playlist contient plus de {limit} titres, voulez-vous les {total} titres ?",
-		"new": {
-			"cover": "Changement de l'image de couverture",
-			"create": "Création de la nouvelle playlist",
-			"done": "Fini",
-			"tracks": "Ajout des titres musicaux"
-		},
-		"next": "Voir la nouvelle playlist",
-		"no-tracks-title": "Cette playlist n'a pas de titres pour le moment.",
-		"no-tracks-subtitle": "Ouvrez la playlist sur Spotify et essayez d'ajouter des titres pour commencer à les voir apparaître ici.",
-		"open-on-spotify": "OUVRIR SPOTIFY",
-		"private": "Playlist privée",
-		"public": "Playlist publique",
-		"reset-filters": "Réinitialiser les filtres",
-		"set-private": "Rendre privée",
-		"set-public": "Rendre publique",
-		"unfollow": "Supprimer 🗑️",
-		"your-music": {
-			"description": "Playlist Spotify avec tous les titres likés",
-			"name": "Titres likés"
-		},
-		"indie-text": {
-			"high": " des artistes de la playlist sont indépendants ! On dirait que vous vous y intéressez.",
-			"low": " des artistes de la playlist sont indépendants."
-		}
-	},
-	"track": {
-		"_generic-name": "titre | titre | titres",
-		"all-tracks": "Tous les titres",
-		"exclusive-filter": "Tous les filtres doivent apparaître sur le titre",
-		"inclusive-filter": "Au moins un des filtres doit apparaître sur le titre",
-		"other": "autre | autre | autres",
-		"filters": {
-			"title": "Filtres",
-			"artists": "Artistes",
-			"genres": "Genres",
-			"indie": "🌴 Indé",
-			"name": "Filtres",
-			"no-filter": "Tout",
-			"popular": "🔥 Populaire",
-			"preference": "Titres likés",
-			"no-valid-tracks": "Pas de titres correspondant à vos filtres",
-			"only-liked": "Likés ♥",
-			"only-not-liked": "Non likés ♡",
-			"popularity": "Popularité",
-			"keyword": {
-				"and": "et",
-				"or": "ou"
-			},
-			"try-now": "Essayez !",
-			"not-fully-loaded": "Tous les titres ne sont pas chargés, vous filtrez seulement une partie de la playlist"
-		},
-		"indie": "🌴 Artiste Indé | 🌴 Artistes Indés",
-		"name": "titres",
-		"no-genre": "Pas de genre",
-		"popular": "🔥 Artiste populaire | 🔥 Artistes populaires"
-	}
+    "404": {
+        "title": {
+            "part1": "Vous êtes perdus ! ",
+            "part2": "C'est bien une page 404"
+        },
+        "button": "Revenir à la page précédente"
+    },
+    "_emojis": {
+        "public": "📣",
+        "collaborative": "👪",
+        "private": "🔒",
+        "popular": "🔥",
+        "indie": "🌴"
+    },
+    "about": {
+        "website-description": "Divisez et créez de nouvelles playlists sur Spotify en fonction de vos genres musicaux ou de vos artistes préférés !",
+        "connection": {
+            "title": "Connexion et accès au compte Spotify  ",
+            "content": "Huskyfy utilise la méthode sécurisée OAuth2 avec PKCE fournie par Spotify qui permet d'accéder à vos données Spotify en toute sécurité. Aucune donnée n'est stockée sur un serveur, vous êtes donc totalement en sécurité lorsque vous naviguez ou quittez le site sans vous déconnecter."
+        },
+        "creator": {
+            "title": "Créateur  ",
+            "content": {
+                "part1": "Ce site a été",
+                "part2": " créé par moi",
+                "part3": "comme un projet personnel pendant mes études. J'espère que vous le trouverez utile ! Si vous trouvez un bug ou si vous voulez de nouvelles fonctionnalités,",
+                "part4": "n'hésitez pas me joindre ici"
+            }
+        },
+        "description": {
+            "title": "Huskyfy playlist manager",
+            "content": {
+                "part1": "Huskyfy est un site web qui vise à fournir de nouvelles fonctionnalités en manipulant des playlists Spotify. Actuellement, il n'est pas possible de créer des sous-playlists sur Spotify en filtrant par genres musicaux ou par artistes. Maintenant c'est possible avec ",
+                "part2": "De plus, les artistes indépendants ne sont pas toujours mis en avant sur la plateforme, c'est pourquoi Huskyfy essaie de les valoriser."
+            }
+        },
+        "expose-liked-songs": {
+            "title": "Rendre publique sa playlist Titres Likées",
+            "content": {
+                "part1": "C'est malheureusement impossible de rendre publique sa playlist de titres likés sur Spotify. Heureusement si vous cherchez à le faire vous pouvez utiliser Huskyfy. Il vous suffit de dupliquer votre playlist, de rendre la nouvelle playlist publique puis de partager la nouvelle playlist avec tous vos amis",
+                "part2": "Cliquez ici pour vous rendre directement sur votre playlist de titres likées"
+            }
+        },
+        "process": {
+            "title": "Comment ça marche ?",
+            "content": "Huskyfy utilise l'API de Spotify pour rassembler les données sur les artistes, les genres et les titres de vos playlists. L'application essaie ensuite de fournir une interface agréable pour vous permettre de filtrer et de créer facilement de nouvelles playlists à partir de celles déjà existantes."
+        },
+        "copyright": {
+            "title": "Copyright",
+            "content": "Le logo d'Huskyfy et d'autres images proviennent du site "
+        }
+    },
+    "api": {
+        "refresh-succeeded": "Connexion à Spotify réussie"
+    },
+    "drawer": {
+        "update-playlist": "Mettre à jour la playlist",
+        "reorder-playlist": "Réordonner la playlist en fonction",
+        "reorder-by-genre": "Des genres",
+        "reorder-by-artist-pop": "Des artistes les plus présents",
+        "reorder-by-artist-name": "Des noms d'artistes",
+        "export-image": "Exporter un récap",
+        "image-display-title": "Afficher le titre",
+        "image-display-stats": "Afficher les stats",
+        "not-enough-data": "Pas assez d'artistes ou de genres différents pour créer une image"
+    },
+    "footer": {
+        "built": "Créé avec ♥ par"
+    },
+    "generating-picture": {
+        "subtitle": "{count} artistes les plus présents dans la playlist"
+    },
+    "login": {
+        "about": "En apprendre plus sur ce site",
+        "connect": "Se connecter à Spotify",
+        "header": "Découvrez de nouvelles fonctionnalités avec vos playlists Spotify",
+        "functionality1": {
+            "text": "Découvrez les genres musicaux que vous écoutez le plus souvent",
+            "emoji": "🎧"
+        },
+        "functionality2": {
+            "text": "Créez de nouvelles playlists en séparant vos playlists par genre",
+            "emoji": "🚀"
+        },
+        "functionality3": {
+            "text": "Dupliquez et partager vos playlists facilement",
+            "emoji": "🔀"
+        },
+        "functionality4": {
+            "text": "Filtrez et analysez vos playlists en fonction de la popularité des artistes ou des genres musicaux",
+            "emoji": "🔮"
+        },
+        "functionality5": {
+            "text": "Triez vos playlists en fonction des genres ou des artistes les plus populaires",
+            "emoji": "📊"
+        },
+        "functionality6": {
+            "text": "Enregistrez des images contenant toutes les informations de vos playlists",
+            "emoji": "🖼️"
+        }
+    },
+    "navbar": {
+        "change-account": "Changer de compte"
+    },
+    "page-title": {
+        "about": "A propos",
+        "explore": "Explore",
+        "login": "Login",
+        "playlist": "Playlist"
+    },
+    "playlist": {
+        "contains-episodes": "Episodes",
+        "contains-episodes-explanations": "Les épisodes ne sont pas affichés",
+        "contains-local-tracks": "Titres locaux",
+        "contains-local-tracks-explanations": "Les titres locaux ne sont pas affichés",
+        "contains-duplicated-tracks": "Titres en double",
+        "contains-duplicated-tracks-explanations": "Les titres en double peuvent altérer le comportement d'Huskyfy puisque leur utilisation fausse la diversité des artistes et des genres",
+        "you": "vous",
+        "collaborative": "Playlist collaborative",
+        "created-by": "Créée par",
+        "name": "Nom de la playlist",
+        "delete": {
+            "agree": "Supprimer 🗑️",
+            "confirm-message": "Voulez vous vraiment supprimer cette playlist de votre bibliothèque ?",
+            "delete": "Supprimer ",
+            "disagree": "Annuler"
+        },
+        "indie-score-text": "Score indé",
+        "duration": "Durée",
+        "no-description": "Pas de description",
+        "total-track-number": "Nombre total de titres",
+        "duplicate": {
+            "button": "Dupliquer la playlist ",
+            "copy-of": "Copie de",
+            "created-by": "créée avec Huskyfy 🐺",
+            "tooltip": "Créer une nouvelle playlist avec tous les titres actuellement sélectionnés",
+            "only-with-filter": "Créer une nouvelle playlist avec les titres sélectionnés"
+        },
+        "explanation-indie-score": "% de titres faits par des artistes avec moins de 500 000 auditeurs mensuels",
+        "explorer-title": "Cliquez sur votre playlist préférée pour commencer à explorer",
+        "export-preview": "Sauvegarder un aperçu 🖼️",
+        "fully-loaded": "Tous les artistes, les titres et les genres ont pu être récupérés",
+        "load-more-button": "Charger tous les titres",
+        "load-more-playlists": "Charger plus de playlists",
+        "load-more-warning": "Votre playlist contient plus de {limit} titres, voulez-vous les {total} titres ?",
+        "new": {
+            "cover": "Changement de l'image de couverture",
+            "create": "Création de la nouvelle playlist",
+            "done": "Fini",
+            "tracks": "Ajout des titres musicaux"
+        },
+        "next": "Voir la nouvelle playlist",
+        "no-tracks-title": "Cette playlist n'a pas de titres pour le moment.",
+        "no-tracks-subtitle": "Ouvrez la playlist sur Spotify et essayez d'ajouter des titres pour commencer à les voir apparaître ici.",
+        "open-on-spotify": "OUVRIR SPOTIFY",
+        "private": "Playlist privée",
+        "public": "Playlist publique",
+        "reset-filters": "Réinitialiser les filtres",
+        "set-private": "Rendre privée",
+        "set-public": "Rendre publique",
+        "unfollow": "Supprimer 🗑️",
+        "your-music": {
+            "description": "Playlist Spotify avec tous les titres likés",
+            "name": "Titres likés"
+        },
+        "indie-text": {
+            "high": " des artistes de la playlist sont indépendants ! On dirait que vous vous y intéressez.",
+            "low": " des artistes de la playlist sont indépendants."
+        }
+    },
+    "track": {
+        "_generic-name": "titre | titre | titres",
+        "all-tracks": "Tous les titres",
+        "exclusive-filter": "Tous les filtres doivent apparaître sur le titre",
+        "inclusive-filter": "Au moins un des filtres doit apparaître sur le titre",
+        "other": "autre | autre | autres",
+        "filters": {
+            "title": "Filtres",
+            "artists": "Artistes",
+            "genres": "Genres",
+            "indie": "🌴 Indé",
+            "name": "Filtres",
+            "no-filter": "Tout",
+            "popular": "🔥 Populaire",
+            "preference": "Titres likés",
+            "no-valid-tracks": "Pas de titres correspondant à vos filtres",
+            "only-liked": "Likés ♥",
+            "only-not-liked": "Non likés ♡",
+            "popularity": "Popularité",
+            "keyword": {
+                "and": "et",
+                "or": "ou"
+            },
+            "try-now": "Essayez !",
+            "not-fully-loaded": "Tous les titres ne sont pas chargés, vous filtrez seulement une partie de la playlist"
+        },
+        "indie": "🌴 Artiste Indé | 🌴 Artistes Indés",
+        "name": "titres",
+        "no-genre": "Pas de genre",
+        "popular": "🔥 Artiste populaire | 🔥 Artistes populaires"
+    }
 }

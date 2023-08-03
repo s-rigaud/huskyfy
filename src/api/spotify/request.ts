@@ -13,10 +13,10 @@ const request = axios.create({
 */
 request.interceptors.request.use(function (config) {
   const authStore = useAuthStore()
-  if (authStore.accessToken) {
-    // eslint-disable-next-line
-    config.headers!.Authorization = `Bearer ${authStore.accessToken}`
+  if (authStore.accessToken && config.headers) {
+    config.headers.Authorization = `Bearer ${authStore.accessToken}`
   }
+
   return config
 })
 
@@ -26,7 +26,7 @@ request.interceptors.response.use(response => {
   return response
 }, async (error) => {
   const { status = 500 } = error.response
-  const config = error.config
+  const { config } = error
 
   // Handle access token refresh for 401
   if (error.response && status === 401) {

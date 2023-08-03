@@ -2,20 +2,35 @@
   <HuskyfyBanner />
   <div id="full-page">
     <div id="playlists">
-      <PlaylistCard v-for="playlist in playlistsStore.playlists" :id="playlist.id" :key="playlist.id"
-        :name="formatName(playlist)" :images="playlist.images" :track-count="playlist.total" />
-      <v-progress-circular v-if="!firstTracksLoaded" :size="70" :width="7" color="var(--text-color)" indeterminate />
+      <PlaylistCard
+        v-for="playlist in playlistsStore.playlists"
+        :id="playlist.id"
+        :key="playlist.id"
+        :images="playlist.images"
+        :name="formatName(playlist)"
+        :track-count="playlist.total"
+      />
+      <v-progress-circular
+        v-if="!firstTracksLoaded"
+        :size="70"
+        :width="7"
+        color="var(--text-color)"
+        indeterminate
+      />
     </div>
 
-    <v-btn v-if="Object.keys(playlistsStore.playlists).length < playlistTotal && firstTracksLoaded" class="rainbow-v-btn"
-      @click="loadMorePlaylists">
+    <v-btn
+      v-if="Object.keys(playlistsStore.playlists).length < playlistTotal && firstTracksLoaded"
+      class="rainbow-v-btn"
+      @click="loadMorePlaylists"
+    >
       {{ $t("playlist.load-more-playlists") }}
     </v-btn>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
+import { ref, computed, onBeforeMount } from 'vue'
 import { useMeta } from 'vue-meta'
 
 import { SpotifyPlaylist } from '@/api/spotify/types/entities'
@@ -24,49 +39,35 @@ import PlaylistCard from '@/components/PlaylistCard.vue'
 import { t } from '@/i18n'
 import { MY_MUSIC_PLAYLIST_ID, usePlaylistsStore } from '@/stores/playlists'
 
-// Display all playlists in the Spotify user library
-export default defineComponent({
-  name: 'PlaylistExplorer',
-  components: {
-    HuskyfyBanner,
-    PlaylistCard
-  },
-  setup() {
-    useMeta({
-      title: t('page-title.explore'),
-      link: [
-        { rel: 'canonical', href: `${import.meta.env.VITE_APP_BASE_SERVER_URL}/explore` }
-      ]
-    })
-    const playlistsStore = usePlaylistsStore()
-    return { playlistsStore }
-  },
-  data() {
-    return {
-      playlistTotal: 0,
-      offset: 0,
-      firstTracksLoaded: false
-    }
-  },
-  computed: {
-    formatName() {
-      return (playlist: SpotifyPlaylist): string => {
-        return playlist.id === MY_MUSIC_PLAYLIST_ID ? this.$t('playlist.your-music.name') : playlist.name
-      }
-    }
-  },
-  async created() {
-    await this.loadMorePlaylists()
-    this.firstTracksLoaded = true
-  },
-  methods: {
-    async loadMorePlaylists() {
-      const { total, offset } = await this.playlistsStore.getUserPlaylists(this.offset)
-      this.playlistTotal = total
-      this.offset = offset
-    }
+useMeta({
+  title: t('page-title.explore'),
+  link: [
+    { rel: 'canonical', href: `${import.meta.env.VITE_APP_BASE_SERVER_URL}/explore` }
+  ]
+})
+
+const playlistsStore = usePlaylistsStore()
+
+const playlistTotal = ref(0)
+const offset = ref(0)
+const firstTracksLoaded = ref(false)
+
+const formatName = computed(() => {
+  return (playlist: SpotifyPlaylist): string => {
+    return playlist.id === MY_MUSIC_PLAYLIST_ID ? t('playlist.your-music.name') : playlist.name
   }
 })
+
+onBeforeMount(async () => {
+  await loadMorePlaylists()
+  firstTracksLoaded.value = true
+})
+
+const loadMorePlaylists = async () => {
+  const res = await playlistsStore.getUserPlaylists(offset.value)
+  playlistTotal.value = res.total
+  offset.value = res.offset
+}
 </script>
 
 <style scoped>

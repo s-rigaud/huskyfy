@@ -408,8 +408,8 @@ export const usePlaylistsStore = defineStore('playlists', {
           }
 
           // Update track artist as we retrieve more info in the specific artist call
-          // eslint-disable-next-line
-          item.track.artists[i] = spotifyArtistInfo.find(a => a.id === artists[i].id)!
+
+          item.track.artists[i] = spotifyArtistInfo.find(a => a.id === artists[i].id) as SpotifyArtist
         }
         formattedTracks.push({
           ...track,
@@ -478,8 +478,8 @@ export const usePlaylistsStore = defineStore('playlists', {
         newPlaylistId,
         trackURIs
       )
-      // eslint-disable-next-line
-      this.playlists[newPlaylistId].snapshot_id = lastSnapshotId!
+
+      this.playlists[newPlaylistId].snapshot_id = lastSnapshotId as string
       this.playlists[newPlaylistId].tracks.push(...tracks)
       this.playlists[newPlaylistId].offset = trackURIs.length
       this.playlists[newPlaylistId].total = trackURIs.length

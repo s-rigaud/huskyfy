@@ -13,18 +13,14 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
+import { computed } from 'vue'
 
-export default defineComponent({
-  name: 'HuskyfyBanner',
-  computed: {
-    starImg (): string {
-      return new URL('./../assets/stars.jpg', import.meta.url).href
-    }
-  }
+const starImg = computed((): string => {
+  return new URL('./../assets/stars.jpg', import.meta.url).href
 })
 </script>
+
 <style scoped>
 #main-banner {
   padding: 0px 20px;

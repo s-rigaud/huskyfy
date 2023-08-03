@@ -1,15 +1,27 @@
 <template>
   <div id="login">
     <div id="upper-part">
-      <v-img id="logo" rel="preconnect" src="@/assets/Huskyfy.png" alt="Huskyfy" />
+      <v-img
+        id="logo"
+        alt="Huskyfy"
+        rel="preconnect"
+        src="@/assets/Huskyfy.png"
+      />
     </div>
 
     <div id="hero">
-      <h1 id="title" class="rainbow-text">
+      <h1
+        id="title"
+        class="rainbow-text"
+      >
         {{ $t("login.header") }}
       </h1>
       <div id="functionalities">
-        <div v-for="n in 6" :key="n" class="functionality">
+        <div
+          v-for="n in 6"
+          :key="n"
+          class="functionality"
+        >
           <p class="emoji">
             {{ $t(`login.functionality${n}.emoji`) }}
           </p>
@@ -19,14 +31,27 @@
     </div>
 
     <div id="lower-part">
-      <v-btn id="connect-button" rounded class="rainbow-v-btn" size="large" @click="accessOAuthPage">
+      <v-btn
+        id="connect-button"
+        class="rainbow-v-btn"
+        rounded
+        size="large"
+        @click="accessOAuthPage"
+      >
         {{ $t("login.connect") }}
-        <v-icon right light style="padding-top: 5px;">
+        <v-icon
+          light
+          right
+          style="padding-top: 5px;"
+        >
           mdi-account-circle
         </v-icon>
       </v-btn>
 
-      <router-link id="link-about" to="/about">
+      <router-link
+        id="link-about"
+        to="/about"
+      >
         {{ $t("login.about") }}
       </router-link>
     </div>
@@ -37,32 +62,23 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
 import { useMeta } from 'vue-meta'
 
 import api from '@/api'
 import LocaleSelector from '@/components/LocaleSelector.vue'
 import { t } from '@/i18n'
 
-// Login view with a large background and a simple button
-export default defineComponent({
-  name: 'LoginView',
-  components: { LocaleSelector },
-  setup() {
-    useMeta({
-      title: t('page-title.login'),
-      link: [
-        { rel: 'canonical', href: `${import.meta.env.VITE_APP_BASE_SERVER_URL}/login` }
-      ]
-    })
-  },
-  methods: {
-    async accessOAuthPage() {
-      window.location.href = await api.spotify.auth.getOAuthUrl()
-    }
-  }
+useMeta({
+  title: t('page-title.login'),
+  link: [
+    { rel: 'canonical', href: `${import.meta.env.VITE_APP_BASE_SERVER_URL}/login` }
+  ]
 })
+
+const accessOAuthPage = async () => {
+  window.location.href = await api.spotify.auth.getOAuthUrl()
+}
 </script>
 <style scoped>
 #login {
@@ -79,7 +95,7 @@ export default defineComponent({
   align-items: center;
   text-align: center;
 
-  background: url("../../public/home-background.webp");
+  background: url("../../home-background.webp");
   background-size: cover;
   background-position: 50%;
   z-index: 1;

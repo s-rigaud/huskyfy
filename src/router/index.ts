@@ -29,25 +29,24 @@ const routes = [
   {
     path: '/about',
     name: 'About',
-    component: () => import('../views/AboutView.vue'),
+    component: () => import('../views/AboutView.vue')
   },
   {
     path: '/:pathMatch(.*)*',
     name: '404',
-    component: () => import('../views/NotFound404.vue'),
+    component: () => import('../views/NotFound404.vue')
   }
 ]
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
-  scrollBehavior() {
+  scrollBehavior () {
     // always scroll to top
     return { top: 0, behavior: 'smooth' }
   }
 })
 
-// eslint-disable-next-line
 const DEFAULT_USER_PICTURE = new URL('./../assets/no-user.png', import.meta.url).href
 
 /**

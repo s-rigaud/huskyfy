@@ -6,17 +6,17 @@
     @click="displayDetails"
   >
     <v-img
-      rel="preconnect"
       :src="images[0].url"
       alt="Playlist cover"
-      lazy-src="@/assets/default_cover.jpg"
       cover
+      lazy-src="@/assets/default_cover.jpg"
+      rel="preconnect"
     />
 
     <v-tooltip
       :text="name"
-      location="bottom"
       class="name-tooltip"
+      location="bottom"
     >
       <template #activator="{ props }">
         <v-card-title v-bind="props">
@@ -29,40 +29,39 @@
   </v-card>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType } from 'vue'
+<script setup lang="ts">
+import { PropType } from 'vue'
 
 import { SpotifyImage } from '@/api/spotify/types/entities'
+import { useRouter } from 'vue-router'
 
-export default defineComponent({
-  name: 'PlaylistCard',
-  props: {
-    id: {
-      type: String,
-      required: true
-    },
-    name: {
-      type: String,
-      required: true
-    },
-    images: {
-      type: Array as PropType<SpotifyImage[]>,
-      required: true
-    },
-    trackCount: {
-      type: Number,
-      required: true
-    }
+const router = useRouter()
+
+const props = defineProps({
+  id: {
+    type: String,
+    required: true
   },
-  methods: {
-    displayDetails () {
-      this.$router.push({
-        name: 'Explore playlist',
-        params: { playlistId: this.id }
-      })
-    }
+  name: {
+    type: String,
+    required: true
+  },
+  images: {
+    type: Array as PropType<SpotifyImage[]>,
+    required: true
+  },
+  trackCount: {
+    type: Number,
+    required: true
   }
 })
+
+const displayDetails = () => {
+  router.push({
+    name: 'Explore playlist',
+    params: { playlistId: props.id }
+  })
+}
 </script>
 <style>
 /*
