@@ -39,16 +39,16 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes,
-  scrollBehavior () {
+  scrollBehavior() {
     // always scroll to top
     return { top: 0, behavior: 'smooth' }
   }
 })
 
 // eslint-disable-next-line
-const DEFAULT_USER_PICTURE = require('@/assets/no-user.png') as string
+const DEFAULT_USER_PICTURE = new URL('./../assets/no-user.png', import.meta.url).href
 
 /**
  * Intercept and handle routing logic according to parameters and authentification state.

@@ -695,7 +695,7 @@ export default defineComponent({
       return this.playlistsStore.genreColorMapping[genre]
     },
     getArtistImage (artist: SpotifyArtist): string {
-      return artist.images[0]?.url || require('@/assets/no-user.png')
+      return artist.images[0]?.url || new URL('./../assets/no-user.png', import.meta.url).href
     }
   }
 })

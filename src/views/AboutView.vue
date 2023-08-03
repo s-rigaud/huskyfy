@@ -2,35 +2,20 @@
   <div id="about-content">
     <div id="text">
       <div id="main-title">
-        <v-img
-          id="main-title-image"
-          width="60"
-          src="@/assets/large-logo-circle.png"
-          alt="Huskyfy Image"
-        />
+        <v-img id="main-title-image" width="60" src="@/assets/large-logo-circle.png" alt="Huskyfy Image" />
         <h1 class="rainbow-text">
           {{ $t("about.description.title") }}
         </h1>
       </div>
       <p style="margin-bottom: 5px">
         {{ $t("about.description.content.part1") }}
-        <span
-          style="color: var(--link-color); cursor: pointer;"
-          @mouseover="drawConfettis"
-        >
+        <span style="color: var(--link-color); cursor: pointer;" @mouseover="drawConfettis">
           Huskyfy !
         </span>
         {{ $t("about.description.content.part2") }}
       </p>
-      <v-chip
-        id="indie-chip"
-        :text="$t('track.indie')"
-        color="green"
-        label
-        text-color="white"
-        size="large"
-        @click="drawStars"
-      />
+      <v-chip id="indie-chip" :text="$t('track.indie')" color="green" label text-color="white" size="large"
+        @click="drawStars" />
 
       <div class="subtitle">
         <h2 class="rainbow-text">
@@ -60,16 +45,9 @@
       <p>
         {{ $t("about.expose-liked-songs.content.part1") }} {{ $t("_emojis.collaborative") }}
         <br>
-        <span
-          id="open-my-music"
-          @click="openMyMusicOnSpotify"
-        >
-          {{ $t("about.expose-liked-songs.content.part2") }}<v-img
-            id="my-song-img"
-            width="20"
-            src="@/assets/my-music.jpeg"
-            alt="My Music playlist"
-          />
+        <span id="open-my-music" @click="openMyMusicOnSpotify">
+          {{ $t("about.expose-liked-songs.content.part2") }}<v-img id="my-song-img" width="20"
+            src="@/assets/my-music.jpeg" alt="My Music playlist" />
         </span>
       </p>
 
@@ -82,11 +60,7 @@
       <v-divider />
       <p>
         {{ $t("about.creator.content.part1") }}
-        <a
-          href="https://github.com/s-rigaud"
-          target="_blank"
-          rel="noopener"
-        >
+        <a href="https://github.com/s-rigaud" target="_blank" rel="noopener">
           {{ $t("about.creator.content.part2") }}
         </a>
         {{ $t("about.creator.content.part3") }}
@@ -99,67 +73,35 @@
         <h2 class="rainbow-text">
           {{ $t("about.copyright.title") }}
         </h2>
-        <h2
-          class="rainbow-text"
-          style="margin-left: 5px"
-        >
+        <h2 class="rainbow-text" style="margin-left: 5px">
           ©️
         </h2>
       </div>
       <v-divider />
       <p>
         {{ $t("about.copyright.content") }}
-        <a
-          href="https://www.flaticon.com/fr/icones-gratuites/husky-siberien"
-          title="husky sibérien icônes"
-          target="_blank"
-          rel="noopener"
-        >FlatIcon.com</a>.
+        <a href="https://www.flaticon.com/fr/icones-gratuites/husky-siberien" title="husky sibérien icônes"
+          target="_blank" rel="noopener">FlatIcon.com</a>.
       </p>
 
       <div id="github-icon">
         <div>
-          <a
-            href="https://github.com/s-rigaud/huskyfy"
-            target="_blank"
-            rel="noopener"
-            style="color: var(--text-color) !important;"
-          >
-            <v-img
-              width="70"
-              src="@/assets/large-logo-circle.png"
-              alt="Huskyfy Image"
-            />
+          <a href="https://github.com/s-rigaud/huskyfy" target="_blank" rel="noopener"
+            style="color: var(--text-color) !important;">
+            <v-img width="70" src="@/assets/large-logo-circle.png" alt="Huskyfy Image" />
             <p style="color: var(--text-color); margin: 0px 15px;">Huskyfy version {{ version }}</p>
           </a>
         </div>
         <div>
-          <a
-            href="https://github.com/s-rigaud"
-            target="_blank"
-            rel="noopener"
-            style="color: white !important;"
-          >
-            <v-img
-              width="70"
-              src="@/assets/github.png"
-              alt="Github Image"
-            />
+          <a href="https://github.com/s-rigaud" target="_blank" rel="noopener" style="color: white !important;">
+            <v-img width="70" src="@/assets/github.png" alt="Github Image" />
             <p style="color: white; margin: 0px 15px;">@s‑rigaud</p>
           </a>
         </div>
         <div>
-          <a
-            href="https://twitter.com/HuskyfyWebsite/with_replies"
-            target="_blank"
-            rel="noopener"
-            style="color: #55ADEE !important;"
-          >
-            <v-img
-              width="70"
-              src="@/assets/twitter.png"
-              alt="Twitter Image"
-            />
+          <a href="https://twitter.com/HuskyfyWebsite/with_replies" target="_blank" rel="noopener"
+            style="color: #55ADEE !important;">
+            <v-img width="70" src="@/assets/twitter.png" alt="Twitter Image" />
             <p style="color: #55ADEE; margin: 0px 15px;">@Huskyfy Website</p>
           </a>
         </div>
@@ -179,24 +121,24 @@ import packageInfo from '../../package.json'
 // General page with info about the app
 export default defineComponent({
   name: 'AboutView',
-  setup () {
+  setup() {
     useMeta({
       title: t('page-title.about'),
       link: [
-        { rel: 'canonical', href: `${process.env.VUE_APP_BASE_SERVER_URL}/about` }
+        { rel: 'canonical', href: `${import.meta.env.VITE_APP_BASE_SERVER_URL}/about` }
       ]
     })
     return { version: packageInfo.version }
   },
   methods: {
-    openMyMusicOnSpotify () {
-      window.location.href = `${process.env.VUE_APP_BASE_SERVER_URL}/playlist/my-music`
+    openMyMusicOnSpotify() {
+      window.location.href = `${import.meta.env.VITE_APP_BASE_SERVER_URL}/playlist/my-music`
     },
     /**
      * Draw some stars on the screens with a nice animation
      * TODO use ref=
      */
-    drawStars () {
+    drawStars() {
       // eslint-disable-next-line
       const indieChip = document.getElementById('indie-chip')!
       const rect = indieChip.getBoundingClientRect()
@@ -215,7 +157,7 @@ export default defineComponent({
         colors: ['FFE400', 'FFBD00', 'E89400', 'FFCA6C', 'FDFFB8']
       }
 
-      function shoot () {
+      function shoot() {
         confetti({
           ...defaults,
           particleCount: 40,
@@ -238,12 +180,12 @@ export default defineComponent({
     /**
      * Draw some confettis on the screens with a nice animation
      */
-    drawConfettis () {
+    drawConfettis() {
       const duration = 1500
       const animationEnd = Date.now() + duration
       const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 }
 
-      function randomInRange (min: number, max: number): number {
+      function randomInRange(min: number, max: number): number {
         return Math.random() * (max - min) + min
       }
 

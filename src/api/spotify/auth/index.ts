@@ -3,11 +3,11 @@ import axios, { AxiosResponse } from 'axios'
 import { useAuthStore } from '@/stores/auth'
 import { SpotifyAuthResponse } from '../types/responses'
 
-const CLIENT_ID: string = process.env.VUE_APP_SPOTIFY_CLIENT_ID as string
-const CLIENT_SECRET: string = process.env.VUE_APP_SPOTIFY_CLIENT_SECRET as string
+const CLIENT_ID: string = import.meta.env.VITE_APP_SPOTIFY_CLIENT_ID as string
+const CLIENT_SECRET: string = import.meta.env.VITE_APP_SPOTIFY_CLIENT_SECRET as string
 
 const ENCODED_CREDENTIALS = btoa(`${CLIENT_ID}:${CLIENT_SECRET}`)
-const REDIRECT_URL = `${process.env.VUE_APP_BASE_SERVER_URL}/login`
+const REDIRECT_URL = `${import.meta.env.VITE_APP_BASE_SERVER_URL}/login`
 const SCOPES = [
   // Read all tracks and playlists
   'user-library-read',
@@ -62,7 +62,7 @@ export default {
    * Return Spotify OAuth url
    * By going to this url, the user can accept terms and scope and a temporary token is returned
    */
-  async getOAuthUrl (): Promise<string> {
+  async getOAuthUrl(): Promise<string> {
     const authStore = useAuthStore()
 
     const STATE_AUTHORIZATION_CODE = generateRandomString(15)
@@ -92,7 +92,7 @@ export default {
   /**
    * Request first access token from the previous temporary token received
    */
-  async requestFirstAccessToken () {
+  async requestFirstAccessToken() {
     const authStore = useAuthStore()
     const data = [
       'grant_type=authorization_code',
@@ -126,7 +126,7 @@ export default {
   /**
    * Refresh new access token
    */
-  async requestNewAccessToken (): Promise<string | void> {
+  async requestNewAccessToken(): Promise<string | void> {
     console.log('trying to refresh token before retrying call')
 
     /*  const authStore = useAuthStore()

@@ -20,7 +20,7 @@ export default defineComponent({
   name: 'HuskyfyBanner',
   computed: {
     starImg (): string {
-      return require('@/assets/stars.jpg')
+      return new URL('./../assets/stars.jpg', import.meta.url).href
     }
   }
 })

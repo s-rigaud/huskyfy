@@ -38,7 +38,8 @@
     "src/locales/*.json",
     "tests/**/*.ts",
     "tests/**/*.tsx",
-    "src/*.ts"
+    "src/*.ts",
+    "package.json"
   ],
   "exclude": [
     "node_modules"

@@ -77,7 +77,7 @@ export default defineComponent({
   computed: {
     profilePictureOrDefault (): string {
       // eslint-disable-next-line
-      const DEFAULT_PICTURE: string = require("@/assets/no-user.png")
+      const DEFAULT_PICTURE = new URL('./../assets/no-user.png', import.meta.url).href
       return this.userStore.profilePicture || DEFAULT_PICTURE
     }
   },

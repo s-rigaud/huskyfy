@@ -1,27 +1,15 @@
 <template>
   <div id="login">
     <div id="upper-part">
-      <v-img
-        id="logo"
-        rel="preconnect"
-        src="@/assets/Huskyfy.png"
-        alt="Huskyfy"
-      />
+      <v-img id="logo" rel="preconnect" src="@/assets/Huskyfy.png" alt="Huskyfy" />
     </div>
 
     <div id="hero">
-      <h1
-        id="title"
-        class="rainbow-text"
-      >
+      <h1 id="title" class="rainbow-text">
         {{ $t("login.header") }}
       </h1>
       <div id="functionalities">
-        <div
-          v-for="n in 6"
-          :key="n"
-          class="functionality"
-        >
+        <div v-for="n in 6" :key="n" class="functionality">
           <p class="emoji">
             {{ $t(`login.functionality${n}.emoji`) }}
           </p>
@@ -31,27 +19,14 @@
     </div>
 
     <div id="lower-part">
-      <v-btn
-        id="connect-button"
-        rounded
-        class="rainbow-v-btn"
-        size="large"
-        @click="accessOAuthPage"
-      >
+      <v-btn id="connect-button" rounded class="rainbow-v-btn" size="large" @click="accessOAuthPage">
         {{ $t("login.connect") }}
-        <v-icon
-          right
-          light
-          style="padding-top: 5px;"
-        >
+        <v-icon right light style="padding-top: 5px;">
           mdi-account-circle
         </v-icon>
       </v-btn>
 
-      <router-link
-        id="link-about"
-        to="/about"
-      >
+      <router-link id="link-about" to="/about">
         {{ $t("login.about") }}
       </router-link>
     </div>
@@ -74,16 +49,16 @@ import { t } from '@/i18n'
 export default defineComponent({
   name: 'LoginView',
   components: { LocaleSelector },
-  setup () {
+  setup() {
     useMeta({
       title: t('page-title.login'),
       link: [
-        { rel: 'canonical', href: `${process.env.VUE_APP_BASE_SERVER_URL}/login` }
+        { rel: 'canonical', href: `${import.meta.env.VITE_APP_BASE_SERVER_URL}/login` }
       ]
     })
   },
   methods: {
-    async accessOAuthPage () {
+    async accessOAuthPage() {
       window.location.href = await api.spotify.auth.getOAuthUrl()
     }
   }

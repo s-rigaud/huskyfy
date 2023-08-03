@@ -109,7 +109,7 @@ const generateFakeArtist = (index: number): SpotifyArtist => {
     followers: { total: 2 },
     genres: ['pop', 'groove', 'indie', 'rock'],
     id: `artist-${index}`,
-    images: [{ url: require('@/assets/default_cover.jpg') }],
+    images: [{ url: new URL('./../assets/default_cover.jpg', import.meta.url).href }],
     name: `artist-${index}`,
     uri: ''
   }

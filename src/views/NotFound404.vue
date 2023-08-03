@@ -6,12 +6,7 @@
     <h2 class="title-404">
       <span class="rainbow-text">{{ $t('404.title.part2') }}</span>😕
     </h2>
-    <v-btn
-      id="back-button"
-      class="rainbow-v-btn"
-      append-icon="mdi-map-search-outline"
-      @click="backToPreviousPage"
-    >
+    <v-btn id="back-button" class="rainbow-v-btn" append-icon="mdi-map-search-outline" @click="backToPreviousPage">
       {{ $t('404.button') }}
     </v-btn>
   </section>
@@ -23,16 +18,16 @@ import { useMeta } from 'vue-meta'
 
 export default defineComponent({
   name: 'NotFound404',
-  setup () {
+  setup() {
     useMeta({
       title: '404',
       link: [
-        { rel: 'canonical', href: `${process.env.VUE_APP_BASE_SERVER_URL}/404` }
+        { rel: 'canonical', href: `${import.meta.env.VITE_APP_BASE_SERVER_URL}/404` }
       ]
     })
   },
   methods: {
-    backToPreviousPage () {
+    backToPreviousPage() {
       this.$router.go(-1)
     }
   }

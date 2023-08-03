@@ -103,9 +103,7 @@
 	"navbar": {
 		"change-account": "Changer de compte"
 	},
-	"not-found": {
-		"404": "Page non trouvée"
-	},
+
 	"page-title": {
 		"about": "A propos",
 		"explore": "Explore",

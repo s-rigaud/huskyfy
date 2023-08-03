@@ -26,7 +26,7 @@ const DEFAULT_MY_MUSIC_PLAYLIST: SimplifiedSpotifyPlaylist = {
   id: MY_MUSIC_PLAYLIST_ID,
   images: [
     {
-      url: require('@/assets/my-music.jpeg')
+      url: new URL('./../assets/my-music.jpeg', import.meta.url).href
     }
   ],
   name: t('playlist.your-music.name'),
@@ -247,7 +247,7 @@ export const usePlaylistsStore = defineStore('playlists', {
         const cachedPlaylist = this.playlists[requestPlaylist.id]
 
         if (requestPlaylist.images.length === 0) {
-          requestPlaylist.images = [{ url: require('@/assets/default_cover.jpg') }]
+          requestPlaylist.images = [{ url: new URL('./../assets/default_cover.jpg', import.meta.url).href }]
         }
 
         if (cachedPlaylist) {

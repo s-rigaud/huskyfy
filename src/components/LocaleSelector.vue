@@ -1,33 +1,14 @@
 <template>
-  <v-menu
-    open-on-hover
-    transition="fade-transition"
-  >
+  <v-menu open-on-hover transition="fade-transition">
     <template #activator="{ props }">
-      <v-btn
-        class="select-btn rainbow-v-btn"
-        v-bind="props"
-      >
-        <v-img
-          :src="currentLocaleIcon"
-          alt="Country flag"
-          width="50"
-        />
+      <v-btn class="select-btn rainbow-v-btn" v-bind="props">
+        <v-img :src="currentLocaleIcon" alt="Country flag" width="50" />
       </v-btn>
     </template>
     <v-list id="locale-list">
-      <v-list-item
-        v-for="(locale, index) in sortedLocales"
-        :key="index"
-        class="locale-item"
-        :item-value="locale"
-        @click="updateLocale"
-      >
-        <v-img
-          width="50"
-          :src="getIconForLocale(locale)"
-          :alt="locale"
-        />
+      <v-list-item v-for="(locale, index) in sortedLocales" :key="index" class="locale-item" :item-value="locale"
+        @click="updateLocale">
+        <v-img width="50" :src="getIconForLocale(locale)" :alt="locale" />
       </v-list-item>
     </v-list>
   </v-menu>
@@ -40,7 +21,7 @@ import { useUserStore } from '@/stores/user'
 
 export default defineComponent({
   name: 'LocaleSelector',
-  setup () {
+  setup() {
     const userStore = useUserStore()
     return { userStore }
   },
@@ -49,26 +30,29 @@ export default defineComponent({
      * Retrieve list of all available locales.
      * The current one is set as first for the UI.
      */
-    sortedLocales (): string[] {
+    sortedLocales(): string[] {
       let locales = this.$i18n.availableLocales
       const currentLocale = this.$i18n.locale
       locales = locales.filter((l) => l !== currentLocale)
       locales.unshift(currentLocale)
       return locales
     },
-    currentLocaleIcon (): string {
-      return this.getIconForLocale(this.$i18n.locale)
+    currentLocaleIcon(): string {
+      return this.getIconForLocale(this.$i18n.locale as "en" | "fr")
     }
   },
   methods: {
-    getIconForLocale (locale: string): string {
-      return require(`@/assets/${locale}.png`)
+    getIconForLocale(locale: "en" | "fr"): string {
+      return {
+        en: new URL('./../assets/en.png', import.meta.url).href,
+        fr: new URL('./../assets/fr.png', import.meta.url).href
+      }[locale]
     },
     /**
      * Update UI locale for i18n.
      * All the website instantly update each element without reloading the page.
      */
-    updateLocale (event: Event) {
+    updateLocale(event: Event) {
       // Recursively retrieve list-item as the event can occur in child nodes
       let node = event.target as HTMLElement
       while (!node.getAttribute('item-value')) {

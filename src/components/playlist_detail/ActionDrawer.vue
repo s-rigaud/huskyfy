@@ -244,7 +244,7 @@ export default defineComponent({
       return this.playlist.id !== MY_MUSIC_PLAYLIST_ID
     },
     starImage (): string {
-      return require('@/assets/stars.jpg')
+      return new URL('./../assets/stars.jpg', import.meta.url).href
     },
     userOwnsPlaylist (): boolean {
       return this.currentUserUsername === this.playlist.owner.display_name
