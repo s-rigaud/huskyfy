@@ -225,7 +225,7 @@
 import gsap from 'gsap'
 import { debounce, DebouncedFunc } from 'lodash'
 import { storeToRefs } from 'pinia'
-import { defineComponent, toRef } from 'vue'
+import { defineComponent, toRef, toRefs } from 'vue'
 
 import ActionDrawer from '@/components/playlist_detail/ActionDrawer.vue'
 import IndieChart, { HIGHEST_VALUE_COLOR, LOWEST_VALUE_COLOR } from '@/components/playlist_detail/IndieChart.vue'
@@ -255,7 +255,8 @@ export default defineComponent({
 
     // Shorthand
     const { playlists } = storeToRefs(playlistsStore)
-    const playlist = toRef(playlists.value, props.playlistId)
+    const { playlistId } = toRefs(props)
+    const playlist = toRef(playlists.value, playlistId.value)
 
     const currentUserUsername = useUserStore().username
 

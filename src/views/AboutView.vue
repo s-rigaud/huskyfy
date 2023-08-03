@@ -174,10 +174,13 @@
 <script setup lang="ts">
 import confetti from 'canvas-confetti'
 import { useMeta } from 'vue-meta'
+import packageInfo from '@/../package.json'
 
 import { t } from '@/i18n'
 
+const version = packageInfo.version
 const BASE_SERVER_URL = import.meta.env.VITE_APP_BASE_SERVER_URL
+
 useMeta({
   title: t('page-title.about'),
   link: [
@@ -194,8 +197,8 @@ const openMyMusicOnSpotify = () => {
  * TODO use ref=
  */
 const drawStars = () => {
-  const indieChip = document.getElementById('indie-chip') as HTMLElement
-  const rect = indieChip.getBoundingClientRect()
+  const chip = document.getElementById('indie-chip') as HTMLElement
+  const rect = chip.getBoundingClientRect()
   const origin = {
     x: (rect.left + rect.right) / 2 / window.innerWidth,
     y: (rect.top + rect.bottom) / 2 / window.innerHeight

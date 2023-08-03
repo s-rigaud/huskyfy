@@ -43,7 +43,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, toRef } from 'vue'
+import { defineComponent, PropType, toRef, toRefs } from 'vue'
 
 import { SpotifyTrack } from '@/api/spotify/types/entities'
 import { usePlaylistsStore } from '@/stores/playlists'
@@ -71,7 +71,8 @@ export default defineComponent({
 
     // Shorthand
     const { playlists } = storeToRefs(playlistsStore)
-    const playlist = toRef(playlists.value, props.playlistId)
+    const { playlistId } = toRefs(props)
+    const playlist = toRef(playlists.value, playlistId.value)
 
     return { playlistsStore, playlist }
   },

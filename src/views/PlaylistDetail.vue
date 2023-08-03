@@ -339,9 +339,9 @@
   />
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import { defineComponent, toRef } from 'vue'
+import { toRef, computed, onBeforeMount, ref, watch, toRefs } from 'vue'
 import { useMeta } from 'vue-meta'
 
 import { SpotifyArtist, SpotifyTrack } from '@/api/spotify/types/entities'
@@ -351,13 +351,11 @@ import LoadMoreTracksPopup from '@/components/playlist_detail/LoadMoreTracksPopu
 import PlaylistMetaDisplay from '@/components/playlist_detail/PlaylistMetaDisplay.vue'
 import TrackItem from '@/components/playlist_detail/TrackItem.vue'
 import { Genre } from '@/genre'
+import { t } from '@/i18n'
 import { API_TRACK_LIMIT, MY_MUSIC_PLAYLIST_ID, usePlaylistsStore } from '@/stores/playlists'
 import { capitalize } from '@/utils/functions'
 
-/**
- * It is used for typing Vuetify select slot props
- */
-
+/** It is used for typing Vuetify select slot props */
 interface SlotProps {
   item: { raw: SpotifyArtist }
   index: number
@@ -385,320 +383,308 @@ const Popularity = {
 
 type Popularity = typeof Popularity[keyof typeof Popularity]
 
-export default defineComponent({
-  name: 'PlaylistDetail',
-  components: {
-    DuplicatorPopup,
-    GenreChart,
-    LoadMoreTracksPopup,
-    PlaylistMetaDisplay,
-    TrackItem
-  },
-  props: {
-    playlistId: {
-      type: String,
-      required: true
-    }
-  },
-  setup (props) {
-    const playlistsStore = usePlaylistsStore()
-
-    // Shorthand
-    const { playlists } = storeToRefs(playlistsStore)
-    const playlist = toRef(playlists.value, props.playlistId)
-
-    const { downloadPlaylistTracks } = playlistsStore
-
-    useMeta({
-      title: playlist.value.name
-    })
-
-    return {
-      playlistsStore,
-      playlist,
-      downloadPlaylistTracks
-    }
-  },
-  data () {
-    return {
-      TRACK_REQUEST_LIMIT: 150,
-
-      // Need to use it this way to be able to type hint properly in template tag
-      NO_POPULARITY: Popularity.NO_POPULARITY,
-      NO_PREFERENCE: Preference.NO_PREFERENCE,
-
-      selectedPopularity: Popularity.NO_POPULARITY as Popularity,
-      selectedPreference: Preference.NO_PREFERENCE as Preference,
-      selectedArtists: ([] as SpotifyArtist[]),
-      selectedGenres: ([] as string[]),
-      isFilterExclusive: true,
-
-      processFilterUpdate: false,
-
-      isHugePlaylist: false,
-      playlistLoaded: false,
-
-      // For child components
-      topGenres: ([] as Genre[]),
-      indiePercentage: 0,
-
-      startDuplication: false,
-
-      displayGoTopButton: false,
-      displayDuplicateBadge: 'none',
-
-      filteredTracks: ([] as SpotifyTrack[])
-    }
-  },
-  computed: {
-    generalTitle (): string {
-      return this.filterTag || this.$t('track.all-tracks')
-    },
-    toButtonOpacity (): { opacity: number } {
-      return { opacity: (this.displayGoTopButton) ? 100 : 0 }
-    },
-    numberOfActiveFilters (): number {
-      return (
-        this.selectedGenres.length +
-        this.selectedArtists.length +
-        +(this.selectedPopularity !== Popularity.NO_POPULARITY) +
-        +(this.selectedPreference !== Preference.NO_PREFERENCE)
-      )
-    },
-    filteringKeyword (): string {
-      return this.isFilterExclusive ? this.$t('track.filters.keyword.and') : this.$t('track.filters.keyword.or')
-    },
-    filterTag (): string {
-      return ([] as string[])
-        .concat((this.selectedPopularity !== Popularity.NO_POPULARITY) ? [this.getTextForPopularity(this.selectedPopularity)] : [])
-        .concat(this.selectedPreference !== Preference.NO_PREFERENCE ? [this.getTextForPreference(this.selectedPreference)] : [])
-        .concat(this.selectedArtists.map(a => a.name))
-        .concat(this.selectedGenres)
-        .map(filter => capitalize(filter))
-        .join(` ${this.filteringKeyword} `)
-    },
-    allTracksLoaded (): boolean {
-      return this.playlist.tracks.length === this.playlist.total
-    },
-    isDuplicationAllowed (): boolean {
-      return this.filteredTracks.length > 0 && this.numberOfActiveFilters > 0
-    }
-  },
-  watch: {
-    async selectedPopularity () {
-      await this.applyFilters()
-    },
-    async selectedPreference () {
-      await this.applyFilters()
-    },
-    async selectedArtists (currentArtists: SpotifyArtist[], previousArtists: SpotifyArtist[]) {
-      if (previousArtists.length !== 0 || currentArtists.length !== 0) {
-        await this.applyFilters()
-      }
-    },
-    async selectedGenres (currentGenres: string[], previousGenres: string[]) {
-      if (previousGenres.length !== 0 || currentGenres.length !== 0) {
-        await this.applyFilters()
-      }
-    },
-    async isFilterExclusive () {
-      await this.applyFilters()
-    },
-    isDuplicationAllowed (isAllowed: boolean) {
-      // Toggle UI badge (no clean way in Vuetify API)
-      this.displayDuplicateBadge = isAllowed ? 'block' : 'none'
-    }
-  },
-  async mounted () {
-    this.TRACK_REQUEST_LIMIT = API_TRACK_LIMIT * 3
-    if (this.playlist.id === MY_MUSIC_PLAYLIST_ID) {
-      // Ensure to retrieve real track count for special endpoint
-      await this.playlistsStore.refreshMyMusicTotalTrack()
-    }
-    await this.loadFirstTracks()
-
-    this.filteredTracks = this.playlist.tracks
-  },
-  methods: {
-    onScroll () {
-      this.displayGoTopButton = (window.scrollY > 100)
-    },
-    async loadFirstTracks () {
-      // Only asking for the right number of tracks as we already know how many tracks are in the playlist
-      const maxLimit = Math.min(this.TRACK_REQUEST_LIMIT, this.playlist.total)
-      await this.downloadPlaylistTracks(this.playlistId, maxLimit)
-
-      this.isHugePlaylist = this.playlist.total > this.TRACK_REQUEST_LIMIT
-      this.playlistLoaded = true
-      this.topGenres = this.getTopGenres()
-      this.indiePercentage = this.getIndiePercentage()
-      this.resetFilters()
-    },
-    refreshStats () {
-      this.topGenres = this.getTopGenres()
-      this.indiePercentage = this.getIndiePercentage()
-    },
-    getIndiePercentage (): number {
-      return this.playlistsStore.getIndiePercentage(this.playlistId)
-    },
-    /**
-     * Filters all the tracks according to the filters chosen by the user
-     */
-    async applyFilters () {
-      this.processFilterUpdate = true
-
-      if (this.numberOfActiveFilters === 0) {
-        this.resetFilters()
-        this.processFilterUpdate = false
-        return
-      }
-
-      const playlistTracks = this.playlist.tracks
-      let newFilteredTracks = this.playlist.tracks
-
-      // Filter over genres
-      const genres = this.selectedGenres
-      if (genres.length > 0) {
-        if (this.isFilterExclusive) {
-          newFilteredTracks = playlistTracks.filter(
-            (t) => genres.every((genre) => t.genres.includes(genre))
-          )
-        } else {
-          newFilteredTracks = playlistTracks.filter(
-            (t) => genres.some((genre) => t.genres.includes(genre))
-          )
-        }
-      }
-
-      // Filter over artists
-      const artistIds = this.selectedArtists.map((a) => a.id)
-      if (artistIds.length > 0) {
-        if (this.isFilterExclusive) {
-          newFilteredTracks = newFilteredTracks.filter(
-            (t) => artistIds.every((artistId) => t.artists.map(a => a.id).includes(artistId))
-          )
-        } else {
-          const validArtistTracks = playlistTracks.filter(
-            (t) => artistIds.some((artistId) => t.artists.map(a => a.id).includes(artistId))
-          )
-          this.addTracksConserveUnicity(newFilteredTracks, validArtistTracks)
-        }
-      }
-
-      // Filter over popularity
-      const popularity = this.selectedPopularity
-      if (popularity !== Popularity.NO_POPULARITY) {
-        const popularityFilter = (t: SpotifyTrack) => t.isIndie === (popularity === Popularity.Indie)
-
-        if (this.isFilterExclusive) {
-          newFilteredTracks = newFilteredTracks.filter(popularityFilter)
-        } else {
-          this.addTracksConserveUnicity(newFilteredTracks, playlistTracks.filter(popularityFilter))
-        }
-      }
-
-      // Filter over preference (if track is in MyMusic playlist or not)
-      const preference = this.selectedPreference
-      if (preference !== Preference.NO_PREFERENCE) {
-        const trackPreferences = await this.playlistsStore.tracksAreLiked(newFilteredTracks)
-        const preferenceFilter = (t: SpotifyTrack) => trackPreferences[t.id] === (preference === Preference.ONLY_LIKED)
-
-        if (this.isFilterExclusive) {
-          newFilteredTracks = newFilteredTracks.filter(preferenceFilter)
-        } else {
-          this.addTracksConserveUnicity(newFilteredTracks, playlistTracks.filter(preferenceFilter))
-        }
-      }
-
-      this.filteredTracks = newFilteredTracks
-      this.processFilterUpdate = false
-    },
-    /**
-     * Mix two list of Spotify tracks to form a set of all elements
-     */
-    addTracksConserveUnicity (filteredTracks: SpotifyTrack[], newFilteredTracks: SpotifyTrack[]) {
-      const alreadyKnownTrackIds = filteredTracks.map(t => t.id)
-      const tracksToAdd = newFilteredTracks.filter(t => !alreadyKnownTrackIds.includes(t.id))
-      filteredTracks.push(...tracksToAdd)
-    },
-    resetFilters () {
-      this.selectedGenres = []
-      this.selectedArtists = []
-      this.selectedPopularity = Popularity.NO_POPULARITY
-      this.selectedPreference = Preference.NO_PREFERENCE
-      this.filteredTracks = this.playlist.tracks
-    },
-    openPlaylistOnSpotify () {
-      window.location.href = this.playlist.uri
-    },
-    getSortedArtists (): SpotifyArtist[] {
-      // Need to have a set of object in JS ...
-      const alreadyAddedArtistIds: string[] = []
-      const artistsToReturn: SpotifyArtist[] = []
-
-      for (const track of this.playlist.tracks) {
-        for (const artist of track.artists) {
-          if (!alreadyAddedArtistIds.includes(artist.id)) {
-            artistsToReturn.push(artist)
-            alreadyAddedArtistIds.push(artist.id)
-          }
-        }
-      }
-      return artistsToReturn.sort((a1, a2) => a1.name.localeCompare(a2.name))
-    },
-    scrollTop () {
-      window.scrollTo({ top: 0, behavior: 'smooth' })
-    },
-    getTextForPopularity (popularity: Popularity): string {
-      const allPopularities: Record<Popularity, string> = {
-        Indie: this.$t('track.filters.indie'),
-        Popular: this.$t('track.filters.popular'),
-        'No filter': this.$t('track.filters.no-filter')
-      }
-      return allPopularities[popularity]
-    },
-    getVSelectTranslatedPopularities (): { label: string, value: Popularity }[] {
-      return [
-        { label: this.$t('track.filters.no-filter'), value: Popularity.NO_POPULARITY },
-        { label: this.$t('track.filters.indie'), value: Popularity.Indie },
-        { label: this.$t('track.filters.popular'), value: Popularity.Popular }
-      ]
-    },
-    getTextForPreference (preference: Preference): string {
-      const allPreference: Record<Preference, string> = {
-        'All tracks': this.$t('track.filters.no-filter'),
-        'Only liked': this.$t('track.filters.only-liked'),
-        'Only not liked': this.$t('track.filters.only-not-liked')
-      }
-      return allPreference[preference]
-    },
-    getVSelectTranslatedPreferences (): { label: string, value: Preference }[] {
-      return [
-        { label: this.$t('track.filters.no-filter'), value: Preference.NO_PREFERENCE },
-        { label: this.$t('track.filters.only-liked'), value: Preference.ONLY_LIKED },
-        { label: this.$t('track.filters.only-not-liked'), value: Preference.ONLY_NOT_LIKED }
-      ]
-    },
-    /**
-     * Returns only top genres sorted by most to least popular
-     */
-    getTopGenres (): Genre[] {
-      const limit = (window.innerWidth > 500) ? 25 : 10
-      return this.playlistsStore.getTopGenres(this.playlistId, limit)
-    },
-    getColorForPopularity (popularity: Popularity): string {
-      if (popularity === Popularity.Indie) return 'green'
-      if (popularity === Popularity.Popular) return 'red'
-      return '#ddd'
-    },
-    getColorForGenre (genre: string): string {
-      return this.playlistsStore.genreColorMapping[genre]
-    },
-    getArtistImage (artist: SpotifyArtist): string {
-      return artist.images[0]?.url || new URL('./../assets/no-user.png', import.meta.url).href
-    }
+const props = defineProps({
+  playlistId: {
+    type: String,
+    required: true
   }
 })
+const playlistsStore = usePlaylistsStore()
+
+// Shorthand
+const { playlists } = storeToRefs(playlistsStore)
+const { playlistId } = toRefs(props)
+const playlist = toRef(playlists.value, playlistId.value)
+
+const { downloadPlaylistTracks } = playlistsStore
+
+useMeta({
+  title: playlist.value.name
+})
+
+const TRACK_REQUEST_LIMIT = ref(150)
+
+const selectedPopularity = ref(Popularity.NO_POPULARITY)
+const selectedPreference = ref(Preference.NO_PREFERENCE)
+const selectedArtists = ref<SpotifyArtist[]>([])
+const selectedGenres = ref<string[]>([])
+const isFilterExclusive = ref(true)
+
+const processFilterUpdate = ref(false)
+
+const isHugePlaylist = ref(false)
+const playlistLoaded = ref(false)
+
+// For child components
+const topGenres = ref<Genre[]>([])
+const indiePercentage = ref(0)
+
+const startDuplication = ref(false)
+
+const displayGoTopButton = ref(false)
+const displayDuplicateBadge = ref('none')
+
+const filteredTracks = ref<SpotifyTrack[]>([])
+
+const generalTitle = computed((): string => {
+  return filterTag.value || t('track.all-tracks')
+})
+const toButtonOpacity = computed((): { opacity: number } => {
+  return { opacity: (displayGoTopButton.value) ? 100 : 0 }
+})
+const numberOfActiveFilters = computed((): number => {
+  return (
+    selectedGenres.value.length +
+    selectedArtists.value.length +
+    +(selectedPopularity.value !== Popularity.NO_POPULARITY) +
+    +(selectedPreference.value !== Preference.NO_PREFERENCE)
+  )
+})
+const filteringKeyword = computed((): string => {
+  return isFilterExclusive.value ? t('track.filters.keyword.and') : t('track.filters.keyword.or')
+})
+const filterTag = computed((): string => {
+  return ([] as string[])
+    .concat((selectedPopularity.value !== Popularity.NO_POPULARITY) ? [getTextForPopularity(selectedPopularity.value)] : [])
+    .concat(selectedPreference.value !== Preference.NO_PREFERENCE ? [getTextForPreference(selectedPreference.value)] : [])
+    .concat(selectedArtists.value.map(a => a.name))
+    .concat(selectedGenres.value)
+    .map(filter => capitalize(filter))
+    .join(` ${filteringKeyword.value} `)
+})
+const allTracksLoaded = computed((): boolean => {
+  return playlist.value.tracks.length === playlist.value.total
+})
+const isDuplicationAllowed = computed((): boolean => {
+  return filteredTracks.value.length > 0 && numberOfActiveFilters.value > 0
+})
+
+watch(selectedPopularity, async () => {
+  await applyFilters()
+})
+watch(selectedPreference, async () => {
+  await applyFilters()
+})
+watch(selectedArtists, async (currentArtists: SpotifyArtist[], previousArtists: SpotifyArtist[]) => {
+  if (previousArtists.length !== 0 || currentArtists.length !== 0) {
+    await applyFilters()
+  }
+})
+watch(selectedGenres, async (currentGenres: string[], previousGenres: string[]) => {
+  if (previousGenres.length !== 0 || currentGenres.length !== 0) {
+    await applyFilters()
+  }
+})
+watch(isFilterExclusive, async () => {
+  await applyFilters()
+})
+watch(isDuplicationAllowed, (isAllowed: boolean) => {
+  // Toggle UI badge (no clean way in Vuetify API)
+  displayDuplicateBadge.value = isAllowed ? 'block' : 'none'
+})
+
+onBeforeMount(async () => {
+  TRACK_REQUEST_LIMIT.value = API_TRACK_LIMIT * 3
+  if (playlist.value.id === MY_MUSIC_PLAYLIST_ID) {
+    // Ensure to retrieve real track count for special endpoint
+    await playlistsStore.refreshMyMusicTotalTrack()
+  }
+  await loadFirstTracks()
+
+  filteredTracks.value = playlist.value.tracks
+})
+
+const onScroll = () => {
+  displayGoTopButton.value = (window.scrollY > 100)
+}
+const loadFirstTracks = async () => {
+  // Only asking for the right number of tracks as we already know how many tracks are in the playlist
+  const maxLimit = Math.min(TRACK_REQUEST_LIMIT.value, playlist.value.total)
+  await downloadPlaylistTracks(props.playlistId, maxLimit)
+
+  isHugePlaylist.value = playlist.value.total > TRACK_REQUEST_LIMIT.value
+  playlistLoaded.value = true
+  topGenres.value = getTopGenres()
+  indiePercentage.value = getIndiePercentage()
+  resetFilters()
+}
+const refreshStats = () => {
+  topGenres.value = getTopGenres()
+  indiePercentage.value = getIndiePercentage()
+}
+const getIndiePercentage = (): number => {
+  return playlistsStore.getIndiePercentage(props.playlistId)
+}
+
+/**
+ * Filters all the tracks according to the filters chosen by the user
+ */
+const applyFilters = async () => {
+  processFilterUpdate.value = true
+
+  if (numberOfActiveFilters.value === 0) {
+    resetFilters()
+    processFilterUpdate.value = false
+    return
+  }
+
+  const playlistTracks = playlist.value.tracks
+  let newFilteredTracks = playlist.value.tracks
+
+  // Filter over genres
+  const genres = selectedGenres.value
+  if (genres.length > 0) {
+    if (isFilterExclusive.value) {
+      newFilteredTracks = playlistTracks.filter(
+        (t) => genres.every((genre) => t.genres.includes(genre))
+      )
+    } else {
+      newFilteredTracks = playlistTracks.filter(
+        (t) => genres.some((genre) => t.genres.includes(genre))
+      )
+    }
+  }
+
+  // Filter over artists
+  const artistIds = selectedArtists.value.map((a) => a.id)
+  if (artistIds.length > 0) {
+    if (isFilterExclusive.value) {
+      newFilteredTracks = newFilteredTracks.filter(
+        (t) => artistIds.every((artistId) => t.artists.map(a => a.id).includes(artistId))
+      )
+    } else {
+      const validArtistTracks = playlistTracks.filter(
+        (t) => artistIds.some((artistId) => t.artists.map(a => a.id).includes(artistId))
+      )
+      addTracksConserveUnicity(newFilteredTracks, validArtistTracks)
+    }
+  }
+
+  // Filter over popularity
+  const popularity = selectedPopularity.value
+  if (popularity !== Popularity.NO_POPULARITY) {
+    const popularityFilter = (t: SpotifyTrack) => t.isIndie === (popularity === Popularity.Indie)
+
+    if (isFilterExclusive.value) {
+      newFilteredTracks = newFilteredTracks.filter(popularityFilter)
+    } else {
+      addTracksConserveUnicity(newFilteredTracks, playlistTracks.filter(popularityFilter))
+    }
+  }
+
+  // Filter over preference (if track is in MyMusic playlist or not)
+  const preference = selectedPreference.value
+  if (preference !== Preference.NO_PREFERENCE) {
+    const trackPreferences = await playlistsStore.tracksAreLiked(newFilteredTracks)
+    const preferenceFilter = (t: SpotifyTrack) => trackPreferences[t.id] === (preference === Preference.ONLY_LIKED)
+
+    if (isFilterExclusive.value) {
+      newFilteredTracks = newFilteredTracks.filter(preferenceFilter)
+    } else {
+      addTracksConserveUnicity(newFilteredTracks, playlistTracks.filter(preferenceFilter))
+    }
+  }
+
+  filteredTracks.value = newFilteredTracks
+  processFilterUpdate.value = false
+}
+
+/**
+ * Mix two list of Spotify tracks to form a set of all elements
+ */
+const addTracksConserveUnicity = (filteredTracks: SpotifyTrack[], newFilteredTracks: SpotifyTrack[]) => {
+  const alreadyKnownTrackIds = filteredTracks.map(t => t.id)
+  const tracksToAdd = newFilteredTracks.filter(t => !alreadyKnownTrackIds.includes(t.id))
+  filteredTracks.push(...tracksToAdd)
+}
+
+const resetFilters = () => {
+  selectedGenres.value = []
+  selectedArtists.value = []
+  selectedPopularity.value = Popularity.NO_POPULARITY
+  selectedPreference.value = Preference.NO_PREFERENCE
+  filteredTracks.value = playlist.value.tracks
+}
+
+const openPlaylistOnSpotify = () => {
+  window.location.href = playlist.value.uri
+}
+
+const getSortedArtists = (): SpotifyArtist[] => {
+  // Need to have a set of object in JS ...
+  const alreadyAddedArtistIds: string[] = []
+  const artistsToReturn: SpotifyArtist[] = []
+
+  for (const track of playlist.value.tracks) {
+    for (const artist of track.artists) {
+      if (!alreadyAddedArtistIds.includes(artist.id)) {
+        artistsToReturn.push(artist)
+        alreadyAddedArtistIds.push(artist.id)
+      }
+    }
+  }
+  return artistsToReturn.sort((a1, a2) => a1.name.localeCompare(a2.name))
+}
+
+const scrollTop = () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
+const getTextForPopularity = (popularity: Popularity): string => {
+  const allPopularities: Record<Popularity, string> = {
+    Indie: t('track.filters.indie'),
+    Popular: t('track.filters.popular'),
+    'No filter': t('track.filters.no-filter')
+  }
+  return allPopularities[popularity]
+}
+
+const getVSelectTranslatedPopularities = (): { label: string, value: Popularity }[] => {
+  return [
+    { label: t('track.filters.no-filter'), value: Popularity.NO_POPULARITY },
+    { label: t('track.filters.indie'), value: Popularity.Indie },
+    { label: t('track.filters.popular'), value: Popularity.Popular }
+  ]
+}
+
+const getTextForPreference = (preference: Preference): string => {
+  const allPreference: Record<Preference, string> = {
+    'All tracks': t('track.filters.no-filter'),
+    'Only liked': t('track.filters.only-liked'),
+    'Only not liked': t('track.filters.only-not-liked')
+  }
+  return allPreference[preference]
+}
+
+const getVSelectTranslatedPreferences = (): { label: string, value: Preference }[] => {
+  return [
+    { label: t('track.filters.no-filter'), value: Preference.NO_PREFERENCE },
+    { label: t('track.filters.only-liked'), value: Preference.ONLY_LIKED },
+    { label: t('track.filters.only-not-liked'), value: Preference.ONLY_NOT_LIKED }
+  ]
+}
+
+/**
+ * Returns only top genres sorted by most to least popular
+ */
+const getTopGenres = (): Genre[] => {
+  const limit = (window.innerWidth > 500) ? 25 : 10
+  return playlistsStore.getTopGenres(props.playlistId, limit)
+}
+
+const getColorForPopularity = (popularity: Popularity): string => {
+  if (popularity === Popularity.Indie) return 'green'
+  if (popularity === Popularity.Popular) return 'red'
+  return '#ddd'
+}
+
+const getColorForGenre = (genre: string): string => {
+  return playlistsStore.genreColorMapping[genre]
+}
+
+const getArtistImage = (artist: SpotifyArtist): string => {
+  return artist.images[0]?.url || new URL('./../assets/no-user.png', import.meta.url).href
+}
 </script>
 <style>
 /* Generic containers */

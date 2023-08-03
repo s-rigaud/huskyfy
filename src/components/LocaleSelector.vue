@@ -51,7 +51,7 @@ const userStore = useUserStore()
  * The current one is set as first for the UI.
  */
 const sortedLocales = computed((): HandledLocale[] => {
-  let locales = i18n.global.availableLocales as HandledLocale[]
+  let locales = [HandledLocale.FR, HandledLocale.EN]
   const currentLocale = locale
   locales = locales.filter((l) => l !== currentLocale)
   locales.unshift(currentLocale as HandledLocale)

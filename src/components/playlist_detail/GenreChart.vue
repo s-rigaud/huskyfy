@@ -15,7 +15,7 @@
 
 <script lang="ts">
 import { ApexOptions } from 'apexcharts'
-import { defineComponent, PropType } from 'vue'
+import { defineComponent, PropType, toRefs } from 'vue'
 
 import { Genre } from '@/genre'
 import { usePlaylistsStore } from '@/stores/playlists'
@@ -30,8 +30,8 @@ export default defineComponent({
   },
   setup (props) {
     const playlistsStore = usePlaylistsStore()
-
-    const START_COLORS = props.genres.map(genre => playlistsStore.genreColorMapping[genre.name])
+    const { genres } = toRefs(props)
+    const START_COLORS = genres.value.map(genre => playlistsStore.genreColorMapping[genre.name])
     return { playlistsStore, START_COLORS }
   },
   data () {
