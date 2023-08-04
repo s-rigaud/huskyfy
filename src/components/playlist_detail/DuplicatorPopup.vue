@@ -66,15 +66,10 @@ export default defineComponent({
     }
   },
   emits: ['onEnd'],
-  setup (props) {
+  setup () {
     const playlistsStore = usePlaylistsStore()
 
-    // Shorthand
-    const { playlists } = storeToRefs(playlistsStore)
-    const { playlistId } = toRefs(props)
-    const playlist = toRef(playlists.value, playlistId.value)
-
-    return { playlistsStore, playlist }
+    return { playlistsStore }
   },
   data () {
     return {
@@ -123,10 +118,10 @@ export default defineComponent({
 
       this.loadingText = this.$t('playlist.new.cover')
       this.loadingPercentage = 33
-      await this.playlistsStore.updatePlaylistCover(newPlaylistId, this.playlist.images[0].url)
+      await this.playlistsStore.updatePlaylistCover(newPlaylistId, this.playlistsStore.playlists[this.playlistId].images[0].url)
 
       // If newTracks is empty that means we have to duplicate all the tracks
-      const tracksToAdd = this.newTracks.length ? this.newTracks : this.playlist.tracks
+      const tracksToAdd = this.newTracks.length ? this.newTracks : this.playlistsStore.playlists[this.playlistId].tracks
 
       this.loadingText = this.$t('playlist.new.tracks')
       this.loadingPercentage = 66
@@ -146,7 +141,7 @@ export default defineComponent({
      * Create a new playlist name according to filters
      */
     getNewPlaylistName (): string {
-      const { name } = this.playlist
+      const { name } = this.playlistsStore.playlists[this.playlistId]
       let newPlaylistName: string
       if (this.filterTag) {
         newPlaylistName = `${name} [${this.filterTag}]`
@@ -159,7 +154,7 @@ export default defineComponent({
      * Create a new playlist description according to filters
      */
     getNewPlaylistDescription (): string {
-      const { name } = this.playlist
+      const { name } = this.playlistsStore.playlists[this.playlistId]
       const tag = this.filterTag ? `[${this.filterTag}]` : ''
 
       const now = new Date()

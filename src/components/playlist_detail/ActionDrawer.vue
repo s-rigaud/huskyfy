@@ -12,9 +12,9 @@
         {{ $t('drawer.update-playlist') }}
       </v-list-subheader>
       <!-- 1.1 Update playlist privacy -->
-      <div v-if="(userOwnsPlaylist || spotifyOwnsPlaylist) && !playlist.collaborative && isNotMyMusicPlaylist">
+      <div v-if="(userOwnsPlaylist || spotifyOwnsPlaylist) && !playlistsStore.playlists[playlistId].collaborative && isNotMyMusicPlaylist">
         <v-list-item
-          v-if="playlist.public"
+          v-if="playlistsStore.playlists[playlistId].public"
           @click="() => updatePlaylistPrivacy(false)"
         >
           <v-list-item-title>{{ $t("playlist.set-private") }} {{ $t("_emojis.private") }}</v-list-item-title>
@@ -48,7 +48,7 @@
         <v-card id="deletion-dialog">
           <v-card-title class="text-h5 rainbow-text font-weight-bold">
             {{ $t('playlist.delete.delete') }}
-            <span class="font-italic white-text"> {{ playlist.name }} </span>
+            <span class="font-italic white-text"> {{ playlistsStore.playlists[playlistId].name }} </span>
           </v-card-title>
           <v-card-text class="rainbow-text">
             {{ $t('playlist.delete.confirm-message') }}
@@ -96,7 +96,7 @@
       <v-divider color="grey" />
 
       <!-- (At least 4 tracks to download image) -->
-      <div v-if="playlist.tracks.length >= 4 && playlistsStore.getTopGenres(playlistId).length >= 4">
+      <div v-if="playlistsStore.playlists[playlistId].tracks.length >= 4 && playlistsStore.getTopGenres(playlistId).length >= 4">
         <!-- 3. Export Image -->
         <v-badge
           id="export-image-badge"
@@ -183,7 +183,7 @@
     v-if="startDuplication"
     :filter-tag="''"
     :new-tracks="[]"
-    :playlist-id="playlist.id"
+    :playlist-id="playlistsStore.playlists[playlistId].id"
     @on-end="startDuplication = false"
   />
 </template>
@@ -210,18 +210,12 @@ export default defineComponent({
     }
   },
   emits: ['onClose', 'onSortEnd'],
-  setup (props) {
+  setup () {
     const playlistsStore = usePlaylistsStore()
     const currentUserUsername = useUserStore().username
 
-    // Shorthand
-    const { playlists } = storeToRefs(playlistsStore)
-    const { playlistId } = toRefs(props)
-    const playlist = toRef(playlists.value, playlistId.value)
-
     return {
       playlistsStore,
-      playlist,
       currentUserUsername
     }
   },
@@ -242,16 +236,16 @@ export default defineComponent({
   },
   computed: {
     isNotMyMusicPlaylist (): boolean {
-      return this.playlist.id !== MY_MUSIC_PLAYLIST_ID
+      return this.playlistsStore.playlists[this.playlistId].id !== MY_MUSIC_PLAYLIST_ID
     },
     starImage (): string {
-      return new URL('./../assets/stars.jpg', import.meta.url).href
+      return new URL('../../assets/stars.jpg', import.meta.url).href
     },
     userOwnsPlaylist (): boolean {
-      return this.currentUserUsername === this.playlist.owner.display_name
+      return this.currentUserUsername === this.playlistsStore.playlists[this.playlistId].owner.display_name
     },
     spotifyOwnsPlaylist (): boolean {
-      return this.playlist.owner.id === 'spotify'
+      return this.playlistsStore.playlists[this.playlistId].owner.id === 'spotify'
     },
     ticks (): Record<number, string> {
       const trackNumber = this.playlistsStore.getTopArtists(this.playlistId).length
@@ -265,13 +259,13 @@ export default defineComponent({
       return Object.keys(this.ticks).length - 1
     },
     allTracksLoaded (): boolean {
-      return this.playlist.tracks.length === this.playlist.total
+      return this.playlistsStore.playlists[this.playlistId].tracks.length === this.playlistsStore.playlists[this.playlistId].total
     },
     canCreateExportImage (): boolean {
-      return this.playlist.tracks.length >= 4 && this.playlistsStore.getTopGenres(this.playlistId).length >= 4
+      return this.playlistsStore.playlists[this.playlistId].tracks.length >= 4 && this.playlistsStore.getTopGenres(this.playlistId).length >= 4
     },
     canUpdatePlaylistName (): boolean {
-      return ((this.userOwnsPlaylist || this.spotifyOwnsPlaylist) && !this.playlist.collaborative && this.isNotMyMusicPlaylist) ||
+      return ((this.userOwnsPlaylist || this.spotifyOwnsPlaylist) && !this.playlistsStore.playlists[this.playlistId].collaborative && this.isNotMyMusicPlaylist) ||
         this.allTracksLoaded ||
         this.isNotMyMusicPlaylist
     }
@@ -331,7 +325,7 @@ export default defineComponent({
         ([2, 3, 4] as GridSize[])[this.generateImageSize],
         this.generateImageDisplayTitle,
         this.generateImageDisplayStats,
-        (rawImageData: string) => { downloadImage(rawImageData, this.playlist.name) }
+        (rawImageData: string) => { downloadImage(rawImageData, this.playlistsStore.playlists[this.playlistId].name) }
       )
     },
     /**

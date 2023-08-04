@@ -10,7 +10,7 @@
           @click="openPlaylistOnSpotify"
         >
           <v-img
-            :src="playlist.images[0].url"
+            :src="playlistsStore.playlists[playlistId].images[0].url"
             alt="Cover image"
             cover
             lazy-src="@/assets/default_cover.jpg"
@@ -23,9 +23,9 @@
             v-if="userOwnsPlaylist && !isMyMusicPlaylist"
             id="playlist-name"
             v-model="playlistNameText"
-            :append-inner-icon="nameUpdatedInAPI && playlist.name === playlistNameText ? 'mdi-check-circle-outline' : ''"
+            :append-inner-icon="nameUpdatedInAPI && playlistsStore.playlists[playlistId].name === playlistNameText ? 'mdi-check-circle-outline' : ''"
             :label="$t('playlist.name')"
-            :loading="playlist.name !== playlistNameText && !nameUpdatedInAPI"
+            :loading="playlistsStore.playlists[playlistId].name !== playlistNameText && !nameUpdatedInAPI"
             color="var(--text-color)"
             density="compact"
             variant="outlined"
@@ -35,7 +35,7 @@
             id="simplified-title"
             class="rainbow-text"
           >
-            {{ playlist.name }}
+            {{ playlistsStore.playlists[playlistId].name }}
           </h4>
           <div id="visibility-and-meta">
             <p> {{ getTextFromVisibility }} </p>
@@ -250,19 +250,12 @@ export default defineComponent({
     }
   },
   emits: ['playlistUpdated'],
-  setup (props) {
+  setup () {
     const playlistsStore = usePlaylistsStore()
-
-    // Shorthand
-    const { playlists } = storeToRefs(playlistsStore)
-    const { playlistId } = toRefs(props)
-    const playlist = toRef(playlists.value, playlistId.value)
-
     const currentUserUsername = useUserStore().username
 
     return {
       playlistsStore,
-      playlist,
       currentUserUsername
     }
   },
@@ -287,18 +280,18 @@ export default defineComponent({
   computed: {
     getTextFromVisibility (): string {
       let visibility: string
-      if (this.playlist.collaborative) visibility = 'collaborative'
-      else if (this.playlist.public) visibility = 'public'
+      if (this.playlistsStore.playlists[this.playlistId].collaborative) visibility = 'collaborative'
+      else if (this.playlistsStore.playlists[this.playlistId].public) visibility = 'public'
       else visibility = 'private'
 
       return this.$t(`playlist.${visibility}`) + ' ' + this.$t(`_emojis.${visibility}`)
     },
     usernameToDisplay (): string {
-      const playlistCreator = this.playlist.owner.display_name
+      const playlistCreator = this.playlistsStore.playlists[this.playlistId].owner.display_name
       return this.currentUserUsername === playlistCreator ? this.$t('playlist.you') : playlistCreator
     },
     allTracksLoaded (): boolean {
-      return this.playlist.tracks.length === this.playlist.total
+      return this.playlistsStore.playlists[this.playlistId].tracks.length === this.playlistsStore.playlists[this.playlistId].total
     },
     colorForPercentage (): { color: string } {
       const color = getAverageColor(LOWEST_VALUE_COLOR, HIGHEST_VALUE_COLOR, this.indiePercentage)
@@ -306,7 +299,7 @@ export default defineComponent({
     },
     formattedDescription (): string {
       return (
-        this.playlist.description
+        this.playlistsStore.playlists[this.playlistId].description
           // Remove html markups from content
           .replace(/(<([^>]+)>)/ig, '')
           // Escaped " back to real character
@@ -316,24 +309,24 @@ export default defineComponent({
       )
     },
     userOwnsPlaylist (): boolean {
-      return this.currentUserUsername === this.playlist.owner.display_name
+      return this.currentUserUsername === this.playlistsStore.playlists[this.playlistId].owner.display_name
     },
     isMyMusicPlaylist (): boolean {
-      return this.playlist.id === MY_MUSIC_PLAYLIST_ID
+      return this.playlistsStore.playlists[this.playlistId].id === MY_MUSIC_PLAYLIST_ID
     },
     playlistContainsLocalTracks (): boolean {
-      return this.playlist.containsLocalTracks
+      return this.playlistsStore.playlists[this.playlistId].containsLocalTracks
     },
     playlistContainsEpisodes (): boolean {
-      return this.playlist.containsEpisodes
+      return this.playlistsStore.playlists[this.playlistId].containsEpisodes
     },
     playlistContainsDuplicatedTracks (): boolean {
-      return this.playlist.containsDuplicatedTracks
+      return this.playlistsStore.playlists[this.playlistId].containsDuplicatedTracks
     }
   },
   watch: {
     playlistNameText (currentText: string) {
-      if (currentText && currentText !== this.playlist.name && this.updatePlaylistNameDebounced) {
+      if (currentText && currentText !== this.playlistsStore.playlists[this.playlistId].name && this.updatePlaylistNameDebounced) {
         this.nameUpdatedInAPI = false
         this.updatePlaylistNameDebounced()
       }
@@ -347,17 +340,17 @@ export default defineComponent({
       },
       2000
     )
-    this.playlistNameText = this.playlist.name
+    this.playlistNameText = this.playlistsStore.playlists[this.playlistId].name
   },
   mounted () {
-    setTimeout(() => gsap.to(this, { duration: 3, playlistTrackCount: this.playlist.total }), 2000)
+    setTimeout(() => gsap.to(this, { duration: 3, playlistTrackCount: this.playlistsStore.playlists[this.playlistId].total }), 2000)
   },
   methods: {
     openPlaylistOnSpotify () {
-      window.location.href = this.playlist.uri
+      window.location.href = this.playlistsStore.playlists[this.playlistId].uri
     },
     openPlaylistOwnerSpotifyProfile () {
-      window.location.href = this.playlist.owner.uri
+      window.location.href = this.playlistsStore.playlists[this.playlistId].owner.uri
     },
     getPlaylistDuration (): string {
       return this.playlistsStore.getPlaylistFullLength(this.playlistId)
