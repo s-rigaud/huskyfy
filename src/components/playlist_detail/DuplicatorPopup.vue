@@ -27,7 +27,7 @@
       class="rainbow-v-btn"
       @click="displayNewPlaylistDetails"
     >
-      {{ $t("playlist.next") }}
+      {{ t("playlist.next") }}
     </v-btn>
 
     <template #actions>
@@ -42,137 +42,130 @@
   </v-snackbar>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType, toRef, toRefs } from 'vue'
+<script setup lang="ts">
+import { PropType, computed, onBeforeMount, ref, watch } from 'vue'
 
 import { SpotifyTrack } from '@/api/spotify/types/entities'
+import { locale, t } from '@/i18n'
 import { usePlaylistsStore } from '@/stores/playlists'
-import { storeToRefs } from 'pinia'
 
-export default defineComponent({
-  name: 'DuplicatorPopup',
-  props: {
-    playlistId: {
-      type: String,
-      required: true
-    },
-    newTracks: {
-      type: Array as PropType<SpotifyTrack[]>,
-      required: true
-    },
-    filterTag: {
-      type: String,
-      required: true
-    }
+const props = defineProps({
+  playlistId: {
+    type: String,
+    required: true
   },
-  emits: ['onEnd'],
-  setup () {
-    const playlistsStore = usePlaylistsStore()
+  newTracks: {
+    type: Array as PropType<SpotifyTrack[]>,
+    required: true
+  },
+  filterTag: {
+    type: String,
+    required: true
+  }
+})
+const emit = defineEmits(['onEnd'])
 
-    return { playlistsStore }
-  },
-  data () {
-    return {
-      loadingPercentage: 0,
-      loadingText: '',
+const playlistsStore = usePlaylistsStore()
 
-      newPlaylistId: '',
+const loadingPercentage = ref(0)
+const loadingText = ref('')
 
-      snackbarVisible: true
-    }
-  },
-  computed: {
-    timeout (): number {
-      return this.loadingPercentage === 100 ? 10_000 : -1
-    }
-  },
-  watch: {
-    snackbarVisible (isVisible: boolean) {
-      if (isVisible) return
+const newPlaylistId = ref('')
 
-      this.loadingPercentage = 0
-      this.loadingText = ''
-      this.newPlaylistId = ''
-      this.$emit('onEnd')
-    }
-  },
-  async created () {
-    await this.createNewPlaylist()
-  },
-  methods: {
-    /**
+const snackbarVisible = ref(true)
+
+const timeout = computed((): number => {
+  return loadingPercentage.value === 100 ? 10_000 : -1
+})
+
+watch(snackbarVisible, (isVisible: boolean) => {
+  if (isVisible) return
+
+  loadingPercentage.value = 0
+  loadingText.value = ''
+  newPlaylistId.value = ''
+  emit('onEnd')
+})
+
+onBeforeMount(async () => {
+  await createNewPlaylist()
+})
+
+/**
      * 1. Create a new blank playlist
      * 2. Set cover as the cover of the old base playlists
      * 3. Add tracks to playlist either the filtered tracks or all the tracks of the old base playlist
      */
-    async createNewPlaylist () {
-      this.loadingText = this.$t('playlist.new.create')
-      this.loadingPercentage = 1
-      const newPlaylistId = await this.playlistsStore.createPlaylist(
-        this.playlistId,
-        this.getNewPlaylistName(),
-        this.getNewPlaylistDescription(),
-        false,
-        false
-      )
+const createNewPlaylist = async () => {
+  loadingText.value = t('playlist.new.create')
+  loadingPercentage.value = 1
+  const newId = await playlistsStore.createPlaylist(
+    props.playlistId,
+    getNewPlaylistName(),
+    getNewPlaylistDescription(),
+    false,
+    false
+  )
 
-      this.loadingText = this.$t('playlist.new.cover')
-      this.loadingPercentage = 33
-      await this.playlistsStore.updatePlaylistCover(newPlaylistId, this.playlistsStore.playlists[this.playlistId].images[0].url)
+  loadingText.value = t('playlist.new.cover')
+  loadingPercentage.value = 33
+  await playlistsStore.updatePlaylistCover(newId, playlistsStore.playlists[props.playlistId].images[0].url)
 
-      // If newTracks is empty that means we have to duplicate all the tracks
-      const tracksToAdd = this.newTracks.length ? this.newTracks : this.playlistsStore.playlists[this.playlistId].tracks
+  // If newTracks is empty that means we have to duplicate all the tracks
+  const tracksToAdd = props.newTracks.length ? props.newTracks : playlistsStore.playlists[props.playlistId].tracks
 
-      this.loadingText = this.$t('playlist.new.tracks')
-      this.loadingPercentage = 66
-      await this.playlistsStore.addTracksToPlaylist(
-        newPlaylistId,
-        tracksToAdd
-      )
+  loadingText.value = t('playlist.new.tracks')
+  loadingPercentage.value = 66
+  await playlistsStore.addTracksToPlaylist(
+    newId,
+    tracksToAdd
+  )
 
-      this.loadingText = this.$t('playlist.new.done') + ' ✓'
-      this.loadingPercentage = 100
-      this.newPlaylistId = newPlaylistId
-    },
-    displayNewPlaylistDetails () {
-      window.location.href = `/playlist/${this.newPlaylistId}`
-    },
-    /**
-     * Create a new playlist name according to filters
-     */
-    getNewPlaylistName (): string {
-      const { name } = this.playlistsStore.playlists[this.playlistId]
-      let newPlaylistName: string
-      if (this.filterTag) {
-        newPlaylistName = `${name} [${this.filterTag}]`
-      } else {
-        newPlaylistName = `${this.$t('playlist.duplicate.copy-of')} ${name}`
-      }
-      return newPlaylistName
-    },
-    /**
-     * Create a new playlist description according to filters
-     */
-    getNewPlaylistDescription (): string {
-      const { name } = this.playlistsStore.playlists[this.playlistId]
-      const tag = this.filterTag ? `[${this.filterTag}]` : ''
+  loadingText.value = t('playlist.new.done') + ' ✓'
+  loadingPercentage.value = 100
+  newPlaylistId.value = newId
+}
 
-      const now = new Date()
-      const day = now.getDate().toString(10).padStart(2, '0')
-      const month = (now.getMonth() + 1).toString(10).padStart(2, '0')
-      const year = now.getFullYear()
-      const formattedDate = (this.$i18n.locale === 'en') ? `${month}/${day}/${year}` : `${day}/${month}/${year}`
+const displayNewPlaylistDetails = () => {
+  window.location.href = `/playlist/${newPlaylistId.value}`
+}
 
-      return [
-        this.$t('playlist.duplicate.copy-of'),
-        name, tag,
-        '•', formattedDate,
-        '•', this.$t('playlist.duplicate.created-by')
-      ].join(' ')
-    }
+/**
+ * Create a new playlist name according to filters
+ */
+const getNewPlaylistName = (): string => {
+  const { name } = playlistsStore.playlists[props.playlistId]
+  let newPlaylistName: string
+  if (props.filterTag) {
+    newPlaylistName = `${name} [${props.filterTag}]`
+  } else {
+    newPlaylistName = `${t('playlist.duplicate.copy-of')} ${name}`
   }
-})
+  return newPlaylistName
+}
+
+/**
+ * Create a new playlist description according to filters
+ */
+const getNewPlaylistDescription = (): string => {
+  const { name } = playlistsStore.playlists[props.playlistId]
+  const tag = props.filterTag ? `[${props.filterTag}]` : ''
+
+  const now = new Date()
+  const day = now.getDate().toString(10).padStart(2, '0')
+  const month = (now.getMonth() + 1).toString(10).padStart(2, '0')
+  const year = now.getFullYear()
+  const formattedDate = (locale === 'en') ? `${month}/${day}/${year}` : `${day}/${month}/${year}`
+
+  return [
+    t('playlist.duplicate.copy-of'),
+    name, tag,
+    '•', formattedDate,
+    '•', t('playlist.duplicate.created-by')
+  ].join(' ')
+}
 </script>
+
 <style>
 #loading-create-new-playlist {
   margin-bottom: 10px;

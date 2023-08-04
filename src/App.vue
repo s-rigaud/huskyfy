@@ -23,8 +23,8 @@
   </v-app>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
+import { onBeforeMount } from 'vue'
 import { useMeta } from 'vue-meta'
 
 import { WindowWithSDK } from '@/api/spotify/types/sdk'
@@ -33,30 +33,10 @@ import NavbarComponent from '@/components/NavbarHeader.vue'
 import NotificationProvider from '@/components/NotificationProvider.vue'
 import { locale, t } from '@/i18n'
 
-export default defineComponent({
-  name: 'App',
-  components: { NavbarComponent, NotificationProvider, FooterComponent },
-  setup () {
-    // vue-meta
-    const DESCRIPTION = t('about.website-description')
-    useMeta({
-      htmlAttrs: {
-        lang: locale
-      },
-      og: {
-        description: DESCRIPTION
-      },
-      description: DESCRIPTION
-    })
-
-    // Spotify SDK
-    instantiateSpotifySDK()
-  },
-  data () {
-    return {
-      snackbar: true
-    }
-  }
+useMeta({
+  htmlAttrs: { lang: locale },
+  og: { description: t('about.website-description') },
+  description: t('about.website-description')
 })
 
 const instantiateSpotifySDK = () => {
@@ -99,7 +79,10 @@ const instantiateSpotifySDK = () => {
     */
   }
 }
+
+onBeforeMount(instantiateSpotifySDK)
 </script>
+
 <style scoped>
 @font-face {
   font-family: "Righteous";

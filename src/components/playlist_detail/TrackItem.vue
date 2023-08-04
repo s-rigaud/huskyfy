@@ -115,7 +115,7 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, ref, computed, onBeforeMount } from 'vue'
+import { PropType, computed, onBeforeMount, ref } from 'vue'
 
 import { SpotifyArtist } from '@/api/spotify/types/entities'
 import { usePlaylistsStore } from '@/stores/playlists'

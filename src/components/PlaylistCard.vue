@@ -31,9 +31,9 @@
 
 <script setup lang="ts">
 import { PropType } from 'vue'
+import { useRouter } from 'vue-router'
 
 import { SpotifyImage } from '@/api/spotify/types/entities'
-import { useRouter } from 'vue-router'
 
 const router = useRouter()
 

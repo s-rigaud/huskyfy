@@ -24,7 +24,7 @@
             id="playlist-name"
             v-model="playlistNameText"
             :append-inner-icon="nameUpdatedInAPI && playlistsStore.playlists[playlistId].name === playlistNameText ? 'mdi-check-circle-outline' : ''"
-            :label="$t('playlist.name')"
+            :label="t('playlist.name')"
             :loading="playlistsStore.playlists[playlistId].name !== playlistNameText && !nameUpdatedInAPI"
             color="var(--text-color)"
             density="compact"
@@ -40,7 +40,7 @@
           <div id="visibility-and-meta">
             <p> {{ getTextFromVisibility }} </p>
             <v-tooltip
-              :text="$t('playlist.contains-episodes-explanations')"
+              :text="t('playlist.contains-episodes-explanations')"
               class="rainbow-tooltip"
               location="bottom"
             >
@@ -54,12 +54,12 @@
                   size="small"
                   variant="elevated"
                 >
-                  {{ $t('playlist.contains-episodes') }}
+                  {{ t('playlist.contains-episodes') }}
                 </v-chip>
               </template>
             </v-tooltip>
             <v-tooltip
-              :text="$t('playlist.contains-local-tracks-explanations')"
+              :text="t('playlist.contains-local-tracks-explanations')"
               class="rainbow-tooltip"
               location="bottom"
             >
@@ -73,12 +73,12 @@
                   size="small"
                   variant="elevated"
                 >
-                  {{ $t('playlist.contains-local-tracks') }}
+                  {{ t('playlist.contains-local-tracks') }}
                 </v-chip>
               </template>
             </v-tooltip>
             <v-tooltip
-              :text="$t('playlist.contains-duplicated-tracks-explanations')"
+              :text="t('playlist.contains-duplicated-tracks-explanations')"
               class="rainbow-tooltip"
               location="bottom"
             >
@@ -92,13 +92,13 @@
                   size="small"
                   variant="elevated"
                 >
-                  {{ $t('playlist.contains-duplicated-tracks') }}
+                  {{ t('playlist.contains-duplicated-tracks') }}
                 </v-chip>
               </template>
             </v-tooltip>
           </div>
           <p id="playlist-owner">
-            {{ $t("playlist.created-by") }}
+            {{ t("playlist.created-by") }}
             <span
               id="playlist-owner-name"
               @click.stop="openPlaylistOwnerSpotifyProfile"
@@ -111,7 +111,7 @@
             id="percentage-row"
             :style="colorForPercentage"
           >
-            <span>{{ $t("playlist.indie-score-text") }}</span>
+            <span>{{ t("playlist.indie-score-text") }}</span>
             <!-- Only if all tracks are loaded -->
             <span
               class="black-highlight"
@@ -120,7 +120,7 @@
               {{ ` ${indiePercentage}` }} %
             </span>
             <v-tooltip
-              :text="$t('playlist.explanation-indie-score')"
+              :text="t('playlist.explanation-indie-score')"
               class="rainbow-tooltip"
             >
               <template #activator="{ props }">
@@ -139,7 +139,7 @@
         </div>
       </div>
       <v-tooltip
-        :text="$t('playlist.explanation-indie-score')"
+        :text="t('playlist.explanation-indie-score')"
         class="rainbow-tooltip"
         location="bottom"
       >
@@ -153,13 +153,13 @@
       </v-tooltip>
       <div id="playlist-meta-right">
         <p>
-          <span class="rainbow-text">{{ $t('playlist.total-track-number') }}</span>
+          <span class="rainbow-text">{{ t('playlist.total-track-number') }}</span>
           <span class="playlist-metric">
             {{ playlistTrackCount.toFixed(0) }}
           </span>
         </p>
         <p v-show="allTracksLoaded">
-          <span class="rainbow-text">{{ $t('playlist.duration') }}</span>
+          <span class="rainbow-text">{{ t('playlist.duration') }}</span>
           <span class="playlist-metric">
             {{ getPlaylistDuration() }}
           </span>
@@ -174,7 +174,7 @@
         v-else
         class="font-italic"
       >
-        {{ $t('playlist.no-description') }}
+        {{ t('playlist.no-description') }}
       </p>
     </v-card-text>
 
@@ -194,7 +194,7 @@
     </v-badge>
 
     <v-tooltip
-      :text="$t('playlist.open-on-spotify')"
+      :text="t('playlist.open-on-spotify')"
       class="rainbow-tooltip"
       location="bottom end"
     >
@@ -217,147 +217,130 @@
     :open="drawer"
     :playlist-id="playlistId"
     @on-close="drawer = false"
-    @on-sort-end="() => { $emit('playlistUpdated'); drawer = false }"
+    @on-sort-end="() => { emit('playlistUpdated'); drawer = false }"
   />
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import gsap from 'gsap'
 import { debounce, DebouncedFunc } from 'lodash'
-import { storeToRefs } from 'pinia'
-import { defineComponent, toRef, toRefs } from 'vue'
+import { computed, onBeforeMount, onMounted, ref, watch } from 'vue'
 
 import ActionDrawer from '@/components/playlist_detail/ActionDrawer.vue'
-import IndieChart, { HIGHEST_VALUE_COLOR, LOWEST_VALUE_COLOR } from '@/components/playlist_detail/IndieChart.vue'
+import IndieChart from '@/components/playlist_detail/IndieChart.vue'
+import { t } from '@/i18n'
 import { MY_MUSIC_PLAYLIST_ID, usePlaylistsStore } from '@/stores/playlists'
 import { useUserStore } from '@/stores/user'
-import { getAverageColor } from '@/utils/colors'
+import { getAverageColor, HIGHEST_VALUE_COLOR, LOWEST_VALUE_COLOR } from '@/utils/colors'
 
-export default defineComponent({
-  name: 'PlaylistMetaDisplay',
-  components: {
-    ActionDrawer,
-    IndieChart
+const props = defineProps({
+  playlistId: {
+    type: String,
+    required: true
   },
-  props: {
-    playlistId: {
-      type: String,
-      required: true
-    },
-    indiePercentage: {
-      type: Number,
-      required: true
-    }
-  },
-  emits: ['playlistUpdated'],
-  setup () {
-    const playlistsStore = usePlaylistsStore()
-    const currentUserUsername = useUserStore().username
-
-    return {
-      playlistsStore,
-      currentUserUsername
-    }
-  },
-  data () {
-    return {
-      drawer: false,
-      displayBurgerMenuBadge: 'block',
-      playlistNameText: '',
-      /**
-       * Set to 0 to prepare for increment animation
-       */
-      playlistTrackCount: 0,
-
-      /**
-       * Debounced function being call each time the user update the playlist name in the UI.
-       * Once the user stop, an APi call is triggered to sync the playlist name.
-       */
-      updatePlaylistNameDebounced: (null as DebouncedFunc<() => Promise<void>> | null),
-      nameUpdatedInAPI: false
-    }
-  },
-  computed: {
-    getTextFromVisibility (): string {
-      let visibility: string
-      if (this.playlistsStore.playlists[this.playlistId].collaborative) visibility = 'collaborative'
-      else if (this.playlistsStore.playlists[this.playlistId].public) visibility = 'public'
-      else visibility = 'private'
-
-      return this.$t(`playlist.${visibility}`) + ' ' + this.$t(`_emojis.${visibility}`)
-    },
-    usernameToDisplay (): string {
-      const playlistCreator = this.playlistsStore.playlists[this.playlistId].owner.display_name
-      return this.currentUserUsername === playlistCreator ? this.$t('playlist.you') : playlistCreator
-    },
-    allTracksLoaded (): boolean {
-      return this.playlistsStore.playlists[this.playlistId].tracks.length === this.playlistsStore.playlists[this.playlistId].total
-    },
-    colorForPercentage (): { color: string } {
-      const color = getAverageColor(LOWEST_VALUE_COLOR, HIGHEST_VALUE_COLOR, this.indiePercentage)
-      return { color }
-    },
-    formattedDescription (): string {
-      return (
-        this.playlistsStore.playlists[this.playlistId].description
-          // Remove html markups from content
-          .replace(/(<([^>]+)>)/ig, '')
-          // Escaped " back to real character
-          .replace(/&quot;/ig, '"')
-          // Escaped / back to real character
-          .replace(/&#x2F;/ig, '/')
-      )
-    },
-    userOwnsPlaylist (): boolean {
-      return this.currentUserUsername === this.playlistsStore.playlists[this.playlistId].owner.display_name
-    },
-    isMyMusicPlaylist (): boolean {
-      return this.playlistsStore.playlists[this.playlistId].id === MY_MUSIC_PLAYLIST_ID
-    },
-    playlistContainsLocalTracks (): boolean {
-      return this.playlistsStore.playlists[this.playlistId].containsLocalTracks
-    },
-    playlistContainsEpisodes (): boolean {
-      return this.playlistsStore.playlists[this.playlistId].containsEpisodes
-    },
-    playlistContainsDuplicatedTracks (): boolean {
-      return this.playlistsStore.playlists[this.playlistId].containsDuplicatedTracks
-    }
-  },
-  watch: {
-    playlistNameText (currentText: string) {
-      if (currentText && currentText !== this.playlistsStore.playlists[this.playlistId].name && this.updatePlaylistNameDebounced) {
-        this.nameUpdatedInAPI = false
-        this.updatePlaylistNameDebounced()
-      }
-    }
-  },
-  beforeMount () {
-    this.updatePlaylistNameDebounced = debounce(
-      async () => {
-        await this.playlistsStore.updatePlaylistName(this.playlistId, this.playlistNameText)
-        this.nameUpdatedInAPI = true
-      },
-      2000
-    )
-    this.playlistNameText = this.playlistsStore.playlists[this.playlistId].name
-  },
-  mounted () {
-    setTimeout(() => gsap.to(this, { duration: 3, playlistTrackCount: this.playlistsStore.playlists[this.playlistId].total }), 2000)
-  },
-  methods: {
-    openPlaylistOnSpotify () {
-      window.location.href = this.playlistsStore.playlists[this.playlistId].uri
-    },
-    openPlaylistOwnerSpotifyProfile () {
-      window.location.href = this.playlistsStore.playlists[this.playlistId].owner.uri
-    },
-    getPlaylistDuration (): string {
-      return this.playlistsStore.getPlaylistFullLength(this.playlistId)
-    }
+  indiePercentage: {
+    type: Number,
+    required: true
   }
 })
+const emit = defineEmits(['playlistUpdated'])
+
+const playlistsStore = usePlaylistsStore()
+const currentUserUsername = useUserStore().username
+
+const drawer = ref(false)
+const displayBurgerMenuBadge = ref('block')
+const playlistNameText = ref('')
+
+/** Set to 0 to prepare for increment animation */
+const playlistTrackCount = ref(0)
+
+/**
+ * Debounced function being call each time the user update the playlist name in the UI.
+ * Once the user stop, an APi call is triggered to sync the playlist name.
+ */
+const updatePlaylistNameDebounced = ref<DebouncedFunc<() => Promise<void>> | null>(null)
+const nameUpdatedInAPI = ref(false)
+
+const getTextFromVisibility = computed((): string => {
+  let visibility: string
+  if (playlistsStore.playlists[props.playlistId].collaborative) visibility = 'collaborative'
+  else if (playlistsStore.playlists[props.playlistId].public) visibility = 'public'
+  else visibility = 'private'
+
+  return t(`playlist.${visibility}`) + ' ' + t(`_emojis.${visibility}`)
+})
+const usernameToDisplay = computed((): string => {
+  const playlistCreator = playlistsStore.playlists[props.playlistId].owner.display_name
+  return currentUserUsername === playlistCreator ? t('playlist.you') : playlistCreator
+})
+const allTracksLoaded = computed((): boolean => {
+  return playlistsStore.playlists[props.playlistId].tracks.length === playlistsStore.playlists[props.playlistId].total
+})
+const colorForPercentage = computed((): { color: string } => {
+  const color = getAverageColor(LOWEST_VALUE_COLOR, HIGHEST_VALUE_COLOR, props.indiePercentage)
+  return { color }
+})
+const formattedDescription = computed((): string => {
+  return (
+    playlistsStore.playlists[props.playlistId].description
+      // Remove html markups from content
+      .replace(/(<([^>]+)>)/ig, '')
+      // Escaped " back to real character
+      .replace(/&quot;/ig, '"')
+      // Escaped / back to real character
+      .replace(/&#x2F;/ig, '/')
+  )
+})
+const userOwnsPlaylist = computed((): boolean => {
+  return currentUserUsername === playlistsStore.playlists[props.playlistId].owner.display_name
+})
+const isMyMusicPlaylist = computed((): boolean => {
+  return playlistsStore.playlists[props.playlistId].id === MY_MUSIC_PLAYLIST_ID
+})
+const playlistContainsLocalTracks = computed((): boolean => {
+  return playlistsStore.playlists[props.playlistId].containsLocalTracks
+})
+const playlistContainsEpisodes = computed((): boolean => {
+  return playlistsStore.playlists[props.playlistId].containsEpisodes
+})
+const playlistContainsDuplicatedTracks = computed((): boolean => {
+  return playlistsStore.playlists[props.playlistId].containsDuplicatedTracks
+})
+
+watch(playlistNameText, (currentText: string) => {
+  if (currentText && currentText !== playlistsStore.playlists[props.playlistId].name && updatePlaylistNameDebounced.value) {
+    nameUpdatedInAPI.value = false
+    updatePlaylistNameDebounced.value()
+  }
+})
+
+onBeforeMount(() => {
+  updatePlaylistNameDebounced.value = debounce(
+    async () => {
+      await playlistsStore.updatePlaylistName(props.playlistId, playlistNameText.value)
+      nameUpdatedInAPI.value = true
+    },
+    2000
+  )
+  playlistNameText.value = playlistsStore.playlists[props.playlistId].name
+})
+
+onMounted(() => {
+  setTimeout(() => gsap.to(playlistTrackCount, { duration: 3, playlistTrackCount: playlistsStore.playlists[props.playlistId].total }), 2000)
+})
+
+const openPlaylistOnSpotify = () => {
+  window.location.href = playlistsStore.playlists[props.playlistId].uri
+}
+const openPlaylistOwnerSpotifyProfile = () => {
+  window.location.href = playlistsStore.playlists[props.playlistId].owner.uri
+}
+const getPlaylistDuration = (): string => {
+  return playlistsStore.getPlaylistFullLength(props.playlistId)
+}
 </script>
+
 <style>
 #playlist-card {
   width: 100%;
@@ -525,8 +508,8 @@ export default defineComponent({
 }
 
 .rainbow-tooltip .v-overlay__content {
-  background-color: var(--primary-color);
-  color: var(--text-color);
+  background-color: var(--primary-color) !important;
+  color: var(--text-color) !important;
   border: var(--text-color) 2px solid;
   outline: var(--primary-color) 0.5px solid;
 }

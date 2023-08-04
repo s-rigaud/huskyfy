@@ -1,3 +1,6 @@
+export const LOWEST_VALUE_COLOR = '#f35800'
+export const HIGHEST_VALUE_COLOR = '#21f92e'
+
 /**
  * German palette https://flatuicolors.com/palette/de
  */

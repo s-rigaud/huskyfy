@@ -12,7 +12,9 @@
         {{ $t('drawer.update-playlist') }}
       </v-list-subheader>
       <!-- 1.1 Update playlist privacy -->
-      <div v-if="(userOwnsPlaylist || spotifyOwnsPlaylist) && !playlistsStore.playlists[playlistId].collaborative && isNotMyMusicPlaylist">
+      <div
+        v-if="(userOwnsPlaylist || spotifyOwnsPlaylist) && !playlistsStore.playlists[playlistId].collaborative && isNotMyMusicPlaylist"
+      >
         <v-list-item
           v-if="playlistsStore.playlists[playlistId].public"
           @click="() => updatePlaylistPrivacy(false)"
@@ -96,7 +98,9 @@
       <v-divider color="grey" />
 
       <!-- (At least 4 tracks to download image) -->
-      <div v-if="playlistsStore.playlists[playlistId].tracks.length >= 4 && playlistsStore.getTopGenres(playlistId).length >= 4">
+      <div
+        v-if="playlistsStore.playlists[playlistId].tracks.length >= 4 && playlistsStore.getTopGenres(playlistId).length >= 4"
+      >
         <!-- 3. Export Image -->
         <v-badge
           id="export-image-badge"
@@ -187,160 +191,148 @@
     @on-end="startDuplication = false"
   />
 </template>
-<script lang="ts">
-import { storeToRefs } from 'pinia'
-import { defineComponent, toRef, toRefs } from 'vue'
+<script setup lang="ts">
+import { computed, ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
 
 import DuplicatorPopup from '@/components/playlist_detail/DuplicatorPopup.vue'
 import { downloadImage, GridSize, makeImage } from '@/services/playlistImageMaker'
 import { MY_MUSIC_PLAYLIST_ID, usePlaylistsStore } from '@/stores/playlists'
 import { useUserStore } from '@/stores/user'
 
-export default defineComponent({
-  name: 'ActionDrawer',
-  components: { DuplicatorPopup },
-  props: {
-    open: {
-      type: Boolean,
-      required: true
-    },
-    playlistId: {
-      type: String,
-      required: true
-    }
-  },
-  emits: ['onClose', 'onSortEnd'],
-  setup () {
-    const playlistsStore = usePlaylistsStore()
-    const currentUserUsername = useUserStore().username
+const router = useRouter()
 
-    return {
-      playlistsStore,
-      currentUserUsername
-    }
+const props = defineProps({
+  open: {
+    type: Boolean,
+    required: true
   },
-  data () {
-    return {
-      isOpen: false,
-      isDeleteModalOpen: false,
-      waitingForDeletion: false,
-
-      generateImageSize: 0,
-      generateImageDisplayTitle: true,
-      generateImageDisplayStats: true,
-
-      imagePreview: '',
-
-      startDuplication: false
-    }
-  },
-  computed: {
-    isNotMyMusicPlaylist (): boolean {
-      return this.playlistsStore.playlists[this.playlistId].id !== MY_MUSIC_PLAYLIST_ID
-    },
-    starImage (): string {
-      return new URL('../../assets/stars.jpg', import.meta.url).href
-    },
-    userOwnsPlaylist (): boolean {
-      return this.currentUserUsername === this.playlistsStore.playlists[this.playlistId].owner.display_name
-    },
-    spotifyOwnsPlaylist (): boolean {
-      return this.playlistsStore.playlists[this.playlistId].owner.id === 'spotify'
-    },
-    ticks (): Record<number, string> {
-      const trackNumber = this.playlistsStore.getTopArtists(this.playlistId).length
-      const ticks: Record<number, string> = {}
-      if (trackNumber >= 4) ticks[0] = '2x2'
-      if (trackNumber >= 9) ticks[1] = '3x3'
-      if (trackNumber >= 16) ticks[2] = '4x4'
-      return ticks
-    },
-    maxTick (): number {
-      return Object.keys(this.ticks).length - 1
-    },
-    allTracksLoaded (): boolean {
-      return this.playlistsStore.playlists[this.playlistId].tracks.length === this.playlistsStore.playlists[this.playlistId].total
-    },
-    canCreateExportImage (): boolean {
-      return this.playlistsStore.playlists[this.playlistId].tracks.length >= 4 && this.playlistsStore.getTopGenres(this.playlistId).length >= 4
-    },
-    canUpdatePlaylistName (): boolean {
-      return ((this.userOwnsPlaylist || this.spotifyOwnsPlaylist) && !this.playlistsStore.playlists[this.playlistId].collaborative && this.isNotMyMusicPlaylist) ||
-        this.allTracksLoaded ||
-        this.isNotMyMusicPlaylist
-    }
-  },
-  watch: {
-    // Have to use this to synchronise props as I can't use props as VModel
-    open (isNowOpen: boolean) {
-      this.isOpen = isNowOpen
-      this.updateImagePreview()
-    },
-    isOpen (isNowOpen: boolean) {
-      !isNowOpen && this.$emit('onClose')
-    },
-    generateImageSize () { this.updateImagePreview() },
-    generateImageDisplayTitle () { this.updateImagePreview() },
-    generateImageDisplayStats () { this.updateImagePreview() }
-  },
-  methods: {
-    startDuplicationProcess () {
-      this.isOpen = false
-      this.startDuplication = true
-    },
-    updateImagePreview () {
-      if (!this.canCreateExportImage) return
-
-      makeImage(
-        this.playlistId,
-        ([2, 3, 4] as GridSize[])[this.generateImageSize],
-        this.generateImageDisplayTitle,
-        this.generateImageDisplayStats,
-        (rawImageData: string) => { this.imagePreview = rawImageData }
-      )
-    },
-    async updatePlaylistPrivacy (isPublic: boolean) {
-      await this.playlistsStore.updatePlaylistPrivacy(this.playlistId, isPublic)
-      this.isOpen = false
-    },
-    async sortPlaylistTracksByGenres () {
-      await this.playlistsStore.sortPlaylistTracksByGenres(this.playlistId)
-      this.$emit('onSortEnd')
-    },
-    async sortPlaylistTracksByArtistTrackInPlaylist () {
-      await this.playlistsStore.sortPlaylistTracksByArtistTrackInPlaylist(
-        this.playlistId
-      )
-      this.$emit('onSortEnd')
-    },
-    async sortPlaylistTracksByArtistName () {
-      await this.playlistsStore.sortPlaylistTracksByArtistName(
-        this.playlistId
-      )
-      this.$emit('onSortEnd')
-    },
-    async exportArtistPreview () {
-      makeImage(
-        this.playlistId,
-        ([2, 3, 4] as GridSize[])[this.generateImageSize],
-        this.generateImageDisplayTitle,
-        this.generateImageDisplayStats,
-        (rawImageData: string) => { downloadImage(rawImageData, this.playlistsStore.playlists[this.playlistId].name) }
-      )
-    },
-    /**
-     * Delete playlist from Spotify account, delete it from localStorage and redirect to main page
-     */
-    async unfollowPlaylist () {
-      this.isDeleteModalOpen = false
-      this.waitingForDeletion = true
-      const toDeletePlaylistId = this.playlistId
-      await this.playlistsStore.unfollowPlaylist(toDeletePlaylistId)
-      this.waitingForDeletion = false
-      this.$router.push({ name: 'Explore' })
-    }
+  playlistId: {
+    type: String,
+    required: true
   }
 })
+
+const emit = defineEmits(['onClose', 'onSortEnd'])
+
+const playlistsStore = usePlaylistsStore()
+const currentUserUsername = useUserStore().username
+
+const isOpen = ref(false)
+const isDeleteModalOpen = ref(false)
+const waitingForDeletion = ref(false)
+
+const generateImageSize = ref(0)
+const generateImageDisplayTitle = ref(true)
+const generateImageDisplayStats = ref(true)
+
+const imagePreview = ref('')
+
+const startDuplication = ref(false)
+
+const isNotMyMusicPlaylist = computed((): boolean => {
+  return playlistsStore.playlists[props.playlistId].id !== MY_MUSIC_PLAYLIST_ID
+})
+const starImage = computed((): string => {
+  return new URL('../../assets/stars.jpg', import.meta.url).href
+})
+const userOwnsPlaylist = computed((): boolean => {
+  return currentUserUsername === playlistsStore.playlists[props.playlistId].owner.display_name
+})
+const spotifyOwnsPlaylist = computed((): boolean => {
+  return playlistsStore.playlists[props.playlistId].owner.id === 'spotify'
+})
+const ticks = computed((): Record<number, string> => {
+  const trackNumber = playlistsStore.getTopArtists(props.playlistId).length
+  const ticks: Record<number, string> = {}
+  if (trackNumber >= 4) ticks[0] = '2x2'
+  if (trackNumber >= 9) ticks[1] = '3x3'
+  if (trackNumber >= 16) ticks[2] = '4x4'
+  return ticks
+})
+const maxTick = computed((): number => {
+  return Object.keys(ticks).length - 1
+})
+const allTracksLoaded = computed((): boolean => {
+  return playlistsStore.playlists[props.playlistId].tracks.length === playlistsStore.playlists[props.playlistId].total
+})
+const canCreateExportImage = computed((): boolean => {
+  return playlistsStore.playlists[props.playlistId].tracks.length >= 4 && playlistsStore.getTopGenres(props.playlistId).length >= 4
+})
+const canUpdatePlaylistName = computed((): boolean => {
+  return ((userOwnsPlaylist.value || spotifyOwnsPlaylist.value) && !playlistsStore.playlists[props.playlistId].collaborative && isNotMyMusicPlaylist.value) ||
+    allTracksLoaded.value ||
+    isNotMyMusicPlaylist.value
+})
+
+// Have to use this to synchronise props as I can't use props as VModel
+watch(() => props.open, (isNowOpen: boolean) => {
+  isNowOpen && updateImagePreview()
+})
+watch(isOpen, (isNowOpen: boolean) => {
+  !isNowOpen && emit('onClose')
+})
+
+watch(generateImageSize, () => { updateImagePreview() })
+watch(generateImageDisplayTitle, () => { updateImagePreview() })
+watch(generateImageDisplayStats, () => { updateImagePreview() })
+
+const startDuplicationProcess = () => {
+  isOpen.value = false
+  startDuplication.value = true
+}
+const updateImagePreview = () => {
+  if (!canCreateExportImage.value) return
+
+  makeImage(
+    props.playlistId,
+    ([2, 3, 4] as GridSize[])[generateImageSize.value],
+    generateImageDisplayTitle.value,
+    generateImageDisplayStats.value,
+    (rawImageData: string) => { imagePreview.value = rawImageData }
+  )
+}
+const updatePlaylistPrivacy = async (isPublic: boolean) => {
+  await playlistsStore.updatePlaylistPrivacy(props.playlistId, isPublic)
+  isOpen.value = false
+}
+const sortPlaylistTracksByGenres = async () => {
+  await playlistsStore.sortPlaylistTracksByGenres(props.playlistId)
+  emit('onSortEnd')
+}
+const sortPlaylistTracksByArtistTrackInPlaylist = async () => {
+  await playlistsStore.sortPlaylistTracksByArtistTrackInPlaylist(
+    props.playlistId
+  )
+  emit('onSortEnd')
+}
+const sortPlaylistTracksByArtistName = async () => {
+  await playlistsStore.sortPlaylistTracksByArtistName(
+    props.playlistId
+  )
+  emit('onSortEnd')
+}
+const exportArtistPreview = () => {
+  makeImage(
+    props.playlistId,
+    ([2, 3, 4] as GridSize[])[generateImageSize.value],
+    generateImageDisplayTitle.value,
+    generateImageDisplayStats.value,
+    (rawImageData: string) => { downloadImage(rawImageData, playlistsStore.playlists[props.playlistId].name) }
+  )
+}
+/**
+ * Delete playlist from Spotify account, delete it from localStorage and redirect to main page
+ */
+const unfollowPlaylist = async () => {
+  isDeleteModalOpen.value = false
+  waitingForDeletion.value = true
+  const toDeletePlaylistId = props.playlistId
+  await playlistsStore.unfollowPlaylist(toDeletePlaylistId)
+  waitingForDeletion.value = false
+  router.push({ name: 'Explore' })
+}
+
 </script>
 <style>
 #drawer {

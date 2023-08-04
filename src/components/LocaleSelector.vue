@@ -34,10 +34,10 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 
 import { i18n, locale } from '@/i18n'
 import { useUserStore } from '@/stores/user'
-import { computed } from 'vue'
 
 enum HandledLocale {
   FR = 'fr',

@@ -20,6 +20,7 @@
 <script setup lang="ts">
 import { useMeta } from 'vue-meta'
 import { useRouter } from 'vue-router'
+
 const router = useRouter()
 
 useMeta({

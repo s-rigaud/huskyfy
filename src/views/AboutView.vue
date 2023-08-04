@@ -174,8 +174,8 @@
 <script setup lang="ts">
 import confetti from 'canvas-confetti'
 import { useMeta } from 'vue-meta'
-import packageInfo from '@/../package.json'
 
+import packageInfo from '@/../package.json'
 import { t } from '@/i18n'
 
 const version = packageInfo.version

@@ -17,9 +17,10 @@
 </template>
 
 <script setup lang="ts">
-import { NotificationType, useNotificationsStore } from '@/stores/notifications'
 import { storeToRefs } from 'pinia'
 import { ref, watch } from 'vue'
+
+import { NotificationType, useNotificationsStore } from '@/stores/notifications'
 
 const notificationsStore = useNotificationsStore()
 const { notifications } = storeToRefs(notificationsStore)

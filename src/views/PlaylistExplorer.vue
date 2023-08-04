@@ -30,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onBeforeMount } from 'vue'
+import { computed, onBeforeMount, ref } from 'vue'
 import { useMeta } from 'vue-meta'
 
 import { SpotifyPlaylist } from '@/api/spotify/types/entities'
