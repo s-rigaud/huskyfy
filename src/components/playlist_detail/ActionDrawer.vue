@@ -6,6 +6,7 @@
     elevation="20"
     location="right"
     temporary
+    @update:model-value="emit('update:open', false)"
   >
     <v-list>
       <v-list-subheader v-if="canUpdatePlaylistName">
@@ -192,7 +193,7 @@
   />
 </template>
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, onBeforeMount, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
 import DuplicatorPopup from '@/components/playlist_detail/DuplicatorPopup.vue'
@@ -213,7 +214,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['onClose', 'onSortEnd'])
+const emit = defineEmits(['update:open', 'onSortEnd'])
 
 const playlistsStore = usePlaylistsStore()
 const currentUserUsername = useUserStore().username
@@ -265,14 +266,13 @@ const canUpdatePlaylistName = computed((): boolean => {
     isNotMyMusicPlaylist.value
 })
 
+onBeforeMount(() => { isOpen.value = props.open })
+
 // Have to use this to synchronise props as I can't use props as VModel
 watch(() => props.open, (isNowOpen: boolean) => {
+  isOpen.value = isNowOpen
   isNowOpen && updateImagePreview()
 })
-watch(isOpen, (isNowOpen: boolean) => {
-  !isNowOpen && emit('onClose')
-})
-
 watch(generateImageSize, () => { updateImagePreview() })
 watch(generateImageDisplayTitle, () => { updateImagePreview() })
 watch(generateImageDisplayStats, () => { updateImagePreview() })

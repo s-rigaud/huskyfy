@@ -214,9 +214,8 @@
   </v-card>
 
   <ActionDrawer
-    :open="drawer"
+    v-model:open="drawer"
     :playlist-id="playlistId"
-    @on-close="drawer = false"
     @on-sort-end="() => { emit('playlistUpdated'); drawer = false }"
   />
 </template>
