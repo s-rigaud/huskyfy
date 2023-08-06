@@ -42,6 +42,7 @@
       <v-dialog
         v-if="isNotMyMusicPlaylist"
         v-model="isDeleteModalOpen"
+        style="z-index:5555;"
       >
         <template #activator="{ props }">
           <v-list-item v-bind="props">
