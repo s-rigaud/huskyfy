@@ -60,7 +60,7 @@
             <v-spacer />
             <v-btn
               class="deletion-action-button"
-              color="var(--text-color)"
+              color="var(--huskyfy-orange)"
               @click="isDeleteModalOpen = false"
             >
               {{ $t('playlist.delete.disagree') }}
@@ -118,7 +118,7 @@
           <template #placeholder>
             <div class="d-flex align-center justify-center fill-height">
               <v-progress-circular
-                color="var(--text-color)"
+                color="var(--huskyfy-orange)"
                 indeterminate
               />
             </div>
@@ -130,18 +130,21 @@
           v-model="generateImageSize"
           :max="maxTick"
           :ticks="ticks"
-          color="var(--text-color)"
+          color="var(--huskyfy-orange)"
           prepend-icon="mdi-arrange-send-to-back"
           show-ticks="always"
           step="1"
           tick-size="4"
           @touchstart.stop
         />
-        <div id="sliders">
+        <div
+          id="sliders"
+          class="ma-2"
+        >
           <v-switch
             v-model="generateImageDisplayTitle"
             class="generate-image-switch"
-            color="var(--text-color)"
+            color="var(--huskyfy-orange)"
           >
             <template #label>
               <p
@@ -155,7 +158,7 @@
           <v-switch
             v-model="generateImageDisplayStats"
             class="generate-image-switch"
-            color="var(--text-color)"
+            color="var(--huskyfy-orange)"
           >
             <template #label>
               <p
@@ -167,7 +170,10 @@
             </template>
           </v-switch>
         </div>
-        <div id="generate-image-button">
+        <div
+          id="generate-image-button"
+          class="ma-4"
+        >
           <v-btn
             class="rainbow-v-btn"
             @click="exportArtistPreview"
@@ -252,7 +258,7 @@ const ticks = computed((): Record<number, string> => {
   return ticks
 })
 const maxTick = computed((): number => {
-  return Object.keys(ticks).length - 1
+  return Object.keys(ticks.value).length - 1
 })
 const allTracksLoaded = computed((): boolean => {
   return playlistsStore.playlists[props.playlistId].tracks.length === playlistsStore.playlists[props.playlistId].total
@@ -388,7 +394,7 @@ const unfollowPlaylist = async () => {
 /* Generic styling */
 #drawer .v-list-subheader {
   font-size: large;
-  color: var(--text-color);
+  color: var(--huskyfy-orange);
   text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
 }
 

@@ -244,7 +244,7 @@ const getColorForGenre = (genre: string): string => {
   margin: 0px 5px 3px 0px;
   padding: 0 !important;
 
-  color: var(--link-color);
+  color: var(--huskyfy-yellow-color);
   text-decoration: none;
 }
 

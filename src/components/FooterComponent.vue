@@ -59,8 +59,8 @@ const userStore = useUserStore()
 <style scoped>
 #footer {
   max-height: 100px;
-  background-color: var(--primary-color) !important;
-  color: var(--text-color) !important;
+  background-color: var(--huskyfy-black) !important;
+  color: var(--huskyfy-orange) !important;
   display: table;
 }
 
@@ -69,22 +69,22 @@ const userStore = useUserStore()
 }
 
 .footer-link:focus {
-  outline: 3px var(--text-color) solid;
+  outline: 3px var(--huskyfy-orange) solid;
 }
 
 button {
-  background-color: var(--primary-color);
-  color: var(--text-color) !important;
+  background-color: var(--huskyfy-black);
+  color: var(--huskyfy-orange) !important;
   font-weight: 700;
 }
 
 #github-link {
-  color: var(--link-color);
+  color: var(--huskyfy-yellow-color);
   text-decoration: none;
 }
 
 #github-link:focus {
-  outline: 3px var(--link-color) solid;
+  outline: 3px var(--huskyfy-yellow-color) solid;
 }
 
 .v-btn--variant-contained {

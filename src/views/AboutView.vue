@@ -15,7 +15,7 @@
       <p style="margin-bottom: 5px">
         {{ $t("about.description.content.part1") }}
         <span
-          style="color: var(--link-color); cursor: pointer;"
+          style="color: var(--huskyfy-yellow-color); cursor: pointer;"
           @mouseover="drawConfettis"
         >
           Huskyfy !
@@ -125,7 +125,7 @@
           <a
             href="https://github.com/s-rigaud/huskyfy"
             rel="noopener"
-            style="color: var(--text-color) !important;"
+            style="color: var(--huskyfy-orange) !important;"
             target="_blank"
           >
             <v-img
@@ -133,7 +133,7 @@
               src="@/assets/large-logo-circle.png"
               width="70"
             />
-            <p style="color: var(--text-color); margin: 0px 15px;">Huskyfy version {{ version }}</p>
+            <p style="color: var(--huskyfy-orange); margin: 0px 15px;">Huskyfy version {{ version }}</p>
           </a>
         </div>
         <div>
@@ -271,7 +271,7 @@ const drawConfettis = () => {
   flex-direction: column;
   align-items: center;
 
-  /* Monochromatic for --secondary-color */
+  /* Monochromatic for --huskyfy-grey */
   background-color: #464646;
 }
 
@@ -281,7 +281,7 @@ const drawConfettis = () => {
 
   text-align: justify;
 
-  background-color: var(--secondary-color);
+  background-color: var(--huskyfy-grey);
   box-shadow: 14px 2px 20px 1px rgba(0, 0, 0, 0.5), -14px 2px 20px 1px rgba(0, 0, 0, 0.5);
   -webkit-box-shadow: 14px 2px 20px 1px rgba(0, 0, 0, 0.5), -14px 2px 20px 1px rgba(0, 0, 0, 0.5);
   -moz-box-shadow: 14px 2px 20px 1px rgba(0, 0, 0, 0.5), -14px 2px 20px 1px rgba(0, 0, 0, 0.5);
@@ -361,7 +361,7 @@ p {
 
 a {
   text-decoration: none;
-  color: var(--link-color) !important;
+  color: var(--huskyfy-yellow-color) !important;
 }
 
 a:hover {
@@ -390,7 +390,7 @@ a:hover {
 
 #open-my-music {
   cursor: pointer;
-  color: var(--link-color);
+  color: var(--huskyfy-yellow-color);
 }
 
 #open-my-music:hover {

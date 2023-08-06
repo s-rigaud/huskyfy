@@ -87,7 +87,7 @@ const updateLocale = (event: Event) => {
 </script>
 <style scoped>
 #locale-list {
-  background-color: var(--text-color);
+  background-color: var(--huskyfy-orange);
 }
 
 .locale-text {
@@ -97,7 +97,7 @@ const updateLocale = (event: Event) => {
 
 .locale-item {
   padding: 7px !important;
-  background: linear-gradient(180deg, var(--text-color) 20%, var(--link-color) 51%, var(--text-color) 86%) !important;
+  background: linear-gradient(180deg, var(--huskyfy-orange) 20%, var(--huskyfy-yellow-color) 51%, var(--huskyfy-orange) 86%) !important;
 }
 
 .locale-item:hover {

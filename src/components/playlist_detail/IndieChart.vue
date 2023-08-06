@@ -138,6 +138,6 @@ const updateChart = (indiePercentage: number) => {
 #genre-chart-subtitle {
   margin-top: 30px;
 
-  color: var(--text-color)
+  color: var(--huskyfy-orange)
 }
 </style>

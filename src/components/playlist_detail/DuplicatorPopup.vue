@@ -4,7 +4,7 @@
     id="duplicate-snackbar"
     v-model="snackbarVisible"
     :timeout="timeout"
-    color="var(--primary-color)"
+    color="var(--huskyfy-black)"
     elevation="24"
   >
     <div
@@ -14,7 +14,7 @@
       <v-progress-circular
         id="duplication-progress"
         :model-value="loadingPercentage"
-        color="var(--text-color)"
+        color="var(--huskyfy-orange)"
       />
       <p class="rainbow-text">
         {{ loadingPercentage }}% - {{ loadingText }}
@@ -181,7 +181,7 @@ const getNewPlaylistDescription = (): string => {
 }
 
 #duplicate-snackbar .v-snackbar__wrapper {
-  border: 2px var(--text-color) solid;
+  border: 2px var(--huskyfy-orange) solid;
 }
 
 #duplicate-snackbar .v-progress-circular__underlay {

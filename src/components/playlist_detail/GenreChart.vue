@@ -93,7 +93,6 @@ onMounted(() => {
   })
 
   observer.observe(container.value as HTMLElement)
-  console.log('known genres', props.genres)
 })
 
 const getColorsForGenres = (genres: Genre[]): string[] => {

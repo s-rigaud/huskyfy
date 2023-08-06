@@ -92,9 +92,9 @@ const disconnect = () => {
   z-index: 2001;
   font-family: 'Righteous', Helvetica, Sans-serif;
   cursor: default;
-  color: var(--text-color) !important;
-  background-color: var(--primary-color) !important;
-  outline: 2px var(--text-color) solid;
+  color: var(--huskyfy-orange) !important;
+  background-color: var(--huskyfy-black) !important;
+  outline: 2px var(--huskyfy-orange) solid;
 }
 
 #app-bar .v-toolbar__content {

@@ -62,6 +62,6 @@ h2 {
 }
 
 #back-button {
-  color: var(--primary-color);
+  color: var(--huskyfy-black);
 }
 </style>

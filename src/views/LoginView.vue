@@ -209,11 +209,11 @@ const accessOAuthPage = async () => {
 }
 
 #connect-button:hover {
-  outline: var(--primary-color) solid 2px !important;
+  outline: var(--huskyfy-black) solid 2px !important;
 }
 
 #connect-button:focus {
-  outline: var(--primary-color) solid 2px !important;
+  outline: var(--huskyfy-black) solid 2px !important;
 }
 
 a {

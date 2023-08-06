@@ -14,7 +14,7 @@
 
       <v-expansion-panels variant="accordion">
         <v-expansion-panel>
-          <v-expansion-panel-title color="var(--text-color)">
+          <v-expansion-panel-title color="var(--huskyfy-orange)">
             <div class="d-flex justify-start">
               Stats
             </div>
@@ -27,7 +27,7 @@
         <v-expansion-panel>
           <v-expansion-panel-title
             id="filter-panel-title"
-            color="var(--link-color)"
+            color="var(--huskyfy-yellow-color)"
           >
             <div class="d-flex justify-start">
               Filters
@@ -181,7 +181,7 @@
                       v-model=" isFilterExclusive "
                       :disabled=" numberOfActiveFilters <= 1 "
                       :label=" $t(`track.${isFilterExclusive ? 'exclusive' : 'inclusive'}-filter`) "
-                      color="var(--text-color)"
+                      color="var(--huskyfy-orange)"
                     />
                   </v-fade-transition>
 
@@ -281,7 +281,7 @@
             id="waiting-spinner"
             :size=" 70 "
             :width=" 7 "
-            color="var(--text-color)"
+            color="var(--huskyfy-orange)"
             indeterminate
           />
         </div>
@@ -711,8 +711,8 @@ const getArtistImage = (artist: SpotifyArtist): string => {
 
 /* no-tracks part */
 #open-spotify {
-  color: var(--text-color) !important;
-  background-color: var(--primary-color) !important;
+  color: var(--huskyfy-orange) !important;
+  background-color: var(--huskyfy-black) !important;
   letter-spacing: 0px;
 }
 
@@ -758,11 +758,11 @@ const getArtistImage = (artist: SpotifyArtist): string => {
 }
 
 #stats-panel-content {
-  border: 2px var(--text-color) solid;
+  border: 2px var(--huskyfy-orange) solid;
 }
 
 #filters-panel-content {
-  border: 2px var(--link-color) solid;
+  border: 2px var(--huskyfy-yellow-color) solid;
   border-radius: 0px 0px 5px 5px;
 }
 
@@ -819,16 +819,16 @@ const getArtistImage = (artist: SpotifyArtist): string => {
 }
 
 #filters-and-reset .v-switch .v-switch__thumb {
-  color: var(--text-color);
+  color: var(--huskyfy-orange);
 }
 
 #filters-and-reset .v-switch .v-switch__track {
-  background-color: var(--text-color);
+  background-color: var(--huskyfy-orange);
 }
 
 #filters-and-reset .v-switch .v-label {
   /* rainbow-text */
-  color: var(--text-color);
+  color: var(--huskyfy-orange);
   opacity: 0.8;
 }
 
@@ -890,7 +890,7 @@ const getArtistImage = (artist: SpotifyArtist): string => {
   margin: 5px 0px;
 
   outline: 1px #F9B621AA solid;
-  background-color: var(--primary-color);
+  background-color: var(--huskyfy-black);
   border-radius: 5px;
 }
 
@@ -901,7 +901,7 @@ const getArtistImage = (artist: SpotifyArtist): string => {
   color: white;
   border-radius: 5px 5px 0px 0px;
 
-  background: linear-gradient(180deg, #F9B621 0%, #F9B621AA 50%, var(--primary-color) 140%);
+  background: linear-gradient(180deg, #F9B621 0%, #F9B621AA 50%, var(--huskyfy-black) 140%);
 }
 
 #list-title-embedded {

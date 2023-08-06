@@ -1,9 +1,29 @@
 <template>
   <HuskyfyBanner />
   <div id="full-page">
+    <div
+      id="playlist-search-bar"
+      class="ma-5"
+    >
+      <v-text-field
+        v-model="search"
+        :label="$t('playlist.filter')"
+        bg-color="white"
+        clearable
+        class="rounded-search-field"
+        color="var(--huskyfy-orange)"
+        density="compact"
+        hide-details
+        prepend-inner-icon="mdi-magnify"
+        single-line
+        type="search"
+        @update:model-value="filterPlaylists"
+      />
+    </div>
+
     <div id="playlists">
       <PlaylistCard
-        v-for="playlist in playlistsStore.playlists"
+        v-for="playlist in playlistsToDisplay"
         :id="playlist.id"
         :key="playlist.id"
         :images="playlist.images"
@@ -14,7 +34,7 @@
         v-if="!firstTracksLoaded"
         :size="70"
         :width="7"
-        color="var(--text-color)"
+        color="var(--huskyfy-orange)"
         indeterminate
       />
     </div>
@@ -48,9 +68,11 @@ useMeta({
 
 const playlistsStore = usePlaylistsStore()
 
+const playlistsToDisplay = ref<SpotifyPlaylist[]>([])
 const playlistTotal = ref(0)
-const offset = ref(0)
+const requestOffset = ref(0)
 const firstTracksLoaded = ref(false)
+const search = ref<string | null>('')
 
 const formatName = computed(() => {
   return (playlist: SpotifyPlaylist): string => {
@@ -64,13 +86,26 @@ onBeforeMount(async () => {
 })
 
 const loadMorePlaylists = async () => {
-  const res = await playlistsStore.getUserPlaylists(offset.value)
-  playlistTotal.value = res.total
-  offset.value = res.offset
+  const { offset, total } = await playlistsStore.getUserPlaylists(requestOffset.value)
+  playlistsToDisplay.value = Object.values(playlistsStore.playlists)
+
+  playlistTotal.value = total
+  requestOffset.value = offset
+}
+
+const filterPlaylists = () => {
+  const lowercaseSearch = search.value?.toLowerCase().trim()
+  if (lowercaseSearch) {
+    playlistsToDisplay.value = Object.values(playlistsStore.playlists).filter(
+      p => p.name.toLowerCase().includes(lowercaseSearch)
+    )
+  } else {
+    playlistsToDisplay.value = Object.values(playlistsStore.playlists)
+  }
 }
 </script>
 
-<style scoped>
+<style>
 #full-page {
   width: 100%;
   height: 100%;
@@ -85,6 +120,7 @@ const loadMorePlaylists = async () => {
 #playlists {
   min-width: 100%;
   max-width: 100%;
+  height: 100%;
 
   margin-top: 10px;
 
@@ -93,6 +129,14 @@ const loadMorePlaylists = async () => {
   flex-wrap: wrap;
   align-content: stretch;
   justify-content: center;
-  align-items: stretch;
+  align-items: flex-start;
+}
+
+#playlist-search-bar .v-field {
+  min-width: 400px;
+
+  color: white;
+  background-color: black;
+  border: 4px var(--huskyfy-orange) solid;
 }
 </style>

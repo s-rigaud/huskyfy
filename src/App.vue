@@ -100,8 +100,8 @@ onBeforeMount(instantiateSpotifySDK)
   height: 100%;
   padding: 0px;
 
-  color: var(--text-color) !important;
-  background-color: var(--secondary-color) !important;
+  color: var(--huskyfy-orange) !important;
+  background-color: var(--huskyfy-grey) !important;
   font-family: "Oswald", Helvetica, Sans-serif !important;
 
   display: flex;
@@ -116,7 +116,7 @@ onBeforeMount(instantiateSpotifySDK)
   /* Footer height */
   height: calc(100% - 108px);
 
-  color: var(--text-color) !important;
-  background-color: var(--primary-color) !important;
+  color: var(--huskyfy-orange) !important;
+  background-color: var(--huskyfy-black) !important;
 }
 </style>

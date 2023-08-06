@@ -26,7 +26,7 @@
             :append-inner-icon="nameUpdatedInAPI && playlistsStore.playlists[playlistId].name === playlistNameText ? 'mdi-check-circle-outline' : ''"
             :label="t('playlist.name')"
             :loading="playlistsStore.playlists[playlistId].name !== playlistNameText && !nameUpdatedInAPI"
-            color="var(--text-color)"
+            color="var(--huskyfy-orange)"
             density="compact"
             variant="outlined"
           />
@@ -154,8 +154,11 @@
       <div id="playlist-meta-right">
         <p>
           <span class="rainbow-text">{{ t('playlist.total-track-number') }}</span>
-          <span class="playlist-metric">
-            {{ playlistTrackCount.toFixed(0) }}
+          <span
+            ref="playlistTrackCount"
+            class="playlist-metric"
+          >
+            {{ playlistsStore.playlists[playlistId].tracks.length.toFixed(0) }}
           </span>
         </p>
         <p v-show="allTracksLoaded">
@@ -186,7 +189,7 @@
       <v-icon
         id="burger-button"
         class="highlight-icon"
-        color="var(--text-color)"
+        color="var(--huskyfy-orange)"
         icon="mdi-menu"
         size="x-large"
         @click="() => { drawer = !drawer; displayBurgerMenuBadge = 'none' }"
@@ -252,7 +255,7 @@ const displayBurgerMenuBadge = ref('block')
 const playlistNameText = ref('')
 
 /** Set to 0 to prepare for increment animation */
-const playlistTrackCount = ref(0)
+const playlistTrackCount = ref<HTMLElement | null>(null)
 
 /**
  * Debounced function being call each time the user update the playlist name in the UI.
@@ -325,11 +328,15 @@ onBeforeMount(() => {
   playlistNameText.value = playlistsStore.playlists[props.playlistId].name
 })
 
-onMounted(() => {
-  playlistTrackCount.value = playlistsStore.playlists[props.playlistId].total
-  // TODO FIX
-  // setTimeout(() => gsap.to(playlistTrackCount, { duration: 3, value: playlistsStore.playlists[props.playlistId].total }), 2000)
-})
+onMounted(() => gsap.from(
+  playlistTrackCount.value,
+  {
+    textContent: 0,
+    duration: 4,
+    snap: { textContent: 1 },
+    stagger: 1
+  }
+))
 
 const openPlaylistOnSpotify = () => {
   window.location.href = playlistsStore.playlists[props.playlistId].uri
@@ -349,7 +356,7 @@ const getPlaylistDuration = (): string => {
   padding-bottom: 5px;
 
   flex-shrink: 0;
-  background: radial-gradient(circle, var(--primary-color) 80%, #F3920099 100%);
+  background: radial-gradient(circle, var(--huskyfy-black) 80%, #F3920099 100%);
   border: 1px #F3920099 solid;
 }
 
@@ -383,7 +390,7 @@ const getPlaylistDuration = (): string => {
   margin-right: 50px;
   padding: 10px;
 
-  background-color: var(--primary-color);
+  background-color: var(--huskyfy-black);
   border: 1px grey solid;
   border-radius: 5px;
 }
@@ -421,7 +428,7 @@ const getPlaylistDuration = (): string => {
 
 /* Title select icon color */
 #title-container .mdi-check-circle-outline {
-  color: var(--text-color);
+  color: var(--huskyfy-orange);
   opacity: 0.9;
 }
 
@@ -435,7 +442,7 @@ const getPlaylistDuration = (): string => {
 #playlist-name {
   margin-right: 10px;
 
-  color: var(--text-color);
+  color: var(--huskyfy-orange);
   cursor: pointer;
 }
 
@@ -484,24 +491,24 @@ const getPlaylistDuration = (): string => {
   position: relative;
   top: 2px;
 
-  border: 2px var(--text-color) solid;
+  border: 2px var(--huskyfy-orange) solid;
   border-radius: 5px;
-  background-color: var(--primary-color);
+  background-color: var(--huskyfy-black);
 }
 
 #help-indie-percentage:hover {
-  background-color: var(--text-color);
-  border-color: var(--primary-color);
+  background-color: var(--huskyfy-orange);
+  border-color: var(--huskyfy-black);
 }
 
 #help-indie-percentage .v-icon {
   padding: 8px 9px;
 
-  color: var(--text-color);
+  color: var(--huskyfy-orange);
 }
 
 #help-indie-percentage:hover .v-icon {
-  color: var(--primary-color);
+  color: var(--huskyfy-black);
 }
 
 #help-indie-percentage .v-btn--size-default {
@@ -509,10 +516,10 @@ const getPlaylistDuration = (): string => {
 }
 
 .rainbow-tooltip .v-overlay__content {
-  background-color: var(--primary-color) !important;
-  color: var(--text-color) !important;
-  border: var(--text-color) 2px solid;
-  outline: var(--primary-color) 0.5px solid;
+  background-color: var(--huskyfy-black) !important;
+  color: var(--huskyfy-orange) !important;
+  border: var(--huskyfy-orange) 2px solid;
+  outline: var(--huskyfy-black) 0.5px solid;
 }
 
 #spotify-logo-meta-small {
@@ -521,9 +528,9 @@ const getPlaylistDuration = (): string => {
   right: 7px;
 
   cursor: pointer;
-  outline: 1px var(--text-color) solid;
+  outline: 1px var(--huskyfy-orange) solid;
   border-radius: 5px;
-  background: var(--primary-color);
+  background: var(--huskyfy-black);
 }
 
 #spotify-logo-meta-small .v-img__img {
@@ -531,14 +538,14 @@ const getPlaylistDuration = (): string => {
 }
 
 .highlight-icon {
-  box-shadow: 0 3px 5px -1px var(--text-color), 0 1px 10px 0 var(--text-color) !important;
+  box-shadow: 0 3px 5px -1px var(--huskyfy-orange), 0 1px 10px 0 var(--huskyfy-orange) !important;
 }
 
 /* Button to display vertical sidebar */
 #burger-button {
   padding: 20px;
 
-  border: 1px var(--text-color) solid;
+  border: 1px var(--huskyfy-orange) solid;
   border-radius: 5px;
   background-color: black;
 }

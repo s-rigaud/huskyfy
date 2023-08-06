@@ -88,7 +88,7 @@ const displayDetails = () => {
   display: flex;
   flex-direction: column;
 
-  color: var(--text-color) !important;
+  color: var(--huskyfy-orange) !important;
   background-color: initial;
   overflow: unset;
   opacity: 0;
@@ -131,7 +131,7 @@ const displayDetails = () => {
 
 .playlist-card .v-card__overlay {
   opacity: 0.3;
-  background: radial-gradient(circle, var(--primary-color) 40%, #F39200 100%);
+  background: radial-gradient(circle, var(--huskyfy-black) 40%, #F39200 100%);
 
   transition: 0.5s opacity ease;
 }
@@ -141,9 +141,9 @@ const displayDetails = () => {
 }
 
 .name-tooltip .v-overlay__content {
-  color: var(--text-color);
+  color: var(--huskyfy-orange);
   background-color: black;
-  border: var(--text-color) .5px solid;
+  border: var(--huskyfy-orange) .5px solid;
 }
 
 @media only screen and (min-width: 768px) {
