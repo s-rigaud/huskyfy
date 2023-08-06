@@ -122,7 +122,7 @@ const filterPlaylists = () => {
   max-width: 100%;
   height: 100%;
 
-  margin-top: 10px;
+  padding: 10px 0 0 0;
 
   display: flex;
   flex-direction: row;
@@ -132,11 +132,33 @@ const filterPlaylists = () => {
   align-items: flex-start;
 }
 
-#playlist-search-bar .v-field {
-  min-width: 400px;
+#playlist-search-bar {
+  min-width: 100%;
+  padding: 0 5%;
+}
 
+#playlist-search-bar .v-field {
   color: white;
   background-color: black;
   border: 4px var(--huskyfy-orange) solid;
+}
+
+@media only screen and (min-width: 768px) {
+  #playlists {
+    padding: 10px 30px 0 30px;
+  }
+
+  #playlist-search-bar {
+    width: 500px;
+    max-width: 500px !important;
+
+  }
+
+  #playlist-search-bar .v-input {
+    width: 500px;
+    max-width: 500px !important;
+    margin: auto;
+  }
+
 }
 </style>

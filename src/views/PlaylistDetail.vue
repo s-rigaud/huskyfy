@@ -95,7 +95,7 @@
                       >
                         <v-avatar>
                           <v-img
-                            :src=" item.raw.images[0].url "
+                            :src=" getArtistImage(item.raw) "
                             alt="Spotify artist cover"
                             rel="preconnect"
                             width="20"
@@ -460,11 +460,13 @@ watch(selectedPreference, async () => {
   await applyFilters()
 })
 watch(selectedArtists, async (currentArtists: SpotifyArtist[], previousArtists: SpotifyArtist[]) => {
+  selectedArtists.value = currentArtists.sort((a1, a2) => a1.name.localeCompare(a2.name))
   if (previousArtists.length !== 0 || currentArtists.length !== 0) {
     await applyFilters()
   }
 })
 watch(selectedGenres, async (currentGenres: string[], previousGenres: string[]) => {
+  selectedGenres.value = currentGenres.sort((g1, g2) => g1.localeCompare(g2))
   if (previousGenres.length !== 0 || currentGenres.length !== 0) {
     await applyFilters()
   }

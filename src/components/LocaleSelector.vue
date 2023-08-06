@@ -1,6 +1,5 @@
 <template>
   <v-menu
-    open-on-hover
     transition="fade-transition"
   >
     <template #activator="{ props }">
@@ -15,7 +14,10 @@
         />
       </v-btn>
     </template>
-    <v-list id="locale-list">
+    <v-list
+      id="locale-list"
+      class="elevation-20"
+    >
       <v-list-item
         v-for="(locale, index) in sortedLocales"
         :key="index"
@@ -34,7 +36,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 
 import { i18n, locale } from '@/i18n'
 import { useUserStore } from '@/stores/user'
@@ -45,6 +47,8 @@ enum HandledLocale {
 }
 
 const userStore = useUserStore()
+
+const currentLanguage = ref(locale)
 
 /**
  * Retrieve list of all available locales.
@@ -59,7 +63,7 @@ const sortedLocales = computed((): HandledLocale[] => {
 })
 
 const currentLocaleIcon = computed((): string => {
-  return getIconForLocale(locale as HandledLocale)
+  return getIconForLocale(currentLanguage.value as HandledLocale)
 })
 
 const getIconForLocale = (locale: HandledLocale): string => {
@@ -82,11 +86,15 @@ const updateLocale = (event: Event) => {
   const newLocale = (node.getAttribute('item-value') as string)
   i18n.global.locale = newLocale
   userStore.locale = newLocale
+  currentLanguage.value = newLocale
 }
 
 </script>
 <style scoped>
 #locale-list {
+  position: relative;
+   left: 12px;
+
   background-color: var(--huskyfy-orange);
 }
 
