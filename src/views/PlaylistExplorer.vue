@@ -9,8 +9,8 @@
         v-model="search"
         :label="$t('playlist.filter')"
         bg-color="white"
-        clearable
         class="rounded-search-field"
+        clearable
         color="var(--huskyfy-orange)"
         density="compact"
         hide-details

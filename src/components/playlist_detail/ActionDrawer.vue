@@ -229,7 +229,7 @@ const isOpen = ref(false)
 const isDeleteModalOpen = ref(false)
 const waitingForDeletion = ref(false)
 
-const generateImageSize = ref(0)
+const generateImageSize = ref(2)
 const generateImageDisplayTitle = ref(true)
 const generateImageDisplayStats = ref(true)
 

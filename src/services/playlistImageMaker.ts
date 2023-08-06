@@ -21,6 +21,8 @@ export const downloadImage = (url: string, playlistName: string) => {
   a.remove()
 }
 
+const BACKUP_PP = new URL('./../assets/no-pp.png', import.meta.url).href
+
 /**
  * Create an image export base on most popular artists for a playlist
  * @param playlistId - id of the Spotify playlist
@@ -41,7 +43,7 @@ export const makeImage = (
 
   const topArtists = playlistsStore.getTopArtists(playlistId, size ** 2)
   const artistNames = topArtists.map(res => res.artist.name)
-  const artistImageUrls = topArtists.map(res => res.artist.images[0].url)
+  const artistImageUrls = topArtists.map(res => res.artist.images.length ? res.artist.images[0].url : BACKUP_PP)
 
   // Logo should also be loaded asynchronously
   const images = artistImageUrls.map(src => {
