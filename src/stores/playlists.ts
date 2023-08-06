@@ -591,7 +591,7 @@ export const usePlaylistsStore = defineStore('playlists', {
         }
       }
 
-      return filteredGenres.sort()
+      return filteredGenres.sort((g1, g2) => g1.localeCompare(g2))
     },
     /**
      * Determine if some tracks are 'liked' by the other or not
