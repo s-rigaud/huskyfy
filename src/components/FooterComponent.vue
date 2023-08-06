@@ -29,6 +29,13 @@
           {{ $t('page-title.about') }}
         </v-btn>
       </router-link>
+      <v-btn
+        tabindex="-1"
+        variant="text"
+        @click="openBugReport"
+      >
+        {{ $t('footer.report-bug') }}
+      </v-btn>
 
       <v-col
         class="primary lighten-2 py-4 text-center white--text"
@@ -54,6 +61,11 @@
 import { useUserStore } from '@/stores/user'
 
 const userStore = useUserStore()
+
+const openBugReport = () => {
+  const email = 'mailto:huskyfy.bugtracker@gmail.com?subject=Huskyfy%20improvement%20request'
+  window.open(email, '_blank')?.focus()
+}
 </script>
 
 <style scoped>

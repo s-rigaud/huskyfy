@@ -66,7 +66,8 @@
         "not-enough-data": "Pas assez d'artistes ou de genres différents pour créer une image"
     },
     "footer": {
-        "built": "Créé avec ♥ par"
+        "built": "Créé avec ♥ par",
+        "report-bug": "Signaler un bug"
     },
     "generating-picture": {
         "subtitle": "{count} artistes les plus présents dans la playlist"
