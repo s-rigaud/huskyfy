@@ -80,17 +80,7 @@ const chartOptions = ref<ApexOptions>({
  * Force the graph update when provided props is updated
  */
 watch(() => props.genres, (newGenres: Genre[]) => {
-  series.value = newGenres.map((genre) => genre.count)
-  chartOptions.value = {
-    ...chartOptions,
-    labels: newGenres.map(genre => genre.cap_name),
-    colors: getColorsForGenres(newGenres),
-    ...{
-      chart: {
-        width: width.value
-      }
-    }
-  }
+  initializeGraphData(newGenres)
 })
 
 onMounted(() => {
@@ -103,11 +93,25 @@ onMounted(() => {
   })
 
   observer.observe(container.value as HTMLElement)
+  console.log('known genres', props.genres)
 })
 
 const getColorsForGenres = (genres: Genre[]): string[] => {
   const colorMapping = playlistsStore.genreColorMapping
   return genres.map(genre => colorMapping[genre.name])
+}
+const initializeGraphData = (newGenres: Genre[]) => {
+  series.value = newGenres.map((genre) => genre.count)
+  chartOptions.value = {
+    ...chartOptions,
+    labels: newGenres.map(genre => genre.cap_name),
+    colors: getColorsForGenres(newGenres),
+    ...{
+      chart: {
+        width: width.value
+      }
+    }
+  }
 }
 </script>
 

@@ -17,7 +17,7 @@
   "dependencies": {
     "@mdi/font": "7.2.96",
     "@vueuse/core": "10.3.0",
-    "apexcharts": "^3.41.1",
+    "apexcharts": "3.37.1",
     "axios": "1.2.1",
     "canvas-confetti": "^1.6.0",
     "core-js": "^3.31.1",
@@ -28,7 +28,7 @@
     "vue-i18n": "^9.2.2",
     "vue-meta": "^3.0.0-alpha.8",
     "vue-router": "^4.2.4",
-    "vue3-apexcharts": "^1.4.4",
+    "vue3-apexcharts": "1.4.1",
     "vuetify": "3.3.11",
     "webfontloader": "^1.0.0"
   },

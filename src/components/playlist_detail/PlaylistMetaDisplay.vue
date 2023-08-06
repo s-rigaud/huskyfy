@@ -326,7 +326,9 @@ onBeforeMount(() => {
 })
 
 onMounted(() => {
-  setTimeout(() => gsap.to(playlistTrackCount, { duration: 3, playlistTrackCount: playlistsStore.playlists[props.playlistId].total }), 2000)
+  playlistTrackCount.value = playlistsStore.playlists[props.playlistId].total
+  // TODO FIX
+  // setTimeout(() => gsap.to(playlistTrackCount, { duration: 3, value: playlistsStore.playlists[props.playlistId].total }), 2000)
 })
 
 const openPlaylistOnSpotify = () => {
