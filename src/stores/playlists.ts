@@ -111,9 +111,7 @@ export const usePlaylistsStore = defineStore('playlists', {
           artistCount[label]
         ])
 
-        sortedArtists.sort((a, b) => {
-          return b[1].count - a[1].count
-        })
+        sortedArtists.sort((a1, a2) => a2[1].count - a1[1].count)
 
         if (n) {
           sortedArtists = sortedArtists.slice(0, n)
@@ -132,28 +130,20 @@ export const usePlaylistsStore = defineStore('playlists', {
             genreCounter[genre] += 1
           }
         }
-        let genreMapping: [string, number][] = Object.keys(genreCounter).map((label) => [
-          label,
-          genreCounter[label]
-        ])
+        const trackNumber = state.playlists[playlistId].tracks.length
 
-        // DESC sort
-        genreMapping.sort((a, b) => {
-          return b[1] - a[1]
-        })
+        let genreMapping: Genre[] = Object.keys(genreCounter).map((genre) => ({
+          name: genre,
+          cap_name: capitalize(genre[0]),
+          count: genreCounter[genre],
+          percentage: ~~(genreCounter[genre] / trackNumber * 100)
+        }))
+        genreMapping.sort((g1, g2) => g2.count - g1.count)
 
         if (n) {
           genreMapping = genreMapping.slice(0, n)
         }
-
-        // Sampling & formatting
-        const trackNumber = state.playlists[playlistId].tracks.length
-        return genreMapping.map((genre) => ({
-          name: genre[0],
-          cap_name: capitalize(genre[0]),
-          count: genre[1],
-          percentage: ~~(genre[1] / trackNumber * 100)
-        }))
+        return genreMapping
       }
     },
     getArtistsByName (state) {

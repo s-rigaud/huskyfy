@@ -36,7 +36,7 @@ export const makeImage = (
   size: GridSize,
   showTitle: boolean,
   showStats: boolean,
-  callback: { (rawImageData: string): void; }
+  callback: (rawImageData: string) => void
 ): string | void => {
   const playlistsStore = usePlaylistsStore()
   const playlist = playlistsStore.playlists[playlistId]

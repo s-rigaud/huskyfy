@@ -6,9 +6,7 @@ import request from '../request'
 import { SimplifiedSpotifyPlaylist, SpotifyTrack } from '../types/entities'
 import { SpotifyGetPlaylistResponse, SpotifyTrackResponse } from '../types/responses'
 
-interface Callback {
-  (base64cover: string): void;
-}
+type Callback = (base64cover: string) => void
 
 /**
  *  Legacy code not optimized used to gather Spotify cover image content in base64

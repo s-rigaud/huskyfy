@@ -12,6 +12,7 @@
         to="/explore"
       >
         <v-btn
+        prepend-icon="mdi-compass"
           tabindex="-1"
           variant="text"
         >
@@ -23,6 +24,7 @@
         to="/about"
       >
         <v-btn
+        prepend-icon="mdi-information-outline"
           tabindex="-1"
           variant="text"
         >
@@ -30,6 +32,7 @@
         </v-btn>
       </router-link>
       <v-btn
+      prepend-icon="mdi-bug-outline"
         tabindex="-1"
         variant="text"
         @click="openBugReport"
