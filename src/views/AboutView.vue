@@ -148,7 +148,7 @@
               src="@/assets/github.png"
               width="70"
             />
-            <p style="color: white; margin: 0px 15px;">@s‑rigaud</p>
+            <p style="color: white; margin: 0px 15px; white-space: nowrap;">@s-rigaud</p>
           </a>
         </div>
         <div>

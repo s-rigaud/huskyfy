@@ -19,6 +19,7 @@
           {{ $t('page-title.explore') }}
         </v-btn>
       </router-link>
+      <v-divider vertical thickness="2" color="var(--huskyfy-orange)" />
       <router-link
         class="footer-link"
         to="/about"
@@ -31,6 +32,7 @@
           {{ $t('page-title.about') }}
         </v-btn>
       </router-link>
+      <v-divider vertical thickness="2" color="var(--huskyfy-orange)" />
       <v-btn
       prepend-icon="mdi-bug-outline"
         tabindex="-1"
