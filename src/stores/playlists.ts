@@ -134,7 +134,7 @@ export const usePlaylistsStore = defineStore('playlists', {
 
         let genreMapping: Genre[] = Object.keys(genreCounter).map((genre) => ({
           name: genre,
-          cap_name: capitalize(genre[0]),
+          cap_name: capitalize(genre),
           count: genreCounter[genre],
           percentage: ~~(genreCounter[genre] / trackNumber * 100)
         }))

@@ -68,7 +68,7 @@ const chartOptions = ref<ApexOptions>({
     },
     fontSize: '13px'
   },
-  colors: (START_COLORS as unknown as string[]),
+  colors: START_COLORS,
   plotOptions: {
     pie: {
       expandOnClick: false
