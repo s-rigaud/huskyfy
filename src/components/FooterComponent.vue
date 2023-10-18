@@ -12,29 +12,37 @@
         to="/explore"
       >
         <v-btn
-        prepend-icon="mdi-compass"
+          prepend-icon="mdi-compass"
           tabindex="-1"
           variant="text"
         >
           {{ $t('page-title.explore') }}
         </v-btn>
       </router-link>
-      <v-divider vertical thickness="2" color="var(--huskyfy-orange)" />
+      <v-divider
+        color="var(--huskyfy-orange)"
+        thickness="2"
+        vertical
+      />
       <router-link
         class="footer-link"
         to="/about"
       >
         <v-btn
-        prepend-icon="mdi-information-outline"
+          prepend-icon="mdi-information-outline"
           tabindex="-1"
           variant="text"
         >
           {{ $t('page-title.about') }}
         </v-btn>
       </router-link>
-      <v-divider vertical thickness="2" color="var(--huskyfy-orange)" />
+      <v-divider
+        color="var(--huskyfy-orange)"
+        thickness="2"
+        vertical
+      />
       <v-btn
-      prepend-icon="mdi-bug-outline"
+        prepend-icon="mdi-bug-outline"
         tabindex="-1"
         variant="text"
         @click="openBugReport"

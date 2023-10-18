@@ -80,6 +80,7 @@ const accessOAuthPage = async () => {
   window.location.href = await api.spotify.auth.getOAuthUrl()
 }
 </script>
+
 <style scoped>
 #login {
   position: absolute;

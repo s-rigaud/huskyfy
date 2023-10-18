@@ -10,7 +10,7 @@
           @click="openPlaylistOnSpotify"
         >
           <v-img
-            :src="playlistsStore.playlists[playlistId].images[0].url"
+            :src="playlists[playlistId].images[0].url"
             alt="Cover image"
             cover
             lazy-src="@/assets/default_cover.jpg"
@@ -23,9 +23,9 @@
             v-if="userOwnsPlaylist && !isMyMusicPlaylist"
             id="playlist-name"
             v-model="playlistNameText"
-            :append-inner-icon="nameUpdatedInAPI && playlistsStore.playlists[playlistId].name === playlistNameText ? 'mdi-check-circle-outline' : ''"
+            :append-inner-icon="nameUpdatedInAPI && playlists[playlistId].name === playlistNameText ? 'mdi-check-circle-outline' : ''"
             :label="t('playlist.name')"
-            :loading="playlistsStore.playlists[playlistId].name !== playlistNameText && !nameUpdatedInAPI"
+            :loading="playlists[playlistId].name !== playlistNameText && !nameUpdatedInAPI"
             color="var(--huskyfy-orange)"
             density="compact"
             variant="outlined"
@@ -35,7 +35,7 @@
             id="simplified-title"
             class="rainbow-text"
           >
-            {{ playlistsStore.playlists[playlistId].name }}
+            {{ playlists[playlistId].name }}
           </h4>
           <div id="visibility-and-meta">
             <p> {{ getTextFromVisibility }} </p>
@@ -158,10 +158,10 @@
             ref="playlistTrackCount"
             class="playlist-metric"
           >
-            {{ playlistsStore.playlists[playlistId].tracks.length.toFixed(0) }}
+            {{ playlists[playlistId].tracks.length }}
           </span>
         </p>
-        <p v-show="allTracksLoaded">
+        <p>
           <span class="rainbow-text">{{ t('playlist.duration') }}</span>
           <span class="playlist-metric">
             {{ getPlaylistDuration() }}
@@ -226,7 +226,7 @@
 <script setup lang="ts">
 import gsap from 'gsap'
 import { debounce, DebouncedFunc } from 'lodash'
-import { computed, onBeforeMount, onMounted, ref, watch } from 'vue'
+import { computed, onBeforeMount, ref, watch } from 'vue'
 
 import ActionDrawer from '@/components/playlist_detail/ActionDrawer.vue'
 import IndieChart from '@/components/playlist_detail/IndieChart.vue'
@@ -234,6 +234,7 @@ import { t } from '@/i18n'
 import { MY_MUSIC_PLAYLIST_ID, usePlaylistsStore } from '@/stores/playlists'
 import { useUserStore } from '@/stores/user'
 import { getAverageColor, HIGHEST_VALUE_COLOR, LOWEST_VALUE_COLOR } from '@/utils/colors'
+import { storeToRefs } from 'pinia'
 
 const props = defineProps({
   playlistId: {
@@ -248,6 +249,7 @@ const props = defineProps({
 const emit = defineEmits(['playlistUpdated'])
 
 const playlistsStore = usePlaylistsStore()
+const { playlists } = storeToRefs(playlistsStore)
 const currentUserUsername = useUserStore().username
 
 const drawer = ref(false)
@@ -266,18 +268,18 @@ const nameUpdatedInAPI = ref(false)
 
 const getTextFromVisibility = computed((): string => {
   let visibility: string
-  if (playlistsStore.playlists[props.playlistId].collaborative) visibility = 'collaborative'
-  else if (playlistsStore.playlists[props.playlistId].public) visibility = 'public'
+  if (playlists.value[props.playlistId].collaborative) visibility = 'collaborative'
+  else if (playlists.value[props.playlistId].public) visibility = 'public'
   else visibility = 'private'
 
   return t(`playlist.${visibility}`) + ' ' + t(`_emojis.${visibility}`)
 })
 const usernameToDisplay = computed((): string => {
-  const playlistCreator = playlistsStore.playlists[props.playlistId].owner.display_name
+  const playlistCreator = playlists.value[props.playlistId].owner.display_name
   return currentUserUsername === playlistCreator ? t('playlist.you') : playlistCreator
 })
 const allTracksLoaded = computed((): boolean => {
-  return playlistsStore.playlists[props.playlistId].tracks.length === playlistsStore.playlists[props.playlistId].total
+  return playlists.value[props.playlistId].tracks.length === playlists.value[props.playlistId].total
 })
 const colorForPercentage = computed((): { color: string } => {
   const color = getAverageColor(LOWEST_VALUE_COLOR, HIGHEST_VALUE_COLOR, props.indiePercentage)
@@ -285,7 +287,7 @@ const colorForPercentage = computed((): { color: string } => {
 })
 const formattedDescription = computed((): string => {
   return (
-    playlistsStore.playlists[props.playlistId].description
+    playlists.value[props.playlistId].description
       // Remove html markups from content
       .replace(/(<([^>]+)>)/ig, '')
       // Escaped " back to real character
@@ -295,26 +297,37 @@ const formattedDescription = computed((): string => {
   )
 })
 const userOwnsPlaylist = computed((): boolean => {
-  return currentUserUsername === playlistsStore.playlists[props.playlistId].owner.display_name
+  return currentUserUsername === playlists.value[props.playlistId].owner.display_name
 })
 const isMyMusicPlaylist = computed((): boolean => {
-  return playlistsStore.playlists[props.playlistId].id === MY_MUSIC_PLAYLIST_ID
+  return playlists.value[props.playlistId].id === MY_MUSIC_PLAYLIST_ID
 })
 const playlistContainsLocalTracks = computed((): boolean => {
-  return playlistsStore.playlists[props.playlistId].containsLocalTracks
+  return playlists.value[props.playlistId].containsLocalTracks
 })
 const playlistContainsEpisodes = computed((): boolean => {
-  return playlistsStore.playlists[props.playlistId].containsEpisodes
+  return playlists.value[props.playlistId].containsEpisodes
 })
 const playlistContainsDuplicatedTracks = computed((): boolean => {
-  return playlistsStore.playlists[props.playlistId].containsDuplicatedTracks
+  return playlists.value[props.playlistId].containsDuplicatedTracks
 })
 
 watch(playlistNameText, (currentText: string) => {
-  if (currentText && currentText !== playlistsStore.playlists[props.playlistId].name && updatePlaylistNameDebounced.value) {
+  if (currentText && currentText !== playlists.value[props.playlistId].name && updatePlaylistNameDebounced.value) {
     nameUpdatedInAPI.value = false
     updatePlaylistNameDebounced.value()
   }
+})
+
+watch(playlists, () => {
+  gsap.to(
+    playlistTrackCount.value,
+    {
+      textContent: playlists.value[props.playlistId].tracks.length,
+      duration: 3,
+      snap: { textContent: playlists.value[props.playlistId].tracks.length > 50 ? 3 : 1 }
+    }
+  )
 })
 
 onBeforeMount(() => {
@@ -325,24 +338,14 @@ onBeforeMount(() => {
     },
     2000
   )
-  playlistNameText.value = playlistsStore.playlists[props.playlistId].name
+  playlistNameText.value = playlists.value[props.playlistId].name
 })
 
-onMounted(() => gsap.from(
-  playlistTrackCount.value,
-  {
-    textContent: 0,
-    duration: 4,
-    snap: { textContent: 1 },
-    stagger: 1
-  }
-))
-
 const openPlaylistOnSpotify = () => {
-  window.location.href = playlistsStore.playlists[props.playlistId].uri
+  window.location.href = playlists.value[props.playlistId].uri
 }
 const openPlaylistOwnerSpotifyProfile = () => {
-  window.location.href = playlistsStore.playlists[props.playlistId].owner.uri
+  window.location.href = playlists.value[props.playlistId].owner.uri
 }
 const getPlaylistDuration = (): string => {
   return playlistsStore.getPlaylistFullLength(props.playlistId)
