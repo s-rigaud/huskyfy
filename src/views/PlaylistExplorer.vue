@@ -129,7 +129,7 @@ const filterPlaylists = () => {
   flex-wrap: wrap;
   align-content: stretch;
   justify-content: center;
-  align-items: flex-start;
+  align-items: stretch;
 }
 
 #playlist-search-bar {

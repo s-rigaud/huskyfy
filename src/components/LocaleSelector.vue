@@ -83,7 +83,7 @@ const updateLocale = (event: Event) => {
   while (!node.getAttribute('item-value')) {
     node = node.parentNode as HTMLElement
   }
-  const newLocale = (node.getAttribute('item-value') as string)
+  const newLocale = node.getAttribute('item-value') as 'en' | 'fr'
   i18n.global.locale = newLocale
   userStore.locale = newLocale
   currentLanguage.value = newLocale

@@ -63,6 +63,7 @@ const displayDetails = () => {
   })
 }
 </script>
+
 <style>
 /*
 
