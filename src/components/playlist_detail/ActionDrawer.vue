@@ -230,7 +230,6 @@ const isOpen = ref(false)
 const isDeleteModalOpen = ref(false)
 const waitingForDeletion = ref(false)
 
-const generateImageSize = ref(2)
 const generateImageDisplayTitle = ref(true)
 const generateImageDisplayStats = ref(true)
 
@@ -238,11 +237,12 @@ const imagePreview = ref('')
 
 const startDuplication = ref(false)
 
-const isNotMyMusicPlaylist = computed((): boolean => {
-  return playlistsStore.playlists[props.playlistId].id !== MY_MUSIC_PLAYLIST_ID
-})
 const starImage = computed((): string => {
   return new URL('../../assets/stars.jpg', import.meta.url).href
+})
+
+const isNotMyMusicPlaylist = computed((): boolean => {
+  return playlistsStore.playlists[props.playlistId].id !== MY_MUSIC_PLAYLIST_ID
 })
 const userOwnsPlaylist = computed((): boolean => {
   return currentUserUsername === playlistsStore.playlists[props.playlistId].owner.display_name
@@ -250,6 +250,7 @@ const userOwnsPlaylist = computed((): boolean => {
 const spotifyOwnsPlaylist = computed((): boolean => {
   return playlistsStore.playlists[props.playlistId].owner.id === 'spotify'
 })
+
 const ticks = computed((): Record<number, string> => {
   const trackNumber = playlistsStore.getTopArtists(props.playlistId).length
   const ticks: Record<number, string> = {}
@@ -261,6 +262,8 @@ const ticks = computed((): Record<number, string> => {
 const maxTick = computed((): number => {
   return Object.keys(ticks.value).length - 1
 })
+const generateImageSize = ref(maxTick.value)
+
 const allTracksLoaded = computed((): boolean => {
   return playlistsStore.playlists[props.playlistId].tracks.length === playlistsStore.playlists[props.playlistId].total
 })
@@ -339,8 +342,8 @@ const unfollowPlaylist = async () => {
   waitingForDeletion.value = false
   router.push({ name: 'Explore' })
 }
-
 </script>
+
 <style>
 #drawer {
   /* More than Vuetify default z-index for snackbar (2000) */

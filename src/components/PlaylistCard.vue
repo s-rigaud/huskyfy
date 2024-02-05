@@ -112,6 +112,7 @@ const displayDetails = () => {
 
 .playlist-card .v-img {
   z-index: 1;
+  height: 81%;
 }
 
 .playlist-card .v-img .v-img__img--cover {
