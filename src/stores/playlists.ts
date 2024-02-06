@@ -310,7 +310,7 @@ export const usePlaylistsStore = defineStore('playlists', {
      * Init playlist info or return already saved tracks
      */
     async downloadPlaylistTracks (playlistId: string, limit: number): Promise<void> {
-      let {offset} = this.playlists[playlistId]
+      let { offset } = this.playlists[playlistId]
       if (!offset) {
         console.log('First time downloading playlist tracks')
         offset = 0
@@ -383,8 +383,8 @@ export const usePlaylistsStore = defineStore('playlists', {
       const formattedTracks: SpotifyTrack[] = []
       // Map each track to artist genres and popularity (indie or not)
       for (const item of newTracks) {
-        const {track} = item
-        const {artists} = track
+        const { track } = item
+        const { artists } = track
         let allArtistIndie = true
 
         const trackGenres: Set<string> = new Set()
@@ -502,7 +502,15 @@ export const usePlaylistsStore = defineStore('playlists', {
     },
     async sortPlaylistTracksByGenres (playlistId: string) {
       // 1. Save a copy of tracks
-      let tracks = this.playlists[playlistId].tracks.toSorted((t1, t2) => t1.genres.length - t2.genres.length)
+      let tracks = this.playlists[playlistId].tracks.toSorted(
+        (t1, t2) => {
+          return t1.genres.length - t2.genres.length ||
+          t1.artists[0].name.localeCompare(t2.artists[0].name) ||
+          t1.album.release_date.localeCompare(t2.album.release_date)
+        }
+      )
+      console.log(tracks)
+
       const genres = this.getTopGenres(playlistId)
 
       // 2. Delete all playlist tracks (100 is the API limit)

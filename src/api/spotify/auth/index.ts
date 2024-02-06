@@ -3,14 +3,8 @@ import axios, { AxiosResponse } from 'axios'
 import { useAuthStore } from '@/stores/auth'
 import { SpotifyAuthResponse } from '../types/responses'
 
-console.log(import.meta.env);
-
 const CLIENT_ID: string = import.meta.env.VITE_APP_SPOTIFY_CLIENT_ID as string
 const CLIENT_SECRET: string = import.meta.env.VITE_APP_SPOTIFY_CLIENT_SECRET as string
-
-console.log(CLIENT_ID, CLIENT_SECRET);
-
-
 const ENCODED_CREDENTIALS = btoa(`${CLIENT_ID}:${CLIENT_SECRET}`)
 const REDIRECT_URL = `${import.meta.env.VITE_APP_BASE_SERVER_URL}/login`
 const SCOPES = [

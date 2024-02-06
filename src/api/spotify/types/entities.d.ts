@@ -63,6 +63,7 @@ export interface SpotifyProfile {
 // Album Model
 export interface SpotifyAlbum {
     images: SpotifyImage[];
+    release_date: string;
 }
 
 // Track Model

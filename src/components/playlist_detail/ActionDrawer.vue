@@ -259,9 +259,7 @@ const ticks = computed((): Record<number, string> => {
   if (trackNumber >= 16) ticks[2] = '4x4'
   return ticks
 })
-const maxTick = computed((): number => {
-  return Object.keys(ticks.value).length - 1
-})
+const maxTick = computed(() => Object.keys(ticks.value).length - 1)
 const generateImageSize = ref(maxTick.value)
 
 const allTracksLoaded = computed((): boolean => {
@@ -322,6 +320,7 @@ const sortPlaylistTracksByArtistName = async () => {
   )
   emit('onSortEnd')
 }
+
 const exportArtistPreview = () => {
   makeImage(
     props.playlistId,
