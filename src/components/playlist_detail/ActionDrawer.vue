@@ -261,6 +261,8 @@ const ticks = computed((): Record<number, string> => {
 })
 const maxTick = computed(() => Object.keys(ticks.value).length - 1)
 const generateImageSize = ref(maxTick.value)
+// Only once during page rendering, have to wait for the playlist to be loaded once so the value is defined
+watch(maxTick, () => { generateImageSize.value = maxTick.value })
 
 const allTracksLoaded = computed((): boolean => {
   return playlistsStore.playlists[props.playlistId].tracks.length === playlistsStore.playlists[props.playlistId].total
@@ -284,6 +286,7 @@ watch(() => props.open, (isNowOpen: boolean) => {
 watch(generateImageSize, () => { updateImagePreview() })
 watch(generateImageDisplayTitle, () => { updateImagePreview() })
 watch(generateImageDisplayStats, () => { updateImagePreview() })
+watch(playlistsStore.playlists, () => { updateImagePreview() })
 
 const startDuplicationProcess = () => {
   isOpen.value = false
@@ -292,9 +295,11 @@ const startDuplicationProcess = () => {
 const updateImagePreview = () => {
   if (!canCreateExportImage.value) return
 
+  const size = ([2, 3, 4] as GridSize[])[generateImageSize.value]
+
   makeImage(
     props.playlistId,
-    ([2, 3, 4] as GridSize[])[generateImageSize.value],
+    size,
     generateImageDisplayTitle.value,
     generateImageDisplayStats.value,
     (rawImageData: string) => { imagePreview.value = rawImageData }

@@ -509,7 +509,6 @@ export const usePlaylistsStore = defineStore('playlists', {
           t1.album.release_date.localeCompare(t2.album.release_date)
         }
       )
-      console.log(tracks)
 
       const genres = this.getTopGenres(playlistId)
 
