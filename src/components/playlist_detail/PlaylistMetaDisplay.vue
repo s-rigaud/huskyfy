@@ -10,7 +10,7 @@
           @click="openPlaylistOnSpotify"
         >
           <v-img
-            :src="playlists[playlistId].images[0].url"
+            :src="playlists[playlistId].images![0].url"
             alt="Cover image"
             cover
             lazy-src="@/assets/default_cover.jpg"

@@ -107,7 +107,7 @@ interface _BasePlaylistAttributes {
     collaborative: boolean;
     description: string;
     id: string;
-    images: SpotifyImage[];
+    images: SpotifyImage[] | null;
     name: string;
     owner: SpotifyOwner;
 

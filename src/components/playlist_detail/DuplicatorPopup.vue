@@ -109,7 +109,8 @@ const createNewPlaylist = async () => {
 
   loadingText.value = t('playlist.new.cover')
   loadingPercentage.value = 33
-  await playlistsStore.updatePlaylistCover(newId, playlistsStore.playlists[props.playlistId].images[0].url)
+  const oldPlaylistCover = playlistsStore.playlists[props.playlistId].images![0].url
+  await playlistsStore.updatePlaylistCover(newId, oldPlaylistCover)
 
   // If newTracks is empty that means we have to duplicate all the tracks
   const tracksToAdd = props.newTracks.length ? props.newTracks : playlistsStore.playlists[props.playlistId].tracks

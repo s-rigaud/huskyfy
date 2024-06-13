@@ -87,7 +87,7 @@ const createFakeTracks = (gridSize: number, targetedIndiePopularity: number): Sp
     const currentGeneralIndieScore = fakeTracks.reduce((score, t) => score + +(t.isIndie), 0) / fakeTracks.length * 100
 
     fakeTracks.push({
-      album: { images: [] },
+      album: { images: [], release_date: '2021-01-01' },
       artists: [generateFakeArtist(index)],
       id: `artist-${index}`,
       is_local: false,

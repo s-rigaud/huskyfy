@@ -26,7 +26,7 @@
         v-for="playlist in playlistsToDisplay"
         :id="playlist.id"
         :key="playlist.id"
-        :images="playlist.images"
+        :images="playlist.images || []"
         :name="formatName(playlist)"
         :track-count="playlist.total"
       />
