@@ -11,7 +11,7 @@
 ![Netlify Status](https://api.netlify.com/api/v1/badges/ca42d8a5-b247-4dd3-9840-65c5750da906/deploy-status)
 ![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=s-rigaud_huskyfy&metric=security_rating)
 ![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=s-rigaud_huskyfy&metric=vulnerabilities)
-![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=s-rigaud_huskyfy&metric=code_smells)
+[![DeepScan grade](https://deepscan.io/api/teams/24491/projects/27681/branches/888347/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=24491&pid=27681&bid=888347)
 
 <a href="https://www.producthunt.com/posts/huskyfy?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-huskyfy" target="_blank">
 <img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=369274&theme=light" alt="Huskyfy - Best&#0032;tool&#0032;to&#0032;split&#0032;Spotify&#0032;playlists&#0032;by&#0032;genres&#0032;or&#0032;artists | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" />
