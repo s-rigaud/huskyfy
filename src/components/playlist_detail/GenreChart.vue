@@ -102,7 +102,7 @@ const getColorsForGenres = (genres: Genre[]): string[] => {
 const initializeGraphData = (newGenres: Genre[]) => {
   series.value = newGenres.map((genre) => genre.count)
   chartOptions.value = {
-    ...chartOptions,
+    ...chartOptions.value,
     labels: newGenres.map(genre => genre.cap_name),
     colors: getColorsForGenres(newGenres),
     ...{

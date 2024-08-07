@@ -25,11 +25,10 @@ request.interceptors.response.use(response => {
   // console.log(response)
   return response
 }, async (error) => {
-  const { status = 500 } = error.response
   const { config } = error
 
   // Handle access token refresh for 401
-  if (error.response && status === 401) {
+  if (error.response && error.response.status === 401) {
     const accessToken = await api.spotify.auth.requestNewAccessToken()
     if (accessToken) {
       const authStore = useAuthStore()
