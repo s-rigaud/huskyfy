@@ -39,13 +39,14 @@
       />
     </div>
 
-    <v-btn
+    <v-progress-circular
       v-if="Object.keys(playlistsStore.playlists).length < playlistTotal && firstTracksLoaded"
-      class="rainbow-v-btn"
-      @click="loadMorePlaylists"
-    >
-      {{ $t("playlist.load-more-playlists") }}
-    </v-btn>
+      :size="70"
+      :width="7"
+      v-my-intersect="loadMorePlaylists"
+      color="var(--huskyfy-orange)"
+      indeterminate
+    />
   </div>
 </template>
 
@@ -95,12 +96,14 @@ const loadMorePlaylists = async () => {
 
 const filterPlaylists = () => {
   const lowercaseSearch = search.value?.toLowerCase().trim()
+  const allPlaylists = Object.values(playlistsStore.playlists)
+
   if (lowercaseSearch) {
-    playlistsToDisplay.value = Object.values(playlistsStore.playlists).filter(
+    playlistsToDisplay.value = allPlaylists.filter(
       p => p.name.toLowerCase().includes(lowercaseSearch)
     )
   } else {
-    playlistsToDisplay.value = Object.values(playlistsStore.playlists)
+    playlistsToDisplay.value = allPlaylists
   }
 }
 </script>

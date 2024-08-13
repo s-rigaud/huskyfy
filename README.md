@@ -22,7 +22,7 @@
 ![Vue 3](https://img.shields.io/badge/Vue-3.4-brightgreen.svg)
 ![Vuetity 3](https://img.shields.io/badge/Vuetify-3.5-AEDDFF.svg)
 ![Pinia 2](https://img.shields.io/badge/Pinia-2.1-yellow.svg)
-![Typescript](https://img.shields.io/badge/Typescript-5.3-blue.svg)
+![Typescript 5](https://img.shields.io/badge/Typescript-5.3-blue.svg)
 ![Apexchart 3](https://img.shields.io/badge/Apexchart-3.37-red.svg)
 ![Axios 1](https://img.shields.io/badge/Axios-1.6-purple.svg)
 

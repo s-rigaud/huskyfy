@@ -62,7 +62,7 @@
             rel="noopener"
             target="_blank"
           >
-            Hylectrif
+            s-rigaud
           </a>
         </strong>
       </v-col>

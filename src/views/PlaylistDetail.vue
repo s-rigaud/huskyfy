@@ -302,7 +302,7 @@
     <LoadMoreTracksPopup
       v-if=" isHugePlaylist && playlistsStore.playlists[props.playlistId].tracks.length < playlistsStore.playlists[props.playlistId].total "
       :playlist=" playlistsStore.playlists[props.playlistId] "
-      :track-request-limit=" TRACK_REQUEST_LIMIT "
+      :track-request-limit=" DEFAULT_MAX_TRACKS "
       @all-tracks-loaded=" () => { resetFilters(); refreshStats() } "
     />
   </div>
@@ -351,7 +351,7 @@ import PlaylistMetaDisplay from '@/components/playlist_detail/PlaylistMetaDispla
 import TrackItem from '@/components/playlist_detail/TrackItem.vue'
 import { Genre } from '@/genre'
 import { t } from '@/i18n'
-import { API_TRACK_LIMIT, MY_MUSIC_PLAYLIST_ID, usePlaylistsStore } from '@/stores/playlists'
+import { DEFAULT_MAX_TRACKS, MY_MUSIC_PLAYLIST_ID, usePlaylistsStore } from '@/stores/playlists'
 import { capitalize } from '@/utils/functions'
 
 /** It is used for typing Vuetify select slot props */
@@ -395,8 +395,6 @@ const { downloadPlaylistTracks } = playlistsStore
 useMeta({
   title: playlistsStore.playlists[props.playlistId].name
 })
-
-const TRACK_REQUEST_LIMIT = ref(150)
 
 const selectedPopularity = ref(Popularity.NO_POPULARITY)
 const selectedPreference = ref(Preference.NO_PREFERENCE)
@@ -480,7 +478,6 @@ watch(isDuplicationAllowed, (isAllowed: boolean) => {
 })
 
 onBeforeMount(async () => {
-  TRACK_REQUEST_LIMIT.value = API_TRACK_LIMIT * 3
   if (playlistsStore.playlists[props.playlistId].id === MY_MUSIC_PLAYLIST_ID) {
     // Ensure to retrieve real track count for special endpoint
     await playlistsStore.refreshMyMusicTotalTrack()
@@ -495,10 +492,10 @@ const onScroll = () => {
 }
 const loadFirstTracks = async () => {
   // Only asking for the right number of tracks as we already know how many tracks are in the playlist
-  const maxLimit = Math.min(TRACK_REQUEST_LIMIT.value, playlistsStore.playlists[props.playlistId].total)
+  const maxLimit = Math.min(DEFAULT_MAX_TRACKS, playlistsStore.playlists[props.playlistId].total)
   await downloadPlaylistTracks(props.playlistId, maxLimit)
 
-  isHugePlaylist.value = playlistsStore.playlists[props.playlistId].total > TRACK_REQUEST_LIMIT.value
+  isHugePlaylist.value = playlistsStore.playlists[props.playlistId].total > DEFAULT_MAX_TRACKS
   playlistLoaded.value = true
   topGenres.value = getTopGenres()
   indiePercentage.value = getIndiePercentage()

@@ -13,7 +13,7 @@
     >
       <div id="loading-create-new-playlist">
         <p class="rainbow-text">
-          {{ $t("playlist.load-more-warning", { limit: playlist.offset, total: playlist.total }) }}
+          {{ $t("playlist.load-more-warning", { limit: DEFAULT_MAX_TRACKS, total: playlist.total }) }}
         </p>
       </div>
       <v-btn
@@ -40,7 +40,7 @@
 import { PropType, computed, ref } from 'vue'
 
 import { SpotifyPlaylist } from '@/api/spotify/types/entities'
-import { usePlaylistsStore } from '@/stores/playlists'
+import { DEFAULT_MAX_TRACKS, usePlaylistsStore } from '@/stores/playlists'
 
 const props = defineProps({
   playlist: {
@@ -62,13 +62,9 @@ const isVisible = ref(true)
 const isLoaded = ref(false)
 const waitingForResponse = ref(false)
 
-const color = computed((): string => {
-  return isLoaded.value ? 'green' : 'black'
-})
+const color = computed(() => isLoaded.value ? 'green' : 'black')
 
-const timeout = computed((): number => {
-  return isLoaded.value ? 3000 : -1
-})
+const timeout = computed(() => isLoaded.value ? 3000 : -1)
 
 /**
  * Download tracks from Spotify API and add them to localStorage.

@@ -12,8 +12,7 @@ module.exports = {
 
     // PLUGINS
     'plugin:vue/vue3-recommended',
-    'plugin:@intlify/vue-i18n/recommended',
-    'plugin:sonarjs/recommended'
+    'plugin:@intlify/vue-i18n/recommended'
   ],
   parserOptions: {
     ecmaVersion: 'latest'

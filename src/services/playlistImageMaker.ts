@@ -231,9 +231,8 @@ const addCanvasLegend = (
     ctx.fillStyle = POPULAR_TEXT_COLOR
     ctx.fillText(popularText, 10, yStart + 20)
   } else {
-    const getMostCommonPopularityTextSize = (popularity: 'indie' | 'popular'): 10 | 11 | 12 => {
-      if (popularity === 'indie') return 12
-      else return (indiePercentage < 50) ? 12 : 10
+    const getMostCommonPopularityTextSize = (popularity: 'indie' | 'popular'): number => {
+      return popularity === 'indie' ? 12 : (indiePercentage < 50) ? 12 : 10
     }
     ctx.fillStyle = '#fff'
     ctx.strokeStyle = '#000'
@@ -295,10 +294,7 @@ const addCanvasLegend = (
 }
 
 const getEmojiForRank = (rank: number): string => {
-  if (rank === 0) return '🥇'
-  if (rank === 1) return '🥈'
-  if (rank === 2) return '🥉'
-  return '🏅'
+  return rank === 0 ? '🥇' : rank === 1 ? '🥈' : rank === 2 ? '🥉' : '🏅'
 }
 
 /**

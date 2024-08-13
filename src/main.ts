@@ -7,6 +7,8 @@ import router from '@/router'
 import { createPinia } from 'pinia'
 import { createMetaManager } from 'vue-meta'
 import VueApexCharts from 'vue3-apexcharts'
+import { intersect } from './directives/intersect'
+import { focus } from './directives/focus'
 
 const app = createApp(App)
 app.use(router)
@@ -15,9 +17,7 @@ app.use(router)
   .use(vuetify)
   .use(VueApexCharts)
   .use(createMetaManager())
-
-app.directive('focus', (el: HTMLElement) => {
-  el.focus()
-})
+  .directive('focus', focus)
+  .directive('my-intersect', intersect)
 
 app.mount('#app')

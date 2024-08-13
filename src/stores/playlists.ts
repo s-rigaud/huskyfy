@@ -48,8 +48,13 @@ const DEFAULT_MY_MUSIC_PLAYLIST: SimplifiedSpotifyPlaylist = {
   uri: 'spotify:collection:tracks'
 }
 
+/** Spotify API restriction on /tracks endpoint */
 export const API_TRACK_LIMIT = 50
+/** Spotify API restriction on /me/playlists endpoint */
 const MAX_PLAYLISTS_LIMIT = 50
+
+/** Maximum number of tracks loaded while browsing a playlist */
+export const DEFAULT_MAX_TRACKS = 150
 
 export type PlaylistState = {
   playlists: RemovableRef<Record<string, SpotifyPlaylist>>;
@@ -163,11 +168,8 @@ export const usePlaylistsStore = defineStore('playlists', {
        * Get the general playlist isIndie % from the mean of all tracks
        */
       return (playlistId: string): number => {
-        const tracks = state.playlists[playlistId].tracks
-        let indieTracks = 0
-        for (const track of tracks) {
-          indieTracks += track.isIndie ? 1 : 0
-        }
+        const { tracks } = state.playlists[playlistId]
+        const indieTracks = tracks.reduce((acc, track) => acc + (track.isIndie ? 1 : 0), 0)
         return ~~(indieTracks / tracks.length * 100)
       }
     },
@@ -184,8 +186,8 @@ export const usePlaylistsStore = defineStore('playlists', {
         const seconds = durationInSeconds % 60
         const hours = ~~(durationInSeconds / (60 * 60))
         const minutes = (durationInSeconds - hours * (60 * 60) - seconds) / 60
-        if (hours) return `${hours} h ${minutes} min`
-        return `${minutes} min ${seconds}s`
+
+        return hours ? `${hours} h ${minutes} min` : `${minutes} min ${seconds}s`
       }
     }
   },
@@ -213,7 +215,7 @@ export const usePlaylistsStore = defineStore('playlists', {
      * Retrieve some playlists from the user account
      */
     async getUserPlaylists (offset: number) {
-      const username = useUserStore().username
+      const { username } = useUserStore()
 
       // Delete playlist tracks if too many playlists already loaded
       let playlistsAlreadyLoaded = 0
@@ -303,8 +305,8 @@ export const usePlaylistsStore = defineStore('playlists', {
      * total tracks set to 0 while there are currently tracks in the playlist
      */
     getTrackCount (requestPlaylist: SimplifiedSpotifyPlaylist, username: string): number {
-      if (requestPlaylist.name.includes(username) && requestPlaylist.name.includes('+')) return 50
-      return requestPlaylist.tracks.total
+      const unknownCount = requestPlaylist.name.includes(username) && requestPlaylist.name.includes('+')
+      return unknownCount ? 50 : requestPlaylist.tracks.total
     },
     /**
      * Init playlist info or return already saved tracks
@@ -505,8 +507,8 @@ export const usePlaylistsStore = defineStore('playlists', {
       let tracks = this.playlists[playlistId].tracks.toSorted(
         (t1, t2) => {
           return t1.genres.length - t2.genres.length ||
-          t1.artists[0].name.localeCompare(t2.artists[0].name) ||
-          t1.album.release_date.localeCompare(t2.album.release_date)
+            t1.artists[0].name.localeCompare(t2.artists[0].name) ||
+            t1.album.release_date.localeCompare(t2.album.release_date)
         }
       )
 
@@ -528,7 +530,7 @@ export const usePlaylistsStore = defineStore('playlists', {
     },
     async sortPlaylistTracksByArtistTrackInPlaylist (playlistId: string) {
       // 1. Save tracks
-      let tracks = this.playlists[playlistId].tracks
+      let { tracks } = this.playlists[playlistId]
       const artists = this.getTopArtists(playlistId)
 
       // 2. Delete all playlist tracks (100 is the API limit)
@@ -548,7 +550,7 @@ export const usePlaylistsStore = defineStore('playlists', {
     },
     async sortPlaylistTracksByArtistName (playlistId: string) {
       // 1. Save tracks
-      let tracks = this.playlists[playlistId].tracks
+      let { tracks } = this.playlists[playlistId]
       const artistNames = this.getArtistsByName(playlistId)
 
       // 2. Delete all playlist tracks (100 is the API limit)
@@ -568,7 +570,7 @@ export const usePlaylistsStore = defineStore('playlists', {
     },
     /**
      * Format uncommon genres to more common and broader genres.
-     * Also pick a specific color for each unknown genre.
+     * Also pick a specific color for each yet unknown genre.
      */
     filterUncommonGenres (trackGenres: string[]): string[] {
       for (let i = 0; i < trackGenres.length; i++) {

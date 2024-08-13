@@ -143,7 +143,7 @@ const accessOAuthPage = async () => {
   margin: 10px auto;
 
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   flex-direction: column;
   overflow: hidden;
 

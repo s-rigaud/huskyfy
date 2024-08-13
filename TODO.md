@@ -1,9 +1,11 @@
 # TODO
 
 - [ ] 🚧 Fix other Github branch for reordering playlist
+- [ ] 🚧 Functionalities overflow on main screen
+- [ ] 🚧 Display duplicated track names in the tooltip (set of dup track names)
+- [ ] 🚧 `filterPlaylists` should be based over API
 - [ ] 🚧 Back to last page when Spotify API token needs refresh
 - [ ] ✨ Implement Spotify SDK to be able to listen to tracks (https://developer.spotify.com/documentation/web-playback-sdk/reference/)
-- [ ] 🖼️ Skeleton loader for TrackItem and PlaylistCard
 - [ ] 🖼️ Horizontal slider for TrackItem genre chips
 
 ## Feedbacks
@@ -20,7 +22,7 @@
 2. [X] Find better catch phrases to use
 3. [X] Improve page description (meta etc) for Google search bot
 4. [X] Spread the word on LinkedIn
-5. [ ] Wikipédia article
+5. [o] Wikipédia article
 6. [X] Spread the word on Discord (NaN, Vuetify, Vue Land)
 7. [ ] Ask Spotify to add the website link on their developer site
 8. [ ] Youtube video
