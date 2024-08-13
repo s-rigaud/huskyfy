@@ -236,8 +236,6 @@ export const usePlaylistsStore = defineStore('playlists', {
       for (const requestPlaylist of playlists) {
         const cachedPlaylist = this.playlists[requestPlaylist.id]
 
-        console.log(requestPlaylist)
-
         if (!requestPlaylist.images || requestPlaylist.images.length === 0) {
           requestPlaylist.images = [{ url: new URL('./../assets/default_cover.jpg', import.meta.url).href }]
         }

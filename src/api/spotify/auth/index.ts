@@ -5,6 +5,12 @@ import { SpotifyAuthResponse } from '../types/responses'
 
 const CLIENT_ID: string = import.meta.env.VITE_APP_SPOTIFY_CLIENT_ID as string
 const CLIENT_SECRET: string = import.meta.env.VITE_APP_SPOTIFY_CLIENT_SECRET as string
+
+if (!CLIENT_ID || !CLIENT_SECRET) {
+  alert('Spotify client ID or secret not found in .env file')
+  throw new Error('Spotify client ID or secret not found in .env file')
+}
+
 const ENCODED_CREDENTIALS = btoa(`${CLIENT_ID}:${CLIENT_SECRET}`)
 const REDIRECT_URL = `${import.meta.env.VITE_APP_BASE_SERVER_URL}/login`
 const SCOPES = [
