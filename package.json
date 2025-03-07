@@ -18,7 +18,7 @@
     "@mdi/font": "^7.4.47",
     "@vueuse/core": "10.11.1",
     "apexcharts": "3.37.1",
-    "axios": "^1.7.3",
+    "axios": "^1.8.2",
     "canvas-confetti": "^1.9.3",
     "core-js": "^3.38.0",
     "gsap": "^3.12.5",
